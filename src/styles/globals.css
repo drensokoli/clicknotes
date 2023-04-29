@@ -17,13 +17,8 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-image: url('/src/styles/media/background.png');
+  background-repeat: repeat;
 }
 
 .movie-info {
@@ -31,5 +26,39 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #000000; /* Prettier color */
+  color: #000000;
+}
+
+.movie-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.movie-card {
+  width: 200px;
+  cursor: pointer;
+}
+
+.movie-image {
+  border-radius: 5px;
+  /* box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.2); */
+  transition: box-shadow 0.3s; /* Add a smooth transition for the hover effect */
+}
+
+.movie-image:hover {
+  box-shadow: 0 0 11px rgba(135,206,235,.2); 
+}
+
+.popcorn-logo {
+  background-image: url('/src/styles/media/logo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.background-image {
+  background-image: url('/background.png');
+  background-repeat: repeat;
 }
