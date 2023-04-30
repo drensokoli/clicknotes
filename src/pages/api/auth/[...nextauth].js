@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth from 'next-auth/next';
 import GoogleProvider from 'next-auth/providers/google';
 
 export default NextAuth({
@@ -8,4 +8,5 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  secret: process.env.JWT_SECRET,
 });

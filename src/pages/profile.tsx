@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, useSession, signOut } from 'next-auth/react';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/router';
+
 
 export default function Profile() {
     const { data: session, status } = useSession();
@@ -38,11 +39,23 @@ export default function Profile() {
         );
     }
 
+    var picture = session.user?.image;
 
     return (
         <div className='bg-peach h-screen background-image'>
+            <div className='flex justify-end p-10'>
+                <a href='/'>
+
+                    <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signOut()} >
+                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
+                            Sign out
+                        </span>
+                    </button>
+                </a>
+            </div>
             <div className="container mx-auto px-4 py-8 centered-form">
-                <h1 className='text-3xl pb-10 font-bold text-center'>Welcome back, User</h1>
+                    <h1 className='text-3xl pb-10 font-bold text-center'>Welcome back, {session.user?.name}</h1>
+                    <img src={picture} alt="" className='h-auto w-32 text-center' />
                 <form onSubmit={handleSubmit} className='sm:w-5/6 w-full'>
                     <div className="mb-4">
                         <input
