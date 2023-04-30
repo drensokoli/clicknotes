@@ -36,6 +36,13 @@ body {
   justify-content: center;
 }
 
+.movie-type {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: left;
+}
+
 .movie-card {
   width: 200px;
   cursor: pointer;
@@ -62,6 +69,19 @@ body {
 .background-image {
   background-image: url('/background.png');
   background-repeat: repeat;
+  animation-name: moveBackground;
+  animation-duration: 120s; /* Adjust the duration for a faster or slower animation */
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes moveBackground {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
 
 .movie-title {
