@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import Movie from '@/components/Movie';
-import TVShow from '@/components/TVShow';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import Movie from '../components/Movie';
+import TVShow from '../components/TVShow';
+import React from 'react';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
@@ -69,7 +70,7 @@ export default function Home() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-peach space-y-4 pt-28 m:pt-40 background-image">
           <div className="content-container lg:w-5/6">
             {movies.length > 0 && (
-              <h2 className="text-xl font-bold mb-4 text-center cursor-pointer" onClick={() => setShowMovies(!showMovies)}
+              <h2 className="text-xl font-bold mb-4 text-center cursor-pointer pt-10" onClick={() => setShowMovies(!showMovies)}
               >Movies</h2>
             )}
             {showMovies && (

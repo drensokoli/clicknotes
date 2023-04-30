@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { signIn, useSession, signOut } from 'next-auth/react';
-import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/router';
 
 
@@ -15,10 +14,6 @@ export default function Profile() {
         console.log('Notion Database ID:', notionDatabaseId);
     };
 
-    const handleSignIn = () => {
-        signIn('google');
-    };
-
     if (status === 'loading') {
         return <div>Loading...</div>;
     }
@@ -28,7 +23,7 @@ export default function Profile() {
             <div className='h-screen background-image bg-peach p-10'>
                 <div className="not-signed-in-message ">
                     <p className='p-3'>Please sign in to view your profile.</p>
-                    <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={handleSignIn}
+                    <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signIn()}
                     >
                         <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
                             Sign in
@@ -44,18 +39,20 @@ export default function Profile() {
     return (
         <div className='bg-peach h-screen background-image'>
             <div className='flex justify-end p-10'>
-                <a href='/'>
+                {/* <a href='/'> */}
 
                     <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signOut()} >
                         <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
                             Sign out
                         </span>
                     </button>
-                </a>
+                {/* </a> */}
             </div>
-            <div className="container mx-auto px-4 py-8 centered-form">
+            <div className="container mx-auto px-4 py-8 flex flex-col items-center h-full">
+                <div className=" flex flex-col items-center ">
                     <h1 className='text-3xl pb-10 font-bold text-center'>Welcome back, {session.user?.name}</h1>
-                    <img src={picture} alt="" className='h-auto w-32 text-center' />
+                    <img src={picture?.toString()} alt="" className='h-auto w-22 p-5' />
+                </div>
                 <form onSubmit={handleSubmit} className='sm:w-5/6 w-full'>
                     <div className="mb-4">
                         <input
