@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signIn, useSession, signOut } from 'next-auth/react';
+import { signIn, useSession, signOut, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 
@@ -17,24 +17,6 @@ export default function Profile() {
     if (status === 'loading') {
         return <div>Loading...</div>;
     }
-
-    if (!session) {
-        return (
-            <div className='h-screen background-image bg-peach p-10'>
-                <div className="not-signed-in-message ">
-                    <p className='p-3'>Please sign in to view your profile.</p>
-                    <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signIn()}
-                    >
-                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
-                            Sign in
-                        </span>
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    var picture = session.user?.image;
 
     return (
         <div className='bg-peach h-screen background-image'>
@@ -85,3 +67,22 @@ export default function Profile() {
         </div>
     );
 }
+
+
+export const getServerSideProps = async (context: any) => {
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/',
+            },
+        };
+    }
+
+    return {
+        props: {
+            session,
+        },
+    };
+};
