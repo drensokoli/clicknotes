@@ -111,3 +111,34 @@ body {
 .movie-card-image-container:hover .movie-card-button {
   display: inline-block;
 }
+
+.profile-icon {
+  font-size: 24px;
+  color: rgb(90, 90, 90);
+  transition: font-size 0.3s ease, color 0.3s ease;
+}
+
+.profile-icon:hover {
+  font-size: 25px;
+  color: rgb(52, 52, 52);
+}
+
+.centered-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 85%;
+}
+
+.not-signed-in-message {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  color: #721c24;
+  font-size: 1.1rem;
+  /* margin: 2rem; */
+  padding: 1.5rem;
+  text-align: center;
+}
