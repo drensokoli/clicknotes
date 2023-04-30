@@ -4,8 +4,8 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 0,0,0;
-  --background-end-rgb: 0,0,0;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,6 +34,7 @@ body {
   flex-wrap: wrap;
   gap: 16px;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .movie-type {
@@ -45,11 +46,12 @@ body {
 
 .movie-card {
   width: 200px;
-  cursor: pointer;
+  /* cursor: pointer; */
   margin-bottom: 7px;
 }
 
 .movie-image {
+  position: relative;
   transition: transform 0.4s, box-shadow 0.4s;
   border-radius: 4px;
   box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.5);
@@ -59,6 +61,37 @@ body {
   transform: scale(1.02);
   box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.5);
 }
+
+.movie-image .arrows {
+  position: absolute;
+  width: auto;
+  height: 20px;
+  top: 10px;
+  right: 10px;
+  display: none;
+}
+
+.movie-image:hover .arrows {
+  display: block;
+  cursor: pointer;
+}
+
+.movie-image .overlay {
+  transition: 0.3s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.movie-image:hover .movie-image,
+.movie-image:hover .overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
 .popcorn-logo {
   background-image: url('/src/styles/media/logo.png');
   background-size: cover;
@@ -70,7 +103,8 @@ body {
   background-image: url('/background.png');
   background-repeat: repeat;
   animation-name: moveBackground;
-  animation-duration: 120s; /* Adjust the duration for a faster or slower animation */
+  animation-duration: 120s;
+  /* Adjust the duration for a faster or slower animation */
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
@@ -79,6 +113,7 @@ body {
   0% {
     background-position: 0 0;
   }
+
   100% {
     background-position: -100% 0;
   }
