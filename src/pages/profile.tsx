@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Navbar from '@/components/Navbar';
+import { useRouter } from 'next/router';
 
 export default function Profile() {
     const { data: session, status } = useSession();
@@ -9,9 +10,12 @@ export default function Profile() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Save the Notion API Key and database ID to your desired storage, e.g., local storage, database, etc.
         console.log('Notion API Key:', notionApiKey);
         console.log('Notion Database ID:', notionDatabaseId);
+    };
+
+    const handleSignIn = () => {
+        signIn('google');
     };
 
     if (status === 'loading') {
@@ -22,7 +26,13 @@ export default function Profile() {
         return (
             <div className='h-screen background-image bg-peach p-10'>
                 <div className="not-signed-in-message ">
-                    Please sign in to view your profile.
+                    <p className='p-3'>Please sign in to view your profile.</p>
+                    <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={handleSignIn}
+                    >
+                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
+                            Sign in
+                        </span>
+                    </button>
                 </div>
             </div>
         );
