@@ -18,6 +18,8 @@ export default function Profile() {
         return <div>Loading...</div>;
     }
 
+    var picture = session?.user?.image;
+
     return (
         <div className='bg-peach h-screen background-image'>
             <div className='flex justify-end p-10'>
@@ -32,7 +34,7 @@ export default function Profile() {
             </div>
             <div className="container mx-auto px-4 py-8 flex flex-col items-center h-full">
                 <div className=" flex flex-col items-center ">
-                    <h1 className='text-3xl pb-10 font-bold text-center'>Welcome back, {session.user?.name}</h1>
+                    <h1 className='text-3xl pb-10 font-bold text-center'>Welcome back, {session?.user?.name}</h1>
                     <img src={picture?.toString()} alt="" className='h-auto w-22 p-5' />
                 </div>
                 <form onSubmit={handleSubmit} className='sm:w-5/6 w-full'>
