@@ -67,12 +67,18 @@ export default function Home() {
     <>
       <div>
         <Navbar input={input} handleInputChange={handleInputChange} />
-        <div className="flex flex-col items-center justify-center min-h-screen bg-peach space-y-4 pt-28 m:pt-40 background-image">
-          <div className="content-container lg:w-5/6">
-            {movies.length > 0 && (
-              <h2 className="text-xl font-bold mb-4 text-center cursor-pointer pt-10" onClick={() => setShowMovies(!showMovies)}
-              >Movies</h2>
-            )}
+        <div className="flex flex-col items-center min-h-screen bg-peach space-y-4 pt-28 background-image">
+          <div className="content-container w-5/6">
+
+            <div className='pt-4 sm:pt-0 cursor-pointer'>
+              <div className="border-b border-gray-400 flex justify-between items-end w-full" onClick={() => setShowMovies(!showMovies)}>
+                <h2 className="text-xl font-bold mb-2 text-center cursor-pointer pt-10 text-gray-600" >
+                  Movies
+                </h2>
+                <img src="/down-arrow.png" alt="" className='h-8 w-auto'></img>
+              </div>
+            </div>
+
             {showMovies && (
 
               <div className="movie-container">
@@ -82,10 +88,15 @@ export default function Home() {
               </div>
             )}
 
-            {tvShows.length > 0 && (
-              <h2 className="text-xl font-bold mb-4 mt-8 text-center cursor-pointer" onClick={() => setShowTVShows(!showTVShows)}
-              >TV Shows</h2>
-            )}
+            <div className='cursor-pointer'>
+              <div className="border-b border-gray-400 flex justify-between items-end w-full" onClick={() => setShowTVShows(!showTVShows)}>
+                <h2 className="text-xl font-bold mb-2 text-center cursor-pointer pt-10 text-gray-600" >
+                  TV Shows
+                </h2>
+                <img src="/down-arrow.png" alt="" className='h-8 w-auto'></img>
+              </div>
+            </div>
+
             {showTVShows && (
 
               <div className="movie-container">
