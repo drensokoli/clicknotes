@@ -14,10 +14,6 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ input, handleInputChange }) => {
     const { data: session, status } = useSession();
     const router = useRouter();
-    
-    // const signIn = () => {
-    //     signIn('google');
-    // };
 
     const handleProfile = () => {
         router.push('/profile');
