@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api/auth/signin.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api/auth/signin.js", "src/pages/api/auth/lib/mongodb.js", "src/lib/mongodb.js"],
   "exclude": ["node_modules"],
 }

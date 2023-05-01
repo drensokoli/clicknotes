@@ -12,6 +12,7 @@ export default function Profile() {
         e.preventDefault();
         console.log('Notion API Key:', notionApiKey);
         console.log('Notion Database ID:', notionDatabaseId);
+        console.log("MONGO:", process.env.NEXT_PUBLIC_MONGODB_URI);
     };
 
     if (status === 'loading') {
@@ -38,7 +39,7 @@ export default function Profile() {
                     </span>
                 </button>
             </div>
-            <div className="container mx-auto px-4 py-8 flex flex-col items-center h-full">
+            <div className="container mx-auto px-4 py-8 flex flex-col items-center">
                 <div className=" flex flex-col items-center ">
                     <h1 className='text-3xl pb-10 font-bold text-center'>Welcome back, {session?.user?.name}</h1>
                     <img src={picture?.toString()} alt="" className='h-auto w-22 p-5' />

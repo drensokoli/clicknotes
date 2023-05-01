@@ -24,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ input, handleInputChange }) => {
             <nav>
                 <div className="bg-peach-dark p-4 fixed w-full top-0 z-10 shadow-md flex justify-around">
                     <a href="/">
-                        <Image src="/logo.png" alt="logo" width={30} height={100} className='ml-2' />
+                        <img src="/logo.png" alt="logo" className='ml-6 w-[30px]' />
                     </a>
                     <form onSubmit={(e) => e.preventDefault()} className="w-3/5 md:w-2/4 mx-auto invisible sm:visible">
                         <input
