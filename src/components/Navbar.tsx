@@ -15,6 +15,7 @@ const Navbar: React.FC = () => {
     const handleProfile = () => {
         router.push('/profile');
     };
+
     const menuItems = [
         { title: 'Movies', path: '/movies' },
         { title: 'TV Shows', path: '/tvshows' },

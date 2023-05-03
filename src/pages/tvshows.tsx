@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import TVShow from '../components/TVShow';
 import React from 'react';
+import Example from '@/components/Example';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
@@ -42,17 +43,19 @@ const Movies: React.FC = () => {
 
     return (
         <>
-            <Navbar />
-            <div className="flex flex-col items-center min-h-screen bg-blue-100 space-y-4 pt-28 background-image">
+            <div className="flex flex-col items-center min-h-screen bg-blue-100 space-y-4  pt-32 background-image">
                 <div className='w-full'>
-                    <form onSubmit={(e) => e.preventDefault()} className="w-3/5 md:w-2/4 mx-auto invisible sm:visible">
-                        <input
-                            type="text"
-                            placeholder="Enter tv show title"
-                            value={input}
-                            onChange={handleInputChange}
-                            className="border rounded p-2 w-full text-gray-900 bg-peach-light"
-                        />
+                <form onSubmit={(e) => e.preventDefault()} className="w-5/6 lg:w-2/3 mx-auto">
+                        <div className="relative">
+                            <i className="absolute fa fa-search text-gray-400 top-5 left-4"></i>
+                            <input
+                                type="text"
+                                placeholder="Enter TV show title"
+                                value={input}
+                                onChange={handleInputChange}
+                                className="bg-white h-12 w-full px-12 rounded-lg focus:outline-none hover:cursor-pointer"
+                            />
+                        </div>
                     </form>
                 </div>
                 <div className="content-container w-5/6">
@@ -67,7 +70,6 @@ const Movies: React.FC = () => {
 
                 </div>
             </div>
-            <Footer />
         </>
     );
 };

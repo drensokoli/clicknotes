@@ -3,6 +3,7 @@ import { signIn, useSession, signOut, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Example from '@/components/Example';
 
 
 export default function Profile() {
@@ -29,8 +30,7 @@ export default function Profile() {
 
     return (
         <>
-            <Navbar />
-
+            <Example />
             <div className='bg-blue-100 h-screen background-image'>
                 <div className="container mx-auto px-4 py-8 flex flex-col items-center h-full">
                     <div className=" flex flex-col items-center ">
@@ -65,14 +65,13 @@ export default function Profile() {
                             </button>
                         </div>
                     </form>
-                    <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signOut()} >
+                    {/* <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signOut()} >
                         <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
                             Sign out
                         </span>
-                    </button>
+                    </button> */}
                 </div>
             </div>
-            <Footer />
         </>
     );
 }
