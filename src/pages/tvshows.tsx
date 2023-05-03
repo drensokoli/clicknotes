@@ -43,7 +43,7 @@ const Movies: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="flex flex-col items-center min-h-screen bg-peach space-y-4 pt-28 background-image">
+            <div className="flex flex-col items-center min-h-screen bg-blue-100 space-y-4 pt-28 background-image">
                 <div className='w-full'>
                     <form onSubmit={(e) => e.preventDefault()} className="w-3/5 md:w-2/4 mx-auto invisible sm:visible">
                         <input

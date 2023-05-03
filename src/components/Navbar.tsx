@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
     return (
         <>
             <nav>
-                <div className="bg-peach-dark p-4 fixed w-full top-0 z-10 shadow-md flex justify-between">
+                <div className="bg-blue-300 p-4 fixed w-full top-0 z-10 shadow-md flex justify-between">
                     <a href="/">
                         <Image src="/logo.png" alt="logo" width={30} height={100} className='ml-6 mr-6' />
                     </a>
@@ -42,8 +42,9 @@ const Navbar: React.FC = () => {
                     </div>
                     <div>
                         {!session ? (
-                            <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signIn()}>
-                                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
+                            <button className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
+                                onClick={() => signIn()}>
+                                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                                     Sign in
                                 </span>
                             </button>

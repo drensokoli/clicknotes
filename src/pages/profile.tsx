@@ -31,7 +31,7 @@ export default function Profile() {
         <>
             <Navbar />
 
-            <div className='bg-peach h-screen background-image'>
+            <div className='bg-blue-100 h-screen background-image'>
                 <div className="container mx-auto px-4 py-8 flex flex-col items-center h-full">
                     <div className=" flex flex-col items-center ">
                         <h1 className='text-3xl pb-10 font-bold text-center'>Welcome back, {session?.user?.name}</h1>

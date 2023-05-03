@@ -10,7 +10,7 @@ interface MovieProps {
 
 const Movie: React.FC<MovieProps> = ({ id, title, release_date, poster_path, onClick }) => {
   return (
-    <div key={id} className="movie-card ">
+    <div key={id} className="movie-card">
       <div className="movie-card-image-container">
 
         {poster_path ? (
