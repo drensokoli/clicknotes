@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
             <nav>
                 <div className="bg-blue-300 p-4 fixed w-full top-0 z-10 shadow-md flex justify-between">
                     <a href="/">
-                        <Image src="/logo.png" alt="logo" width={30} height={100} className='ml-6 mr-6' />
+                        <img src="/logo.png" alt="logo"/>
                     </a>
                     <div className='flex flex-row gap-10 items-center'>
                         {menuItems.map(item => (
