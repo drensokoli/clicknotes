@@ -36,7 +36,7 @@ export default function Profile() {
                 <div className="container mx-auto my-60">
                     <div>
 
-                        <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto">
+                        <div className="bg-white relative shadow rounded-lg w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto shadow-lg">
                             <div className="flex justify-center">
                                 <img src={session?.user?.image?.toString()} alt="" className="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-md border-4 border-white transition duration-200 transform hover:scale-110" />
                             </div>

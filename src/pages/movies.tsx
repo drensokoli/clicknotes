@@ -45,9 +45,9 @@ const Movies: React.FC = () => {
 
     return (
         <>
-            <div className="flex flex-col items-center min-h-screen bg-blue-100 space-y-4 background-image pt-32">
+            <div className="flex flex-col items-center min-h-screen bg-white space-y-4 pt-32">
                 <div className='w-full'>
-                    <form onSubmit={(e) => e.preventDefault()} className="w-5/6 lg:w-2/3 mx-auto">
+                    <form onSubmit={(e) => e.preventDefault()} className="w-5/6 lg:w-2/3 mx-auto shadow-lg">
                         <div className="relative">
                             <i className="absolute fa fa-search text-gray-400 top-5 left-4"></i>
                             <input
@@ -72,6 +72,7 @@ const Movies: React.FC = () => {
 
                 </div>
             </div>
+            <Footer />
         </>
     );
 };
