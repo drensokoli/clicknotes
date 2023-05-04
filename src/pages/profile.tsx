@@ -32,7 +32,7 @@ export default function Profile() {
                 <div className="container">
                     <div>
 
-                        <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto shadow-xl border-t-2 rounded-md border-gray-20 ">
+                        <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto rounded-md drop-shadow-[0_0_10px_rgba(0,0,0,0.2)] ">
                             <div className="flex justify-center">
                                 <img src={session?.user?.image?.toString()} alt="" className="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " />
                             </div>
