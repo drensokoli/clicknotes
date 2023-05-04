@@ -8,12 +8,10 @@ export default function Profile() {
     const { data: session, status } = useSession();
     const [notionApiKey, setNotionApiKey] = useState('');
     const [notionDatabaseId, setNotionDatabaseId] = useState('');
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log('Notion API Key:', notionApiKey);
-        console.log('Notion Database ID:', notionDatabaseId);
-    };
+    const [apiKey, setApiKey] = useState('');
+    const [moviesPageLink, setMoviesPageLink] = useState('');
+    const [tvShowsPageLink, setTvShowsPageLink] = useState('');
+    const [booksPageLink, setBooksPageLink] = useState('');
 
     if (status === 'loading') {
         return <div>Loading...</div>;
@@ -25,6 +23,29 @@ export default function Profile() {
     const back = () => {
         router.push('/');
     }
+    async function handleSubmit() {
+        // e.preventDefault();
+
+        const response = await fetch('/api/updateProfile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: session?.user?.email,
+                updatedProfile: {
+                    // The updated profile data goes here
+                },
+            }),
+        });
+
+        if (response.ok) {
+            // Handle successful profile update
+        } else {
+            // Handle error updating profile
+        }
+    }
+
 
     return (
         <>
@@ -80,7 +101,9 @@ export default function Profile() {
                                                 placeholder="Enter your Books Page link"
                                             />
                                         </div>
-
+                                        <div className='flex justify-center px-6 pt-6'>
+                                            <button onClick={handleSubmit} type="button" className="w-full text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">Submit</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
