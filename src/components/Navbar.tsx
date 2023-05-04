@@ -69,7 +69,14 @@ export default function Navbar() {
 
                                             <div>
 
-                                                {session ? (
+                                                {!session ? (
+
+                                                    <button type="button"
+                                                        className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                                                        onClick={() => signIn()}
+                                                    >Sign in</button>
+
+                                                ) : (
                                                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                         <img
                                                             className="h-8 w-8 rounded-full"
@@ -77,12 +84,6 @@ export default function Navbar() {
                                                             alt=""
                                                         />
                                                     </Menu.Button>
-
-                                                ) : (
-                                                    <button type="button"
-                                                        className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                                                        onClick={() => signIn()}
-                                                    >Sign in</button>
                                                 )}
                                             </div>
                                             <Transition

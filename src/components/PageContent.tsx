@@ -27,6 +27,7 @@ const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const PageContent: React.FC<PageContentProps> = ({ contentType }) => {
     const [input, setInput] = useState('');
     const [content, setContent] = useState<Content[]>([]);
+    const [popularMovies, setPopularMovies] = useState<Content[]>([]);
 
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
@@ -46,6 +47,18 @@ const PageContent: React.FC<PageContentProps> = ({ contentType }) => {
         window.open(`https://www.themoviedb.org/${contentType}/${contentId}`, '_blank');
     };
 
+    useEffect(() => {
+        const fetchPopularMovies = async () => {
+            try {
+                const response = await axios.get(`https://api.themoviedb.org/3/${contentType}/popular?api_key=${API_KEY}`);
+                setPopularMovies(response.data.results);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchPopularMovies();
+    }, []);
+
     return (
         <>
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
@@ -56,10 +69,23 @@ const PageContent: React.FC<PageContentProps> = ({ contentType }) => {
                             <Movie key={item.id} {...item} onClick={() => handleContentClick(item.id)} />
                         ))}
                     </div>
+                    {content.length === 0 && (
+                        <>
+                            <div className='movie-container'>
+                                <h1 className='text-2xl pb-4'>POPULAR</h1>
+                            </div>
+                            <div className="movie-container">
+                                {popularMovies.map((item) => (
+                                    <Movie key={item.id} {...item} onClick={() => handleContentClick(item.id)} />
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </>
     );
+
 };
 
 export default PageContent;
