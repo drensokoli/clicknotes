@@ -43,14 +43,26 @@ const PageContent: React.FC<PageContentProps> = ({ contentType }) => {
         }
     };
 
-    const handleContentClick = (contentId: number) => {
-        window.open(`https://www.themoviedb.org/${contentType}/${contentId}`, '_blank');
+    const handleContentClick = async (contentId: number) => {
+        try {
+            const response = await axios.get(`https://api.themoviedb.org/3/${contentType}/${contentId}?api_key=${API_KEY}`);
+            const imdbId = response.data.imdb_id;
+            console.log(imdbId);
+            if (imdbId) {
+                window.open(`https://www.imdb.com/title/${imdbId}`, '_blank');
+            } else {
+                window.open(`https://www.themoviedb.org/${contentType}/${contentId}`, '_blank');
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
+
 
     useEffect(() => {
         const fetchPopularMovies = async () => {
             try {
-                const response = await axios.get(`https://api.themoviedb.org/3/${contentType}/popular?api_key=${API_KEY}`);
+                const response = await axios.get(`https://api.themoviedb.org/3/${contentType}/popular?api_key=${API_KEY}&language=en-US&page=1`);
                 setPopularMovies(response.data.results);
             } catch (error) {
                 console.error(error);
