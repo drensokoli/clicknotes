@@ -21,62 +21,27 @@ export default function Navbar() {
 
     return (
         <>
-            <Disclosure as="nav" className="bg-white fixed w-full top-0 z-10 shadow-md">
-                {({ open }) => (
-                    <>
-                        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 h-18">
-                            <div className="relative flex h-16 justify-between items-center">
-                                <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                                        <span className="sr-only">Open main menu</span>
-                                        {open ? (
-                                            <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                                        ) : (
-                                            <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                                        )}
-                                    </Disclosure.Button>
-                                </div>
-                                <div className="flex flex-1 items-center justify-between">
-                                    <div className="flex flex-shrink-0 hidden sm:block sm:items-center">
-                                        <a href="/">
-                                            <img src="/logo.png" alt="logo"
-                                                className="block h-8 w-auto lg:hidden"
-                                            />
-                                        </a>
-                                        <a href="/">
-                                            <img src="/logo.png" alt="logo"
-                                                className="hidden h-8 w-auto lg:block"
-                                            />
-                                        </a>
-                                    </div>
-                                    <div className="hidden sm:block pr-14">
-                                        <div className="flex gap-6">
-                                            {navigation.map((item) => (
-                                                <a
-                                                    key={item.name}
-                                                    href={item.href}
-
-                                                    className={`text-gray-400 hover:border-b-2 hover:border-indigo-400 text-sm font-medium ${router.pathname === item.href ? ' text-gray-700 border-b-2 border-indigo-500' : ''
-                                                        }`}
-                                                >{item.name}
-                                                </a>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="absolute inset-y-0 right-0 flex items-center sm:static ">
-
-                                        <Menu as="div" className="relative">
-
-                                            <div>
-
-                                                {session ? (
-                                                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                                        <img
-                                                            className="h-8 w-8 rounded-full"
-                                                            src={session?.user?.image?.toString()}
-                                                            alt=""
-                                                        />
-                                                    </Menu.Button>
+            <nav>
+                <div className="bg-peach-dark p-4 fixed w-full top-0 z-10 shadow-md flex justify-around">
+                    <a href="/">
+                        <img src="/logo.png" alt="logo" className='ml-6 w-[30px]' />
+                    </a>
+                    <form onSubmit={(e) => e.preventDefault()} className="w-3/5 md:w-2/4 mx-auto invisible sm:visible">
+                        <input
+                            type="text"
+                            placeholder="Enter movie title"
+                            value={input}
+                            onChange={handleInputChange}
+                            className="border rounded p-2 w-full text-gray-900 bg-peach-light"
+                        />
+                    </form>
+                    <div>
+                        {!session ? (
+                            <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signIn()}>
+                                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
+                                    Sign in
+                                </span>
+                            </button>
 
                                                 ) : (
                                                     <button type="button"

@@ -13,6 +13,7 @@ export default function Profile() {
         e.preventDefault();
         console.log('Notion API Key:', notionApiKey);
         console.log('Notion Database ID:', notionDatabaseId);
+        console.log("MONGO:", process.env.NEXT_PUBLIC_MONGODB_URI);
     };
 
     if (status === 'loading') {
@@ -27,10 +28,98 @@ export default function Profile() {
     }
 
     return (
+        <div className='bg-peach h-screen background-image'>
+            <div className='flex justify-between p-10 items-baseline gap-3'>
+                <div className='flex flex-row justify-center items-center cursor-pointer' onClick={back}>
+                    <img src="/back-arrow.png" alt="" className='h-3' />
+                    <h1 className='text-xl pl-2'>HOME</h1>
+                </div>
+                <button className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800" onClick={() => signOut()} >
+                    <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 md:font-20">
+                        Sign out
+                    </span>
+                </button>
+            </div>
+            <div className="container mx-auto px-4 py-8 flex flex-col items-center">
+                <div className=" flex flex-col items-center ">
+                    <h1 className='text-3xl pb-10 font-bold text-center'>Welcome back, {session?.user?.name}</h1>
+                    <img src={picture?.toString()} alt="" className='h-auto w-22 p-5' />
+                </div>
+                <form onSubmit={handleSubmit} className='sm:w-5/6 w-full'>
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            value={notionApiKey}
+                            onChange={(e) => setNotionApiKey(e.target.value)}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white-100"
+                            placeholder='Enter your Notion API Key'
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            value={notionDatabaseId}
+                            onChange={(e) => setNotionDatabaseId(e.target.value)}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline  bg-white-100"
+                            placeholder='Enter your Notion Database ID'
+                        />
+                    </div>
+                    <div className='flex justify-center'>
         <>
             <div className="antialiased mt-24">
                 <div className="container">
                     <div>
+
+                        <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto shadow-xl border-t-2 rounded-md border-gray-20 ">
+                            <div className="flex justify-center">
+                                <img src={session?.user?.image?.toString()} alt="" className="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " />
+                            </div>
+
+                            <div className="mt-16">
+                                <h1 className="font-bold text-center text-3xl text-gray-900">{session?.user?.name}</h1>
+                                <div className="w-full">
+                                    <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm pb-4">
+                                        <form onSubmit={handleSubmit} className='w-full pl-2 pr-2'>
+                                            <div className='mb-4 border-b-2 border-gray pb-6 pl-6 pr-6'>
+                                                <label className="block mb-2 text-sm text-gray-500">API Key</label>
+                                                <input
+                                                    type="text"
+                                                    value={notionApiKey}
+                                                    onChange={(e) => setNotionApiKey(e.target.value)}
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                    placeholder="Enter your Notion API Key"
+                                                />
+                                            </div>
+                                            <div className='mb-4 pl-6 pr-6'>
+                                                <label className="block mb-2 text-sm text-gray-500">Movies Database ID</label>
+                                                <input
+                                                    type="text"
+                                                    value={notionApiKey}
+                                                    onChange={(e) => setNotionApiKey(e.target.value)}
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                    placeholder="Enter your Movies Database ID"
+                                                />
+                                            </div>
+                                            <div className='mb-4 pl-6 pr-6'>
+                                                <label className="block mb-2 text-sm text-gray-500">TV Shows Database ID</label>
+                                                <input
+                                                    type="text"
+                                                    value={notionApiKey}
+                                                    onChange={(e) => setNotionApiKey(e.target.value)}
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                    placeholder="Enter your TV Shows Database ID"
+                                                />
+                                            </div>
+                                            <div className='mb-4 pl-6 pr-6'>
+                                                <label className="block mb-2 text-sm text-gray-500">Books Database ID</label>
+                                                <input
+                                                    type="text"
+                                                    value={notionApiKey}
+                                                    onChange={(e) => setNotionApiKey(e.target.value)}
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
+                                                    placeholder="Enter your Books Database ID"
+                                                />
+                                            </div>
 
                         <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto shadow-xl border-t-2 rounded-md border-gray-20 ">
                             <div className="flex justify-center">
