@@ -5,8 +5,8 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-peach p-4 bottom-0 w-full z-10 flex items-center justify-center">
-      <p className="text-gray-800 mr-2 font-bold">&copy; 2023 Movie Notes</p>
+    <footer className="bg-white p-4 bottom-0 w-full z-10 flex items-center justify-center">
+      <p className="text-gray-800 mr-2 ">&copy; 2023 Movie Notes</p>
     </footer>
   );
 };
