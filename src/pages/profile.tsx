@@ -53,33 +53,33 @@ export default function Profile() {
                                                 />
                                             </div>
                                             <div className='mb-4 pl-6 pr-6'>
-                                                <label className="block mb-2 text-sm text-gray-500">Movies Database ID</label>
+                                                <label className="block mb-2 text-sm text-gray-500">Movies Page link</label>
                                                 <input
                                                     type="text"
                                                     value={notionApiKey}
                                                     onChange={(e) => setNotionApiKey(e.target.value)}
                                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                    placeholder="Enter your Movies Database ID"
+                                                    placeholder="Enter your Movies Page link"
                                                 />
                                             </div>
                                             <div className='mb-4 pl-6 pr-6'>
-                                                <label className="block mb-2 text-sm text-gray-500">TV Shows Database ID</label>
+                                                <label className="block mb-2 text-sm text-gray-500">TV Shows Page link</label>
                                                 <input
                                                     type="text"
                                                     value={notionApiKey}
                                                     onChange={(e) => setNotionApiKey(e.target.value)}
                                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                    placeholder="Enter your TV Shows Database ID"
+                                                    placeholder="Enter your TV Shows Page link"
                                                 />
                                             </div>
                                             <div className='mb-4 pl-6 pr-6'>
-                                                <label className="block mb-2 text-sm text-gray-500">Books Database ID</label>
+                                                <label className="block mb-2 text-sm text-gray-500">Books Page link</label>
                                                 <input
                                                     type="text"
                                                     value={notionApiKey}
                                                     onChange={(e) => setNotionApiKey(e.target.value)}
                                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
-                                                    placeholder="Enter your Books Database ID"
+                                                    placeholder="Enter your Books Page link"
                                                 />
                                             </div>
 
