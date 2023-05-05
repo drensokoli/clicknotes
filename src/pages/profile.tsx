@@ -11,13 +11,13 @@ export default function Profile() {
     const [moviesPageLink, setMoviesPageLink] = useState('');
     const [tvShowsPageLink, setTvShowsPageLink] = useState('');
     const [booksPageLink, setBooksPageLink] = useState('');
+    const router = useRouter();
 
     if (status === 'loading') {
         return <div>Loading...</div>;
     }
 
     var picture = session?.user?.image;
-    const router = useRouter();
 
     const back = () => {
         router.push('/');
