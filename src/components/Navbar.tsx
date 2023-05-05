@@ -4,6 +4,8 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import Image from 'next/dist/client/image';
 
 
 export default function Navbar() {
@@ -38,28 +40,28 @@ export default function Navbar() {
                                 </div>
                                 <div className="flex flex-1 items-center justify-between">
                                     <div className="flex flex-shrink-0 hidden sm:block sm:items-center">
-                                        <a href="/">
-                                            <img src="/logo.png" alt="logo"
+                                        <Link href="/">
+                                            <Image src="/logo.png" alt="logo" width={30} height={40}
                                                 className="block h-8 w-auto lg:hidden"
                                             />
-                                        </a>
-                                        <a href="/">
-                                            <img src="/logo.png" alt="logo"
+                                        </Link>
+                                        <Link href="/">
+                                            <Image src="/logo.png" alt="logo" width={30} height={40}
                                                 className="hidden h-8 w-auto lg:block"
                                             />
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="hidden sm:block pr-14">
                                         <div className="flex gap-6">
                                             {navigation.map((item) => (
-                                                <a
+                                                <Link
                                                     key={item.name}
                                                     href={item.href}
 
                                                     className={`text-gray-400 hover:border-b-2 hover:border-indigo-400 text-sm font-medium ${router.pathname === item.href ? ' text-gray-700 border-b-2 border-indigo-500' : ''
                                                         }`}
                                                 >{item.name}
-                                                </a>
+                                                </Link>
                                             ))}
                                         </div>
                                     </div>
@@ -78,9 +80,10 @@ export default function Navbar() {
 
                                                 ) : (
                                                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                                        <img
+                                                        <Image
                                                             className="h-8 w-8 rounded-full"
-                                                            src={session?.user?.image?.toString()}
+                                                            src={session?.user?.image?.toString()!}
+                                                            width={30} height={40}
                                                             alt=""
                                                         />
                                                     </Menu.Button>
@@ -98,21 +101,21 @@ export default function Navbar() {
                                                 <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <a
+                                                            <Link
                                                                 href="/profile"
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                             >
                                                                 Your Profile
-                                                            </a>
+                                                            </Link>
                                                         )}
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <a
+                                                            <h1
                                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                                 onClick={() => signOut()}>
                                                                 Sign out
-                                                            </a>
+                                                            </h1>
                                                         )}
                                                     </Menu.Item>
                                                 </Menu.Items>

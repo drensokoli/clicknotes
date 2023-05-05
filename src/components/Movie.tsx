@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
-
+import Image from 'next/dist/client/image';
 interface MovieProps {
   id: number;
   title: string;
@@ -20,22 +20,20 @@ const Movie: React.FC<MovieProps> = ({ id, title, release_date, poster_path, onC
         {poster_path ? (
           <div className='movie-image'>
 
-            <img
-              src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${poster_path}`} height={300} width={200}
               alt={title}
               className="h-[300px] rounded-sm"
             />
 
             {!session ? (
-              <a href='/signin'>
 
-                <button type="button"
-                  className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                  onClick={() => signIn()}
-                  >
-                  Add to Notion
-                </button>
-              </a>
+              <button type="button"
+                className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                onClick={() => signIn()}
+              >
+                Add to Notion
+              </button>
             )
               : (
                 <button type="button"
@@ -44,8 +42,8 @@ const Movie: React.FC<MovieProps> = ({ id, title, release_date, poster_path, onC
                 </button>
               )
             }
-            <img src="/share.png" className="arrows" alt=""
-              onClick={onClick} />
+            <Image src="/share.png" className="arrows" alt=""
+              onClick={onClick} width={30} height={30}/>
 
           </div>
         ) : (
@@ -60,15 +58,13 @@ const Movie: React.FC<MovieProps> = ({ id, title, release_date, poster_path, onC
             ></div>
 
             {!session ? (
-              <a href='/tvshows'>
 
-                <button type="button"
-                  className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                  onClick={() => signIn()}
-                  >
-                  Add to Notion
-                </button>
-              </a>
+              <button type="button"
+                className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                onClick={() => signIn()}
+              >
+                Add to Notion
+              </button>
             )
               : (
                 <button type="button"
@@ -77,7 +73,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, release_date, poster_path, onC
                 </button>
               )
             }
-            <img src="/share-black.png" className="arrows" alt=""
+            <Image src="/share-black.png" className="arrows" alt="" width={30} height={30}
               onClick={onClick} />
           </div>
         )}

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { signIn, useSession, signOut, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import Example from '@/components/Navbar';
-
+import Image from 'next/dist/client/image';
 
 export default function Profile() {
     const { data: session, status } = useSession();
@@ -53,7 +52,7 @@ export default function Profile() {
                 <div className="container">
                     <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto rounded-md drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">
                         <div className="flex justify-center">
-                            <img src={session?.user?.image?.toString()} alt="" className="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " />
+                            <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={50} height={50} />
                         </div>
 
                         <div className="mt-16">
