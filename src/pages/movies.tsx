@@ -5,9 +5,7 @@ const Movies: React.FC = () => {
 
     return (
         <>
-            <div title='Movies'>
-                <PageContent contentType={ContentType.Movie} />
-            </div>
+            <PageContent contentType={ContentType.Movie} />
         </>
     );
 };
