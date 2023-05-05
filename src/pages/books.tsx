@@ -6,7 +6,9 @@ const Books: React.FC = () => {
 
     return (
         <>
-            <PageContent contentType={ContentType.Movie} />
+            <div title='Books'>
+                <PageContent contentType={ContentType.Movie} />
+            </div>
         </>
     );
 };
