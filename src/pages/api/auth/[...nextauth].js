@@ -21,4 +21,9 @@ export default NextAuth({
     }),
   ],
   secret: process.env.JWT_SECRET,
+  callbacks: {
+    async redirect(url, baseUrl) {
+      return url.startsWith(baseUrl) ? url : baseUrl;
+    },
+  },  
 });
