@@ -22,8 +22,14 @@ export default NextAuth({
   ],
   secret: process.env.JWT_SECRET,
   callbacks: {
+    async signIn(user, account, profile) {
+      if (account.provider === 'google') {
+        return true;
+      }
+      return false;
+    },
     async redirect(url, baseUrl) {
       return url.startsWith(baseUrl) ? url : baseUrl;
     },
-  },  
+  },
 });
