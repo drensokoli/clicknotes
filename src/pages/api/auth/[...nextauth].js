@@ -5,7 +5,7 @@ import clientPromise from "../../../lib/mongodb"
 
 const db = process.env.NEXT_PUBLIC_MONGODB_DB_NAME;
 
-export default NextAuth({
+export const authOptions = {
   adapter: MongoDBAdapter(clientPromise, {
     databaseName: db,
     collections: {
@@ -21,4 +21,9 @@ export default NextAuth({
     }),
   ],
   secret: process.env.JWT_SECRET,
-});
+  pages: {
+    signIn: '/auth/signin',
+  }
+};
+
+export default (req, res) => NextAuth(req, res, authOptions);
