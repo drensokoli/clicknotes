@@ -23,7 +23,7 @@ export default function Navbar() {
 
     return (
         <>
-            <Disclosure as="nav" className="bg-white fixed w-full top-0 z-10 shadow-md">
+            <Disclosure as="nav" className="backdrop-blur-md bg-white bg-opacity-80 fixed w-full top-0 z-10 shadow-lg ">
                 {({ open }) => (
                     <>
                         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 h-18">
@@ -58,7 +58,7 @@ export default function Navbar() {
                                                     key={item.name}
                                                     href={item.href}
 
-                                                    className={`text-gray-400 hover:border-b-2 hover:border-indigo-400 text-sm font-medium ${router.pathname === item.href ? ' text-gray-700 border-b-2 border-indigo-500' : ''
+                                                    className={`text-gray-500 hover:border-b-2 hover:border-indigo-400 text-sm font-medium ${router.pathname === item.href ? ' text-gray-800 border-b-2 border-indigo-500' : ''
                                                         }`}
                                                 >{item.name}
                                                 </Link>
