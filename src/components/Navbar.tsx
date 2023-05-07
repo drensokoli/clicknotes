@@ -143,10 +143,8 @@ export default function Navbar() {
                                         key={item.name}
                                         as="a"
                                         href={item.href}
-                                        className={classNames(
-                                            item.current ? 'bg-gray-900 text-black' : 'text-gray-400 hover:bg-gray-700 hover:text-white w-full text-center',
-                                            'block rounded-md px-3 py-2 text-base font-medium'
-                                        )}
+                                        className={`text-gray-400 hover:bg-gray-700 hover:text-white w-full text-center block rounded-md px-3 py-2 text-base font-medium ${router.pathname === item.href ? ' bg-gray-900 text-black' : ''
+                                                        }`}
                                         aria-current={item.current ? 'page' : undefined}
                                     >
                                         {item.name}
