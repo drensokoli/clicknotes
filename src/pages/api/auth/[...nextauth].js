@@ -21,10 +21,4 @@ export default NextAuth({
     }),
   ],
   secret: process.env.JWT_SECRET,
-  callbacks: {
-    async jwt({ token }) {
-      token.userRole = "admin"
-      return token
-    },
-  },
 });
