@@ -4,12 +4,13 @@ import Image from 'next/dist/client/image';
 interface MovieProps {
   id: number;
   title: string;
+  name: string;
   release_date: string;
   poster_path: string;
   onClick: () => void;
 }
 
-const Movie: React.FC<MovieProps> = ({ id, title, release_date, poster_path, onClick }) => {
+const Movie: React.FC<MovieProps> = ({ id, title, name, release_date, poster_path, onClick }) => {
 
   const { data: session } = useSession();
 
@@ -43,7 +44,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, release_date, poster_path, onC
               )
             }
             <Image src="/share.png" className="arrows" alt=""
-              onClick={onClick} width={30} height={30}/>
+              onClick={onClick} width={30} height={30} />
 
           </div>
         ) : (
@@ -79,8 +80,9 @@ const Movie: React.FC<MovieProps> = ({ id, title, release_date, poster_path, onC
         )}
       </div>
       <h2 className="text-l font-bold text-center text-gray-800">
-        <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
+        <span>{title || name} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
       </h2>
+
     </div>
   );
 };
