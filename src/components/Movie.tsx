@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Image from 'next/dist/client/image';
+
 interface MovieProps {
   id: number;
   title: string;
