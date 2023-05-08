@@ -56,11 +56,20 @@ const BooksPageContent: React.FC<BooksPageContentProps> = () => {
             const bookDetailsResponses = await Promise.all(bookDetailsPromises);
             const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
             setBestsellers(bestsellers);
-            // await redis.set('bestsellers', JSON.stringify(bestsellers), 'EX', 60 * 60);
+
+            // Store the best sellers data in Redis
+            await fetch('/api/redisHandler', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bestsellers }),
+            });
         } catch (error) {
             console.error(error);
         }
     };
+
 
     useEffect(() => {
         fetchBestsellers();
