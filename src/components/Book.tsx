@@ -78,7 +78,7 @@ const Book: React.FC<BookProps> = ({ id, title, cover_image, previewLink, onClic
                             )
                         }
                         <Image src="/share-black.png" className="arrows" alt="" width={30} height={30}
-                            onClick={onClick} />
+                            onClick={handleClick} />
                     </div>
                 )}
             </div>
