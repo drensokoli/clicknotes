@@ -1,49 +1,66 @@
-import React, { useState } from 'react';
-import { signIn, useSession, signOut, getSession } from 'next-auth/react';
+import React, { useEffect, useState } from 'react';
+import { useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/dist/client/image';
 
 export default function Profile() {
     const { data: session, status } = useSession();
+
     const [notionApiKey, setNotionApiKey] = useState('');
-    const [notionDatabaseId, setNotionDatabaseId] = useState('');
-    const [apiKey, setApiKey] = useState('');
     const [moviesPageLink, setMoviesPageLink] = useState('');
     const [tvShowsPageLink, setTvShowsPageLink] = useState('');
     const [booksPageLink, setBooksPageLink] = useState('');
+
     const router = useRouter();
 
-    if (status === 'loading') {
-        return <div>Loading...</div>;
-    }
-
-    var picture = session?.user?.image;
-
-    const back = () => {
-        router.push('/');
-    }
     async function handleSubmit() {
-        // e.preventDefault();
-
-        const response = await fetch('/api/updateProfile', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: session?.user?.email,
-                updatedProfile: {
-                    // The updated profile data goes here
+        try {
+            const response = await fetch('/api/updateUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-            }),
-        });
-
-        if (response.ok) {
-            // Handle successful profile update
-        } else {
-            // Handle error updating profile
+                body: JSON.stringify({
+                    userEmail: session?.user?.email,
+                    notionApiKey,
+                    moviesPageLink,
+                    tvShowsPageLink,
+                    booksPageLink,
+                }),
+            });
+            router.push('/profile');
+        } catch (error) {
+            console.error('Error:', error);
         }
     }
+
+    async function fetchUserData() {
+        try {
+            const response = await fetch('/api/getUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userEmail: session?.user?.email,
+                }),
+            });
+            const data = await response.json();
+            setNotionApiKey(data.notionApiKey);
+            setMoviesPageLink(data.moviesPageLink);
+            setTvShowsPageLink(data.tvShowsPageLink);
+            setBooksPageLink(data.booksPageLink);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    useEffect(() => {
+        if (session) {
+            fetchUserData();
+        }
+    }, [session]);
+
 
 
     return (
@@ -64,40 +81,37 @@ export default function Profile() {
                                             <label className="block mb-2 text-sm text-gray-500">API Key</label>
                                             <input
                                                 type="text"
-                                                value={notionApiKey}
                                                 onChange={(e) => setNotionApiKey(e.target.value)}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                placeholder="Enter your Notion API Key"
+                                                placeholder={notionApiKey || "Enter your Notion API Key"}
                                             />
+
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
                                             <label className="block mb-2 text-sm text-gray-500">Movies Page link</label>
                                             <input
                                                 type="text"
-                                                // value={notionApiKey}
-                                                // onChange={(e) => setNotionApiKey(e.target.value)}
+                                                onChange={(e) => setMoviesPageLink(e.target.value)}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                placeholder="Enter your Movies Page link"
+                                                placeholder={moviesPageLink || "Enter your Movies Page link"}
                                             />
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
                                             <label className="block mb-2 text-sm text-gray-500">TV Shows Page link</label>
                                             <input
                                                 type="text"
-                                                // value={notionApiKey}
-                                                // onChange={(e) => setNotionApiKey(e.target.value)}
+                                                onChange={(e) => setTvShowsPageLink(e.target.value)}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                placeholder="Enter your TV Shows Page link"
+                                                placeholder={tvShowsPageLink || "Enter your TV Shows Page link"}
                                             />
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
                                             <label className="block mb-2 text-sm text-gray-500">Books Page link</label>
                                             <input
                                                 type="text"
-                                                // value={notionApiKey}
-                                                // onChange={(e) => setNotionApiKey(e.target.value)}
+                                                onChange={(e) => setBooksPageLink(e.target.value)}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
-                                                placeholder="Enter your Books Page link"
+                                                placeholder={booksPageLink || "Enter your Books Page link"}
                                             />
                                         </div>
                                         <div className='flex justify-center px-6 pt-6'>
