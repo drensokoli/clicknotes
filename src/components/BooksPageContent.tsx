@@ -44,12 +44,19 @@ const BooksPageContent: React.FC<BooksPageContentProps> = () => {
 
     const fetchBestsellers = async () => {
         try {
+            const cacheResponse = await fetch("/api/redisHandler");
+            const cacheData = await cacheResponse.json();
+            if (cacheData) {
+                setBestsellers(JSON.parse(cacheData));
+                return;
+            }
             const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${NYTIMES_API_KEY}`);
             const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
             const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_BOOKS_API_KEY}`));
             const bookDetailsResponses = await Promise.all(bookDetailsPromises);
             const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
             setBestsellers(bestsellers);
+            // await redis.set('bestsellers', JSON.stringify(bestsellers), 'EX', 60 * 60);
         } catch (error) {
             console.error(error);
         }
