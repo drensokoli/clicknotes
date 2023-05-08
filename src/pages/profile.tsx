@@ -13,26 +13,37 @@ export default function Profile() {
 
     const router = useRouter();
 
-    async function handleSubmit() {
+    function extractValueFromUrl(url: string) {
+        const regex = /([a-f0-9]{32})/;
+        const match = url.match(regex);
+        return match ? match[1] : '';
+      }
+
+      
+      async function handleSubmit() {
         try {
-            const response = await fetch('/api/updateUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userEmail: session?.user?.email,
-                    notionApiKey,
-                    moviesPageLink,
-                    tvShowsPageLink,
-                    booksPageLink,
-                }),
-            });
-            router.reload();
+          const extractedMoviesPageValue = extractValueFromUrl(moviesPageLink);
+          const extractedTvShowsPageValue = extractValueFromUrl(tvShowsPageLink);
+          const extractedBooksPageValue = extractValueFromUrl(booksPageLink);
+      
+          const response = await fetch('/api/updateUser', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userEmail: session?.user?.email,
+              notionApiKey,
+              moviesPageLink: extractedMoviesPageValue,
+              tvShowsPageLink: extractedTvShowsPageValue,
+              booksPageLink: extractedBooksPageValue,
+            }),
+          });
+          router.reload();
         } catch (error) {
-            console.error('Error:', error);
+          console.error('Error:', error);
         }
-    }
+      }      
 
     async function fetchUserData() {
         try {
