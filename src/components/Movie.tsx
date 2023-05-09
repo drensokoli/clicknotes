@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
+const { Client } = require('@notionhq/client');
 
 interface MovieProps {
   id: number;
@@ -15,6 +16,42 @@ const Movie: React.FC<MovieProps> = ({ id, title, name, release_date, poster_pat
 
   const { data: session } = useSession();
 
+  const handleAddToNotion = async () => {
+    // Fetch user data from MongoDB
+    const response = await fetch('/api/getUser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail: session?.user?.email }),
+    });
+  
+    const user = await response.json();
+  
+    // Fetch movie data
+    const movieData = {
+      id: id,
+      title: title,
+      name: name,
+      release_date: release_date,
+      poster_path: poster_path,
+    };
+  
+    // Call the new API route to add the movie to Notion
+    const notionResponse = await fetch('/api/addMovieToNotion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        // userEmail: session?.user?.email,
+        notionApiKey: user.notionApiKey,
+        db_id: user.moviesPageLink,
+        movieData: movieData,
+      }),
+    });
+  
+    const notionResult = await notionResponse.json();
+    console.log(notionResult);
+  };
+  
+  
   return (
     <div key={id} className="movie-card">
       <div className="movie-card-image-container">
@@ -39,7 +76,9 @@ const Movie: React.FC<MovieProps> = ({ id, title, name, release_date, poster_pat
             )
               : (
                 <button type="button"
-                  className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                  className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                  onClick={handleAddToNotion}
+                  >
                   Add to Notion
                 </button>
               )
