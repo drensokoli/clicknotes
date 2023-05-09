@@ -7,6 +7,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const notion = new Client({ auth: notionApiKey });
 
+        const genresArray = [];
+
+if (tvShowData.firstGenre) {
+  genresArray.push({ "name": tvShowData.firstGenre });
+}
+
+if (tvShowData.secondGenre) {
+  genresArray.push({ "name": tvShowData.secondGenre });
+}
+
+if (tvShowData.thirdGenre) {
+  genresArray.push({ "name": tvShowData.thirdGenre });
+}
         const newPage = await notion.pages.create({
             parent: {
                 database_id: db_id,
@@ -30,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                 },
                 'Genres': {
-                    multi_select: [{"name": tvShowData.firstGenre},{"name": tvShowData.secondGenre},{"name": tvShowData.thirdGenre}],
+                    multi_select: genresArray,
                 },
                 'TMDB Rating': {
                     number: tvShowData.vote_average,
