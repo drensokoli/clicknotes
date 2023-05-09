@@ -3,8 +3,6 @@ import axios from 'axios';
 import Book from '../components/Book';
 import SearchBar from '@/components/SearchBar';
 
-interface BookProps { }
-
 interface Book {
     id: string;
     volumeInfo: {
@@ -21,7 +19,7 @@ interface Book {
 const GOOGLE_BOOKS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY;
 const NYTIMES_API_KEY = process.env.NEXT_PUBLIC_NYTIMES_API_KEY;
 
-const Books: React.FC<BookProps> = () => {
+const Books: React.FC = () => {
     const [input, setInput] = useState('');
     const [books, setBooks] = useState<Book[]>([]);
     const [bestsellers, setBestsellers] = useState<Book[]>([]);
