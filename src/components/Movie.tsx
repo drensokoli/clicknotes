@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 const { Client } = require('@notionhq/client');
@@ -6,31 +6,62 @@ const { Client } = require('@notionhq/client');
 interface MovieProps {
   id: number;
   title: string;
-  name: string;
+  overview: string;
   release_date: string;
+  vote_average: number;
+  adult: boolean;
   poster_path: string;
+  backdrop_path: string;
   onClick: () => void;
 }
 
-const Movie: React.FC<MovieProps> = ({ id, title, name, release_date, poster_path, onClick }) => {
+const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, onClick }) => {
 
   const { data: session } = useSession();
+  const [genres, setGenres] = useState<string[]>([]);
+  const [imdbId, setImdbId] = useState<string>('');
 
+  useEffect(() => {
+    const fetchGenres = async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+      );
+      const movieDetails = await response.json();
+      const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
+      const imdb_id = movieDetails.imdb_id;
+      setImdbId(imdb_id);
+      setGenres(genres);
+    };
+
+    fetchGenres();
+  }, [id]);
+  
   const handleAddToNotion = async () => {
     const response = await fetch('/api/getUser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userEmail: session?.user?.email }),
     });
-  
+
     const user = await response.json();
-  
+    const rounded_vote_average = Math.round(vote_average * 10) / 10;
+    const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
+    const imdb_link = `https://www.imdb.com/title/${imdbId}`;
+
     const movieData = {
       id: id,
       title: title,
-      name: name,
+      overview: overview,
+      firstGenre: genres[0],
+      secondGenre: genres[1],
+      thirdGenre: genres[2],
       release_date: release_date,
-      poster_path: poster_path,
+      vote_average: rounded_vote_average,
+      adult: adult,
+      tmdb_link: tmdb_link,
+      imdb_link: imdb_link,
+      poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
+      backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
     };
   
     const notionResponse = await fetch('/api/addMovieToNotion', {

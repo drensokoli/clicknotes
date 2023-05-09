@@ -1,43 +1,43 @@
 import { useEffect, useState } from 'react';
-import Movie from '@/components/Movie';
 import axios from 'axios';
+import Movie from '../components/Movie';
 import SearchBar from '@/components/SearchBar';
 
-interface Movie {
+interface Content {
     id: number;
     title: string;
+    name: string;
     overview: string;
     poster_path: string;
     vote_average: number;
+    vote_count: number;
     release_date: string;
 }
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
-const Movies: React.FC = () => {
-
+const PageContent: React.FC<PageContentProps> = ({ contentType }) => {
     const [input, setInput] = useState('');
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+    const [content, setContent] = useState<Content[]>([]);
+    const [popularMovies, setPopularMovies] = useState<Content[]>([]);
 
-    
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
-        await searchMovieByTitle(event.target.value);
+        await searchContentByTitle(event.target.value);
     };
 
-    const searchMovieByTitle = async (title: string) => {
+    const searchContentByTitle = async (title: string) => {
         try {
-            const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${title}`);
-            setMovies(response.data.results);
+            const response = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${title}`);
+            setContent(response.data.results);
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleMovieClick = async (movieId: number) => {
+    const handleContentClick = async (contentId: number) => {
         try {
-            window.open(`https://www.themoviedb.org/movie/${movieId}`, '_blank');
+            window.open(`https://www.themoviedb.org/${contentType}/${contentId}`, '_blank');
         } catch (error) {
             console.error(error);
         }
@@ -47,7 +47,7 @@ const Movies: React.FC = () => {
     useEffect(() => {
         const fetchPopularMovies = async () => {
             try {
-                const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`);
+                const response = await axios.get(`https://api.themoviedb.org/3/${contentType}/popular?api_key=${API_KEY}&language=en-US&page=1`);
                 setPopularMovies(response.data.results);
             } catch (error) {
                 console.error(error);
@@ -62,18 +62,18 @@ const Movies: React.FC = () => {
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
                     <div className="movie-container">
-                        {movies.map((item) => (
-                            <Movie adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} />
+                        {content.map((item) => (
+                            <Movie key={item.id} {...item} onClick={() => handleContentClick(item.id)} />
                         ))}
                     </div>
-                    {movies.length === 0 && (
+                    {content.length === 0 && (
                         <>
                             <div className='movie-container'>
                                 <h1 className='text-2xl pb-4'>POPULAR</h1>
                             </div>
                             <div className="movie-container">
                                 {popularMovies.map((item) => (
-                                    <Movie adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} />
+                                    <Movie key={item.id} {...item} onClick={() => handleContentClick(item.id)} />
                                 ))}
                             </div>
                         </>
@@ -83,7 +83,6 @@ const Movies: React.FC = () => {
         </>
     );
 
-
 };
 
-export default Movies;
+export default PageContent;
