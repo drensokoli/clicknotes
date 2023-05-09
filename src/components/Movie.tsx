@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
-const { Client } = require('@notionhq/client');
 
 interface MovieProps {
   id: number;

@@ -62,7 +62,7 @@ const TvShows: React.FC= () => {
                 <div className="content-container w-5/6">
                     <div className="movie-container">
                         {tvShows.map((item) => (
-                            <TvShow key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} />
+                            <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} />
                         ))}
                     </div>
                     {tvShows.length === 0 && (
@@ -72,7 +72,7 @@ const TvShows: React.FC= () => {
                             </div>
                             <div className="movie-container">
                                 {popularTvShows.map((item) => (
-                                    <TvShow key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} />
+                                    <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} />
                                 ))}
                             </div>
                         </>

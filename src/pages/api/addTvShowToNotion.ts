@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { notionApiKey, db_id, movieData } = req.body;
-
+    const { notionApiKey, db_id, tvShowData } = req.body;
+    
     try {
         const notion = new Client({ auth: notionApiKey });
 
@@ -13,40 +13,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             properties: {
                 'ID': {
-                    number: movieData.id,
+                    number: tvShowData.id,
                 },
                 'Name': {
                     title: [
                         {
                             text: {
-                                content: movieData.title,
+                                content: tvShowData.name,
                             },
                         },
                     ],
                 },
                 'Release Date': {
                     date: {
-                        start: movieData.release_date,
+                        start: tvShowData.first_air_date,
                     },
                 },
                 'Genres': {
-                    multi_select: [{"name": movieData.firstGenre},{"name": movieData.secondGenre},{"name": movieData.thirdGenre}],
+                    multi_select: [{"name": tvShowData.firstGenre},{"name": tvShowData.secondGenre},{"name": tvShowData.thirdGenre}],
                 },
                 'TMDB Rating': {
-                    number: movieData.vote_average,
+                    number: tvShowData.vote_average,
                 },
                 'TMDB Link': {
-                    url: movieData.tmdb_link,
-                },
-                'iMDB Link': {
-                    url: movieData.imdb_link,
-                },
-                'Adult': {
-                    checkbox: movieData.adult,
+                    url: tvShowData.tmdb_link,
                 },
                 'Type': {
                     select: {
-                        name: 'Movie',
+                        name: 'TvShow',
                     },
                 },
                 'Status': {
@@ -57,12 +51,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             icon: {
                 type: 'emoji',
-                emoji: '🎬',
+                emoji: '📺',
             },
             cover: {
                 type: 'external',
                 external: {
-                    url: movieData.backdrop_path,
+                    url: tvShowData.backdrop_path,
                 },
             },
         });
@@ -74,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     object: 'block',
                     type: 'embed',
                     embed: {
-                        url: movieData.poster_path,
+                        url: tvShowData.poster_path,
                     },
                 },
                 {
@@ -85,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             {
                                 type: 'text',
                                 text: {
-                                    content: movieData.overview,
+                                    content: tvShowData.overview,
                                 },
                             },
                         ],

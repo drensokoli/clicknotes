@@ -1,20 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
-const { Client } = require('@notionhq/client');
 
 interface TvShowProps {
   id: number;
-  title: string;
   name: string;
-  release_date: string;
+  overview: string;
+  first_air_date: string;
+  vote_average: number;
   poster_path: string;
+  backdrop_path: string;
   onClick: () => void;
 }
 
-const TvShow: React.FC<TvShowProps> = ({ id, title, name, release_date, poster_path, onClick }) => {
+const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onClick }) => {
 
   const { data: session } = useSession();
+  const [genres, setGenres] = useState<string[]>([]);
+  
+  useEffect(() => {
+    const fetchGenres = async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+      );
+      const movieDetails = await response.json();
+      const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
+      setGenres(genres);
+    };
+
+    fetchGenres();
+  }, [id]);
+  
 
   const handleAddToNotion = async () => {
     const response = await fetch('/api/getUser', {
@@ -24,13 +40,21 @@ const TvShow: React.FC<TvShowProps> = ({ id, title, name, release_date, poster_p
     });
   
     const user = await response.json();
-  
+    const rounded_vote_average = Math.round(vote_average * 10) / 10;
+    const tmdb_link = `https://www.themoviedb.org/tv/${id}`;
+
     const tvShowData = {
       id: id,
-      title: title,
       name: name,
-      release_date: release_date,
-      poster_path: poster_path,
+      overview: overview,
+      firstGenre: genres[0],
+      secondGenre: genres[1],
+      thirdGenre: genres[2],
+      first_air_date: first_air_date,
+      vote_average: rounded_vote_average,
+      tmdb_link: tmdb_link,
+      poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
+      backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
     };
   
     const notionResponse = await fetch('/api/addTvShowToNotion', {
@@ -57,7 +81,7 @@ const TvShow: React.FC<TvShowProps> = ({ id, title, name, release_date, poster_p
 
             <Image
               src={`https://image.tmdb.org/t/p/w500${poster_path}`} height={300} width={200}
-              alt={title}
+              alt={name}
               className="h-[300px] rounded-sm"
             />
 
