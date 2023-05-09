@@ -3,7 +3,7 @@ import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 const { Client } = require('@notionhq/client');
 
-interface MovieProps {
+interface TvShowProps {
   id: number;
   title: string;
   name: string;
@@ -12,7 +12,7 @@ interface MovieProps {
   onClick: () => void;
 }
 
-const Movie: React.FC<MovieProps> = ({ id, title, name, release_date, poster_path, onClick }) => {
+const TvShow: React.FC<TvShowProps> = ({ id, title, name, release_date, poster_path, onClick }) => {
 
   const { data: session } = useSession();
 
@@ -25,7 +25,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, name, release_date, poster_pat
   
     const user = await response.json();
   
-    const movieData = {
+    const tvShowData = {
       id: id,
       title: title,
       name: name,
@@ -33,13 +33,13 @@ const Movie: React.FC<MovieProps> = ({ id, title, name, release_date, poster_pat
       poster_path: poster_path,
     };
   
-    const notionResponse = await fetch('/api/addMovieToNotion', {
+    const notionResponse = await fetch('/api/addTvShowToNotion', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         notionApiKey: user.notionApiKey,
         db_id: user.moviesPageLink,
-        movieData: movieData,
+        tvShowData: tvShowData,
       }),
     });
   
@@ -116,11 +116,11 @@ const Movie: React.FC<MovieProps> = ({ id, title, name, release_date, poster_pat
         )}
       </div>
       <h2 className="text-l font-bold text-center text-gray-800">
-        <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
+        <span>{name}</span>
       </h2>
 
     </div>
   );
 };
 
-export default Movie;
+export default TvShow;

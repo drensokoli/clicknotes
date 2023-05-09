@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 
 interface BookProps {
@@ -58,7 +58,6 @@ const Book: React.FC<BookProps> = ({ id, title, cover_image, previewLink, onClic
                                 height: '300px',
                                 borderRadius: '5px'
                             }}
-                            onClick={onClick}
                         ></div>
 
                         {!session ? (

@@ -19,7 +19,6 @@ export default function Profile() {
         return match ? match[1] : '';
       }
 
-      
       async function handleSubmit() {
         try {
           const extractedMoviesPageValue = extractValueFromUrl(moviesPageLink);
@@ -71,8 +70,6 @@ export default function Profile() {
             fetchUserData();
         }
     }, [session]);
-
-
 
     return (
         <>
@@ -138,7 +135,6 @@ export default function Profile() {
         </>
     );
 }
-
 
 export const getServerSideProps = async (context: any) => {
     const session = await getSession(context);
