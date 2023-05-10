@@ -3,6 +3,7 @@ import { useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/dist/client/image';
 import { encryptData, decryptData } from '../lib/crypto';
+import 'flowbite';
 
 export default function Profile() {
     const { data: session, status } = useSession();
@@ -91,14 +92,24 @@ export default function Profile() {
                         <div className="flex justify-center">
                             <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto absolute -top-20 w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={50} height={50} />
                         </div>
-
                         <div className="mt-16">
                             <h1 className="font-bold text-center text-3xl text-gray-900">{session?.user?.name}</h1>
                             <div className="w-full">
                                 <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm pb-4">
+                                    <button data-tooltip-target="tooltip-dark"
+                                        type="button"
+                                        className="text-white bg-blue-400 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 fixed top-4 right-4 w-8 h-8"
+                                        onClick={() => router.push('/help')}
+                                    >
+                                        ?
+                                    </button>
+                                    <div id="tooltip-dark" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-xs font-small text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                        Need help?
+                                        <div className="tooltip-arrow" data-popper-arrow></div>
+                                    </div>
                                     <form onSubmit={handleSubmit} className='w-full pl-2 pr-2'>
                                         <div className='mb-4 border-b-2 border-gray pb-6 pl-6 pr-6'>
-                                            <label className="block mb-2 text-sm text-gray-500">API Key</label>
+                                            <label className="block mb-2 text-sm text-gray-500">Notion API Key</label>
                                             <input
                                                 type="text"
                                                 onChange={(e) => setNotionApiKey(e.target.value)}
@@ -107,7 +118,7 @@ export default function Profile() {
                                             />
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
-                                            <label className="block mb-2 text-sm text-gray-500">Movies Page link</label>
+                                            <label className="block mb-2 text-sm text-gray-500">Movies Database link</label>
                                             <input
                                                 type="text"
                                                 onChange={(e) => setMoviesPageLink(e.target.value)}
@@ -116,7 +127,7 @@ export default function Profile() {
                                             />
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
-                                            <label className="block mb-2 text-sm text-gray-500">TV Shows Page link</label>
+                                            <label className="block mb-2 text-sm text-gray-500">TV Shows Database link</label>
                                             <input
                                                 type="text"
                                                 onChange={(e) => setTvShowsPageLink(e.target.value)}
@@ -125,7 +136,7 @@ export default function Profile() {
                                             />
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
-                                            <label className="block mb-2 text-sm text-gray-500">Books Page link</label>
+                                            <label className="block mb-2 text-sm text-gray-500">Books Database link</label>
                                             <input
                                                 type="text"
                                                 onChange={(e) => setBooksPageLink(e.target.value)}
@@ -134,7 +145,7 @@ export default function Profile() {
                                             />
                                         </div>
                                         <div className='flex justify-center px-6 pt-6'>
-                                            <button onClick={handleSubmit} type="button" className="w-full text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">Submit</button>
+                                            <button onClick={handleSubmit} type="button" className="w-full text-yellow-200 hover:text-white border border-yellow-200 hover:bg-yellow-300 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-yellow-200 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">Submit</button>
                                         </div>
                                     </form>
                                 </div>

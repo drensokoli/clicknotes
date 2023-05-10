@@ -178,3 +178,6 @@ body {
   text-align: center;
 }
 
+.bg-test {
+  background-image: url('/public/create-integration.gif');
+}
