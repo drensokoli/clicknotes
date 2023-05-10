@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
+import { decryptData } from '@/lib/crypto';
 
 interface MovieProps {
   id: number;
@@ -67,8 +68,8 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        notionApiKey: user.notionApiKey,
-        db_id: user.moviesPageLink,
+        notionApiKey: decryptData(user.notionApiKey),
+        db_id: decryptData(user.moviesPageLink),
         movieData: movieData,
       }),
     });

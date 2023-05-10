@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
+import { decryptData } from '@/lib/crypto';
 
 interface TvShowProps {
   id: number;
@@ -61,8 +62,8 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        notionApiKey: user.notionApiKey,
-        db_id: user.moviesPageLink,
+        notionApiKey: decryptData(user.notionApiKey),
+        db_id: decryptData(user.tvShowsPageLink),
         tvShowData: tvShowData,
       }),
     });

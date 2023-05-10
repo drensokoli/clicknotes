@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/dist/client/image';
+import { encryptData, decryptData } from '../lib/crypto';
 
 export default function Profile() {
     const { data: session, status } = useSession();
@@ -17,32 +18,36 @@ export default function Profile() {
         const regex = /([a-f0-9]{32})/;
         const match = url.match(regex);
         return match ? match[1] : '';
-      }
+    }
 
-      async function handleSubmit() {
+    async function handleSubmit() {
         try {
-          const extractedMoviesPageValue = extractValueFromUrl(moviesPageLink);
-          const extractedTvShowsPageValue = extractValueFromUrl(tvShowsPageLink);
-          const extractedBooksPageValue = extractValueFromUrl(booksPageLink);
-      
-          const response = await fetch('/api/updateUser', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              userEmail: session?.user?.email,
-              notionApiKey,
-              moviesPageLink: extractedMoviesPageValue,
-              tvShowsPageLink: extractedTvShowsPageValue,
-              booksPageLink: extractedBooksPageValue,
-            }),
-          });
-          router.reload();
+            const encryptedNotionApiKey = encryptData(notionApiKey);
+            const extractedMoviesPageValue = extractValueFromUrl(moviesPageLink);
+
+            const encryptedMoviesPageLink = encryptData(extractedMoviesPageValue);
+            // const extractedMoviesPageValue = encryptData(extractValueFromUrl(moviesPageLink));
+            const extractedTvShowsPageValue = encryptData(extractValueFromUrl(tvShowsPageLink));
+            const extractedBooksPageValue = encryptData(extractValueFromUrl(booksPageLink));
+
+            const response = await fetch('/api/updateUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userEmail: session?.user?.email,
+                    notionApiKey: encryptedNotionApiKey,
+                    moviesPageLink: encryptedMoviesPageLink,
+                    tvShowsPageLink: extractedTvShowsPageValue,
+                    booksPageLink: extractedBooksPageValue,
+                }),
+            });
+            router.reload();
         } catch (error) {
-          console.error('Error:', error);
+            console.error('Error:', error);
         }
-      }      
+    }
 
     async function fetchUserData() {
         try {
@@ -56,10 +61,17 @@ export default function Profile() {
                 }),
             });
             const data = await response.json();
-            setNotionApiKey(data.notionApiKey);
-            setMoviesPageLink(data.moviesPageLink);
-            setTvShowsPageLink(data.tvShowsPageLink);
-            setBooksPageLink(data.booksPageLink);
+
+            const decryptedNotionApiKey = decryptData(data.notionApiKey);
+            const decryptedMoviesPageLink = decryptData(data.moviesPageLink);
+            const decryptedTvShowsPageLink = decryptData(data.tvShowsPageLink);
+            const decryptedBooksPageLink = decryptData(data.booksPageLink);
+
+            setNotionApiKey(decryptedNotionApiKey);
+            setMoviesPageLink(decryptedMoviesPageLink);
+            setTvShowsPageLink(decryptedTvShowsPageLink);
+            setBooksPageLink(decryptedBooksPageLink);
+
         } catch (error) {
             console.error('Error:', error);
         }
