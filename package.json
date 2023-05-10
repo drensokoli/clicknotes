@@ -38,6 +38,7 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
     "@types/js-cookie": "^3.0.3"
   }
 }
