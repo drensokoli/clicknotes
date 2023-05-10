@@ -98,7 +98,7 @@ export default function Profile() {
                                 <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm pb-4">
                                     <button data-tooltip-target="tooltip-dark"
                                         type="button"
-                                        className="text-white bg-blue-400 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 fixed top-4 right-4 w-8 h-8"
+                                        className="text-white bg-pink-500  font-medium rounded-3xl text-center shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none fixed top-4 right-4 w-8 h-8"
                                         onClick={() => router.push('/help')}
                                     >
                                         ?
@@ -107,6 +107,7 @@ export default function Profile() {
                                         Need help?
                                         <div className="tooltip-arrow" data-popper-arrow></div>
                                     </div>
+                                    
                                     <form onSubmit={handleSubmit} className='w-full pl-2 pr-2'>
                                         <div className='mb-4 border-b-2 border-gray pb-6 pl-6 pr-6'>
                                             <label className="block mb-2 text-sm text-gray-500">Notion API Key</label>
