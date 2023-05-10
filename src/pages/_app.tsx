@@ -5,8 +5,6 @@ import { SessionProvider } from 'next-auth/react';
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import BuyMeACoffeeWidget from '@/components/BuyMeACoffeeWidget';
-
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -14,7 +12,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <Navbar />
       <Component {...pageProps} />
       <Footer />
-    <BuyMeACoffeeWidget />
     </SessionProvider>
   );
 }
