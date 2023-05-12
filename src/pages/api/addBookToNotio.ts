@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { notionApiKey, db_id, movieData } = req.body;
+    const { notionApiKey, db_id, bookData } = req.body;
 
     try {
         const notion = new Client({ auth: notionApiKey });
@@ -12,24 +12,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             filter: {
                 property: 'ID',
                 number: {
-                    equals: movieData.id,
+                    equals: bookData.id,
                 },
             },
         });
 
-        const genresArray = [];
-
-        if (movieData.firstGenre) {
-            genresArray.push({ "name": movieData.firstGenre });
-        }
-
-        if (movieData.secondGenre) {
-            genresArray.push({ "name": movieData.secondGenre });
-        }
-
-        if (movieData.thirdGenre) {
-            genresArray.push({ "name": movieData.thirdGenre });
-        }
+        const authorsArray = bookData.authors.map((author: string) => ({ "name": author }));
 
         if (existingPages.results.length > 0) {
             // Update the existing page
@@ -39,56 +27,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 page_id: existingPageId,
                 properties: {
                     'ID': {
-                        number: movieData.id,
+                        number: bookData.id,
                     },
                     'Name': {
                         title: [
                             {
                                 text: {
-                                    content: movieData.title,
+                                    content: bookData.title,
                                 },
                             },
                         ],
                     },
-                    'Release Date': {
+                    'Publication Date': {
                         date: {
-                            start: movieData.release_date,
+                            start: bookData.publishedDate,
                         },
                     },
-                    'Genres': {
-                        multi_select: genresArray,
+                    'Authors': {
+                        multi_select: authorsArray,
                     },
-                    'TMDB Rating': {
-                        number: movieData.vote_average,
+                    'Rating': {
+                        number: bookData.averageRating,
                     },
-                    'TMDB Link': {
-                        url: movieData.tmdb_link,
-                    },
-                    'iMDB Link': {
-                        url: movieData.imdb_link,
-                    },
-                    'Adult': {
-                        checkbox: movieData.adult,
+                    'Google Books Link': {
+                        url: bookData.infoLink,
                     },
                     'Type': {
                         select: {
-                            name: 'Movie',
+                            name: 'Book',
                         },
                     },
                     'Status': {
                         select: {
-                            name: 'To watch',
+                            name: 'To read',
                         },
                     },
                 },
                 icon: {
                     type: 'emoji',
-                    emoji: '🎬',
+                    emoji: '📚',
                 },
                 cover: {
                     type: 'external',
                     external: {
-                        url: movieData.backdrop_path,
+                        url: bookData.thumbnail,
                     },
                 },
             });
@@ -99,56 +81,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
                 properties: {
                     'ID': {
-                        number: movieData.id,
+                        number: bookData.id,
                     },
                     'Name': {
                         title: [
                             {
                                 text: {
-                                    content: movieData.title,
+                                    content: bookData.title,
                                 },
                             },
                         ],
                     },
-                    'Release Date': {
+                    'Publication Date': {
                         date: {
-                            start: movieData.release_date,
+                            start: bookData.publishedDate,
                         },
                     },
-                    'Genres': {
-                        multi_select: genresArray,
+                    'Authors': {
+                        multi_select: authorsArray,
                     },
-                    'TMDB Rating': {
-                        number: movieData.vote_average,
+                    'Rating': {
+                        number: bookData.averageRating,
                     },
-                    'TMDB Link': {
-                        url: movieData.tmdb_link,
-                    },
-                    'iMDB Link': {
-                        url: movieData.imdb_link,
-                    },
-                    'Adult': {
-                        checkbox: movieData.adult,
+                    'Google Books Link': {
+                        url: bookData.infoLink,
                     },
                     'Type': {
                         select: {
-                            name: 'Movie',
+                            name: 'Book',
                         },
                     },
                     'Status': {
                         select: {
-                            name: 'To watch',
+                            name: 'To read',
                         },
                     },
                 },
                 icon: {
                     type: 'emoji',
-                    emoji: '🎬',
+                    emoji: '📚',
                 },
                 cover: {
                     type: 'external',
                     external: {
-                        url: movieData.backdrop_path,
+                        url: bookData.thumbnail,
                     },
                 },
             });
@@ -160,7 +136,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         object: 'block',
                         type: 'embed',
                         embed: {
-                            url: movieData.poster_path,
+                            url: bookData.thumbnail,
                         },
                     },
                     {
@@ -171,7 +147,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 {
                                     type: 'text',
                                     text: {
-                                        content: movieData.overview,
+                                        content: bookData.description,
                                     },
                                 },
                             ],
@@ -179,10 +155,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                 ],
             });
-
         }
-        res.status(200).json({message: "Movie added/updated to Notion.", movieData});
+
+        res.status(200).json({ message: "Book added/updated to Notion.", bookData });
     } catch (error) {
-        res.status(500).json({ message: "Error occurred while adding/updating movie to Notion.", error });
+        res.status(500).json({ message: "Error occurred while adding/updating book to Notion.", error });
     }
 }

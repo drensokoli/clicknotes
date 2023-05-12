@@ -169,8 +169,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 ],
             });
         }
-        res.status(200).json({ success: true });
+        res.status(200).json({ message: "TV show added/updated to Notion.", tvShowData });
     } catch (error) {
-        res.status(500).json({ error: "It didn't work G" });
+        res.status(500).json({  message: "Error occurred while adding/updating TV show to Notion.", error  });
     }
 }

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Movie from '@/components/Movie';
 import axios from 'axios';
 import SearchBar from '@/components/SearchBar';
-import Script from 'next/script';
 
 interface Movie {
     id: number;

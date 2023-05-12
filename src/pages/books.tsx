@@ -26,50 +26,50 @@ const Books: React.FC = () => {
 
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
-        await searchBooksByTitle(event.target.value);
+        if (event.target.value.length > 0) {
+            await searchBooksByTitle(event.target.value);
+        } else {
+            setBooks([]);
+        }
     };
 
     const searchBooksByTitle = async (title: string) => {
         try {
-            const response = await axios.get(
-                `https://www.googleapis.com/books/v1/volumes?q=${title}&key=${GOOGLE_BOOKS_API_KEY}`
-            );
+            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&key=${GOOGLE_BOOKS_API_KEY}`);
             setBooks(response.data.items);
         } catch (error) {
             console.error(error);
         }
     };
 
-    const fetchBestsellers = async () => {
-        try {
-            const cacheResponse = await fetch("/api/redisHandler");
-            const cacheData = await cacheResponse.json();
-            if (cacheData) {
-                setBestsellers(JSON.parse(cacheData));
-                return;
-            }
-            const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${NYTIMES_API_KEY}`);
-            const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
-            const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_BOOKS_API_KEY}`));
-            const bookDetailsResponses = await Promise.all(bookDetailsPromises);
-            const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
-            setBestsellers(bestsellers);
-
-            // Store the best sellers data in Redis
-            await fetch('/api/redisHandler', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ bestsellers }),
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-
     useEffect(() => {
+        const fetchBestsellers = async () => {
+            try {
+                const cacheResponse = await fetch("/api/redisHandler");
+                const cacheData = await cacheResponse.json();
+                if (cacheData) {
+                    setBestsellers(JSON.parse(cacheData));
+                    return;
+                }
+                const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${NYTIMES_API_KEY}`);
+                const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
+                const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_BOOKS_API_KEY}`));
+                const bookDetailsResponses = await Promise.all(bookDetailsPromises);
+                const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
+                setBestsellers(bestsellers);
+
+                // Store the best sellers data in Redis
+                await fetch('/api/redisHandler', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ bestsellers }),
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        };
         fetchBestsellers();
     }, []);
 
@@ -79,38 +79,35 @@ const Books: React.FC = () => {
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
                     <div className="movie-container">
-                        <div>
-                            {books.length === 0 && (
-                                <>
-                                    <div className='movie-container'>
-                                        <h1 className='text-2xl pb-4'>BEST SELLERS</h1>
-                                    </div>
-                                    <div className='movie-container'>
-                                        {
-                                            bestsellers.map((book: Book) => (
-                                                <Book
-                                                    key={book.id}
-                                                    id={book.id}
-                                                    title={book.volumeInfo.title}
-                                                    previewLink={book.volumeInfo.previewLink}
-                                                    cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                                    onClick={() => { }}
-                                                />
-                                            ))
-                                        }
-                                    </div>
-                                </>)}
-                        </div>
-                        {books.map((book: Book) => (
-                            <Book
-                                key={book.id}
-                                id={book.id}
-                                title={book.volumeInfo.title}
-                                previewLink={book.volumeInfo.previewLink}
-                                cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                onClick={() => { }}
-                            />
-                        ))}
+                            {books.map((book: Book) => (
+                                <Book
+                                    key={book.id}
+                                    id={book.id}
+                                    title={book.volumeInfo.title}
+                                    previewLink={book.volumeInfo.previewLink}
+                                    cover_image={book.volumeInfo.imageLinks?.thumbnail}
+                                    onClick={() => { }} description={''} publishedDate={''} rating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} />
+                            ))}
+                        {books.length === 0 && (
+                            <>
+                                <div className='movie-container'>
+                                    <h1 className='text-2xl pb-4'>BEST SELLERS</h1>
+                                </div>
+                                <div className='movie-container'>
+                                    {
+                                        bestsellers.map((book: Book) => (
+                                            <Book
+                                                key={book.id}
+                                                id={book.id}
+                                                title={book.volumeInfo.title}
+                                                previewLink={book.volumeInfo.previewLink}
+                                                cover_image={book.volumeInfo.imageLinks?.thumbnail}
+                                                onClick={() => { }} description={''} publishedDate={''} rating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} />
+                                        ))
+                                    }
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
