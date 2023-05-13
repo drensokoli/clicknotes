@@ -3,11 +3,13 @@ import Image from "next/image"
 import StepOne from "../../public/stepOne.gif"
 import StepTwo from "../../public/stepTwo.gif"
 import StepThree from "../../public/stepThree.gif"
+import Logo from "../../public/logo.png"
+// import { NextSeo } from "next-seo"
 
 export default function Help() {
     return (
         <div className="flex flex-col justify-center items-center w-full">
-
+            <Image src={Logo} width={180} height={200} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8" />
             <div className="flex flex-col py-8 px-8 sm:px-16 justify-center lg:w-4/6 w-full">
                 <h1 className="text-2xl font-semibold">Connecting ClickNotes to Your Notion Account</h1>
                 <p className="pt-6">Setting up a connection between ClickNotes and your Notion account may seem discouraging, but it's very straightforward. I've broken down the process into three easy steps that should take no more than five minutes to complete.</p>
@@ -16,7 +18,7 @@ export default function Help() {
                     <h1 className="text-xl font-semibold">Step 1: Create an Integration in Notion</h1>
                     <p className="pt-4">If you don't already have a Notion account, you can create one <span className="text-blue-500"><a href="https://www.notion.so/">here</a></span>.</p>
                     <p>Once you've set up your account, navigate to the <span className="text-blue-500"><a href="https://www.notion.so/my-integrations">"My integrations"</a></span> section and click on "Create new integration." Give it a name and Notion will generate an Internal Integration Token for you. This token serves as your "Notion API Key" and can be used to establish a connection between ClickNotes and Notion.</p>
-                    <Image src={StepOne} width={700} height={600} alt={""} style={{display: 'block', margin: 'auto'}} className="py-8"/>
+                    <Image src={StepOne} width={700} height={600} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8" />
                 </div>
                 <div className="flex flex-col mt-10 justify-center w-full">
                     <h1 className="text-xl font-semibold">Step 2: Add Database Templates</h1>
@@ -26,12 +28,12 @@ export default function Help() {
                         <li> • <span className="text-blue-500"><a href="">TV Shows template</a></span></li>
                         <li> • <span className="text-blue-500"><a href="">Books template</a></span></li>
                     </ol>
-                    <Image src={StepTwo} width={700} height={600} alt={""} style={{display: 'block', margin: 'auto'}} className="py-4"/>
+                    <Image src={StepTwo} width={700} height={600} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-4" />
                 </div>
                 <div className="flex flex-col mt-10 justify-center w-full">
                     <h1 className="text-xl font-semibold">Step 3: Connect Your Database</h1>
                     <p className="pt-4">After duplicating the templates, you'll need to add the API Key generated in the previous step as a connection by clicking on the "Add connections" button and searching for it by name. This action grants your integration read and write permissions to the corresponding Notion database.</p>
-                    <Image src={StepThree} width={700} height={600} alt={""} style={{display: 'block', margin: 'auto'}} className="py-8"/>
+                    <Image src={StepThree} width={700} height={600} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8" />
                     <p>Finally, save your database link in your ClickNotes profile page by clicking "Share," "Copy link," and pasting it in the ClickNotes profile page.</p>
                     <p>These steps apply to any of the three content types you want to save. Just add the respective template and save the link to the corresponding field in your profile page.</p>
                 </div>
