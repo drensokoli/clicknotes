@@ -5,31 +5,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { notionApiKey, db_id, bookData } = req.body;
 
     try {
+
         const notion = new Client({ auth: notionApiKey });
 
         const existingPages = await notion.databases.query({
             database_id: db_id,
             filter: {
                 property: 'ID',
-                number: {
+                rich_text: {
                     equals: bookData.id,
                 },
             },
         });
 
-        const authorsArray = bookData.authors.map((author: string) => ({ "name": author }));
-
         if (existingPages.results.length > 0) {
-            // Update the existing page
             const existingPageId = existingPages.results[0].id;
 
             await notion.pages.update({
                 page_id: existingPageId,
                 properties: {
                     'ID': {
-                        number: bookData.id,
+                        rich_text: [
+                            {
+                                text: {
+                                    content: bookData.id,
+                                },
+                            },
+                        ],
                     },
-                    'Name': {
+                    'Title': {
                         title: [
                             {
                                 text: {
@@ -38,29 +42,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             },
                         ],
                     },
-                    'Publication Date': {
-                        date: {
-                            start: bookData.publishedDate,
-                        },
-                    },
-                    'Authors': {
-                        multi_select: authorsArray,
-                    },
-                    'Rating': {
-                        number: bookData.averageRating,
-                    },
-                    'Google Books Link': {
-                        url: bookData.infoLink,
-                    },
                     'Type': {
                         select: {
                             name: 'Book',
                         },
                     },
-                    'Status': {
-                        select: {
-                            name: 'To read',
-                        },
+                    'Google Books Link': {
+                        url: bookData.previewLink,
                     },
                 },
                 icon: {
@@ -70,9 +58,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 cover: {
                     type: 'external',
                     external: {
-                        url: bookData.thumbnail,
+                        url: bookData.cover_image,
                     },
                 },
+            });
+
+            const contentUpdateResponse = await notion.blocks.children.append({
+                block_id: existingPageId,
+                children: [
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: bookData.thumbnail,
+                        },
+                    },
+                ],
             });
         } else {
             const newPage = await notion.pages.create({
@@ -81,9 +82,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
                 properties: {
                     'ID': {
-                        number: bookData.id,
+                        rich_text: [
+                            {
+                                text: {
+                                    content: bookData.id,
+                                },
+                            },
+                        ],
                     },
-                    'Name': {
+                    'Title': {
                         title: [
                             {
                                 text: {
@@ -92,29 +99,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             },
                         ],
                     },
-                    'Publication Date': {
-                        date: {
-                            start: bookData.publishedDate,
-                        },
-                    },
-                    'Authors': {
-                        multi_select: authorsArray,
-                    },
-                    'Rating': {
-                        number: bookData.averageRating,
-                    },
-                    'Google Books Link': {
-                        url: bookData.infoLink,
-                    },
                     'Type': {
                         select: {
                             name: 'Book',
                         },
                     },
-                    'Status': {
-                        select: {
-                            name: 'To read',
-                        },
+                    'Google Books Link': {
+                        url: bookData.previewLink,
                     },
                 },
                 icon: {
@@ -124,7 +115,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 cover: {
                     type: 'external',
                     external: {
-                        url: bookData.thumbnail,
+                        url: bookData.cover_image,
                     },
                 },
             });
@@ -139,24 +130,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             url: bookData.thumbnail,
                         },
                     },
-                    {
-                        object: 'block',
-                        type: 'paragraph',
-                        paragraph: {
-                            rich_text: [
-                                {
-                                    type: 'text',
-                                    text: {
-                                        content: bookData.description,
-                                    },
-                                },
-                            ],
-                        },
-                    },
                 ],
             });
         }
-
         res.status(200).json({ message: "Book added/updated to Notion.", bookData });
     } catch (error) {
         res.status(500).json({ message: "Error occurred while adding/updating book to Notion.", error });

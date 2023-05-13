@@ -86,7 +86,7 @@ const Books: React.FC = () => {
                                     title={book.volumeInfo.title}
                                     previewLink={book.volumeInfo.previewLink}
                                     cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                    onClick={() => { }} description={''} publishedDate={''} rating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} />
+                                    onClick={() => { }} description={''} publishedDate={''} averageRating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} />
                             ))}
                         {books.length === 0 && (
                             <>
@@ -102,7 +102,7 @@ const Books: React.FC = () => {
                                                 title={book.volumeInfo.title}
                                                 previewLink={book.volumeInfo.previewLink}
                                                 cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                                onClick={() => { }} description={''} publishedDate={''} rating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} />
+                                                onClick={() => { }} description={''} publishedDate={''} averageRating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} />
                                         ))
                                     }
                                 </div>

@@ -75,7 +75,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
     });
 
     const notionResult = await notionResponse.json();
-    // console.log(notionResult);
+    console.log(notionResult);
   };
 
 

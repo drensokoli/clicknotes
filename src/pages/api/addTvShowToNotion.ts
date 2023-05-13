@@ -85,7 +85,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         url: tvShowData.backdrop_path,
                     },
                 },
+            });
 
+            const contentUpdateResponse = await notion.blocks.children.append({
+                block_id: existingPageId,
+                children: [
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: tvShowData.poster_path,
+                        },
+                    },
+                    {
+                        object: 'block',
+                        type: 'paragraph',
+                        paragraph: {
+                            rich_text: [
+                                {
+                                    type: 'text',
+                                    text: {
+                                        content: tvShowData.overview,
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
             });
         } else {
             const newPage = await notion.pages.create({
@@ -171,6 +197,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         res.status(200).json({ message: "TV show added/updated to Notion.", tvShowData });
     } catch (error) {
-        res.status(500).json({  message: "Error occurred while adding/updating TV show to Notion.", error  });
+        res.status(500).json({ message: "Error occurred while adding/updating TV show to Notion.", error });
     }
 }
