@@ -5,6 +5,7 @@ import Image from 'next/dist/client/image';
 import { decryptData } from '../lib/crypto';
 import 'flowbite';
 import { notionApiKeySubmit, moviesLinkSubmit, tvShowsLinkSubmit, booksLinkSubmit } from '../lib/profileHelpers';
+import Send from '../../public/send.png';
 
 export default function Profile() {
     const { data: session, status } = useSession();
@@ -81,7 +82,7 @@ export default function Profile() {
 
     return (
         <>
-            <div className="antialiased mt-18 flex justify-center items-center h-screen" title='Profile'>
+            <div className="antialiased flex justify-center items-center h-screen" title='Profile'>
                 <div className="container">
                     <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto rounded-md drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">
                         <div className="flex justify-center">
@@ -102,75 +103,60 @@ export default function Profile() {
                                         Need help?
                                         <div className="tooltip-arrow" data-popper-arrow></div>
                                     </div>
-
                                     <div className='w-full pl-2 pr-2'>
                                         <form className='mb-4 border-b-2 border-gray pb-6 pl-6 pr-6' onSubmit={handleNotionApiKeySubmit}>
                                             <label className="block mb-2 text-sm text-gray-500">Notion API Key</label>
-                                            <div className='flex flex-row'>
-                                                <input type="text" onChange={(e) => setNotionApiKey(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder={notionApiKey || "Enter your Notion API Key"} />
-                                                <button type="submit">
-                                                    <div className='py-2 px-2 border-2 rounded-md'>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                                                        </svg>
-                                                    </div>
+                                            <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
+                                                <input
+                                                    type="text"
+                                                    onChange={(e) => setNotionApiKey(e.target.value)}
+                                                    className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
+                                                    placeholder={notionApiKey || "Enter your Notion API Key"}
+                                                />
+                                                <button type="submit" className='py-2 px-2'>
+                                                    <Image src={Send} alt="" width={25} height={25} />
                                                 </button>
                                             </div>
                                         </form>
                                         <form className='mb-4 pl-6 pr-6' onSubmit={handleMoviesPageLinkSubmit}>
                                             <label className="block mb-2 text-sm text-gray-500">Movies Database link</label>
-                                            <div className='flex flex-row'>
-
+                                            <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
                                                     type="text"
                                                     onChange={(e) => setMoviesPageLink(e.target.value)}
-                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                    placeholder={moviesPageLink || "Enter your Movies Page link"}
+                                                    className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
+                                                    placeholder={moviesPageLink || "Enter your Movies Database link"}
                                                 />
-                                                <button type="submit">
-                                                    <div className='py-2 px-2 border-2 rounded-md'>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                                                        </svg>
-                                                    </div>
+                                                <button type="submit" className='py-2 px-2'>
+                                                    <Image src={Send} alt="" width={25} height={25} />
                                                 </button>
                                             </div>
                                         </form>
                                         <form className='mb-4 pl-6 pr-6' onSubmit={handleTvShowsPageLinkSubmit}>
                                             <label className="block mb-2 text-sm text-gray-500">TV Shows Database link</label>
-                                            <div className='flex flex-row'>
-
+                                            <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
                                                     type="text"
                                                     onChange={(e) => setTvShowsPageLink(e.target.value)}
-                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                    placeholder={tvShowsPageLink || "Enter your TV Shows Page link"}
+                                                    className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
+                                                    placeholder={tvShowsPageLink || "Enter your TV Shows Database link"}
                                                 />
-                                                <button type="submit">
-                                                    <div className='py-2 px-2 border-2 rounded-md'>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                                                        </svg>
-                                                    </div>
+                                                <button type="submit" className='py-2 px-2'>
+                                                    <Image src={Send} alt="" width={25} height={25} />
                                                 </button>
                                             </div>
                                         </form>
                                         <form className='mb-4 pl-6 pr-6' onSubmit={handleBooksPageLinkSubmit}>
                                             <label className="block mb-2 text-sm text-gray-500">Books Database link</label>
-                                            <div className='flex flex-row'>
-
+                                            <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
                                                     type="text"
                                                     onChange={(e) => setBooksPageLink(e.target.value)}
-                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
-                                                    placeholder={booksPageLink || "Enter your Books Page link"}
+                                                    className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
+                                                    placeholder={booksPageLink || "Enter your Books Database link"}
                                                 />
-                                                <button type="submit">
-                                                    <div className='py-2 px-2 border-2 rounded-md'>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                                                        </svg>
-                                                    </div>
+                                                <button type="submit" className='py-2 px-2'>
+                                                    <Image src={Send} alt="" width={25} height={25} />
                                                 </button>
                                             </div>
                                         </form>
