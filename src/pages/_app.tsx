@@ -33,7 +33,10 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
 
     const user = await response.json();
 
-    if (!user?.notionApiKey) {
+    if (
+      !user?.notionApiKey ||
+      (!user?.moviesPageLink && !user?.tvShowsPageLink && !user?.booksPageLink)
+    ) {
       setShowInfoBubble(true);
     } else {
       setShowInfoBubble(false);
@@ -50,6 +53,22 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
     <>
       <Navbar />
       <Component {...pageProps} />
+      {!session && (
+        <div className="info-bubble sm:w-[300px] w-[230px]">
+          <div
+            className="info-bubble__close"
+            onClick={() => setShowInfoBubble(false)}
+          >
+            &times;
+          </div>
+          Need Help connecting?{" "}
+          <a href="/help" target="_blank">
+            <span className="text-blue-500"
+              onClick={() => setShowInfoBubble(false)}
+            >Click here</span>
+          </a>
+        </div>
+      )}
       {showInfoBubble && router.pathname !== '/help' && (
         <div className="info-bubble sm:w-[300px] w-[230px]">
           <div

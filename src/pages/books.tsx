@@ -24,6 +24,8 @@ const Books: React.FC = () => {
     const [books, setBooks] = useState<Book[]>([]);
     const [bestsellers, setBestsellers] = useState<Book[]>([]);
 
+    const [apiResponse, setApiResponse] = useState<string | null>(null);
+
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         if (event.target.value.length > 0) {
@@ -73,21 +75,49 @@ const Books: React.FC = () => {
         fetchBestsellers();
     }, []);
 
+    useEffect(() => {
+        if (apiResponse !== 'Adding book to Notion...') {
+            const timer = setTimeout(() => {
+                setApiResponse(null);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [apiResponse]);
+
     return (
         <>
+            {apiResponse === 'Added book to Notion' ? (
+                <div className="success-message">
+                    <p>{apiResponse}</p>
+                </div>
+            ) : apiResponse === 'Error adding book to Notion' ? (
+                <div className="error-message">
+                    <p>{apiResponse}</p>
+                    Need <a href="/help" target="_blank">
+                        <span className="text-blue-500">help</span>?
+                    </a>
+                </div>
+            ) : apiResponse === 'Adding book to Notion...' ? (
+                <div className="loading-message">
+                    <p>{apiResponse}</p>
+                </div>
+            ) : null}
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
                     <div className="movie-container">
-                            {books.map((book: Book) => (
-                                <Book
-                                    key={book.id}
-                                    id={book.id}
-                                    title={book.volumeInfo.title}
-                                    previewLink={book.volumeInfo.previewLink}
-                                    cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                    onClick={() => { }} description={''} publishedDate={''} averageRating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} />
-                            ))}
+                        {books.map((book: Book) => (
+                            <Book
+                                key={book.id}
+                                id={book.id}
+                                title={book.volumeInfo.title}
+                                previewLink={book.volumeInfo.previewLink}
+                                cover_image={book.volumeInfo.imageLinks?.thumbnail}
+                                onClick={() => { }} description={''} publishedDate={''} averageRating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''}
+                                onApiResponse={(error: string) => setApiResponse(error)}
+                                />
+                        ))}
                         {books.length === 0 && (
                             <>
                                 <div className='movie-container'>
@@ -102,7 +132,10 @@ const Books: React.FC = () => {
                                                 title={book.volumeInfo.title}
                                                 previewLink={book.volumeInfo.previewLink}
                                                 cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                                onClick={() => { }} description={''} publishedDate={''} averageRating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} />
+                                                onClick={() => { }} description={''} publishedDate={''} averageRating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} 
+                                                onApiResponse={(error: string) => setApiResponse(error)}
+                                                />
+                                                
                                         ))
                                     }
                                 </div>

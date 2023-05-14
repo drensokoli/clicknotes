@@ -20,7 +20,8 @@ const Movies: React.FC = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
 
-    
+    const [apiResponse, setApiResponse] = useState<string | null>(null);
+
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         await searchMovieByTitle(event.target.value);
@@ -56,14 +57,42 @@ const Movies: React.FC = () => {
         fetchPopularMovies();
     }, []);
 
+    useEffect(() => {
+        if (apiResponse !== 'Adding movie to Notion...') {
+            const timer = setTimeout(() => {
+                setApiResponse(null);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [apiResponse]);
+
     return (
         <>
+            {apiResponse === 'Added movie to Notion' ? (
+                <div className="success-message">
+                    <p>{apiResponse}</p>
+                </div>
+            ) : apiResponse === 'Error adding movie to Notion' ? (
+                <div className="error-message">
+                    <p>{apiResponse}</p>
+                    Need <a href="/help" target="_blank">
+                        <span className="text-blue-500">help</span>?
+                    </a>
+                </div>
+            ) : apiResponse === 'Adding movie to Notion...' ?(
+                <div className="loading-message">
+                    <p>{apiResponse}</p>
+                </div>
+            ) : null}
+
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
                     <div className="movie-container">
                         {movies.map((item) => (
-                            <Movie adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} />
+                            <Movie adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)}
+                            />
                         ))}
                     </div>
                     {movies.length === 0 && (
@@ -73,7 +102,8 @@ const Movies: React.FC = () => {
                             </div>
                             <div className="movie-container">
                                 {popularMovies.map((item) => (
-                                    <Movie adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} />
+                                    <Movie adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)}
+                                    />
                                 ))}
                             </div>
                         </>

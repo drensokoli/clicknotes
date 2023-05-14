@@ -16,49 +16,60 @@ interface BookProps {
     cover_image?: string;
     previewLink: string;
     onClick: () => void;
+    onApiResponse: (error: string) => void;
 }
 
-const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onClick }) => {
+const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onClick, onApiResponse }) => {
     const { data: session } = useSession();
 
     const handleAddToNotion = async () => {
-        const response = await fetch('/api/getUser', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userEmail: session?.user?.email }),
-        });
+        try {
+            onApiResponse('Adding book to Notion...');
+            const response = await fetch('/api/getUser', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userEmail: session?.user?.email }),
+            });
 
-        const user = await response.json();
+            const user = await response.json();
 
-        const bookData = {
-            id: id,
-            title: title,
-            description: description,
-            publishedDate: publishedDate,
-            averageRating: averageRating,
-            authors: authors,
-            infoLink: infoLink,
-            pageCount: pageCount,
-            thumbnail: thumbnail,
-            cover_image: cover_image,
-            previewLink: previewLink,
-        };
+            const bookData = {
+                id: id,
+                title: title,
+                description: description,
+                publishedDate: publishedDate,
+                averageRating: averageRating,
+                authors: authors,
+                infoLink: infoLink,
+                pageCount: pageCount,
+                thumbnail: thumbnail,
+                cover_image: cover_image,
+                previewLink: previewLink,
+            };
 
-        const notionResponse = await fetch('/api/addBookToNotion', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                notionApiKey: decryptData(user.notionApiKey),
-                db_id: decryptData(user.booksPageLink),
-                bookData: bookData,
-            }),
-        });
+            const notionResponse = await fetch('/api/addBookToNotion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    notionApiKey: decryptData(user.notionApiKey),
+                    db_id: decryptData(user.booksPageLink),
+                    bookData: bookData,
+                }),
+            });
 
-        const notionResult = await notionResponse.json();
-        console.log(notionResult);
-        // console.log(bookData.);
-
+            if (notionResponse.ok) {
+                const notionResult = await notionResponse.json();
+                onApiResponse('Added book to Notion');
+                console.log(notionResult);
+            } else {
+                onApiResponse('Error adding book to Notion');
+            }
+        } catch (error) {
+            console.error(error);
+            onApiResponse('Error adding book to Notion');
+        }
     };
+
 
     const handleClick = () => {
         window.open(previewLink, '_blank');

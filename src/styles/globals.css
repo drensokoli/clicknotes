@@ -200,3 +200,36 @@ body {
   font-size: 20px;
   cursor: pointer;
 }
+
+.error-message{
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 16px 16px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  border-right: 5px solid red;
+}
+
+.success-message {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 16px 16px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  border-right: 5px solid green;
+}
+
+.loading-message {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 16px 16px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  border-right: 5px solid gray;
+}

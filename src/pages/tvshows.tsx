@@ -16,10 +16,12 @@ interface TvShow {
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
-const TvShows: React.FC= () => {
+const TvShows: React.FC = () => {
     const [input, setInput] = useState('');
     const [tvShows, setTvShows] = useState<TvShow[]>([]);
     const [popularTvShows, setPopularTvShows] = useState<TvShow[]>([]);
+
+    const [apiResponse, setApiResponse] = useState<string | null>(null);
 
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
@@ -55,14 +57,41 @@ const TvShows: React.FC= () => {
         fetchPopularTvShows();
     }, []);
 
+    useEffect(() => {
+        if (apiResponse !== 'Adding TV show to Notion...') {
+            const timer = setTimeout(() => {
+                setApiResponse(null);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [apiResponse]);
+
     return (
         <>
+            {apiResponse === 'Added TV show to Notion' ? (
+                <div className="success-message">
+                    <p>{apiResponse}</p>
+                </div>
+            ) : apiResponse === 'Error adding TV show to Notion' ? (
+                <div className="error-message">
+                    <p>{apiResponse}</p>
+                    Need <a href="/help" target="_blank">
+                        <span className="text-blue-500">help</span>?
+                    </a>
+                </div>
+            ) : apiResponse === 'Adding TV show to Notion...' ? (
+                <div className="loading-message">
+                    <p>{apiResponse}</p>
+                </div>
+            ) : null}
+
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
                     <div className="movie-container">
                         {tvShows.map((item) => (
-                            <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} />
+                            <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} />
                         ))}
                     </div>
                     {tvShows.length === 0 && (
@@ -72,7 +101,7 @@ const TvShows: React.FC= () => {
                             </div>
                             <div className="movie-container">
                                 {popularTvShows.map((item) => (
-                                    <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} />
+                                    <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} />
                                 ))}
                             </div>
                         </>

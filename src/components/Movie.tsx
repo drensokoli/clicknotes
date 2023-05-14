@@ -13,9 +13,10 @@ interface MovieProps {
   poster_path: string;
   backdrop_path: string;
   onClick: () => void;
+  onApiResponse: (error: string) => void;
 }
 
-const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, onClick }) => {
+const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, onClick, onApiResponse }) => {
 
   const { data: session } = useSession();
   const [genres, setGenres] = useState<string[]>([]);
@@ -37,6 +38,8 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
   }, [id]);
 
   const handleAddToNotion = async () => {
+    try {
+    onApiResponse('Adding movie to Notion...');
     const response = await fetch('/api/getUser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -73,9 +76,18 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
         movieData: movieData,
       }),
     });
-
-    const notionResult = await notionResponse.json();
-    console.log(notionResult);
+  
+    if (notionResponse.ok) {
+      const notionResult = await notionResponse.json();
+      onApiResponse('Added movie to Notion');
+      console.log(notionResult);
+    } else {
+      onApiResponse('Error adding movie to Notion');
+    }
+  } catch (error) {
+    console.error(error);
+    onApiResponse('Error adding movie to Notion');
+  }
   };
 
 
