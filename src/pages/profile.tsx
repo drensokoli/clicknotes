@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/dist/client/image';
-import { encryptData, decryptData } from '../lib/crypto';
+import { decryptData } from '../lib/crypto';
 import 'flowbite';
+import { notionApiKeySubmit, moviesLinkSubmit, tvShowsLinkSubmit, booksLinkSubmit } from '../lib/profileHelpers';
 
 export default function Profile() {
     const { data: session, status } = useSession();
+    const userEmail = session?.user?.email;
 
     const [notionApiKey, setNotionApiKey] = useState('');
     const [moviesPageLink, setMoviesPageLink] = useState('');
@@ -15,36 +17,33 @@ export default function Profile() {
 
     const router = useRouter();
 
-    function extractValueFromUrl(url: string) {
-        const regex = /([a-f0-9]{32})/;
-        const match = url.match(regex);
-        return match ? match[1] : '';
+    async function handleNotionApiKeySubmit() {
+        try {
+            notionApiKeySubmit(notionApiKey, userEmail);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
-    async function handleSubmit() {
+    async function handleMoviesPageLinkSubmit() {
         try {
-            const encryptedNotionApiKey = encryptData(notionApiKey);
-            const extractedMoviesPageValue = extractValueFromUrl(moviesPageLink);
+            moviesLinkSubmit(moviesPageLink, userEmail);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
-            const encryptedMoviesPageLink = encryptData(extractedMoviesPageValue);
-            // const extractedMoviesPageValue = encryptData(extractValueFromUrl(moviesPageLink));
-            const extractedTvShowsPageValue = encryptData(extractValueFromUrl(tvShowsPageLink));
-            const extractedBooksPageValue = encryptData(extractValueFromUrl(booksPageLink));
+    async function handleTvShowsPageLinkSubmit() {
+        try {
+            tvShowsLinkSubmit(tvShowsPageLink, userEmail);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
-            const response = await fetch('/api/updateUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userEmail: session?.user?.email,
-                    notionApiKey: encryptedNotionApiKey,
-                    moviesPageLink: encryptedMoviesPageLink,
-                    tvShowsPageLink: extractedTvShowsPageValue,
-                    booksPageLink: extractedBooksPageValue,
-                }),
-            });
-            router.reload();
+    async function handleBooksPageLinkSubmit() {
+        try {
+            booksLinkSubmit(booksPageLink, userEmail);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -63,20 +62,16 @@ export default function Profile() {
             });
             const data = await response.json();
 
-            const decryptedNotionApiKey = decryptData(data.notionApiKey);
-            const decryptedMoviesPageLink = decryptData(data.moviesPageLink);
-            const decryptedTvShowsPageLink = decryptData(data.tvShowsPageLink);
-            const decryptedBooksPageLink = decryptData(data.booksPageLink);
-
-            setNotionApiKey(decryptedNotionApiKey);
-            setMoviesPageLink(decryptedMoviesPageLink);
-            setTvShowsPageLink(decryptedTvShowsPageLink);
-            setBooksPageLink(decryptedBooksPageLink);
+            data.notionApiKey && setNotionApiKey(decryptData(data.notionApiKey));
+            data.moviesPageLink && setMoviesPageLink(decryptData(data.moviesPageLink));
+            data.tvShowsPageLink && setTvShowsPageLink(decryptData(data.tvShowsPageLink));
+            data.booksPageLink && setBooksPageLink(decryptData(data.booksPageLink));
 
         } catch (error) {
             console.error('Error:', error);
         }
     }
+
 
     useEffect(() => {
         if (session) {
@@ -107,8 +102,8 @@ export default function Profile() {
                                         Need help?
                                         <div className="tooltip-arrow" data-popper-arrow></div>
                                     </div>
-                                    
-                                    <form onSubmit={handleSubmit} className='w-full pl-2 pr-2'>
+
+                                    <form className='w-full pl-2 pr-2'>
                                         <div className='mb-4 border-b-2 border-gray pb-6 pl-6 pr-6'>
                                             <label className="block mb-2 text-sm text-gray-500">Notion API Key</label>
                                             <input
@@ -117,6 +112,9 @@ export default function Profile() {
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                                 placeholder={notionApiKey || "Enter your Notion API Key"}
                                             />
+                                            <button type="submit" onClick={handleNotionApiKeySubmit}>
+                                                Save
+                                            </button>
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
                                             <label className="block mb-2 text-sm text-gray-500">Movies Database link</label>
@@ -126,6 +124,9 @@ export default function Profile() {
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                                 placeholder={moviesPageLink || "Enter your Movies Page link"}
                                             />
+                                            <button type="submit" onClick={handleMoviesPageLinkSubmit}>
+                                                Save
+                                            </button>
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
                                             <label className="block mb-2 text-sm text-gray-500">TV Shows Database link</label>
@@ -135,6 +136,9 @@ export default function Profile() {
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                                 placeholder={tvShowsPageLink || "Enter your TV Shows Page link"}
                                             />
+                                            <button type="submit" onClick={handleTvShowsPageLinkSubmit}>
+                                                Save
+                                            </button>
                                         </div>
                                         <div className='mb-4 pl-6 pr-6'>
                                             <label className="block mb-2 text-sm text-gray-500">Books Database link</label>
@@ -144,9 +148,9 @@ export default function Profile() {
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
                                                 placeholder={booksPageLink || "Enter your Books Page link"}
                                             />
-                                        </div>
-                                        <div className='flex justify-center px-6 pt-6'>
-                                            <button onClick={handleSubmit} type="button" className="w-full text-yellow-200 hover:text-white border border-yellow-200 hover:bg-yellow-300 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-yellow-200 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">Submit</button>
+                                            <button type="submit" onClick={handleBooksPageLinkSubmit}>
+                                                Save
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
