@@ -82,7 +82,7 @@ export default function Profile() {
 
     return (
         <>
-            <div className="antialiased flex justify-center items-center sm:h-screen h-[700px]" title='Profile'>
+            <div className="antialiased flex justify-center items-center sm:h-[650px] h-[700px]" title='Profile'>
                 <div className="container">
                     <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto rounded-md drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">
                         <div className="flex justify-center">
