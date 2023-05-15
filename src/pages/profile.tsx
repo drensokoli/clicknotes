@@ -82,7 +82,7 @@ export default function Profile() {
 
     return (
         <>
-            <div className="antialiased flex justify-center items-center sm:h-[650px] h-[700px]" title='Profile'>
+            <div className="antialiased flex justify-center items-center sm:h-[650px] h-[700px] h-screen-larger-than-15inch" title='Profile'>
                 <div className="container">
                     <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto rounded-md drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">
                         <div className="flex justify-center">
@@ -104,7 +104,7 @@ export default function Profile() {
                                         <div className="tooltip-arrow" data-popper-arrow></div>
                                     </div>
                                     <div className='w-full pl-2 pr-2'>
-                                        <form className='mb-4 border-b-2 border-gray pb-6 pl-6 pr-6' onSubmit={handleNotionApiKeySubmit}>
+                                        <form className='mb-4 border-b-2 border-gray pb-6 px-6' onSubmit={handleNotionApiKeySubmit}>
                                             <label className="block mb-2 text-sm text-gray-500">Notion API Key</label>
                                             <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
@@ -118,7 +118,7 @@ export default function Profile() {
                                                 </button>
                                             </div>
                                         </form>
-                                        <form className='mb-4 pl-6 pr-6' onSubmit={handleMoviesPageLinkSubmit}>
+                                        <form className='mb-4 px-6' onSubmit={handleMoviesPageLinkSubmit}>
                                             <label className="block mb-2 text-sm text-gray-500">Movies Database link</label>
                                             <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
@@ -132,7 +132,7 @@ export default function Profile() {
                                                 </button>
                                             </div>
                                         </form>
-                                        <form className='mb-4 pl-6 pr-6' onSubmit={handleTvShowsPageLinkSubmit}>
+                                        <form className='mb-4 px-6' onSubmit={handleTvShowsPageLinkSubmit}>
                                             <label className="block mb-2 text-sm text-gray-500">TV Shows Database link</label>
                                             <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
@@ -146,7 +146,7 @@ export default function Profile() {
                                                 </button>
                                             </div>
                                         </form>
-                                        <form className='mb-4 pl-6 pr-6' onSubmit={handleBooksPageLinkSubmit}>
+                                        <form className='mb-8 px-6' onSubmit={handleBooksPageLinkSubmit}>
                                             <label className="block mb-2 text-sm text-gray-500">Books Database link</label>
                                             <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input

@@ -233,3 +233,10 @@ body {
   z-index: 9999;
   border-right: 5px solid gray;
 }
+
+.footer-fixed {
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+}
