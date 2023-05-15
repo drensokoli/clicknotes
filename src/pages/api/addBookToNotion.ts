@@ -68,9 +68,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             }
                         ]
                     },
-                    'Info Link': {
-                        "url": bookData.infoLink
-                    },
                     'Thumbnail': {
                         "url": bookData.thumbnail
                     },
@@ -191,9 +188,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 }
                             }
                         ]
-                    },
-                    'Info Link': {
-                        "url": bookData.infoLink
                     },
                     'Thumbnail': {
                         "url": bookData.thumbnail
