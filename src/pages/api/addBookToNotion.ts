@@ -68,9 +68,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             }
                         ]
                     },
-                    'Thumbnail': {
-                        "url": bookData.thumbnail
-                    },
                     'Language': {
                         "rich_text": [
                             {
@@ -188,9 +185,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 }
                             }
                         ]
-                    },
-                    'Thumbnail': {
-                        "url": bookData.thumbnail
                     },
                     'Language': {
                         "rich_text": [
