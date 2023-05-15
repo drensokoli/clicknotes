@@ -1,3 +1,4 @@
+// In addBookToNotion.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
 
@@ -50,6 +51,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Google Books Link': {
                         url: bookData.previewLink,
                     },
+                    'Published Date': {
+                        "date": {
+                            "start": bookData.publishedDate
+                        }
+                    },
+                    'Average Rating': {
+                        "number": bookData.averageRating
+                    },
+                    'Authors': {
+                        "rich_text": [
+                            {
+                                "text": {
+                                    "content": bookData.authors.join(', ')
+                                }
+                            }
+                        ]
+                    },
+                    'Info Link': {
+                        "url": bookData.infoLink
+                    },
+                    'Thumbnail': {
+                        "url": bookData.thumbnail
+                    },
+                    'Language': {
+                        "rich_text": [
+                            {
+                                "text": {
+                                    "content": bookData.language
+                                }
+                            }
+                        ]
+                    },
+                    'Publisher': {
+                        "rich_text": [
+                            {
+                                "text": {
+                                    "content": bookData.publisher
+                                }
+                            }
+                        ]
+                    },
+                    'Page Count': {
+                        "number": bookData.pageCount
+                    },
                 },
                 icon: {
                     type: 'emoji',
@@ -68,9 +113,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 children: [
                     {
                         object: 'block',
+                        type: 'paragraph',
+                        paragraph: {
+                            rich_text: [
+                                {
+                                    type: 'text',
+                                    text: {
+                                        content: bookData.description,
+                                    },
+                                },
+                            ],
+                        },
+
+                    },
+                    {
+                        object: 'block',
                         type: 'embed',
                         embed: {
-                            url: bookData.thumbnail,
+                            url: bookData.cover_image,
+                            caption: [
+                                {
+                                    type: 'text',
+                                    text: {
+                                        content: 'Cover image of the book.'
+                                    }
+                                }
+                            ]
                         },
                     },
                 ],
@@ -107,6 +175,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Google Books Link': {
                         url: bookData.previewLink,
                     },
+                    'Published Date': {
+                        "date": {
+                            "start": bookData.publishedDate
+                        }
+                    },
+                    'Average Rating': {
+                        "number": bookData.averageRating
+                    },
+                    'Authors': {
+                        "rich_text": [
+                            {
+                                "text": {
+                                    "content": bookData.authors.join(', ')
+                                }
+                            }
+                        ]
+                    },
+                    'Info Link': {
+                        "url": bookData.infoLink
+                    },
+                    'Thumbnail': {
+                        "url": bookData.thumbnail
+                    },
+                    'Language': {
+                        "rich_text": [
+                            {
+                                "text": {
+                                    "content": bookData.language
+                                }
+                            }
+                        ]
+                    },
+                    'Publisher': {
+                        "rich_text": [
+                            {
+                                "text": {
+                                    "content": bookData.publisher
+                                }
+                            }
+                        ]
+                    },
+                    'Page Count': {
+                        "number": bookData.pageCount
+                    },
                 },
                 icon: {
                     type: 'emoji',
@@ -125,11 +237,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 children: [
                     {
                         object: 'block',
+                        type: 'paragraph',
+                        paragraph: {
+                            rich_text: [
+                                {
+                                    type: 'text',
+                                    text: {
+                                        content: bookData.description,
+                                    },
+                                },
+                            ],
+                        },
+
+                    },
+                    {
+                        object: 'block',
                         type: 'embed',
                         embed: {
-                            url: bookData.thumbnail,
+                            url: bookData.cover_image,
+                            caption: [
+                                {
+                                    type: 'text',
+                                    text: {
+                                        content: 'Cover image of the book.'
+                                    }
+                                }
+                            ]
                         },
-                    },
+                    }
                 ],
             });
         }

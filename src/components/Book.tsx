@@ -3,6 +3,7 @@ import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
 
+// In Book.ts
 interface BookProps {
     id: string;
     title: string;
@@ -17,9 +18,15 @@ interface BookProps {
     previewLink: string;
     onClick: () => void;
     onApiResponse: (error: string) => void;
+    // Add more optional properties here
+    language?: string;
+    price?: number;
+    publisher?: string;
+    availability?: string;
 }
 
-const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onClick, onApiResponse }) => {
+
+const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onClick, onApiResponse, language, price, publisher, availability }) => {
     const { data: session } = useSession();
 
     const handleAddToNotion = async () => {
@@ -33,18 +40,25 @@ const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, aver
 
             const user = await response.json();
 
+            // Check the length of the description and slice it if needed
+            if (description.length >= 2000) {
+                description = description.slice(0, 1995) + '...';
+            }
+
             const bookData = {
                 id: id,
                 title: title,
                 description: description,
                 publishedDate: publishedDate,
-                averageRating: averageRating,
+                averageRating: averageRating || 0,
                 authors: authors,
                 infoLink: infoLink,
-                pageCount: pageCount,
                 thumbnail: thumbnail,
                 cover_image: cover_image,
                 previewLink: previewLink,
+                language: language,
+                publisher: publisher,
+                pageCount: pageCount,
             };
 
             const notionResponse = await fetch('/api/addBookToNotion', {
@@ -74,7 +88,6 @@ const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, aver
     const handleClick = () => {
         window.open(previewLink, '_blank');
     };
-
     return (
         <div key={id} className="movie-card" >
             <div className="movie-card-image-container">

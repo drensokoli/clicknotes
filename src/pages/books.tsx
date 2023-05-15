@@ -4,8 +4,11 @@ import Book from '../components/Book';
 import SearchBar from '@/components/SearchBar';
 
 interface Book {
+    saleInfo: any;
     id: string;
     volumeInfo: {
+        publisher: any;
+        language: any;
         title: string;
         authors: string[];
         description: string;
@@ -13,6 +16,10 @@ interface Book {
             thumbnail: string;
         };
         previewLink: string;
+        publishedDate: string;
+        averageRating: number;
+        infoLink: string;
+        pageCount: number;
     };
 }
 
@@ -114,9 +121,20 @@ const Books: React.FC = () => {
                                 title={book.volumeInfo.title}
                                 previewLink={book.volumeInfo.previewLink}
                                 cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                onClick={() => { }} description={''} publishedDate={''} averageRating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''}
+                                onClick={() => { }}
+                                description={book.volumeInfo.description}
+                                publishedDate={book.volumeInfo.publishedDate}
+                                averageRating={book.volumeInfo.averageRating}
+                                authors={book.volumeInfo.authors}
+                                infoLink={book.volumeInfo.infoLink}
+                                pageCount={book.volumeInfo.pageCount}
+                                thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+                                language={book.volumeInfo.language}
+                                price={book.saleInfo.listPrice?.amount}
+                                publisher={book.volumeInfo.publisher}
+                                availability={book.saleInfo.saleability}
                                 onApiResponse={(error: string) => setApiResponse(error)}
-                                />
+                            />
                         ))}
                         {books.length === 0 && (
                             <>
@@ -132,10 +150,20 @@ const Books: React.FC = () => {
                                                 title={book.volumeInfo.title}
                                                 previewLink={book.volumeInfo.previewLink}
                                                 cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                                onClick={() => { }} description={''} publishedDate={''} averageRating={0} authors={[]} infoLink={''} pageCount={0} thumbnail={''} 
+                                                onClick={() => { }}
+                                                description={book.volumeInfo.description}
+                                                publishedDate={book.volumeInfo.publishedDate}
+                                                averageRating={book.volumeInfo.averageRating}
+                                                authors={book.volumeInfo.authors}
+                                                infoLink={book.volumeInfo.infoLink}
+                                                pageCount={book.volumeInfo.pageCount}
+                                                thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+                                                language={book.volumeInfo.language}
+                                                price={book.saleInfo.listPrice?.amount}
+                                                publisher={book.volumeInfo.publisher}
+                                                availability={book.saleInfo.saleability}
                                                 onApiResponse={(error: string) => setApiResponse(error)}
-                                                />
-                                                
+                                            />
                                         ))
                                     }
                                 </div>
