@@ -23,6 +23,10 @@ const TvShows: React.FC = () => {
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
+    const include_genres = '16,35,99,18,10751,14,36,10402,9648,10749,878'
+    const certification_country = 'US'
+    const certification = 'TV-PG'
+
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         await searchTvShowByTitle(event.target.value);
@@ -30,12 +34,13 @@ const TvShows: React.FC = () => {
 
     const searchTvShowByTitle = async (title: string) => {
         try {
-            const response = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${title}`);
+            const response = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${title}&with_genres=${include_genres}&certification_country=${certification_country}&certification=${certification}`);
             setTvShows(response.data.results);
         } catch (error) {
             console.error(error);
         }
     };
+
 
     const handleTvShowClick = async (tvShowId: number) => {
         try {

@@ -64,11 +64,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'TMDB Link': {
                         url: tvShowData.tmdb_link,
                     },
-                    'Type': {
-                        select: {
-                            name: 'TvShow',
-                        },
-                    },
                     'Status': {
                         select: {
                             name: 'To watch',
@@ -144,11 +139,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     'TMDB Link': {
                         url: tvShowData.tmdb_link,
-                    },
-                    'Type': {
-                        select: {
-                            name: 'TvShow',
-                        },
                     },
                     'Status': {
                         select: {

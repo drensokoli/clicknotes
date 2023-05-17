@@ -1,45 +1,82 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ClickNotes Documentation
+## Overview
+ClickNotes is a Next.js application built with TypeScript that allows users to search for movies, TV shows, and books using the TMDB API, Google Books API, and New York Times API (for bestsellers endpoint). Users can log in with Google authentication provided by NextAuth and save their favorite items to their Notion databases by submitting their Notion API key and database IDs which are encrypted using Advanced Encryption Standard (AES) encryption.
+
+**You can learn about connecting your ClickNotes account to Notion [HERE](https://clicknotes.vercel.app/help).**
 
 ## Getting Started
+### Running Locally
+To run the ClickNotes application locally, follow these steps:
+Clone the repository:
+```
+git clone https://github.com/drensokoli/clicknotes.git
+```
 
-First, run the development server:
+Install the required packages:
+```
+npm install
+```
+Create a .env.local file in the root of the project directory and add the following environment variables:
 
-```bash
+```
+NEXT_PUBLIC_TMDB_API_KEY=<>
+NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY=<>
+NEXT_PUBLIC_NYTIMES_API_KEY=<>
+
+NEXTAUTH_URL=<>
+JWT_SECRET=<>
+NEXTAUTH_SECRET=<>
+
+GOOGLE_CLIENT_ID=<>
+GOOGLE_CLIENT_SECRET=<>
+
+NEXT_PUBLIC_MONGODB_URI=<>
+NEXT_PUBLIC_MONGODB_DB_NAME=<>
+NEXT_PUBLIC_MONGODB_COLLECTION=<>
+
+REDIS_URL=<>
+
+NEXT_PUBLIC_CRYPTO_KEY=<>
+```
+
+### Getting your env variables
+ - [TMDB API key](https://developer.themoviedb.org/reference/intro/getting-started).
+ - [Google Books API key](https://developers.google.com/books/docs/v1/getting_started)
+ - [New York Times API key](https://developer.nytimes.com/docs/books-product/1/overview)
+ - [Google Client Auth Provider](https://console.cloud.google.com/apis/)
+ - [MongoDB Atlas](https://www.mongodb.com/atlas/database)
+ - [Redis](https://app.redislabs.com)
+
+Start the development server:
+```
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application should now be running at http://localhost:3000.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Deployment
+To deploy the ClickNotes application, follow the deployment instructions for your preferred hosting platform, such as Vercel or Netlify.
+Make sure to set the environment variables in your hosting platform's dashboard, as specified in the .env.local file.
 
-Create a new file called '.env.local' in your root directory and add your secrets in this format:
-```
-NEXT_PUBLIC_TMDB_API_KEY=<YOUR_TMDB_API_KEY_HERE>
-NEXT_PUBLIC_NOTION_API_KEY=<YOUR_NOTION_API_KEY_HERE>
-NEXT_PUBLIC_NOTION_DATABASE_ID=<YOUR_NOTION_DATABASE_ID_HERE>
-```
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
+### Deploy on Vercel
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## How to Use the App
+Visit the application at http://localhost:3000.
+Log in with your Google account using the "Log in with Google" button.
+Navigate to the "Profile" page and submit your Notion API key and database IDs for movies, TV shows, and books.
+Use the search functionality to find movies, TV shows, and books.
+Click the "Save to Notion" button to save the selected item to the corresponding Notion database.
+
+## Contributing
+If you would like to contribute to the ClickNotes project, please follow the standard GitHub workflow:
+Fork the repository.
+Create a new branch for your feature or bugfix.
+Make your changes and commit them to your branch.
+Submit a pull request to the main repository.
+Please ensure that your code follows the existing style and structure of the project.
+
+## License
+ClickNotes is released under the [MIT License](https://github.com/drensokoli/clicknotes/blob/master/LICENSE).

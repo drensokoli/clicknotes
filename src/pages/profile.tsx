@@ -105,13 +105,13 @@ export default function Profile() {
                                     </div>
                                     <div className='w-full pl-2 pr-2'>
                                         <form className='mb-4 border-b-2 border-gray pb-6 px-6' onSubmit={handleNotionApiKeySubmit}>
-                                            <label className="block mb-2 text-sm text-gray-500">Notion API Key</label>
+                                            <label className="block mb-2 text-sm text-gray-500">Notion Token</label>
                                             <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
                                                     type="text"
                                                     onChange={(e) => setNotionApiKey(e.target.value)}
                                                     className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
-                                                    placeholder={notionApiKey || "Enter your Notion API Key"}
+                                                    placeholder={notionApiKey || "Enter your Notion Token"}
                                                 />
                                                 <button type="submit" className='py-2 px-2'>
                                                     <Image src={Send} alt="" width={25} height={25} />
@@ -119,13 +119,13 @@ export default function Profile() {
                                             </div>
                                         </form>
                                         <form className='mb-4 px-6' onSubmit={handleMoviesPageLinkSubmit}>
-                                            <label className="block mb-2 text-sm text-gray-500">Movies Database link</label>
+                                            <label className="block mb-2 text-sm text-gray-500">Movies Page link</label>
                                             <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
                                                     type="text"
                                                     onChange={(e) => setMoviesPageLink(e.target.value)}
                                                     className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
-                                                    placeholder={moviesPageLink || "Enter your Movies Database link"}
+                                                    placeholder={moviesPageLink || "Enter your Movies Page link"}
                                                 />
                                                 <button type="submit" className='py-2 px-2'>
                                                     <Image src={Send} alt="" width={25} height={25} />
@@ -133,13 +133,13 @@ export default function Profile() {
                                             </div>
                                         </form>
                                         <form className='mb-4 px-6' onSubmit={handleTvShowsPageLinkSubmit}>
-                                            <label className="block mb-2 text-sm text-gray-500">TV Shows Database link</label>
+                                            <label className="block mb-2 text-sm text-gray-500">TV Shows Page link</label>
                                             <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
                                                     type="text"
                                                     onChange={(e) => setTvShowsPageLink(e.target.value)}
                                                     className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
-                                                    placeholder={tvShowsPageLink || "Enter your TV Shows Database link"}
+                                                    placeholder={tvShowsPageLink || "Enter your TV Shows Page link"}
                                                 />
                                                 <button type="submit" className='py-2 px-2'>
                                                     <Image src={Send} alt="" width={25} height={25} />
@@ -147,13 +147,13 @@ export default function Profile() {
                                             </div>
                                         </form>
                                         <form className='mb-8 px-6' onSubmit={handleBooksPageLinkSubmit}>
-                                            <label className="block mb-2 text-sm text-gray-500">Books Database link</label>
+                                            <label className="block mb-2 text-sm text-gray-500">Books Page link</label>
                                             <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                                                 <input
                                                     type="text"
                                                     onChange={(e) => setBooksPageLink(e.target.value)}
                                                     className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
-                                                    placeholder={booksPageLink || "Enter your Books Database link"}
+                                                    placeholder={booksPageLink || "Enter your Books Page link"}
                                                 />
                                                 <button type="submit" className='py-2 px-2'>
                                                     <Image src={Send} alt="" width={25} height={25} />

@@ -62,7 +62,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
           >
             &times;
           </div>
-          Need help connecting?{" "}
+          Need help connecting your account to Notion?{" "}
           <a href="/help" target="_blank">
             <span className="text-blue-500"
               onClick={() => setShowInfoBubble(false)}
