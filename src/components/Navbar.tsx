@@ -58,7 +58,7 @@ export default function Navbar() {
                                                     key={item.name}
                                                     href={item.href}
 
-                                                    className={`text-gray-500 hover:border-b-2 hover:border-indigo-400 text-sm font-medium ${router.pathname === item.href ? ' text-gray-800 border-b-2 border-indigo-500' : ''
+                                                    className={`text-gray-500 hover:border-b-2 hover:border-indigo-400 text-sm font-medium ${router.pathname === item.href ? ' text-gray-800 border-b-2 border-blue-700' : ''
                                                         }`}
                                                 >{item.name}
                                                 </Link>

@@ -138,7 +138,7 @@ const Books: React.FC = () => {
                         ))}
                         {books.length === 0 && (
                             <>
-                                <div className='movie-container'>
+                                <div className='movie-container w-full'>
                                     <h1 className='text-2xl pb-4'>BEST SELLERS</h1>
                                 </div>
                                 <div className='movie-container'>
