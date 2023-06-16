@@ -1,9 +1,6 @@
 {
   "name": "clicknotes",
   "version": "0.1.0",
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -41,6 +38,9 @@
     "redis": "^4.6.6",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
