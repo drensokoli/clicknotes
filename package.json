@@ -1,6 +1,9 @@
 {
   "name": "clicknotes",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=14.0.0"
+  }
   "private": true,
   "scripts": {
     "dev": "next dev",
