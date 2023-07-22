@@ -19,6 +19,8 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
 
   const { data: session } = useSession();
   const [genres, setGenres] = useState<string[]>([]);
+  const [cast, setCast] = useState<any[]>([]);
+  const [director, setDirector] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -30,6 +32,26 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
       setGenres(genres);
     };
 
+    const fetchCast = async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+      );
+
+      const credits = await response.json();
+      const theCast = credits.cast.map((cast: { name: any; }) => cast.name);
+      const director = credits.crew.filter((person: { job: string; }) => person.job === 'Director').map((crew: { name: any; }) => crew.name);
+
+      let castArray = [];
+
+      for (let index = 0; index < 4; index++) {
+        castArray.push(theCast[index]);
+      }
+
+      setCast(castArray);
+      setDirector(director);
+    };
+
+    fetchCast();
     fetchGenres();
   }, [id]);
 
@@ -52,9 +74,9 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
         id: id,
         name: name,
         overview: overview,
-        firstGenre: genres[0],
-        secondGenre: genres[1],
-        thirdGenre: genres[2],
+        genres: genres,
+        cast: cast,
+        director: director[0] || '',
         first_air_date: first_air_date,
         vote_average: rounded_vote_average,
         tmdb_link: tmdb_link,

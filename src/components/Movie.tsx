@@ -12,34 +12,57 @@ interface MovieProps {
   adult: boolean;
   poster_path: string;
   backdrop_path: string;
+  runtime: number;
   onClick: () => void;
   onApiResponse: (error: string) => void;
 }
 
-const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, onClick, onApiResponse }) => {
-
+const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onClick, onApiResponse }) => {
+  
   const { data: session } = useSession();
   const [genres, setGenres] = useState<string[]>([]);
   const [imdbId, setImdbId] = useState<string>('');
-
+  const [cast, setCast] = useState<any[]>([]);
+  const [director, setDirector] = useState<string[]>([]);
+  
   useEffect(() => {
     const fetchGenres = async () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
-      );
-      const movieDetails = await response.json();
-      const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
-      const imdb_id = movieDetails.imdb_id;
-      setImdbId(imdb_id);
-      setGenres(genres);
-    };
+        );
+        const movieDetails = await response.json();
+        const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
+        const imdb_id = movieDetails.imdb_id;
+        setImdbId(imdb_id);
+        setGenres(genres);
+      };
 
-    fetchGenres();
-  }, [id]);
+      const fetchCast = async () => {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+          );
+        
+        const credits = await response.json();
+        const theCast = credits.cast.map((cast: { name: any; }) => cast.name);
+        const director = credits.crew.filter((crew: { job: string; }) => crew.job === 'Director').map((crew: { name: any; }) => crew.name);
+        
+        let castArray = [];
+        
+        for (let index = 0; index < 4; index++) {
+          castArray.push(theCast[index]);
+        }
+        
+        setCast(castArray);
+        setDirector(director);
+      };
 
-  const handleAddToNotion = async () => {
-    try {
-    onApiResponse('Adding movie to Notion...');
+      fetchGenres();
+      fetchCast();
+    }, [id]);
+    
+    const handleAddToNotion = async () => {
+      try {
+        onApiResponse('Adding movie to Notion...');
     const response = await fetch('/api/getUser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -51,18 +74,20 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
     const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
     const imdb_link = `https://www.imdb.com/title/${imdbId}`;
 
+
     const movieData = {
       id: id,
       title: title,
       overview: overview,
-      firstGenre: genres[0],
-      secondGenre: genres[1],
-      thirdGenre: genres[2],
+      genres: genres,
       release_date: release_date,
       vote_average: rounded_vote_average,
       adult: adult,
+      runtime: runtime,
       tmdb_link: tmdb_link,
       imdb_link: imdb_link,
+      director: director[0],
+      cast: cast,
       poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
       backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
     };
@@ -76,6 +101,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
         movieData: movieData,
       }),
     });
+
   
     if (notionResponse.ok) {
       const notionResult = await notionResponse.json();

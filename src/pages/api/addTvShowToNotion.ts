@@ -18,17 +18,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         const genresArray = [];
+        const castArray = [];
 
-        if (tvShowData.firstGenre) {
-            genresArray.push({ "name": tvShowData.firstGenre });
+        for (let index = 0; index < tvShowData.genres.length; index++) {
+            if (tvShowData.genres[index]) {
+                const element = tvShowData.genres[index];
+                genresArray.push({ "name": element });
+            }
         }
 
-        if (tvShowData.secondGenre) {
-            genresArray.push({ "name": tvShowData.secondGenre });
-        }
-
-        if (tvShowData.thirdGenre) {
-            genresArray.push({ "name": tvShowData.thirdGenre });
+        for (let index = 0; index < tvShowData.cast.length; index++) {
+            const element = tvShowData.cast[index];
+            castArray.push({ "name": element });
         }
 
         if (existingPages.results.length > 0) {
@@ -58,12 +59,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Genres': {
                         multi_select: genresArray,
                     },
+                    'Cast': {
+                        multi_select: castArray,
+                    },
                     'TMDB Rating': {
                         number: tvShowData.vote_average,
                     },
                     'TMDB Link': {
                         url: tvShowData.tmdb_link,
                     },
+                    'Type': {
+                        select: {
+                            name: 'TvShow',
+                        },
+                    },                    
+                    'Director': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: tvShowData.director,
+                                },
+                            },
+                        ],
+                    },                    
                     'Status': {
                         select: {
                             name: 'To watch',
@@ -134,12 +152,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Genres': {
                         multi_select: genresArray,
                     },
+                    'Cast': {
+                        multi_select: castArray,
+                    },
                     'TMDB Rating': {
                         number: tvShowData.vote_average,
                     },
                     'TMDB Link': {
                         url: tvShowData.tmdb_link,
                     },
+                    'Type': {
+                        select: {
+                            name: 'TvShow',
+                        },
+                    },                    
+                    'Director': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: tvShowData.director,
+                                },
+                            },
+                        ],
+                    },                    
                     'Status': {
                         select: {
                             name: 'To watch',

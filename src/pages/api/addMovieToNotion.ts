@@ -18,17 +18,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         const genresArray = [];
+        const castArray = [];
 
-        if (movieData.firstGenre) {
-            genresArray.push({ "name": movieData.firstGenre });
+        for (let index = 0; index < movieData.cast.length; index++) {
+            const element = movieData.cast[index];
+            castArray.push({ "name": element });
         }
 
-        if (movieData.secondGenre) {
-            genresArray.push({ "name": movieData.secondGenre });
-        }
-
-        if (movieData.thirdGenre) {
-            genresArray.push({ "name": movieData.thirdGenre });
+        for (let index = 0; index < movieData.genres.length; index++) {
+            if (movieData.genres[index]) {
+                const element = movieData.genres[index];
+                genresArray.push({ "name": element });
+            }
         }
 
         if (existingPages.results.length > 0) {
@@ -57,6 +58,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Genres': {
                         multi_select: genresArray,
                     },
+                    'Cast': {
+                        multi_select: castArray
+                    },
                     'TMDB Rating': {
                         number: movieData.vote_average,
                     },
@@ -65,6 +69,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     'iMDB Link': {
                         url: movieData.imdb_link,
+                    },
+                    'Director': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: movieData.director,
+                                },
+                            },
+                        ],
                     },
                     'Adult': {
                         checkbox: movieData.adult,
@@ -114,6 +127,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                     },
                                 },
                             ],
+
                         },
                     },
                 ],
@@ -128,6 +142,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         number: movieData.id,
                     },
                     'Name': {
+                        
                         title: [
                             {
                                 text: {
@@ -144,6 +159,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Genres': {
                         multi_select: genresArray,
                     },
+                    'Cast': {
+                        multi_select: castArray
+                    },
                     'TMDB Rating': {
                         number: movieData.vote_average,
                     },
@@ -152,6 +170,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     'iMDB Link': {
                         url: movieData.imdb_link,
+                    },
+                    'Director': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: movieData.director,
+                                },
+                            },
+                        ],
                     },
                     'Adult': {
                         checkbox: movieData.adult,
@@ -201,6 +228,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                     },
                                 },
                             ],
+
                         },
                     },
                 ],

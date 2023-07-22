@@ -29,7 +29,7 @@ const Movies: React.FC = () => {
 
     const searchMovieByTitle = async (title: string) => {
         try {
-            const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${title}`);
+            const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${title}&language=en-US&page=1&include_adult=false`);
             setMovies(response.data.results);
         } catch (error) {
             console.error(error);
@@ -48,7 +48,7 @@ const Movies: React.FC = () => {
     useEffect(() => {
         const fetchPopularMovies = async () => {
             try {
-                const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&include_adult=false`);
+                const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1&include_adult=false`);
                 setPopularMovies(response.data.results);
             } catch (error) {
                 console.error(error);
@@ -91,8 +91,7 @@ const Movies: React.FC = () => {
                 <div className="content-container w-5/6">
                     <div className="movie-container">
                         {movies.map((item) => (
-                            <Movie adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)}
-                            />
+                            <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)}                            />
                         ))}
                     </div>
                     {movies.length === 0 && (
@@ -102,8 +101,7 @@ const Movies: React.FC = () => {
                             </div>
                             <div className="movie-container">
                                 {popularMovies.map((item) => (
-                                    <Movie adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)}
-                                    />
+                                    <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)}                                    />
                                 ))}
                             </div>
                         </>
