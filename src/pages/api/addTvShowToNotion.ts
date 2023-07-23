@@ -178,6 +178,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 },
                             },
                         ],
+                    },                    
+                    'Status': {
+                        select: {
+                            name: 'To watch',
+                        },
                     },
                 },
                 icon: {

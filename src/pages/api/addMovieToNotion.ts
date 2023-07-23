@@ -193,6 +193,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             name: 'Movie',
                         },
                     },
+                    'Status': {
+                        select: {
+                            name: 'To watch',
+                        },
+                    },
                 },
                 icon: {
                     type: 'emoji',
