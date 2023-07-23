@@ -128,6 +128,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             url: tvShowData.trailer,
                         },
                     },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: tvShowData.tpb_link,
+                        },
+                    },
                 ],
             });
         } else {
@@ -226,6 +233,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         type: 'embed',
                         embed: {
                             url: tvShowData.trailer,
+                        },
+                    },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: tvShowData.tpb_link,
                         },
                     },
                 ],

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
+import { link } from 'fs';
 
 interface MovieProps {
   id: number;
@@ -91,6 +92,9 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
       const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
       const imdb_link = `https://www.imdb.com/title/${imdbId}`;
 
+      let linkTitle = title.replace(/ /g, '%20');
+      const tpb_link = `https://tpb.party/search/${linkTitle}/1/99/0`
+      
       const movieData = {
         id: id,
         title: title,
@@ -105,6 +109,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
         director: director[0],
         cast: cast,
         trailer: trailer || '',
+        tpb_link: tpb_link || '',
         poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
         backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
       };

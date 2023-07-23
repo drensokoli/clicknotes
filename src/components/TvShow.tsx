@@ -87,6 +87,9 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
       const rounded_vote_average = Math.round(vote_average * 10) / 10;
       const tmdb_link = `https://www.themoviedb.org/tv/${id}`;
 
+      let linkTitle = name.replace(/ /g, '%20');
+      const tpb_link = `https://tpb.party/search/${linkTitle}/1/99/0`
+
       const tvShowData = {
         id: id,
         name: name,
@@ -98,6 +101,7 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
         first_air_date: first_air_date,
         vote_average: rounded_vote_average,
         tmdb_link: tmdb_link,
+        tpb_link: tpb_link,
         poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
         backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
       };

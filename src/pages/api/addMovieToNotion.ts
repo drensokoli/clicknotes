@@ -134,6 +134,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             url: movieData.trailer,
                         },
                     },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: movieData.tpb_link,
+                        },
+                    },
                 ],
                 
             });
@@ -241,6 +248,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         type: 'embed',
                         embed: {
                             url: movieData.trailer,
+                        },
+                    },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: movieData.tpb_link,
                         },
                     },
                 ],
