@@ -3,7 +3,6 @@ import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
 
-// In Book.ts
 interface BookProps {
     id: string;
     title: string;
@@ -18,7 +17,6 @@ interface BookProps {
     previewLink: string;
     onClick: () => void;
     onApiResponse: (error: string) => void;
-    // Add more optional properties here
     language?: string;
     price?: number;
     publisher?: string;
@@ -39,26 +37,27 @@ const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, aver
             });
 
             const user = await response.json();
+            const defaultDate = '0001-01-01'
 
-            // Check the length of the description and slice it if needed
-            if (description.length >= 2000) {
-                description = description.slice(0, 1995) + '...';
+            if (description) {
+                if (description.length >= 2000) {
+                    description = description.slice(0, 1995) + '...';
+                }
             }
 
             const bookData = {
                 id: id,
                 title: title,
-                description: description,
-                publishedDate: publishedDate,
+                description: description || '',
+                publishedDate: publishedDate || defaultDate,
                 averageRating: averageRating || 0,
-                authors: authors,
-                infoLink: infoLink,
-                thumbnail: thumbnail,
-                cover_image: cover_image,
-                previewLink: previewLink,
-                language: language,
-                publisher: publisher,
-                pageCount: pageCount,
+                authors: authors || [],
+                thumbnail: thumbnail || '',
+                cover_image: cover_image || 'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled.png',
+                previewLink: previewLink || '',
+                language: language || '',
+                publisher: publisher || '',
+                pageCount: pageCount || 0,
             };
 
             const notionResponse = await fetch('/api/addBookToNotion', {
@@ -88,6 +87,7 @@ const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, aver
     const handleClick = () => {
         window.open(previewLink, '_blank');
     };
+
     return (
         <div key={id} className="movie-card" >
             <div className="movie-card-image-container">
@@ -146,7 +146,7 @@ const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, aver
                                 <button type="button"
                                     className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
                                     onClick={handleAddToNotion}
-                                    >
+                                >
                                     Add to Notion
                                 </button>
                             )

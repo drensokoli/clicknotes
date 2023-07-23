@@ -1,4 +1,3 @@
-// In addBookToNotion.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
 
@@ -6,7 +5,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { notionApiKey, db_id, bookData } = req.body;
 
     try {
-
         const notion = new Client({ auth: notionApiKey });
 
         const existingPages = await notion.databases.query({
@@ -89,6 +87,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Page Count': {
                         "number": bookData.pageCount
                     },
+                    'Book Cover': {
+                        "url": bookData.cover_image
+                    }
                 },
                 icon: {
                     type: 'emoji',
@@ -97,7 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 cover: {
                     type: 'external',
                     external: {
-                        url: bookData.cover_image,
+                        url: bookData.cover_image  || 'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled.png',
                     },
                 },
             });
@@ -119,21 +120,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             ],
                         },
 
-                    },
-                    {
-                        object: 'block',
-                        type: 'embed',
-                        embed: {
-                            url: bookData.cover_image,
-                            caption: [
-                                {
-                                    type: 'text',
-                                    text: {
-                                        content: 'Cover image of the book.'
-                                    }
-                                }
-                            ]
-                        },
                     },
                 ],
             });
@@ -207,6 +193,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Page Count': {
                         "number": bookData.pageCount
                     },
+                    'Book Cover': {
+                        "url": bookData.cover_image
+                    }
                 },
                 icon: {
                     type: 'emoji',
@@ -238,21 +227,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         },
 
                     },
-                    {
-                        object: 'block',
-                        type: 'embed',
-                        embed: {
-                            url: bookData.cover_image,
-                            caption: [
-                                {
-                                    type: 'text',
-                                    text: {
-                                        content: 'Cover image of the book.'
-                                    }
-                                }
-                            ]
-                        },
-                    }
                 ],
             });
         }
