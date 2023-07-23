@@ -17,23 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
         });
 
-        const genresArray = [];
-        const castArray = [];
-
-        for (let index = 0; index < movieData.cast.length; index++) {
-            if (movieData.cast[index]) {
-                const element = movieData.cast[index];
-                castArray.push({ "name": element });
-            }
-        }
-
-        for (let index = 0; index < movieData.genres.length; index++) {
-            if (movieData.genres[index]) {
-                const element = movieData.genres[index];
-                genresArray.push({ "name": element });
-            }
-        }
-
         if (existingPages.results.length > 0) {
             const existingPageId = existingPages.results[0].id;
 
@@ -58,10 +41,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         },
                     },
                     'Genres': {
-                        multi_select: genresArray,
+                        multi_select: movieData.genres,
                     },
                     'Cast': {
-                        multi_select: castArray
+                        multi_select: movieData.cast,
                     },
                     'TMDB Rating': {
                         number: movieData.vote_average,
@@ -142,9 +125,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         },
                     }
                 ],
-                
+
             });
-        } else {
+        }
+        else {
             const newPage = await notion.pages.create({
                 parent: {
                     database_id: db_id,
@@ -154,7 +138,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         number: movieData.id,
                     },
                     'Name': {
-                        
+
                         title: [
                             {
                                 text: {
@@ -169,10 +153,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         },
                     },
                     'Genres': {
-                        multi_select: genresArray,
+                        multi_select: movieData.genres,
                     },
                     'Cast': {
-                        multi_select: castArray
+                        multi_select: movieData.cast,
                     },
                     'TMDB Rating': {
                         number: movieData.vote_average,

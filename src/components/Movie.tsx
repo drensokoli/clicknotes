@@ -21,22 +21,33 @@ interface MovieProps {
 const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onClick, onApiResponse }) => {
 
   const { data: session } = useSession();
-  const [genres, setGenres] = useState<string[]>([]);
+  const [genres, setGenres] = useState<any[]>([]);
   const [imdbId, setImdbId] = useState<string>('');
   const [cast, setCast] = useState<any[]>([]);
   const [director, setDirector] = useState<string[]>([]);
   const [trailer, setTrailer] = useState<string>('');
 
   useEffect(() => {
+
     const fetchGenres = async () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
       );
+
       const movieDetails = await response.json();
       const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
+      const genresArray = [];
       const imdb_id = movieDetails.imdb_id;
+
+      for (let index = 0; index < genres.length; index++) {
+        if (genres[index]) {
+          const element = genres[index];
+          genresArray.push({ "name": element });
+        }
+      }
+
       setImdbId(imdb_id);
-      setGenres(genres);
+      setGenres(genresArray);
     };
 
     const fetchCast = async () => {
@@ -50,8 +61,11 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
 
       let castArray = [];
 
-      for (let index = 0; index < 4; index++) {
-        castArray.push(theCast[index]);
+      for (let index = 0; index < 11; index++) {
+        if (theCast[index]) {
+          const element = theCast[index];
+          castArray.push({ "name": element });
+        }
       }
 
       setCast(castArray);
@@ -64,7 +78,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
       );
       const videoData = await response.json();
       const trailers = videoData.results.filter((video: { type: string; }) => video.type === 'Trailer');
-    
+
       if (trailers.length > 0) {
         const trailerID = trailers[0].key;
         const trailer = `https://www.youtube.com/watch?v=${trailerID}`;
@@ -80,7 +94,9 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
 
   const handleAddToNotion = async () => {
     try {
+
       onApiResponse('Adding movie to Notion...');
+
       const response = await fetch('/api/getUser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -91,23 +107,22 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
       const rounded_vote_average = Math.round(vote_average * 10) / 10;
       const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
       const imdb_link = `https://www.imdb.com/title/${imdbId}`;
+      const tpb_link = `https://tpb.party/search/${title.replace(/ /g, '%20')}/1/99/0`
+      const defaultDate = "0001-01-01";
 
-      let linkTitle = title.replace(/ /g, '%20');
-      const tpb_link = `https://tpb.party/search/${linkTitle}/1/99/0`
-      
       const movieData = {
         id: id,
         title: title,
         overview: overview,
         genres: genres,
-        release_date: release_date,
+        cast: cast,
+        release_date: release_date || defaultDate,
         vote_average: rounded_vote_average,
         adult: adult,
         runtime: runtime,
         tmdb_link: tmdb_link,
         imdb_link: imdb_link,
-        director: director[0],
-        cast: cast,
+        director: director[0] || "[Missing]",
         trailer: trailer || '',
         tpb_link: tpb_link || '',
         poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
@@ -129,9 +144,11 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
         const notionResult = await notionResponse.json();
         onApiResponse('Added movie to Notion');
         console.log(notionResult);
-      } else {
+      }
+      else {
         onApiResponse('Error adding movie to Notion');
       }
+
     } catch (error) {
       console.error(error);
       onApiResponse('Error adding movie to Notion');

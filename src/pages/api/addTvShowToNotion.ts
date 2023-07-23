@@ -17,25 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
         });
 
-        const genresArray = [];
-        const castArray = [];
-
-        for (let index = 0; index < tvShowData.genres.length; index++) {
-            if (tvShowData.genres[index]) {
-                const element = tvShowData.genres[index];
-                genresArray.push({ "name": element });
-            }
-        }
-
-        for (let index = 0; index < tvShowData.cast.length; index++) {
-            if (tvShowData.cast[index]) {
-                const element = tvShowData.cast[index];
-                castArray.push({ "name": element });
-            }
-        }
-
         if (existingPages.results.length > 0) {
-            // Update the existing page
             const existingPageId = existingPages.results[0].id;
 
             await notion.pages.update({
@@ -59,10 +41,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         },
                     },
                     'Genres': {
-                        multi_select: genresArray,
+                        multi_select: tvShowData.genres,
                     },
                     'Cast': {
-                        multi_select: castArray,
+                        multi_select: tvShowData.cast,
                     },
                     'TMDB Rating': {
                         number: tvShowData.vote_average,
@@ -161,10 +143,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         },
                     },
                     'Genres': {
-                        multi_select: genresArray,
+                        multi_select: tvShowData.genres,
                     },
                     'Cast': {
-                        multi_select: castArray,
+                        multi_select: tvShowData.cast,
                     },
                     'TMDB Rating': {
                         number: tvShowData.vote_average,

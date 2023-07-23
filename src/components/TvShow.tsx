@@ -18,19 +18,30 @@ interface TvShowProps {
 const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onClick, onApiResponse }) => {
 
   const { data: session } = useSession();
-  const [genres, setGenres] = useState<string[]>([]);
+  const [genres, setGenres] = useState<any[]>([]);
   const [cast, setCast] = useState<any[]>([]);
   const [director, setDirector] = useState<string[]>([]);
   const [trailer, setTrailer] = useState<string>('');
 
   useEffect(() => {
+
     const fetchGenres = async () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
       );
+      
       const movieDetails = await response.json();
       const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
-      setGenres(genres);
+      const genresArray = [];
+      
+      for (let index = 0; index < genres.length; index++) {
+          if (genres[index]) {
+              const element = genres[index];
+              genresArray.push({ "name": element });
+          }
+      }
+      
+      setGenres(genresArray);
     };
 
     const fetchCast = async () => {
@@ -41,12 +52,14 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
       const credits = await response.json();
       const theCast = credits.cast.map((cast: { name: any; }) => cast.name);
       const director = credits.crew.filter((person: { job: string; }) => person.job === 'Director').map((crew: { name: any; }) => crew.name);
-
-      let castArray = [];
-
-      for (let index = 0; index < 4; index++) {
-        castArray.push(theCast[index]);
-      }
+      const castArray = [];
+    
+      for (let index = 0; index < 11; index++) {
+          if (theCast[index]) {
+            const element = theCast[index];
+              castArray.push({ "name": element });
+            }
+          }
 
       setCast(castArray);
       setDirector(director);
@@ -58,13 +71,13 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
       );
       const videoData = await response.json();
       const trailers = videoData.results.filter((video: { type: string; }) => video.type === 'Trailer');
-    
       
       if (trailers.length > 0) {
         const trailerID = trailers[0].key;
         const trailer = `https://www.youtube.com/watch?v=${trailerID}`;
         setTrailer(trailer);
       }
+
     };
 
     fetchCast();
@@ -86,9 +99,8 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
       const user = await response.json();
       const rounded_vote_average = Math.round(vote_average * 10) / 10;
       const tmdb_link = `https://www.themoviedb.org/tv/${id}`;
-
-      let linkTitle = name.replace(/ /g, '%20');
-      const tpb_link = `https://tpb.party/search/${linkTitle}/1/99/0`
+      const tpb_link = `https://tpb.party/search/${name.replace(/ /g, '%20')}/1/99/0`
+      const defaultDate = "0001-01-01";
 
       const tvShowData = {
         id: id,
@@ -96,9 +108,9 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
         overview: overview,
         genres: genres,
         cast: cast,
+        first_air_date: first_air_date || defaultDate,
         trailer: trailer,
         director: director[0] || '[Missing]',
-        first_air_date: first_air_date,
         vote_average: rounded_vote_average,
         tmdb_link: tmdb_link,
         tpb_link: tpb_link,
