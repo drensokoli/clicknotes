@@ -130,11 +130,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     {
                         object: 'block',
-                        type: 'embed',
-                        embed: {
+                        type: 'bookmark',
+                        bookmark: {
                             url: tvShowData.tpb_link,
                         },
-                    },
+                    }
                 ],
             });
         } else {
@@ -237,11 +237,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     {
                         object: 'block',
-                        type: 'embed',
-                        embed: {
+                        type: 'bookmark',
+                        bookmark: {
                             url: tvShowData.tpb_link,
                         },
-                    },
+                    }
                 ],
             });
         }

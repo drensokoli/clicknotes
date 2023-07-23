@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { IonSearchbar } from '@ionic/react';
+import { searchCircle } from 'ionicons/icons';
 
 interface Props {
   input: string;
@@ -6,22 +8,61 @@ interface Props {
 }
 
 const SearchBar: React.FC<Props> = ({ input, handleInputChange }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    function handleKeyPress(event: { key: string; preventDefault: () => void; }) {
+      if (event.key === '/') {
+        event.preventDefault();
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
+  const handleClearInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+      handleInputChange({ target: inputRef.current } as React.ChangeEvent<HTMLInputElement>);
+    }
+  };
+
   return (
-    <form onSubmit={(e) => e.preventDefault()} className="w-5/6 lg:w-2/3 mx-auto drop-shadow-[0_0_10px_rgba(0,0,0,0.2)] rounded-md">
-      <div className="relative">
-        <svg className="w-5 h-5 text-gray-400 absolute top-3.5 left-4" fill="currentColor" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path>
-        </svg>
-        <input
-          type="text"
-          placeholder="Enter title"
-          value={input}
-          onChange={handleInputChange}
-          className="bg-white h-12 w-full px-12 rounded-lg focus:outline-none hover:cursor-pointer"
-        />
-      </div>
-    </form>
+    <>
+      <form onSubmit={(e) => e.preventDefault()} className="w-5/6 lg:w-2/3 mx-auto drop-shadow-[0_0_10px_rgba(0,0,0,0.2)] rounded-md">
+        <div className="relative">
+          <svg className="w-5 h-5 text-gray-400 absolute top-3.5 left-4" fill="currentColor" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path>
+          </svg>
+          <input
+            type="text"
+            placeholder="Enter title"
+            value={input}
+            onChange={handleInputChange}
+            className="bg-white h-12 w-full px-12 rounded-lg focus:outline-none hover:cursor-pointer"
+            ref={inputRef}
+          />
+
+          {input && ( //this is the condition that checks if there's anything in the input
+            <button onClick={handleClearInput} className="absolute top-3.5 right-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-x">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          )}
+
+        </div>
+      </form>
+    </>
   );
+
 };
 
 export default SearchBar;
