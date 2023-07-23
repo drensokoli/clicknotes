@@ -51,6 +51,8 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
       setDirector(director);
     };
 
+    console.log('Director: ', director);
+
     fetchCast();
     fetchGenres();
   }, [id]);
@@ -76,7 +78,7 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
         overview: overview,
         genres: genres,
         cast: cast,
-        director: director[0] || '',
+        director: director[0] || '[Missing]',
         first_air_date: first_air_date,
         vote_average: rounded_vote_average,
         tmdb_link: tmdb_link,
