@@ -87,9 +87,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Page Count': {
                         "number": bookData.pageCount
                     },
-                    'Book Cover': {
-                        "url": bookData.cover_image
-                    }
                 },
                 icon: {
                     type: 'emoji',
@@ -121,6 +118,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         },
 
                     },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: bookData.cover_image,
+                            caption: [
+                                {
+                                    type: 'text',
+                                    text: {
+                                        content: 'Book Cover Image',
+                                    },
+                                },
+                            ],
+                        },
+                    }
                 ],
             });
         } else {
@@ -193,9 +205,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Page Count': {
                         "number": bookData.pageCount
                     },
-                    'Book Cover': {
-                        "url": bookData.cover_image
-                    }
                 },
                 icon: {
                     type: 'emoji',
@@ -225,8 +234,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 },
                             ],
                         },
-
                     },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: bookData.cover_image,
+                            caption: [
+                                {
+                                    type: 'text',
+                                    text: {
+                                        content: 'Book Cover Image',
+                                    },
+                                },
+                            ],
+                        },
+                    }
                 ],
             });
         }

@@ -53,7 +53,7 @@ const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, aver
                 averageRating: averageRating || 0,
                 authors: authors || [],
                 thumbnail: thumbnail || '',
-                cover_image: cover_image || 'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled.png',
+                cover_image: cover_image || 'https://www.frontlist.in/storage/uploads/2019/10/Google-Books-Update.png',
                 previewLink: previewLink || '',
                 language: language || '',
                 publisher: publisher || '',
