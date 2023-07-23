@@ -21,6 +21,7 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
   const [genres, setGenres] = useState<string[]>([]);
   const [cast, setCast] = useState<any[]>([]);
   const [director, setDirector] = useState<string[]>([]);
+  const [trailer, setTrailer] = useState<string>('');
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -51,10 +52,24 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
       setDirector(director);
     };
 
-    console.log('Director: ', director);
+    const fetchTrailer = async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+      );
+      const videoData = await response.json();
+      const trailers = videoData.results.filter((video: { type: string; }) => video.type === 'Trailer');
+    
+      
+      if (trailers.length > 0) {
+        const trailerID = trailers[0].key;
+        const trailer = `https://www.youtube.com/watch?v=${trailerID}`;
+        setTrailer(trailer);
+      }
+    };
 
     fetchCast();
     fetchGenres();
+    fetchTrailer();
   }, [id]);
 
 
@@ -78,6 +93,7 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
         overview: overview,
         genres: genres,
         cast: cast,
+        trailer: trailer,
         director: director[0] || '[Missing]',
         first_air_date: first_air_date,
         vote_average: rounded_vote_average,

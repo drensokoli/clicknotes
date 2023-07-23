@@ -21,8 +21,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const castArray = [];
 
         for (let index = 0; index < movieData.cast.length; index++) {
-            const element = movieData.cast[index];
-            castArray.push({ "name": element });
+            if (movieData.cast[index]) {
+                const element = movieData.cast[index];
+                castArray.push({ "name": element });
+            }
         }
 
         for (let index = 0; index < movieData.genres.length; index++) {
@@ -87,11 +89,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             name: 'Movie',
                         },
                     },
-                    'Status': {
-                        select: {
-                            name: 'To watch',
-                        },
-                    },
                 },
                 icon: {
                     type: 'emoji',
@@ -130,7 +127,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                         },
                     },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: movieData.trailer,
+                        },
+                    },
                 ],
+                
             });
         } else {
             const newPage = await notion.pages.create({
@@ -188,11 +193,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             name: 'Movie',
                         },
                     },
-                    'Status': {
-                        select: {
-                            name: 'To watch',
-                        },
-                    },
                 },
                 icon: {
                     type: 'emoji',
@@ -229,6 +229,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 },
                             ],
 
+                        },
+                    },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: movieData.trailer,
                         },
                     },
                 ],

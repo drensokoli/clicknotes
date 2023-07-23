@@ -18,102 +18,119 @@ interface MovieProps {
 }
 
 const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onClick, onApiResponse }) => {
-  
+
   const { data: session } = useSession();
   const [genres, setGenres] = useState<string[]>([]);
   const [imdbId, setImdbId] = useState<string>('');
   const [cast, setCast] = useState<any[]>([]);
   const [director, setDirector] = useState<string[]>([]);
-  
+  const [trailer, setTrailer] = useState<string>('');
+
   useEffect(() => {
     const fetchGenres = async () => {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
-        );
-        const movieDetails = await response.json();
-        const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
-        const imdb_id = movieDetails.imdb_id;
-        setImdbId(imdb_id);
-        setGenres(genres);
-      };
-
-      const fetchCast = async () => {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
-          );
-        
-        const credits = await response.json();
-        const theCast = credits.cast.map((cast: { name: any; }) => cast.name);
-        const director = credits.crew.filter((crew: { job: string; }) => crew.job === 'Director').map((crew: { name: any; }) => crew.name);
-        
-        let castArray = [];
-        
-        for (let index = 0; index < 4; index++) {
-          castArray.push(theCast[index]);
-        }
-        
-        setCast(castArray);
-        setDirector(director);
-      };
-
-      fetchGenres();
-      fetchCast();
-    }, [id]);
-    
-    const handleAddToNotion = async () => {
-      try {
-        onApiResponse('Adding movie to Notion...');
-    const response = await fetch('/api/getUser', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userEmail: session?.user?.email }),
-    });
-
-    const user = await response.json();
-    const rounded_vote_average = Math.round(vote_average * 10) / 10;
-    const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
-    const imdb_link = `https://www.imdb.com/title/${imdbId}`;
-
-
-    const movieData = {
-      id: id,
-      title: title,
-      overview: overview,
-      genres: genres,
-      release_date: release_date,
-      vote_average: rounded_vote_average,
-      adult: adult,
-      runtime: runtime,
-      tmdb_link: tmdb_link,
-      imdb_link: imdb_link,
-      director: director[0],
-      cast: cast,
-      poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
-      backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
+      );
+      const movieDetails = await response.json();
+      const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
+      const imdb_id = movieDetails.imdb_id;
+      setImdbId(imdb_id);
+      setGenres(genres);
     };
 
-    const notionResponse = await fetch('/api/addMovieToNotion', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        notionApiKey: decryptData(user.notionApiKey),
-        db_id: decryptData(user.moviesPageLink),
-        movieData: movieData,
-      }),
-    });
+    const fetchCast = async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+      );
 
-  
-    if (notionResponse.ok) {
-      const notionResult = await notionResponse.json();
-      onApiResponse('Added movie to Notion');
-      console.log(notionResult);
-    } else {
+      const credits = await response.json();
+      const theCast = credits.cast.map((cast: { name: any; }) => cast.name);
+      const director = credits.crew.filter((crew: { job: string; }) => crew.job === 'Director').map((crew: { name: any; }) => crew.name);
+
+      let castArray = [];
+
+      for (let index = 0; index < 4; index++) {
+        castArray.push(theCast[index]);
+      }
+
+      setCast(castArray);
+      setDirector(director);
+    };
+
+    const fetchTrailer = async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+      );
+      const videoData = await response.json();
+      const trailers = videoData.results.filter((video: { type: string; }) => video.type === 'Trailer');
+    
+      if (trailers.length > 0) {
+        const trailerID = trailers[0].key;
+        const trailer = `https://www.youtube.com/watch?v=${trailerID}`;
+        setTrailer(trailer);
+      }
+    };
+
+    fetchGenres();
+    fetchCast();
+    fetchTrailer();
+
+  }, [id]);
+
+  const handleAddToNotion = async () => {
+    try {
+      onApiResponse('Adding movie to Notion...');
+      const response = await fetch('/api/getUser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail: session?.user?.email }),
+      });
+
+      const user = await response.json();
+      const rounded_vote_average = Math.round(vote_average * 10) / 10;
+      const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
+      const imdb_link = `https://www.imdb.com/title/${imdbId}`;
+
+      const movieData = {
+        id: id,
+        title: title,
+        overview: overview,
+        genres: genres,
+        release_date: release_date,
+        vote_average: rounded_vote_average,
+        adult: adult,
+        runtime: runtime,
+        tmdb_link: tmdb_link,
+        imdb_link: imdb_link,
+        director: director[0],
+        cast: cast,
+        trailer: trailer || '',
+        poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
+        backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
+      };
+
+      const notionResponse = await fetch('/api/addMovieToNotion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          notionApiKey: decryptData(user.notionApiKey),
+          db_id: decryptData(user.moviesPageLink),
+          movieData: movieData,
+        }),
+      });
+
+
+      if (notionResponse.ok) {
+        const notionResult = await notionResponse.json();
+        onApiResponse('Added movie to Notion');
+        console.log(notionResult);
+      } else {
+        onApiResponse('Error adding movie to Notion');
+      }
+    } catch (error) {
+      console.error(error);
       onApiResponse('Error adding movie to Notion');
     }
-  } catch (error) {
-    console.error(error);
-    onApiResponse('Error adding movie to Notion');
-  }
   };
 
 
@@ -176,7 +193,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
                 <button type="button"
                   className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
                   onClick={handleAddToNotion}
-                  >
+                >
                   Add to Notion
                 </button>
               )

@@ -28,8 +28,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         for (let index = 0; index < tvShowData.cast.length; index++) {
-            const element = tvShowData.cast[index];
-            castArray.push({ "name": element });
+            if (tvShowData.cast[index]) {
+                const element = tvShowData.cast[index];
+                castArray.push({ "name": element });
+            }
         }
 
         if (existingPages.results.length > 0) {
@@ -81,11 +83,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 },
                             },
                         ],
-                    },                    
-                    'Status': {
-                        select: {
-                            name: 'To watch',
-                        },
                     },
                 },
                 icon: {
@@ -122,6 +119,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                     },
                                 },
                             ],
+                        },
+                    },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: tvShowData.trailer,
                         },
                     },
                 ],
@@ -174,11 +178,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 },
                             },
                         ],
-                    },                    
-                    'Status': {
-                        select: {
-                            name: 'To watch',
-                        },
                     },
                 },
                 icon: {
@@ -215,6 +214,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                     },
                                 },
                             ],
+                        },
+                    },
+                    {
+                        object: 'block',
+                        type: 'embed',
+                        embed: {
+                            url: tvShowData.trailer,
                         },
                     },
                 ],
