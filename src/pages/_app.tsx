@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { NextRouter } from 'next/router';
+import { Analytics } from '@vercel/analytics/react';
 
 interface WrappedAppProps extends Omit<AppProps, 'router'> {
   router: NextRouter;
@@ -70,6 +71,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
           </a>
         </div>
       )}
+      <Analytics />
       <Footer />
     </div>
   );
