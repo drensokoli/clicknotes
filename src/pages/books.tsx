@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Book from '../components/Book';
 import SearchBar from '@/components/SearchBar';
+import { debounce } from 'lodash';
 
 interface Book {
     saleInfo: any;
@@ -33,13 +34,24 @@ const Books: React.FC = () => {
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
-    const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInput(event.target.value);
-        if (event.target.value.length > 0) {
-            await searchBooksByTitle(event.target.value);
-        } else {
-            setBooks([]);
-        }
+    let debouncedSearchBooksByTitle: ReturnType<typeof debounce>;
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInput(event.target.value);
+    
+      if (debouncedSearchBooksByTitle) {
+        debouncedSearchBooksByTitle.cancel();
+      }
+    
+      if (event.target.value.length > 0) {
+        debouncedSearchBooksByTitle = debounce(async () => {
+          await searchBooksByTitle(event.target.value);
+        }, 1000);
+    
+        debouncedSearchBooksByTitle();
+      } else {
+        setBooks([]);
+      }
     };
 
     const searchBooksByTitle = async (title: string) => {

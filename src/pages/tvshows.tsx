@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TvShow from '../components/TvShow';
 import SearchBar from '@/components/SearchBar';
+import { debounce } from 'lodash';
 
 interface TvShow {
     id: number;
@@ -27,9 +28,20 @@ const TvShows: React.FC = () => {
     const certification_country = 'US'
     const certification = 'TV-PG'
 
-    const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInput(event.target.value);
+    let debouncedSearchTvShowByTitle: ReturnType<typeof debounce>;
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInput(event.target.value);
+    
+      if (debouncedSearchTvShowByTitle) {
+        debouncedSearchTvShowByTitle.cancel();
+      }
+    
+      debouncedSearchTvShowByTitle = debounce(async () => {
         await searchTvShowByTitle(event.target.value);
+      }, 1000);
+    
+      debouncedSearchTvShowByTitle();
     };
 
     const searchTvShowByTitle = async (title: string) => {

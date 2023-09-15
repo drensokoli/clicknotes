@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Movie from '@/components/Movie';
 import axios from 'axios';
 import SearchBar from '@/components/SearchBar';
+import { debounce } from 'lodash';
 
 interface Movie {
     id: number;
@@ -22,9 +23,23 @@ const Movies: React.FC = () => {
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
-    const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInput(event.target.value);
+    let debouncedSearchMovieByTitle: ReturnType<typeof debounce>;
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInput(event.target.value);
+    
+      // Cancel the previous debounced function if it exists
+      if (debouncedSearchMovieByTitle) {
+        debouncedSearchMovieByTitle.cancel();
+      }
+    
+      // Create a new debounced function that waits for one second before invoking the searchMovieByTitle function
+      debouncedSearchMovieByTitle = debounce(async () => {
         await searchMovieByTitle(event.target.value);
+      }, 1000);
+    
+      // Invoke the debounced function
+      debouncedSearchMovieByTitle();
     };
 
     const searchMovieByTitle = async (title: string) => {
