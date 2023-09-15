@@ -64,9 +64,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             },
                         ],
                     },
-                    'Adult': {
-                        checkbox: movieData.adult,
-                    },
+                    // 'Adult': {
+                    //     checkbox: movieData.adult,
+                    // },
                     'Type': {
                         select: {
                             name: 'Movie',
@@ -176,9 +176,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             },
                         ],
                     },
-                    'Adult': {
-                        checkbox: movieData.adult,
-                    },
+                    // 'Adult': {
+                    //     checkbox: movieData.adult,
+                    // },
                     'Type': {
                         select: {
                             name: 'Movie',
