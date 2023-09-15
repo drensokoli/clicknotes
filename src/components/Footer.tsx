@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
       <p className="text-gray-800 mr-2 ">
         &copy; {new Date().getFullYear()}{' '}
         <span className="text-blue-400">
-          <a href="https://github.com/drensokoli/clicknotes">ClickNotes</a>
+          <a href="https://github.com/drensokoli/clicknotes" target="_blank">ClickNotes</a>
         </span>
       </p>
     </footer>
