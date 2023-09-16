@@ -20,10 +20,7 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  secret: process.env.JWT_SECRET,
-  pages: {
-    signIn: '/auth/signin',
-  }
+  secret: process.env.JWT_SECRET
 };
 
 export default (req, res) => NextAuth(req, res, authOptions);
