@@ -46,7 +46,7 @@ const Books: React.FC = () => {
       if (event.target.value.length > 0) {
         debouncedSearchBooksByTitle = debounce(async () => {
           await searchBooksByTitle(event.target.value);
-        }, 1000);
+        }, 500);
     
         debouncedSearchBooksByTitle();
       } else {

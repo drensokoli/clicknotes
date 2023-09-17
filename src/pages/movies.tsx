@@ -36,7 +36,7 @@ const Movies: React.FC = () => {
       // Create a new debounced function that waits for one second before invoking the searchMovieByTitle function
       debouncedSearchMovieByTitle = debounce(async () => {
         await searchMovieByTitle(event.target.value);
-      }, 1000);
+      }, 500);
     
       // Invoke the debounced function
       debouncedSearchMovieByTitle();

@@ -39,7 +39,7 @@ const TvShows: React.FC = () => {
     
       debouncedSearchTvShowByTitle = debounce(async () => {
         await searchTvShowByTitle(event.target.value);
-      }, 1000);
+      }, 500);
     
       debouncedSearchTvShowByTitle();
     };
