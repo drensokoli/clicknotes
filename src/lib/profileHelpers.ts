@@ -4,9 +4,9 @@ import { useSession, getSession } from 'next-auth/react';
 import { MouseEvent } from "react";
 
 
-export async function notionApiKeySubmit(notionApiKey: any, userEmail: any) {
+export async function notionApiKeySubmit(notionApiKey: any, userEmail: any, cryptoKey: string) {
     try {
-        const encryptedNotionApiKey = encryptData(notionApiKey);
+        const encryptedNotionApiKey = encryptData(notionApiKey, cryptoKey);
         const response = await fetch('/api/updateUser', {
             method: 'POST',
             headers: {
@@ -22,10 +22,10 @@ export async function notionApiKeySubmit(notionApiKey: any, userEmail: any) {
     }
 }
 
-export async function moviesLinkSubmit(link: string, userEmail: any) {
+export async function moviesLinkSubmit(link: string, userEmail: any, cryptoKey: string) {
     try {
         const extractedValue = extractValueFromUrl(link);
-        const encryptedValue = encryptData(extractedValue);
+        const encryptedValue = encryptData(extractedValue, cryptoKey);
         const response = await fetch('/api/updateUser', {
             method: 'POST',
             headers: {
@@ -41,10 +41,10 @@ export async function moviesLinkSubmit(link: string, userEmail: any) {
     }
 }
 
-export async function tvShowsLinkSubmit(link: string, userEmail: any) {
+export async function tvShowsLinkSubmit(link: string, userEmail: any, cryptoKey: string) {
     try {
         const extractedValue = extractValueFromUrl(link);
-        const encryptedValue = encryptData(extractedValue);
+        const encryptedValue = encryptData(extractedValue, cryptoKey);
         const response = await fetch('/api/updateUser', {
             method: 'POST',
             headers: {
@@ -60,10 +60,10 @@ export async function tvShowsLinkSubmit(link: string, userEmail: any) {
     }
 }
 
-export async function booksLinkSubmit(link: string, userEmail: any) {
+export async function booksLinkSubmit(link: string, userEmail: any, cryptoKey: string) {
     try {
         const extractedValue = extractValueFromUrl(link);
-        const encryptedValue = encryptData(extractedValue);
+        const encryptedValue = encryptData(extractedValue, cryptoKey);
         const response = await fetch('/api/updateUser', {
             method: 'POST',
             headers: {

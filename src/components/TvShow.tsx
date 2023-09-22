@@ -13,9 +13,11 @@ interface TvShowProps {
   backdrop_path: string;
   onClick: () => void;
   onApiResponse: (error: string) => void;
+  cryptoKey: string;
+  tmdbApiKey: string;
 }
 
-const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onClick, onApiResponse }) => {
+const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onClick, onApiResponse, cryptoKey, tmdbApiKey }) => {
 
   const { data: session } = useSession();
   const [genres, setGenres] = useState<any[]>([]);
@@ -27,7 +29,7 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
 
     const fetchGenres = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+        `https://api.themoviedb.org/3/tv/${id}?api_key=${tmdbApiKey}&language=en-US`
       );
       
       const movieDetails = await response.json();
@@ -46,7 +48,7 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
 
     const fetchCast = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+        `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${tmdbApiKey}&language=en-US`
       );
 
       const credits = await response.json();
@@ -67,7 +69,7 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
 
     const fetchTrailer = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+        `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${tmdbApiKey}&language=en-US`
       );
       const videoData = await response.json();
       const trailers = videoData.results.filter((video: { type: string; }) => video.type === 'Trailer');
@@ -122,8 +124,8 @@ const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vot
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          notionApiKey: decryptData(user.notionApiKey),
-          db_id: decryptData(user.tvShowsPageLink),
+          notionApiKey: decryptData(user.notionApiKey, cryptoKey),
+          db_id: decryptData(user.tvShowsPageLink, cryptoKey),
           tvShowData: tvShowData,
         }),
       });

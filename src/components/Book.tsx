@@ -21,10 +21,11 @@ interface BookProps {
     price?: number;
     publisher?: string;
     availability?: string;
+    cryptoKey: string;
 }
 
 
-const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onClick, onApiResponse, language, price, publisher, availability }) => {
+const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onClick, onApiResponse, language, price, publisher, availability, cryptoKey }) => {
     const { data: session } = useSession();
 
     const handleAddToNotion = async () => {
@@ -64,8 +65,8 @@ const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, aver
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    notionApiKey: decryptData(user.notionApiKey),
-                    db_id: decryptData(user.booksPageLink),
+                    notionApiKey: decryptData(user.notionApiKey, cryptoKey),
+                    db_id: decryptData(user.booksPageLink, cryptoKey),
                     bookData: bookData,
                 }),
             });

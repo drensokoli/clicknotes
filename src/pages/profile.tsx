@@ -7,7 +7,7 @@ import 'flowbite';
 import { notionApiKeySubmit, moviesLinkSubmit, tvShowsLinkSubmit, booksLinkSubmit } from '../lib/profileHelpers';
 import Send from '../../public/send.png';
 
-export default function Profile() {
+export default function Profile({ cryptoKey } : { cryptoKey: string }) {
     const { data: session, status } = useSession();
     const userEmail = session?.user?.email;
 
@@ -20,7 +20,7 @@ export default function Profile() {
 
     async function handleNotionApiKeySubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
-            notionApiKeySubmit(notionApiKey, userEmail);
+            notionApiKeySubmit(notionApiKey, userEmail, cryptoKey);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -28,7 +28,7 @@ export default function Profile() {
 
     async function handleMoviesPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
-            moviesLinkSubmit(moviesPageLink, userEmail);
+            moviesLinkSubmit(moviesPageLink, userEmail, cryptoKey);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -36,7 +36,7 @@ export default function Profile() {
 
     async function handleTvShowsPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
-            tvShowsLinkSubmit(tvShowsPageLink, userEmail);
+            tvShowsLinkSubmit(tvShowsPageLink, userEmail, cryptoKey);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -44,7 +44,7 @@ export default function Profile() {
 
     async function handleBooksPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
-            booksLinkSubmit(booksPageLink, userEmail);
+            booksLinkSubmit(booksPageLink, userEmail, cryptoKey);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -63,10 +63,10 @@ export default function Profile() {
             });
             const data = await response.json();
 
-            data.notionApiKey && setNotionApiKey(decryptData(data.notionApiKey));
-            data.moviesPageLink && setMoviesPageLink(decryptData(data.moviesPageLink));
-            data.tvShowsPageLink && setTvShowsPageLink(decryptData(data.tvShowsPageLink));
-            data.booksPageLink && setBooksPageLink(decryptData(data.booksPageLink));
+            data.notionApiKey && setNotionApiKey(decryptData(data.notionApiKey, cryptoKey));
+            data.moviesPageLink && setMoviesPageLink(decryptData(data.moviesPageLink, cryptoKey));
+            data.tvShowsPageLink && setTvShowsPageLink(decryptData(data.tvShowsPageLink, cryptoKey));
+            data.booksPageLink && setBooksPageLink(decryptData(data.booksPageLink, cryptoKey));
 
         } catch (error) {
             console.error('Error:', error);
@@ -174,6 +174,7 @@ export default function Profile() {
 
 export const getServerSideProps = async (context: any) => {
     const session = await getSession(context);
+    const cryptoKey = process.env.CRYPTO_KEY;
 
     if (!session) {
         return {
@@ -186,6 +187,7 @@ export const getServerSideProps = async (context: any) => {
     return {
         props: {
             session,
+            cryptoKey
         },
     };
 };

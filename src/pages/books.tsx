@@ -24,10 +24,13 @@ interface Book {
     };
 }
 
-const GOOGLE_BOOKS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY;
-const NYTIMES_API_KEY = process.env.NEXT_PUBLIC_NYTIMES_API_KEY;
+interface Props {
+    cryptoKey: string;
+    googleBooksApiKey: string;
+    nyTimesApiKey: string;
+}
 
-const Books: React.FC = () => {
+const Books: React.FC<Props> = ({cryptoKey, googleBooksApiKey, nyTimesApiKey}) => {
     const [input, setInput] = useState('');
     const [books, setBooks] = useState<Book[]>([]);
     const [bestsellers, setBestsellers] = useState<Book[]>([]);
@@ -56,7 +59,7 @@ const Books: React.FC = () => {
 
     const searchBooksByTitle = async (title: string) => {
         try {
-            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&key=${GOOGLE_BOOKS_API_KEY}`);
+            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&key=${googleBooksApiKey}`);
             setBooks(response.data.items);
         } catch (error) {
             console.error(error);
@@ -72,9 +75,9 @@ const Books: React.FC = () => {
                     setBestsellers(JSON.parse(cacheData));
                     return;
                 }
-                const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${NYTIMES_API_KEY}`);
+                const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
                 const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
-                const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_BOOKS_API_KEY}`));
+                const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
                 const bookDetailsResponses = await Promise.all(bookDetailsPromises);
                 const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
                 setBestsellers(bestsellers);
@@ -146,6 +149,7 @@ const Books: React.FC = () => {
                                 publisher={book.volumeInfo.publisher}
                                 availability={book.saleInfo.saleability}
                                 onApiResponse={(error: string) => setApiResponse(error)}
+                                cryptoKey={cryptoKey}
                             />
                         ))}
                         {books.length === 0 && (
@@ -175,6 +179,7 @@ const Books: React.FC = () => {
                                                 publisher={book.volumeInfo.publisher}
                                                 availability={book.saleInfo.saleability}
                                                 onApiResponse={(error: string) => setApiResponse(error)}
+                                                cryptoKey={cryptoKey}
                                             />
                                         ))
                                     }
@@ -189,3 +194,18 @@ const Books: React.FC = () => {
 };
 
 export default Books;
+
+export const getServerSideProps = async () => {
+    
+    const cryptoKey = process.env.CRYPTO_KEY;
+    const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY;
+    const nyTimesApiKey = process.env.NYTIMES_API_KEY;
+    
+    return {
+        props: {
+            cryptoKey,
+            googleBooksApiKey,
+            nyTimesApiKey,
+        },
+    };
+}

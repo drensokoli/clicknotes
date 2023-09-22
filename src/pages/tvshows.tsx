@@ -15,12 +15,17 @@ interface TvShow {
     release_date: string;
 }
 
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+interface Props {
+    tmdbApiKey: string;
+    cryptoKey: string;
+}
 
-const TvShows: React.FC = () => {
+const TvShows: React.FC<Props> = ({tmdbApiKey, cryptoKey}) => {
     const [input, setInput] = useState('');
     const [tvShows, setTvShows] = useState<TvShow[]>([]);
     const [popularTvShows, setPopularTvShows] = useState<TvShow[]>([]);
+
+    const API_KEY = tmdbApiKey;
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
@@ -108,7 +113,7 @@ const TvShows: React.FC = () => {
                 <div className="content-container w-5/6">
                     <div className="movie-container">
                         {tvShows.map((item) => (
-                            <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} />
+                            <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
                         ))}
                     </div>
                     {tvShows.length === 0 && (
@@ -118,7 +123,7 @@ const TvShows: React.FC = () => {
                             </div>
                             <div className="movie-container">
                                 {popularTvShows.map((item) => (
-                                    <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} />
+                                    <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
                                 ))}
                             </div>
                         </>
@@ -131,3 +136,16 @@ const TvShows: React.FC = () => {
 };
 
 export default TvShows;
+
+export const getServerSideProps = async () => {
+
+    const cryptoKey = process.env.CRYPTO_KEY;
+    const tmdbApiKey = process.env.TMDB_API_KEY;
+
+    return{
+        props: {
+            cryptoKey,
+            tmdbApiKey
+        }
+    }
+}

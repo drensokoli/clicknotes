@@ -13,14 +13,19 @@ interface Movie {
     release_date: string;
 }
 
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+interface Props {
+    tmdbApiKey: string;
+    cryptoKey: string;
+}
 
-const Movies: React.FC = () => {
+const Movies: React.FC<Props> = ({tmdbApiKey, cryptoKey}) => {
 
     const [input, setInput] = useState('');
     const [movies, setMovies] = useState<Movie[]>([]);
     const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
 
+    const API_KEY = tmdbApiKey;
+    
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
     let debouncedSearchMovieByTitle: ReturnType<typeof debounce>;
@@ -106,7 +111,7 @@ const Movies: React.FC = () => {
                 <div className="content-container w-5/6">
                     <div className="movie-container">
                         {movies.map((item) => (
-                            <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)}                            />
+                            <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} tmdbApiKey={tmdbApiKey} cryptoKey={cryptoKey} />
                         ))}
                     </div>
                     {movies.length === 0 && (
@@ -116,7 +121,7 @@ const Movies: React.FC = () => {
                             </div>
                             <div className="movie-container">
                                 {popularMovies.map((item) => (
-                                    <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)}                                    />
+                                    <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} tmdbApiKey={tmdbApiKey} cryptoKey={cryptoKey} />
                                 ))}
                             </div>
                         </>
@@ -130,3 +135,16 @@ const Movies: React.FC = () => {
 };
 
 export default Movies;
+
+export const getServerSideProps = async () => {
+
+    const cryptoKey = process.env.CRYPTO_KEY;
+    const tmdbApiKey = process.env.TMDB_API_KEY;
+  
+    return {
+      props: {
+        tmdbApiKey,
+        cryptoKey,
+      },
+    };
+  }

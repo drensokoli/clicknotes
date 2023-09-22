@@ -16,9 +16,11 @@ interface MovieProps {
   runtime: number;
   onClick: () => void;
   onApiResponse: (error: string) => void;
+  cryptoKey: string;
+  tmdbApiKey: string;
 }
 
-const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onClick, onApiResponse }) => {
+const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onClick, onApiResponse, cryptoKey, tmdbApiKey }) => {
 
   const { data: session } = useSession();
   const [genres, setGenres] = useState<any[]>([]);
@@ -31,7 +33,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
 
     const fetchGenres = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+        `https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbApiKey}&language=en-US`
       );
 
       const movieDetails = await response.json();
@@ -52,7 +54,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
 
     const fetchCast = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${tmdbApiKey}&language=en-US`
       );
 
       const credits = await response.json();
@@ -74,7 +76,7 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
 
     const fetchTrailer = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=en-US`
+        `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${tmdbApiKey}&language=en-US`
       );
       const videoData = await response.json();
       const trailers = videoData.results.filter((video: { type: string; }) => video.type === 'Trailer');
@@ -133,8 +135,8 @@ const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_a
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          notionApiKey: decryptData(user.notionApiKey),
-          db_id: decryptData(user.moviesPageLink),
+          notionApiKey: decryptData(user.notionApiKey, cryptoKey),
+          db_id: decryptData(user.moviesPageLink, cryptoKey),
           movieData: movieData,
         }),
       });
