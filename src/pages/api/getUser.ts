@@ -1,15 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import clientPromise from '../../lib/mongodb';
+import { clientPromise } from './mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { userEmail } = req.body;
 
-    const dbName = process.env.NEXT_PUBLIC_MONGODB_DB_NAME;
+    const dbName = process.env.MONGODB_DB_NAME;
+    const dbCollection = process.env.MONGODB_COLLECTION;
+
+    if (!dbName || !dbCollection) {
+      throw new Error('Database name or collection not defined');
+    }
 
     const client = await clientPromise;
-    const collection = client.db(dbName).collection('users');
-    const user = await collection.findOne({ email: userEmail });
+    const collection = client.db(dbName)?.collection(dbCollection);
+    const user = await collection?.findOne({ email: userEmail });
 
     if (user) {
       res.status(200).json(user);

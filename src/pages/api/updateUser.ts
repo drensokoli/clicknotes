@@ -1,14 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import clientPromise from '../../lib/mongodb';
+import { clientPromise } from './mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const data = req.body;
 
-    const dbName = process.env.NEXT_PUBLIC_MONGODB_DB_NAME;
+    const dbName = process.env.MONGODB_DB_NAME;
+    const dbCollection = process.env.MONGODB_COLLECTION;
+
+    if (!dbName || !dbCollection) {
+      throw new Error('Database name or collection not defined');
+    }
 
     const client = await clientPromise;
-    const collection = client.db(dbName).collection('users');
+    const collection = client.db(dbName)?.collection(dbCollection);
     const result = await collection.updateOne({ email: data.userEmail }, { $set: data });
 
     if (result.modifiedCount > 0) {
