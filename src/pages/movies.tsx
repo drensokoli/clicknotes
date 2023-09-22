@@ -76,7 +76,7 @@ const Movies: React.FC = () => {
         if (apiResponse !== 'Adding movie to Notion...') {
             const timer = setTimeout(() => {
                 setApiResponse(null);
-            }, 3000);
+            }, 1000);
 
             return () => clearTimeout(timer);
         }

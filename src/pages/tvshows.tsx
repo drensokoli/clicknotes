@@ -78,7 +78,7 @@ const TvShows: React.FC = () => {
         if (apiResponse !== 'Adding TV show to Notion...') {
             const timer = setTimeout(() => {
                 setApiResponse(null);
-            }, 3000);
+            }, 1000);
 
             return () => clearTimeout(timer);
         }
