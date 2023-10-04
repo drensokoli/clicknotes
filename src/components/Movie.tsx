@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
-import { link } from 'fs';
 
 interface MovieProps {
   id: number;
@@ -20,7 +19,21 @@ interface MovieProps {
   tmdbApiKey: string;
 }
 
-const Movie: React.FC<MovieProps> = ({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onClick, onApiResponse, cryptoKey, tmdbApiKey }) => {
+const Movie: React.FC<MovieProps> = ({
+  id,
+  title,
+  overview,
+  release_date,
+  vote_average,
+  adult,
+  poster_path,
+  backdrop_path,
+  runtime,
+  onClick,
+  onApiResponse,
+  cryptoKey,
+  tmdbApiKey
+}) => {
 
   const { data: session } = useSession();
   const [genres, setGenres] = useState<any[]>([]);

@@ -17,7 +17,19 @@ interface TvShowProps {
   tmdbApiKey: string;
 }
 
-const TvShow: React.FC<TvShowProps> = ({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onClick, onApiResponse, cryptoKey, tmdbApiKey }) => {
+const TvShow: React.FC<TvShowProps> = ({
+  id,
+  name,
+  overview,
+  first_air_date,
+  vote_average,
+  poster_path,
+  backdrop_path,
+  onClick,
+  onApiResponse,
+  cryptoKey,
+  tmdbApiKey
+}) => {
 
   const { data: session } = useSession();
   const [genres, setGenres] = useState<any[]>([]);

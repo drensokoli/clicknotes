@@ -1,8 +1,4 @@
-import router, { useRouter } from "next/router";
 import { encryptData } from "./crypto";
-import { useSession, getSession } from 'next-auth/react';
-import { MouseEvent } from "react";
-
 
 export async function notionApiKeySubmit(notionApiKey: any, userEmail: any, cryptoKey: string) {
     try {

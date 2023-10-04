@@ -7,7 +7,10 @@ interface Props {
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const SearchBar: React.FC<Props> = ({ input, handleInputChange }) => {
+const SearchBar: React.FC<Props> = ({
+  input,
+  handleInputChange
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

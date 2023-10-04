@@ -25,7 +25,26 @@ interface BookProps {
 }
 
 
-const Book: React.FC<BookProps> = ({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onClick, onApiResponse, language, price, publisher, availability, cryptoKey }) => {
+const Book: React.FC<BookProps> = ({
+    id,
+    title,
+    description,
+    publishedDate,
+    averageRating,
+    authors,
+    infoLink,
+    pageCount,
+    thumbnail,
+    cover_image,
+    previewLink,
+    onClick,
+    onApiResponse,
+    language,
+    price,
+    publisher,
+    availability,
+    cryptoKey
+}) => {
     const { data: session } = useSession();
 
     const handleAddToNotion = async () => {
