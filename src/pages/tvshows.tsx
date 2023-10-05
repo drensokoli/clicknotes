@@ -20,7 +20,7 @@ interface Props {
     cryptoKey: string;
 }
 
-const TvShows: React.FC<Props> = ({tmdbApiKey, cryptoKey}) => {
+const TvShows: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
     const [input, setInput] = useState('');
     const [tvShows, setTvShows] = useState<TvShow[]>([]);
     const [popularTvShows, setPopularTvShows] = useState<TvShow[]>([]);
@@ -33,20 +33,10 @@ const TvShows: React.FC<Props> = ({tmdbApiKey, cryptoKey}) => {
     const certification_country = 'US'
     const certification = 'TV-PG'
 
-    let debouncedSearchTvShowByTitle: ReturnType<typeof debounce>;
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInput(event.target.value);
-    
-      if (debouncedSearchTvShowByTitle) {
-        debouncedSearchTvShowByTitle.cancel();
-      }
-    
-      debouncedSearchTvShowByTitle = debounce(async () => {
-        await searchTvShowByTitle(event.target.value);
-      }, 500);
-    
-      debouncedSearchTvShowByTitle();
+        setInput(event.target.value);
+        searchTvShowByTitle(event.target.value);
     };
 
     const searchTvShowByTitle = async (title: string) => {
@@ -142,7 +132,7 @@ export const getServerSideProps = async () => {
     const cryptoKey = process.env.CRYPTO_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
 
-    return{
+    return {
         props: {
             cryptoKey,
             tmdbApiKey

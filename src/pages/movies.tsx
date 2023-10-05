@@ -18,33 +18,19 @@ interface Props {
     cryptoKey: string;
 }
 
-const Movies: React.FC<Props> = ({tmdbApiKey, cryptoKey}) => {
+const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
 
     const [input, setInput] = useState('');
     const [movies, setMovies] = useState<Movie[]>([]);
     const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
 
     const API_KEY = tmdbApiKey;
-    
+
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
-    let debouncedSearchMovieByTitle: ReturnType<typeof debounce>;
-
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInput(event.target.value);
-    
-      // Cancel the previous debounced function if it exists
-      if (debouncedSearchMovieByTitle) {
-        debouncedSearchMovieByTitle.cancel();
-      }
-    
-      // Create a new debounced function that waits for one second before invoking the searchMovieByTitle function
-      debouncedSearchMovieByTitle = debounce(async () => {
-        await searchMovieByTitle(event.target.value);
-      }, 500);
-    
-      // Invoke the debounced function
-      debouncedSearchMovieByTitle();
+        setInput(event.target.value);
+        searchMovieByTitle(event.target.value);
     };
 
     const searchMovieByTitle = async (title: string) => {
@@ -100,7 +86,7 @@ const Movies: React.FC<Props> = ({tmdbApiKey, cryptoKey}) => {
                         <span className="text-blue-500">help</span>?
                     </a>
                 </div>
-            ) : apiResponse === 'Adding movie to Notion...' ?(
+            ) : apiResponse === 'Adding movie to Notion...' ? (
                 <div className="loading-message">
                     <p>{apiResponse}</p>
                 </div>
@@ -140,11 +126,11 @@ export const getServerSideProps = async () => {
 
     const cryptoKey = process.env.CRYPTO_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
-  
+
     return {
-      props: {
-        tmdbApiKey,
-        cryptoKey,
-      },
+        props: {
+            tmdbApiKey,
+            cryptoKey,
+        },
     };
-  }
+}

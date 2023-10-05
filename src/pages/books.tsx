@@ -30,31 +30,16 @@ interface Props {
     nyTimesApiKey: string;
 }
 
-const Books: React.FC<Props> = ({cryptoKey, googleBooksApiKey, nyTimesApiKey}) => {
+const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey }) => {
     const [input, setInput] = useState('');
     const [books, setBooks] = useState<Book[]>([]);
     const [bestsellers, setBestsellers] = useState<Book[]>([]);
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
-    let debouncedSearchBooksByTitle: ReturnType<typeof debounce>;
-
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInput(event.target.value);
-    
-      if (debouncedSearchBooksByTitle) {
-        debouncedSearchBooksByTitle.cancel();
-      }
-    
-      if (event.target.value.length > 0) {
-        debouncedSearchBooksByTitle = debounce(async () => {
-          await searchBooksByTitle(event.target.value);
-        }, 500);
-    
-        debouncedSearchBooksByTitle();
-      } else {
-        setBooks([]);
-      }
+        setInput(event.target.value);
+        searchBooksByTitle(event.target.value);
     };
 
     const searchBooksByTitle = async (title: string) => {
@@ -196,11 +181,11 @@ const Books: React.FC<Props> = ({cryptoKey, googleBooksApiKey, nyTimesApiKey}) =
 export default Books;
 
 export const getServerSideProps = async () => {
-    
+
     const cryptoKey = process.env.CRYPTO_KEY;
     const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY;
     const nyTimesApiKey = process.env.NYTIMES_API_KEY;
-    
+
     return {
         props: {
             cryptoKey,
