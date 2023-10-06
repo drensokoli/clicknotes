@@ -143,6 +143,17 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey })
                                     <h1 className='text-2xl pb-4'>BEST SELLERS</h1>
                                 </div>
                                 <div className='movie-container'>
+                                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                                        crossOrigin="anonymous"></script>
+                                    <ins className="adsbygoogle"
+                                        style={{ display: 'block' } as React.CSSProperties}
+                                        data-ad-format="fluid"
+                                        data-ad-layout-key="+1x+s6-1h-2r+au"
+                                        data-ad-client="ca-pub-3464540666338005"
+                                        data-ad-slot="7559664548"></ins>
+                                    <script>
+                                        (adsbygoogle = window.adsbygoogle || []).push({ });
+                                    </script>
                                     {
                                         bestsellers.map((book: Book) => (
                                             <Book
