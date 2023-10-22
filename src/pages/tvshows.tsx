@@ -7,6 +7,7 @@ import { debounce } from 'lodash';
 interface TvShow {
     id: number;
     title: string;
+    original_name: string;
     name: string;
     overview: string;
     poster_path: string;
@@ -39,15 +40,31 @@ const TvShows: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
         searchTvShowByTitle(event.target.value);
     };
 
+    const adultContent = ["sex", "porn", "nude", "sadomasochistic","pussy", "vagina", "erotic", "lust", "softcore", "hardcore"]
+
     const searchTvShowByTitle = async (title: string) => {
         try {
             const response = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${title}&with_genres=${include_genres}&certification_country=${certification_country}&certification=${certification}`);
-            setTvShows(response.data.results);
+            
+            const tvShowIds = response.data.results.map((tvShow: { id: any; }) => tvShow.id);
+    
+            const tvShows = [];
+            for (let id of tvShowIds) {
+                const tvShowResponse = await axios.get(`https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}&append_to_response=keywords`);
+                
+                const keywords = tvShowResponse.data.keywords.results.map((keyword: { name: any; }) => keyword.name);
+    
+                if (!keywords.some((keyword: string) => adultContent.includes(keyword))) {
+                    tvShows.push(tvShowResponse.data);
+                }
+            }
+            
+            setTvShows(tvShows);
         } catch (error) {
             console.error(error);
         }
     };
-
+    
 
     const handleTvShowClick = async (tvShowId: number) => {
         try {
@@ -68,16 +85,17 @@ const TvShows: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
         };
         fetchPopularTvShows();
     }, []);
-
+    
     useEffect(() => {
         if (apiResponse !== 'Adding TV show to Notion...') {
             const timer = setTimeout(() => {
                 setApiResponse(null);
             }, 1000);
-
+            
             return () => clearTimeout(timer);
         }
     }, [apiResponse]);
+    
 
     return (
         <>
@@ -102,9 +120,15 @@ const TvShows: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
                     <div className="movie-container">
-                        {tvShows.map((item) => (
-                            <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
-                        ))}
+                        {tvShows
+                            .filter((item) => item.vote_average > 6)
+                            .filter((item) => !adultContent.some((word) => item.name && item.name.toLowerCase().includes(word)))
+                            .filter((item) => !adultContent.some((word) => item.original_name && item.original_name.toLowerCase().includes(word)))
+                            .filter((item) => !adultContent.some((word) => item.title && item.title.toLowerCase().includes(word)))  
+                            .filter((item) => !adultContent.some((word) => item.overview && item.overview.toLowerCase().includes(word)))
+                            .map((item) => (
+                                <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
+                            ))}
                     </div>
                     {tvShows.length === 0 && (
                         <>

@@ -7,6 +7,7 @@ import { debounce } from 'lodash';
 interface Movie {
     id: number;
     title: string;
+    original_title: string;
     overview: string;
     poster_path: string;
     vote_average: number;
@@ -32,15 +33,31 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
         setInput(event.target.value);
         searchMovieByTitle(event.target.value);
     };
+    const adultContent = ["sex", "porn", "nude", "sadomasochistic","pussy", "vagina", "erotic", "lust", "softcore", "hardcore"]
 
     const searchMovieByTitle = async (title: string) => {
         try {
             const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${title}&language=en-US&page=1&include_adult=false`);
-            setMovies(response.data.results);
+            
+            const movieIds = response.data.results.map((movie: { id: any; }) => movie.id);
+    
+            const movies = [];
+            for (let id of movieIds) {
+                const movieResponse = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&append_to_response=keywords`);
+                
+                const keywords = movieResponse.data.keywords.keywords.map((keyword: { name: any; }) => keyword.name);
+    
+                if (!keywords.some((keyword: string) => adultContent.includes(keyword))) {
+                    movies.push(movieResponse.data);
+                }
+            }
+            
+            setMovies(movies);
         } catch (error) {
             console.error(error);
         }
     };
+    
 
     const handleMovieClick = async (movieId: number) => {
         try {
@@ -73,6 +90,7 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
         }
     }, [apiResponse]);
 
+
     return (
         <>
             {apiResponse === 'Added movie to Notion' ? (
@@ -96,9 +114,14 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
                     <div className="movie-container">
-                        {movies.map((item) => (
-                            <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} tmdbApiKey={tmdbApiKey} cryptoKey={cryptoKey} />
-                        ))}
+                        {movies
+                            .filter((item) => item.vote_average > 6)
+                            .filter((item) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
+                            .filter((item) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
+                            .filter((item) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)))
+                            .map((item) => (
+                                <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} tmdbApiKey={tmdbApiKey} cryptoKey={cryptoKey} />
+                            ))}
                     </div>
                     {movies.length === 0 && (
                         <>
@@ -106,9 +129,11 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
                                 <h1 className='text-2xl pb-4'>POPULAR</h1>
                             </div>
                             <div className="movie-container">
-                                {popularMovies.map((item) => (
-                                    <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} tmdbApiKey={tmdbApiKey} cryptoKey={cryptoKey} />
-                                ))}
+                                {popularMovies
+                                    .filter((item) => item.vote_average > 6)
+                                    .map((item) => (
+                                        <Movie runtime={0} adult={false} backdrop_path={''} key={item.id} {...item} onClick={() => handleMovieClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} tmdbApiKey={tmdbApiKey} cryptoKey={cryptoKey} />
+                                    ))}
                             </div>
                         </>
                     )}
