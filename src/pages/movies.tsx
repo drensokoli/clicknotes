@@ -33,7 +33,7 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
         setInput(event.target.value);
         searchMovieByTitle(event.target.value);
     };
-    const adultContent = ["sex", "porn", "nude", "sadomasochistic","pussy", "vagina", "erotic", "lust", "softcore", "hardcore"]
+    const adultContent = ["sex", "porn", "nude", "sadomasochistic","pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
 
     const searchMovieByTitle = async (title: string) => {
         try {
