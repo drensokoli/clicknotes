@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import Movie from '@/components/Movie';
 import axios from 'axios';
 import SearchBar from '@/components/SearchBar';
-import { debounce } from 'lodash';
+import Image from 'next/image';
+import NotionAd from '@/components/NotionAd';
 
 interface Movie {
     id: number;
@@ -33,31 +34,31 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
         setInput(event.target.value);
         searchMovieByTitle(event.target.value);
     };
-    const adultContent = ["sex", "porn", "nude", "sadomasochistic","pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
+
+    const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
 
     const searchMovieByTitle = async (title: string) => {
         try {
             const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${title}&language=en-US&page=1&include_adult=false`);
-            
+
             const movieIds = response.data.results.map((movie: { id: any; }) => movie.id);
-    
+
             const movies = [];
             for (let id of movieIds) {
                 const movieResponse = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&append_to_response=keywords`);
-                
+
                 const keywords = movieResponse.data.keywords.keywords.map((keyword: { name: any; }) => keyword.name);
-    
+
                 if (!keywords.some((keyword: string) => adultContent.includes(keyword))) {
                     movies.push(movieResponse.data);
                 }
             }
-            
+
             setMovies(movies);
         } catch (error) {
             console.error(error);
         }
     };
-    
 
     const handleMovieClick = async (movieId: number) => {
         try {
@@ -66,7 +67,6 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
             console.error(error);
         }
     };
-
 
     useEffect(() => {
         const fetchPopularMovies = async () => {
@@ -113,6 +113,7 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
+                    <NotionAd path={"movies"} />
                     <div className="movie-container">
                         {movies
                             .filter((item) => item.vote_average > 6)
@@ -125,9 +126,6 @@ const Movies: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
                     </div>
                     {movies.length === 0 && (
                         <>
-                            <div className='movie-container'>
-                                <h1 className='text-2xl pb-4'>POPULAR</h1>
-                            </div>
                             <div className="movie-container">
                                 {popularMovies
                                     .filter((item) => item.vote_average > 6)

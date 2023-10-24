@@ -3,6 +3,7 @@ import axios from 'axios';
 import Book from '../components/Book';
 import SearchBar from '@/components/SearchBar';
 import { debounce } from 'lodash';
+import NotionAd from '@/components/NotionAd';
 
 interface Book {
     saleInfo: any;
@@ -110,9 +111,11 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey })
                     <p>{apiResponse}</p>
                 </div>
             ) : null}
+
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
+                    <NotionAd path={"books"} />
                     <div className="movie-container">
                         {books.map((book: Book) => (
                             <Book
@@ -139,21 +142,7 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey })
                         ))}
                         {books.length === 0 && (
                             <>
-                                <div className='movie-container w-full'>
-                                    <h1 className='text-2xl pb-4'>BEST SELLERS</h1>
-                                </div>
                                 <div className='movie-container'>
-                                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-                                        crossOrigin="anonymous"></script>
-                                    <ins className="adsbygoogle"
-                                        style={{ display: 'block' } as React.CSSProperties}
-                                        data-ad-format="fluid"
-                                        data-ad-layout-key="+1x+s6-1h-2r+au"
-                                        data-ad-client="ca-pub-3464540666338005"
-                                        data-ad-slot="7559664548"></ins>
-                                    <script>
-                                        (adsbygoogle = window.adsbygoogle || []).push({ });
-                                    </script>
                                     {
                                         bestsellers.map((book: Book) => (
                                             <Book
