@@ -117,13 +117,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             url: movieData.trailer,
                         },
                     },
-                    {
-                        object: 'block',
-                        type: 'bookmark',
-                        bookmark: {
-                            url: movieData.tpb_link,
-                        },
-                    }
+                    // {
+                    //     object: 'block',
+                    //     type: 'bookmark',
+                    //     bookmark: {
+                    //         url: movieData.tpb_link,
+                    //     },
+                    // }
                 ],
 
             });
@@ -234,13 +234,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             url: movieData.trailer,
                         },
                     },
-                    {
-                        object: 'block',
-                        type: 'bookmark',
-                        bookmark: {
-                            url: movieData.tpb_link,
-                        },
-                    }
+                    // {
+                    //     object: 'block',
+                    //     type: 'bookmark',
+                    //     bookmark: {
+                    //         url: movieData.tpb_link,
+                    //     },
+                    // }
                 ],
             });
 

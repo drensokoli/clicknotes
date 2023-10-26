@@ -110,13 +110,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             url: tvShowData.trailer,
                         },
                     },
-                    {
-                        object: 'block',
-                        type: 'bookmark',
-                        bookmark: {
-                            url: tvShowData.tpb_link,
-                        },
-                    }
+                    // {
+                    //     object: 'block',
+                    //     type: 'bookmark',
+                    //     bookmark: {
+                    //         url: tvShowData.tpb_link,
+                    //     },
+                    // }
                 ],
             });
         } else {
@@ -217,13 +217,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             url: tvShowData.trailer,
                         },
                     },
-                    {
-                        object: 'block',
-                        type: 'bookmark',
-                        bookmark: {
-                            url: tvShowData.tpb_link,
-                        },
-                    }
+                    // {
+                    //     object: 'block',
+                    //     type: 'bookmark',
+                    //     bookmark: {
+                    //         url: tvShowData.tpb_link,
+                    //     },
+                    // }
                 ],
             });
         }

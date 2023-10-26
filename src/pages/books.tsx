@@ -52,34 +52,35 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey })
         }
     };
 
-    useEffect(() => {
-        const fetchBestsellers = async () => {
-            try {
-                const cacheResponse = await fetch("/api/redisHandler");
-                const cacheData = await cacheResponse.json();
-                if (cacheData) {
-                    setBestsellers(JSON.parse(cacheData));
-                    return;
-                }
-                const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
-                const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
-                const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
-                const bookDetailsResponses = await Promise.all(bookDetailsPromises);
-                const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
-                setBestsellers(bestsellers);
-
-                // Store the best sellers data in Redis
-                await fetch('/api/redisHandler', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ bestsellers }),
-                });
-            } catch (error) {
-                console.error(error);
+    const fetchBestsellers = async () => {
+        try {
+            const cacheResponse = await fetch("/api/redisHandler");
+            const cacheData = await cacheResponse.json();
+            if (cacheData) {
+                setBestsellers(JSON.parse(cacheData));
+                return;
             }
-        };
+            const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
+            const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
+            const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
+            const bookDetailsResponses = await Promise.all(bookDetailsPromises);
+            const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
+            setBestsellers(bestsellers);
+
+            // Store the best sellers data in Redis
+            await fetch('/api/redisHandler', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bestsellers }),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
         fetchBestsellers();
     }, []);
 
@@ -124,7 +125,6 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey })
                                 title={book.volumeInfo.title}
                                 previewLink={book.volumeInfo.previewLink}
                                 cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                onClick={() => { }}
                                 description={book.volumeInfo.description}
                                 publishedDate={book.volumeInfo.publishedDate}
                                 averageRating={book.volumeInfo.averageRating}
@@ -151,7 +151,6 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey })
                                                 title={book.volumeInfo.title}
                                                 previewLink={book.volumeInfo.previewLink}
                                                 cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                                onClick={() => { }}
                                                 description={book.volumeInfo.description}
                                                 publishedDate={book.volumeInfo.publishedDate}
                                                 averageRating={book.volumeInfo.averageRating}

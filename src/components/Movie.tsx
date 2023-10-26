@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
+import Link from 'next/link';
 
 interface MovieProps {
   id: number;
@@ -13,36 +14,37 @@ interface MovieProps {
   poster_path: string;
   backdrop_path: string;
   runtime: number;
-  onClick: () => void;
   onApiResponse: (error: string) => void;
   cryptoKey: string;
   tmdbApiKey: string;
+  genre_ids: number[];
 }
 
-const Movie: React.FC<MovieProps> = ({
-  id,
-  title,
-  overview,
-  release_date,
-  vote_average,
-  adult,
-  poster_path,
-  backdrop_path,
-  runtime,
-  onClick,
-  onApiResponse,
-  cryptoKey,
-  tmdbApiKey
-}) => {
+const Movie: React.FC<MovieProps> =
+  (
+    {
+      id,
+      title,
+      overview,
+      release_date,
+      vote_average,
+      adult,
+      poster_path,
+      backdrop_path,
+      runtime,
+      onApiResponse,
+      cryptoKey,
+      tmdbApiKey
+    }
+  ) => {
 
-  const { data: session } = useSession();
-  const [genres, setGenres] = useState<any[]>([]);
-  const [imdbId, setImdbId] = useState<string>('');
-  const [cast, setCast] = useState<any[]>([]);
-  const [director, setDirector] = useState<string[]>([]);
-  const [trailer, setTrailer] = useState<string>('');
+    const { data: session } = useSession();
+    const [genres, setGenres] = useState<any[]>([]);
+    const [imdbId, setImdbId] = useState<string>('');
+    const [cast, setCast] = useState<any[]>([]);
+    const [director, setDirector] = useState<string[]>([]);
+    const [trailer, setTrailer] = useState<string>('');
 
-  useEffect(() => {
 
     const fetchGenres = async () => {
       const response = await fetch(
@@ -60,6 +62,7 @@ const Movie: React.FC<MovieProps> = ({
           genresArray.push({ "name": element });
         }
       }
+      console.log("genresArray");
 
       setImdbId(imdb_id);
       setGenres(genresArray);
@@ -82,6 +85,7 @@ const Movie: React.FC<MovieProps> = ({
           castArray.push({ "name": element });
         }
       }
+      console.log("castArray");
 
       setCast(castArray);
       setDirector(director);
@@ -99,153 +103,120 @@ const Movie: React.FC<MovieProps> = ({
         const trailer = `https://www.youtube.com/watch?v=${trailerID}`;
         setTrailer(trailer);
       }
+      console.log("trailer");
+
     };
 
-    fetchGenres();
-    fetchCast();
-    fetchTrailer();
+    useEffect(() => {
 
-  }, [id]);
+      fetchGenres();
+      fetchCast();
+      fetchTrailer();
 
-  const handleAddToNotion = async () => {
-    try {
+    }, [id]);
 
-      onApiResponse('Adding movie to Notion...');
+    const handleAddToNotion = async () => {
+      try {
 
-      const response = await fetch('/api/getUser', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userEmail: session?.user?.email }),
-      });
+        onApiResponse('Adding movie to Notion...');
 
-      const user = await response.json();
-      const rounded_vote_average = Math.round(vote_average * 10) / 10;
-      const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
-      const imdb_link = `https://www.imdb.com/title/${imdbId}`;
-      const tpb_link = `https://tpb.party/search/${title.replace(/ /g, '%20')}/1/99/0`
-      const defaultDate = "0001-01-01";
+        const response = await fetch('/api/getUser', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userEmail: session?.user?.email }),
+        });
 
-      const movieData = {
-        id: id,
-        title: title,
-        overview: overview,
-        genres: genres,
-        cast: cast,
-        release_date: release_date || defaultDate,
-        vote_average: rounded_vote_average,
-        adult: adult,
-        runtime: runtime,
-        tmdb_link: tmdb_link,
-        imdb_link: imdb_link,
-        director: director[0] || "[Missing]",
-        trailer: trailer || '',
-        tpb_link: tpb_link || '',
-        poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
-        backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
-      };
+        const user = await response.json();
+        const rounded_vote_average = Math.round(vote_average * 10) / 10;
+        const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
+        const imdb_link = `https://www.imdb.com/title/${imdbId}`;
+        // const tpb_link = `https://tpb.party/search/${name.replace(/ /g, '%20')}/1/99/0`
+        const defaultDate = "0001-01-01";
 
-      const notionResponse = await fetch('/api/addMovieToNotion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          notionApiKey: decryptData(user.notionApiKey, cryptoKey),
-          db_id: decryptData(user.moviesPageLink, cryptoKey),
-          movieData: movieData,
-        }),
-      });
+        const movieData = {
+          id: id,
+          title: title,
+          overview: overview,
+          genres: genres,
+          cast: cast,
+          release_date: release_date || defaultDate,
+          vote_average: rounded_vote_average,
+          adult: adult,
+          runtime: runtime,
+          tmdb_link: tmdb_link,
+          imdb_link: imdb_link,
+          director: director[0] || "[Missing]",
+          trailer: trailer || '',
+          // tpb_link: tpb_link,
+          poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
+          backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
+        };
+
+        const notionResponse = await fetch('/api/addMovieToNotion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            notionApiKey: decryptData(user.notionApiKey, cryptoKey),
+            db_id: decryptData(user.moviesPageLink, cryptoKey),
+            movieData: movieData,
+          }),
+        });
 
 
-      if (notionResponse.ok) {
-        const notionResult = await notionResponse.json();
-        onApiResponse('Added movie to Notion');
-        console.log(notionResult);
-      }
-      else {
+        if (notionResponse.ok) {
+          const notionResult = await notionResponse.json();
+          onApiResponse('Added movie to Notion');
+          console.log(notionResult);
+        }
+        else {
+          onApiResponse('Error adding movie to Notion');
+        }
+
+      } catch (error) {
+        console.error(error);
         onApiResponse('Error adding movie to Notion');
       }
+    };
 
-    } catch (error) {
-      console.error(error);
-      onApiResponse('Error adding movie to Notion');
-    }
-  };
-
-
-  return (
-    <div key={id} className="movie-card">
-      <div className="movie-card-image-container">
-
-        {poster_path ? (
+    return (
+      <div key={id} className="movie-card">
+        <div className="movie-card-image-container">
           <div className='movie-image'>
+            {poster_path ? (
+              <Image
+                src={`https://image.tmdb.org/t/p/w500${poster_path}`} height={300} width={200}
+                alt={title}
+                className="h-[300px] rounded-sm"
+              />
+            ) : (
+              <div className="w-[200px] h-[300px]"></div>
+            )}
 
-            <Image
-              src={`https://image.tmdb.org/t/p/w500${poster_path}`} height={300} width={200}
-              alt={title}
-              className="h-[300px] rounded-sm"
-            />
-
-            {!session ? (
-
-              <button type="button"
-                className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                onClick={() => signIn('google')}
-              >
-                Add to Notion
-              </button>
-            )
-              : (
-                <button type="button"
-                  className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                  onClick={handleAddToNotion}
-                >
-                  Add to Notion
-                </button>
-              )
-            }
-            <Image src="/share.png" className="arrows" alt=""
-              onClick={onClick} width={30} height={30} />
-
-          </div>
-        ) : (
-          <div className='movie-image'>
-            <div className="bg-transparent backdrop-blur-sm"
-              style={{
-                width: '200px',
-                height: '300px',
-                borderRadius: '5px'
+            <Link href={`https://www.themoviedb.org/movie/${id}`} passHref target='_blank'>
+              <Image
+                src="/share-black.png"
+                className="arrows"
+                alt=""
+                width={30}
+                height={30} />
+            </Link>
+            <button type="button"
+              className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+              onClick={() => {
+                session ? handleAddToNotion() : signIn('google')
               }}
-              onClick={onClick}
-            ></div>
-
-            {!session ? (
-
-              <button type="button"
-                className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                onClick={() => signIn('google')}
-              >
-                Add to Notion
-              </button>
-            )
-              : (
-                <button type="button"
-                  className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                  onClick={handleAddToNotion}
-                >
-                  Add to Notion
-                </button>
-              )
-            }
-            <Image src="/share-black.png" className="arrows" alt="" width={30} height={30}
-              onClick={onClick} />
+            >
+              Add to Notion
+            </button>
           </div>
-        )}
-      </div>
-      <h2 className="text-l font-bold text-center text-gray-800">
-        <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
-      </h2>
 
-    </div>
-  );
-};
+          <h2 className="text-l font-bold text-center text-gray-800">
+            <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
+          </h2>
+
+        </div>
+      </div>
+    );
+  };
 
 export default Movie;

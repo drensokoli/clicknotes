@@ -2,6 +2,7 @@ import React, { use } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
+import Link from 'next/link';
 
 interface BookProps {
     id: string;
@@ -15,7 +16,6 @@ interface BookProps {
     thumbnail: string;
     cover_image?: string;
     previewLink: string;
-    onClick: () => void;
     onApiResponse: (error: string) => void;
     language?: string;
     price?: number;
@@ -37,7 +37,6 @@ const Book: React.FC<BookProps> = ({
     thumbnail,
     cover_image,
     previewLink,
-    onClick,
     onApiResponse,
     language,
     price,
@@ -103,78 +102,37 @@ const Book: React.FC<BookProps> = ({
         }
     };
 
-
-    const handleClick = () => {
-        window.open(previewLink, '_blank');
-    };
-
     return (
         <div key={id} className="movie-card" >
             <div className="movie-card-image-container">
-                {cover_image ? (
-                    <div className='movie-image'>
-
+                <div className='movie-image'>
+                    {cover_image ? (
                         <Image
-                            src={cover_image}
-                            height={300}
-                            width={200}
+                            src={cover_image} height={300} width={200}
                             alt={title}
+
                             className="h-[300px] rounded-sm"
                         />
-
-                        {!session ? (
-                            <button
-                                type="button"
-                                className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                                onClick={() => signIn('google')}
-                            >
-                                Add to Notion
-                            </button>
-
-                        ) : (
-                            <button type="button"
-                                className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                                onClick={handleAddToNotion}
-                            >
-                                Add to Notion
-                            </button>
-                        )
-                        }
-                        <Image src="/share.png" className="arrows" alt=""
-                            onClick={handleClick} width={30} height={30} />
-                    </div>
-                ) : (
-                    <div className='movie-image'>
-                        <div className="bg-transparent backdrop-blur-sm"
-                            style={{
-                                width: '200px',
-                                height: '300px',
-                                borderRadius: '5px'
-                            }}
-                        ></div>
-
-                        {!session ? (
-
-                            <button type="button"
-                                className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                                onClick={() => signIn('google')}
-                            >
-                                Add to Notion
-                            </button>
-                        )
-                            : (
-                                <button type="button"
-                                    className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                                    onClick={handleAddToNotion}
-                                >
-                                    Add to Notion
-                                </button>
-                            )
-                        }
-                        <Image src="/share-black.png" className="arrows" alt="" width={30} height={30}
-                            onClick={handleClick} />
-                    </div>
-                )}
+                    ) : (
+                        <div className="w-[200px] h-[300px]"></div>
+                    )}
+                    <Link href={`http://books.google.com/books?id=${id}`} passHref target='_blank'>
+                        <Image
+                            src="/share-black.png"
+                            className="arrows"
+                            alt=""
+                            width={30}
+                            height={30} />
+                    </Link>
+                    <button type="button"
+                        className="movie-card-button text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                        onClick={() => {
+                            session ? handleAddToNotion() : signIn('google')
+                        }}
+                    >
+                        Add to Notion
+                    </button>
+                </div>
             </div>
             <h2 className="text-l font-bold text-center text-gray-800">
                 <span>

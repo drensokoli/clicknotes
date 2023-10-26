@@ -53,17 +53,6 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
 
   return (
     <div>
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-        crossOrigin="anonymous"></script>
-      <ins className="adsbygoogle"
-        style={{ display: 'block' } as React.CSSProperties}
-        data-ad-client="ca-pub-3464540666338005"
-        data-ad-slot="7659984313"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({ });
-      </script>
       <Navbar />
       <Component {...pageProps} />
       {showInfoBubble && (

@@ -27,31 +27,27 @@ const TvShows: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
     const [tvShows, setTvShows] = useState<TvShow[]>([]);
     const [popularTvShows, setPopularTvShows] = useState<TvShow[]>([]);
 
-    const API_KEY = tmdbApiKey;
-
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
     const include_genres = '16,35,99,18,10751,14,36,10402,9648,10749,878'
     const certification_country = 'US'
     const certification = 'TV-PG'
-
+    const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore"]
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         searchTvShowByTitle(event.target.value);
     };
 
-    const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore"]
-
     const searchTvShowByTitle = async (title: string) => {
         try {
-            const response = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${title}&with_genres=${include_genres}&certification_country=${certification_country}&certification=${certification}`);
+            const response = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=${tmdbApiKey}&query=${title}&with_genres=${include_genres}&certification_country=${certification_country}&certification=${certification}`);
 
             const tvShowIds = response.data.results.map((tvShow: { id: any; }) => tvShow.id);
 
             const tvShows = [];
             for (let id of tvShowIds) {
-                const tvShowResponse = await axios.get(`https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}&append_to_response=keywords`);
+                const tvShowResponse = await axios.get(`https://api.themoviedb.org/3/tv/${id}?api_key=${tmdbApiKey}&append_to_response=keywords`);
 
                 const keywords = tvShowResponse.data.keywords.results.map((keyword: { name: any; }) => keyword.name);
 
@@ -66,19 +62,10 @@ const TvShows: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
         }
     };
 
-
-    const handleTvShowClick = async (tvShowId: number) => {
-        try {
-            window.open(`https://www.themoviedb.org/tv/${tvShowId}`, '_blank');
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     useEffect(() => {
         const fetchPopularTvShows = async () => {
             try {
-                const response = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=en-US&page=1`);
+                const response = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=1`);
                 setPopularTvShows(response.data.results);
             } catch (error) {
                 console.error(error);
@@ -96,7 +83,6 @@ const TvShows: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
             return () => clearTimeout(timer);
         }
     }, [apiResponse]);
-
 
     return (
         <>
@@ -129,14 +115,14 @@ const TvShows: React.FC<Props> = ({ tmdbApiKey, cryptoKey }) => {
                             .filter((item) => !adultContent.some((word) => item.title && item.title.toLowerCase().includes(word)))
                             .filter((item) => !adultContent.some((word) => item.overview && item.overview.toLowerCase().includes(word)))
                             .map((item) => (
-                                <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
+                                <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
                             ))}
                     </div>
                     {tvShows.length === 0 && (
                         <>
                             <div className="movie-container">
                                 {popularTvShows.map((item) => (
-                                    <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onClick={() => handleTvShowClick(item.id)} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
+                                    <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
                                 ))}
                             </div>
                         </>
