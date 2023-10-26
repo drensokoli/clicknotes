@@ -114,7 +114,6 @@ const TvShow: React.FC<TvShowProps> =
         const user = await response.json();
         const rounded_vote_average = Math.round(vote_average * 10) / 10;
         const tmdb_link = `https://www.themoviedb.org/tv/${id}`;
-        // const tpb_link = `https://tpb.party/search/${name.replace(/ /g, '%20')}/1/99/0`
         const defaultDate = "0001-01-01";
 
         const tvShowData = {
@@ -128,7 +127,6 @@ const TvShow: React.FC<TvShowProps> =
           director: director[0] || '[Missing]',
           vote_average: rounded_vote_average,
           tmdb_link: tmdb_link,
-          // tpb_link: tpb_link,
           poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
           backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
         };

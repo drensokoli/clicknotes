@@ -3,7 +3,7 @@ import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
 import Link from 'next/link';
-import { getCast, getDirector, getImdb, getTrailer } from '@/lib/movieFunctions';
+import { genresMapping, getCast, getDirector, getImdb, getTrailer } from '@/lib/movieHelpers';
 
 
 export default function Movie
@@ -44,111 +44,36 @@ export default function Movie
     ) {
 
         const { data: session } = useSession();
-        const genresMapping = {
-            "genres": [
-                {
-                    "id": 28,
-                    "name": "Action"
-                },
-                {
-                    "id": 12,
-                    "name": "Adventure"
-                },
-                {
-                    "id": 16,
-                    "name": "Animation"
-                },
-                {
-                    "id": 35,
-                    "name": "Comedy"
-                },
-                {
-                    "id": 80,
-                    "name": "Crime"
-                },
-                {
-                    "id": 99,
-                    "name": "Documentary"
-                },
-                {
-                    "id": 18,
-                    "name": "Drama"
-                },
-                {
-                    "id": 10751,
-                    "name": "Family"
-                },
-                {
-                    "id": 14,
-                    "name": "Fantasy"
-                },
-                {
-                    "id": 36,
-                    "name": "History"
-                },
-                {
-                    "id": 27,
-                    "name": "Horror"
-                },
-                {
-                    "id": 10402,
-                    "name": "Music"
-                },
-                {
-                    "id": 9648,
-                    "name": "Mystery"
-                },
-                {
-                    "id": 10749,
-                    "name": "Romance"
-                },
-                {
-                    "id": 878,
-                    "name": "Science Fiction"
-                },
-                {
-                    "id": 10770,
-                    "name": "TV Movie"
-                },
-                {
-                    "id": 53,
-                    "name": "Thriller"
-                },
-                {
-                    "id": 10752,
-                    "name": "War"
-                },
-                {
-                    "id": 37,
-                    "name": "Western"
-                }
-            ]
-        };
+
 
         const handleAddToNotion = async () => {
             try {
 
                 onApiResponse('Adding movie to Notion...');
 
+                const genres = [...genresMapping.genres.filter((genre: { id: number; }) => genre_ids.includes(genre.id)).map((genre: { name: any; }) => ({ name: genre.name }))];
+                const cast = await getCast({ id, tmdbApiKey });
+                const defaultDate = "0001-01-01";
                 const rounded_vote_average = Math.round(vote_average * 10) / 10;
                 const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
-                const defaultDate = "0001-01-01";
-                const genres = [...genresMapping.genres.filter((genre: { id: number; }) => genre_ids.includes(genre.id)).map((genre: { name: any; }) => ({ name: genre.name }))];
+                const imdb_link = await getImdb({ id, tmdbApiKey });
+                const director = await getDirector({ id, tmdbApiKey });
+                const trailer = await getTrailer({ id, tmdbApiKey });
 
                 const movieData = {
                     id: id,
                     title: title,
                     overview: overview,
                     genres: genres,
-                    cast: await getCast({ id, tmdbApiKey }),
+                    cast: cast,
                     release_date: release_date || defaultDate,
                     vote_average: rounded_vote_average,
                     adult: adult,
                     runtime: runtime,
                     tmdb_link: tmdb_link,
-                    imdb_link: await getImdb({ id, tmdbApiKey }),
-                    director: (await getDirector({ id, tmdbApiKey })) || "[Missing]",
-                    trailer: (await getTrailer({ id, tmdbApiKey })) || '',
+                    imdb_link: imdb_link,
+                    director: director || "[Missing]",
+                    trailer: trailer || '',
                     poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
                     backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
                 };

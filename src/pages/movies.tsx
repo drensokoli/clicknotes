@@ -4,7 +4,8 @@ import SearchBar from '@/components/SearchBar';
 import NotionAd from '@/components/NotionAd';
 import Movie from '@/components/Movie';
 import { useSession } from 'next-auth/react';
-import { searchMovieByTitle } from '@/lib/movieFunctions';
+import { searchMovieByTitle } from '@/lib/movieHelpers';
+import NotionResponse from '@/components/NotionResponse';
 
 interface MovieMedia {
     id: number;
@@ -17,16 +18,11 @@ interface MovieMedia {
     genre_ids: number[];
 }
 
-export default function Movies
-    ({
-        tmdbApiKey,
-        cryptoKey,
-        popularMovies
-    }: {
-        tmdbApiKey: string;
-        cryptoKey: string;
-        popularMovies: MovieMedia[];
-    }) {
+export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
+    tmdbApiKey: string;
+    cryptoKey: string;
+    popularMovies: MovieMedia[];
+}) {
 
     const { data: session } = useSession();
 
@@ -47,55 +43,23 @@ export default function Movies
             .catch(error => console.error(error));
     };
 
-    const fetchUser = async () => {
-
-        const response = await fetch('/api/getUser', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userEmail: session?.user?.email }),
-        });
-
-        const user = await response.json();
-
-        setNotionApiKey(user.notionApiKey);
-        setMoviesPageLink(user.moviesPageLink);
-    };
-
     useEffect(() => {
-        if (apiResponse !== 'Adding movie to Notion...') {
-            const timer = setTimeout(() => {
-                setApiResponse(null);
-            }, 1000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [apiResponse]);
-
-    useEffect(() => {
-        if (session && !sessionStorage.getItem('userId') && !sessionStorage.getItem('notionApiKey') && !sessionStorage.getItem('moviesPageLink') && !sessionStorage.getItem('tvShowsPageLink') && !sessionStorage.getItem('booksPageLink')) {
-            fetchUser();
-        }
+        const fetchUser = async () => {
+            const response = await fetch('/api/getUser', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userEmail: session?.user?.email }),
+            });
+            const user = await response.json();
+            setNotionApiKey(user.notionApiKey);
+            setMoviesPageLink(user.moviesPageLink);
+        };
+        fetchUser();
     }, [session]);
-
 
     return (
         <>
-            {apiResponse === 'Added movie to Notion' ? (
-                <div className="success-message">
-                    <p>{apiResponse}</p>
-                </div>
-            ) : apiResponse === 'Error adding movie to Notion' ? (
-                <div className="error-message">
-                    <p>{apiResponse}</p>
-                    Need <a href="/help" target="_blank">
-                        <span className="text-blue-500">help</span>?
-                    </a>
-                </div>
-            ) : apiResponse === 'Adding movie to Notion...' ? (
-                <div className="loading-message">
-                    <p>{apiResponse}</p>
-                </div>
-            ) : null}
+            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
@@ -105,41 +69,36 @@ export default function Movies
                         {movies
                             .map((item) => (
                                 <Movie
+                                    {...item}
                                     runtime={0}
                                     adult={false}
                                     backdrop_path={''}
-                                    key={item.id} 
-                                    {...item}
                                     onApiResponse={(error: string) => setApiResponse(error)}
                                     tmdbApiKey={tmdbApiKey}
                                     cryptoKey={cryptoKey}
-                                    genre_ids={item.genre_ids}
                                     notionApiKey={notionApiKey}
                                     moviesPageLink={moviesPageLink}
                                 />
                             ))}
                     </div>
                     {movies.length === 0 && (
-                        <>
-                            <div className="movie-container">
-                                {popularMovies
-                                    .filter((item) => item.vote_average > 6)
-                                    .map((item) => (
-                                        <Movie
-                                            runtime={0}
-                                            adult={false}
-                                            backdrop_path={''}
-                                            key={item.id} {...item}
-                                            onApiResponse={(error: string) => setApiResponse(error)}
-                                            tmdbApiKey={tmdbApiKey}
-                                            cryptoKey={cryptoKey}
-                                            genre_ids={item.genre_ids}
-                                            notionApiKey={notionApiKey}
-                                            moviesPageLink={moviesPageLink}
-                                        />
-                                    ))}
-                            </div>
-                        </>
+                        <div className="movie-container">
+                            {popularMovies
+                                .filter((item) => item.vote_average > 6)
+                                .map((item) => (
+                                    <Movie
+                                        {...item}
+                                        runtime={0}
+                                        adult={false}
+                                        backdrop_path={''}
+                                        onApiResponse={(error: string) => setApiResponse(error)}
+                                        tmdbApiKey={tmdbApiKey}
+                                        cryptoKey={cryptoKey}
+                                        notionApiKey={notionApiKey}
+                                        moviesPageLink={moviesPageLink}
+                                    />
+                                ))}
+                        </div>
                     )}
                 </div>
             </div>
@@ -154,28 +113,16 @@ export const getStaticProps = async () => {
     const cryptoKey = process.env.CRYPTO_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
 
-    try {
-        const popularMoviesResponse = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=1&include_adult=false`);
-        const popularMovies = popularMoviesResponse.data.results;
+    const popularMoviesResponse = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=1&include_adult=false`);
+    const popularMovies = popularMoviesResponse.data.results;
 
-        return {
-            props: {
-                tmdbApiKey,
-                cryptoKey,
-                popularMovies
-            },
+    return {
+        props: {
+            tmdbApiKey,
+            cryptoKey,
+            popularMovies
+        },
 
-            revalidate: 60 * 60 * 24 // 24 hours
-        };
-    } catch (error) {
-        console.error(error);
-        return {
-            props: {
-                tmdbApiKey,
-                cryptoKey,
-                popularMovies: []
-            },
-            revalidate: 60 * 60 * 24 // 24 hours
-        };
-    }
+        revalidate: 60 * 60 * 24 // 24 hours
+    };
 }
