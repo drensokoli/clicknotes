@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import SearchBar from '@/components/SearchBar';
 import NotionAd from '@/components/NotionAd';
-import MediaCard from '@/components/MediaCard';
+import Movie from '@/components/Movie';
 import { useSession } from 'next-auth/react';
 import { searchMovieByTitle } from '@/lib/movieFunctions';
 
@@ -17,7 +17,7 @@ interface MovieMedia {
     genre_ids: number[];
 }
 
-export default function MoviesMedia
+export default function Movies
     ({
         tmdbApiKey,
         cryptoKey,
@@ -104,7 +104,7 @@ export default function MoviesMedia
                     <div className="movie-container">
                         {movies
                             .map((item) => (
-                                <MediaCard
+                                <Movie
                                     runtime={0}
                                     adult={false}
                                     backdrop_path={''}
@@ -125,7 +125,7 @@ export default function MoviesMedia
                                 {popularMovies
                                     .filter((item) => item.vote_average > 6)
                                     .map((item) => (
-                                        <MediaCard
+                                        <Movie
                                             runtime={0}
                                             adult={false}
                                             backdrop_path={''}
