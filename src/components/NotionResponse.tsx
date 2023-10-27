@@ -1,7 +1,7 @@
 import React from 'react';
 
 const NotionResponse = ({ apiResponse, setApiResponse }: { apiResponse: string | null, setApiResponse: any }) => {
-    if (apiResponse === 'Added movie to Notion' || apiResponse === 'Added TV show to Notion' || apiResponse === 'Added Book to Notion') {
+    if (apiResponse === 'Added movie to Notion' || apiResponse === 'Added TV show to Notion' || apiResponse === 'Added book to Notion') {
 
         setTimeout(() => {
             setApiResponse(null);
@@ -13,7 +13,7 @@ const NotionResponse = ({ apiResponse, setApiResponse }: { apiResponse: string |
             </div>
         );
 
-    } else if (apiResponse === 'Error adding movie to Notion' || apiResponse === 'Error adding TV show to Notion' || apiResponse === 'Error adding Book to Notion') {
+    } else if (apiResponse === 'Error adding movie to Notion' || apiResponse === 'Error adding TV show to Notion' || apiResponse === 'Error adding book to Notion') {
 
         setTimeout(() => {
             setApiResponse(null);
@@ -27,7 +27,7 @@ const NotionResponse = ({ apiResponse, setApiResponse }: { apiResponse: string |
                 </a>
             </div>
         );
-    } else if (apiResponse === 'Adding movie to Notion...' || apiResponse === 'Adding TV show to Notion...' || apiResponse === 'Adding Book to Notion...') {
+    } else if (apiResponse === 'Adding movie to Notion...' || apiResponse === 'Adding TV show to Notion...' || apiResponse === 'Adding book to Notion...') {
         return (
             <div className="loading-message">
                 <p>{apiResponse}</p>

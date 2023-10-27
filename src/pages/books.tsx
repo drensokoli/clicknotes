@@ -4,6 +4,7 @@ import Book from '../components/Book';
 import SearchBar from '@/components/SearchBar';
 import { debounce } from 'lodash';
 import NotionAd from '@/components/NotionAd';
+import NotionResponse from '@/components/NotionResponse';
 
 interface Book {
     saleInfo: any;
@@ -96,23 +97,7 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey })
 
     return (
         <>
-            {apiResponse === 'Added book to Notion' ? (
-                <div className="success-message">
-                    <p>{apiResponse}</p>
-                </div>
-            ) : apiResponse === 'Error adding book to Notion' ? (
-                <div className="error-message">
-                    <p>{apiResponse}</p>
-                    Need <a href="/help" target="_blank">
-                        <span className="text-blue-500">help</span>?
-                    </a>
-                </div>
-            ) : apiResponse === 'Adding book to Notion...' ? (
-                <div className="loading-message">
-                    <p>{apiResponse}</p>
-                </div>
-            ) : null}
-
+            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
