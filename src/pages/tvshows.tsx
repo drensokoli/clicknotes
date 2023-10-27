@@ -69,14 +69,26 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                     <div className="movie-container">
                         {tvShows
                             .map((item) => (
-                                <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
+                                <TvShow 
+                                {...item} 
+                                first_air_date={''} 
+                                backdrop_path={''} 
+                                onApiResponse={(error: string) => setApiResponse(error)} 
+                                cryptoKey={cryptoKey} 
+                                tmdbApiKey={tmdbApiKey} />
                             ))}
                     </div>
                     {tvShows.length === 0 && (
                         <>
                             <div className="movie-container">
                                 {popularTvShows.map((item) => (
-                                    <TvShow first_air_date={''} backdrop_path={''} key={item.id} {...item} onApiResponse={(error: string) => setApiResponse(error)} cryptoKey={cryptoKey} tmdbApiKey={tmdbApiKey} />
+                                    <TvShow 
+                                    {...item} 
+                                    first_air_date={''} 
+                                    backdrop_path={''} 
+                                    onApiResponse={(error: string) => setApiResponse(error)} 
+                                    cryptoKey={cryptoKey} 
+                                    tmdbApiKey={tmdbApiKey} />
                                 ))}
                             </div>
                         </>

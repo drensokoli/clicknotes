@@ -41,6 +41,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                 }
             })
             .catch(error => console.error(error));
+        console.log(movies)
     };
 
     useEffect(() => {

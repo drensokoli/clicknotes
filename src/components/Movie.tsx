@@ -49,6 +49,7 @@ export default function Movie
         const handleAddToNotion = async () => {
             try {
 
+                console.log("sssssss", genre_ids);
                 onApiResponse('Adding movie to Notion...');
 
                 const genres = [...genresMapping.genres.filter((genre: { id: number; }) => genre_ids.includes(genre.id)).map((genre: { name: any; }) => ({ name: genre.name }))];
@@ -64,7 +65,7 @@ export default function Movie
                     id: id,
                     title: title,
                     overview: overview,
-                    genres: genres,
+                    genres: genres || [],
                     cast: cast,
                     release_date: release_date || defaultDate,
                     vote_average: rounded_vote_average,

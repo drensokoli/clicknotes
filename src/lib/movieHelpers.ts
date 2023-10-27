@@ -64,10 +64,10 @@ export async function searchMovieByTitle({ title, tmdbApiKey }: { title: string,
         }
 
         return movies
-            .filter((item) => item.vote_average > 6)
-            .filter((item) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
-            .filter((item) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
-            .filter((item) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)));
+            // .filter((item) => item.vote_average > 6)
+            // .filter((item) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
+            // .filter((item) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
+            // .filter((item) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)));
     } catch (error) {
         console.error(error);
     }

@@ -23,13 +23,33 @@ export async function searchTvShowByTitle({ title, tmdbApiKey }: { title: string
         }
 
         return tvShows
-        .filter((item) => item.vote_average > 6)
-        .filter((item) => !adultContent.some((word) => item.name && item.name.toLowerCase().includes(word)))
-        .filter((item) => !adultContent.some((word) => item.original_name && item.original_name.toLowerCase().includes(word)))
-        .filter((item) => !adultContent.some((word) => item.title && item.title.toLowerCase().includes(word)))
-        .filter((item) => !adultContent.some((word) => item.overview && item.overview.toLowerCase().includes(word)));
+            .filter((item) => item.vote_average > 6)
+            .filter((item) => !adultContent.some((word) => item.name && item.name.toLowerCase().includes(word)))
+            .filter((item) => !adultContent.some((word) => item.original_name && item.original_name.toLowerCase().includes(word)))
+            .filter((item) => !adultContent.some((word) => item.title && item.title.toLowerCase().includes(word)))
+            .filter((item) => !adultContent.some((word) => item.overview && item.overview.toLowerCase().includes(word)));
 
     } catch (error) {
         console.error(error);
     }
+};
+
+export async function fetchGenres({ id, tmdbApiKey }: { id: string, tmdbApiKey: string }) {
+    const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}?api_key=${tmdbApiKey}&language=en-US`
+    );
+
+    const movieDetails = await response.json();
+    const genres = movieDetails.genres.map((genre: { name: any; }) => genre.name);
+    const genresArray = [];
+
+    for (let index = 0; index < genres.length; index++) {
+        if (genres[index]) {
+            const element = genres[index];
+            genresArray.push({ "name": element });
+        }
+    }
+
+    return genresArray;
+    // setGenres(genresArray);
 };
