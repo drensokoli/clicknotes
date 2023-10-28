@@ -71,6 +71,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                             .map((item) => (
                                 <Movie
                                     {...item}
+                                    key={item.id}
                                     runtime={0}
                                     adult={false}
                                     backdrop_path={''}
@@ -89,6 +90,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                                 .map((item) => (
                                     <Movie
                                         {...item}
+                                        key={item.id}
                                         runtime={0}
                                         adult={false}
                                         backdrop_path={''}

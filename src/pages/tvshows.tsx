@@ -25,7 +25,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
     cryptoKey: string;
     popularTvShows: TvShow[];
 }) {
-    
+
     const { data: session } = useSession();
 
     const [input, setInput] = useState('');
@@ -69,26 +69,28 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                     <div className="movie-container">
                         {tvShows
                             .map((item) => (
-                                <TvShow 
-                                {...item} 
-                                first_air_date={''} 
-                                backdrop_path={''} 
-                                onApiResponse={(error: string) => setApiResponse(error)} 
-                                cryptoKey={cryptoKey} 
-                                tmdbApiKey={tmdbApiKey} />
+                                <TvShow
+                                    {...item}
+                                    key={item.id}
+                                    first_air_date={''}
+                                    backdrop_path={''}
+                                    onApiResponse={(error: string) => setApiResponse(error)}
+                                    cryptoKey={cryptoKey}
+                                    tmdbApiKey={tmdbApiKey} />
                             ))}
                     </div>
                     {tvShows.length === 0 && (
                         <>
                             <div className="movie-container">
                                 {popularTvShows.map((item) => (
-                                    <TvShow 
-                                    {...item} 
-                                    first_air_date={''} 
-                                    backdrop_path={''} 
-                                    onApiResponse={(error: string) => setApiResponse(error)} 
-                                    cryptoKey={cryptoKey} 
-                                    tmdbApiKey={tmdbApiKey} />
+                                    <TvShow
+                                        {...item}
+                                        key={item.id}
+                                        first_air_date={''}
+                                        backdrop_path={''}
+                                        onApiResponse={(error: string) => setApiResponse(error)}
+                                        cryptoKey={cryptoKey}
+                                        tmdbApiKey={tmdbApiKey} />
                                 ))}
                             </div>
                         </>
