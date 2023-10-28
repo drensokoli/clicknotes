@@ -49,29 +49,30 @@ export async function searchMovieByTitle({ title, tmdbApiKey }: { title: string,
     try {
         const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${title}&language=en-US&page=1&include_adult=false`);
 
-        // const movies = response.data.results;
-        // return movies;
+        const movies = response.data.results;
+        return movies;
 
         // MOVIE FILTERING
-        const movieIds = response.data.results.map((movie: { id: any; }) => movie.id);
-        const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
+        // const movieIds = response.data.results.map((movie: { id: any; }) => movie.id);
+        // const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
 
-        const movies = [];
-        for (let id of movieIds) {
-            const movieResponse = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbApiKey}&append_to_response=keywords`);
+        // const movies = [];
+        // for (let id of movieIds) {
+        //     const movieResponse = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbApiKey}&append_to_response=keywords`);
 
-            const keywords = movieResponse.data.keywords.keywords.map((keyword: { name: any; }) => keyword.name);
+        //     const keywords = movieResponse.data.keywords.keywords.map((keyword: { name: any; }) => keyword.name);
 
-            if (!keywords.some((keyword: string) => adultContent.includes(keyword))) {
-                movies.push(movieResponse.data);
-            }
-        }
+        //     if (!keywords.some((keyword: string) => adultContent.includes(keyword))) {
+        //         movies.push(movieResponse.data);
+        //     }
+        // }
 
-        return movies
-            .filter((item) => item.vote_average > 6)
-            .filter((item) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
-            .filter((item) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
-            .filter((item) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)));
+        // return movies;
+
+            // .filter((item) => item.vote_average > 6)
+            // .filter((item) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
+            // .filter((item) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
+            // .filter((item) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)));
     } catch (error) {
         console.error(error);
     }
