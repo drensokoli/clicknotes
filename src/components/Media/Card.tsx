@@ -1,3 +1,4 @@
+
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import Link from 'next/link';
@@ -19,7 +20,9 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                 <div className='movie-image'>
                     {poster_path ? (
                         <Image
-                            src={poster_path} width={200}
+                            src={poster_path} 
+                            width={200}
+                            height={300}
                             alt={title}
                             className="rounded-sm h-auto"
                         />
