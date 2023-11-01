@@ -107,7 +107,22 @@ export const getStaticProps = async () => {
     const cryptoKey = process.env.CRYPTO_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
 
-    const popularTvShowsResponse = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=1`);
+    const popularTvShowsResponsePageOne = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=1`);
+    const popularTvShowsResponsePageTwo = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=2`);
+    const popularTvShowsResponsePageThree = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=3`);
+    const popularTvShowsResponsePageFour = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=4`);
+    
+    const popularTvShowsResponse = {
+        data: {
+            results: [
+                ...popularTvShowsResponsePageOne.data.results,
+                ...popularTvShowsResponsePageTwo.data.results,
+                ...popularTvShowsResponsePageThree.data.results,
+                ...popularTvShowsResponsePageFour.data.results
+            ]
+        }
+    };
+
     const popularTvShows = popularTvShowsResponse.data.results;
 
     return {

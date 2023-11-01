@@ -30,12 +30,12 @@ interface Props {
     cryptoKey: string;
     googleBooksApiKey: string;
     nyTimesApiKey: string;
+    bestsellers: Book[];
 }
 
-const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey }) => {
+const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bestsellers }) => {
     const [input, setInput] = useState('');
     const [books, setBooks] = useState<Book[]>([]);
-    const [bestsellers, setBestsellers] = useState<Book[]>([]);
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
@@ -52,38 +52,6 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey })
             console.error(error);
         }
     };
-
-    const fetchBestsellers = async () => {
-        try {
-            const cacheResponse = await fetch("/api/redisHandler");
-            const cacheData = await cacheResponse.json();
-            if (cacheData) {
-                setBestsellers(JSON.parse(cacheData));
-                return;
-            }
-            const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
-            const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
-            const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
-            const bookDetailsResponses = await Promise.all(bookDetailsPromises);
-            const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
-            setBestsellers(bestsellers);
-
-            // Store the best sellers data in Redis
-            await fetch('/api/redisHandler', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ bestsellers }),
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        fetchBestsellers();
-    }, []);
 
     useEffect(() => {
         if (apiResponse !== 'Adding book to Notion...') {
@@ -170,11 +138,18 @@ export const getServerSideProps = async () => {
     const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY;
     const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
+    const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
+    const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
+    const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
+    const bookDetailsResponses = await Promise.all(bookDetailsPromises);
+    const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
+
     return {
         props: {
             cryptoKey,
             googleBooksApiKey,
             nyTimesApiKey,
+            bestsellers
         },
     };
 }

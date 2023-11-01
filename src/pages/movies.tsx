@@ -116,7 +116,22 @@ export const getStaticProps = async () => {
     const cryptoKey = process.env.CRYPTO_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
 
-    const popularMoviesResponse = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=1&include_adult=false`);
+    const popularMoviesResponsePageOne = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=1&include_adult=false`);
+    const popularMoviesResponsePageTwo = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=2&include_adult=false`);
+    const popularMoviesResponsePageThree = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=3&include_adult=false`);
+    const popularMoviesResponsePageFour = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=4&include_adult=false`);
+
+    const popularMoviesResponse = {
+        data: {
+            results: [
+                ...popularMoviesResponsePageOne.data.results,
+                ...popularMoviesResponsePageTwo.data.results,
+                ...popularMoviesResponsePageThree.data.results,
+                ...popularMoviesResponsePageFour.data.results
+            ]
+        }
+    };
+
     const popularMovies = popularMoviesResponse.data.results;
 
     return {
