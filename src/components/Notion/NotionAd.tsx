@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function NotionAd({
     path,
@@ -7,7 +8,7 @@ export default function NotionAd({
 }) {
 
     return (
-        <a href="https://affiliate.notion.so/8ieljsf8weuq" target="_blank" className="flex justify-center items-center">
+        <Link href="https://affiliate.notion.so/8ieljsf8weuq" target="_blank" className="flex justify-center items-center">
             <div className='movie-image flex flex-col justify-center items-center bg-[#f7f6f3] border-2 rounded-md w-[100%] lg:w-[85%] p-8'>
                 <Image src={`/${path}-banner-logo.png`} alt="logo"
                     width={20}
@@ -15,6 +16,6 @@ export default function NotionAd({
                     className="sm:h-20 h-12 w-auto lg:block"
                 />
             </div>
-        </a>
+        </Link>
     );
 }

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const NotionResponse = ({ apiResponse, setApiResponse }: { apiResponse: string | null, setApiResponse: any }) => {
@@ -22,9 +23,9 @@ const NotionResponse = ({ apiResponse, setApiResponse }: { apiResponse: string |
         return (
             <div className="error-message">
                 <p>{apiResponse}</p>
-                Need <a href="/help" target="_blank">
+                Need <Link href="/help" target="_blank">
                     <span className="text-blue-500">help</span>?
-                </a>
+                </Link>
             </div>
         );
     } else if (apiResponse === 'Adding movie to Notion...' || apiResponse === 'Adding TV show to Notion...' || apiResponse === 'Adding book to Notion...') {

@@ -7,6 +7,7 @@ import Navbar from '@/components/Layout/Navbar';
 import Footer from '@/components/Layout/Footer';
 import { NextRouter } from 'next/router';
 import { Analytics } from '@vercel/analytics/react';
+import Link from 'next/link';
 
 interface WrappedAppProps extends Omit<AppProps, 'router'> {
   router: NextRouter;
@@ -64,11 +65,11 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
             &times;
           </div>
           Need help connecting your account to Notion?{" "}
-          <a href="/help" target="_blank">
+          <Link href="/help" target="_blank">
             <span className="text-blue-500"
               onClick={() => setShowInfoBubble(false)}
             >Click here</span>
-          </a>
+          </Link>
         </div>
       )}
       <Analytics />
