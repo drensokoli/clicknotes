@@ -72,7 +72,6 @@ export default function Book({ id, title, description, publishedDate, averageRat
         if (notionResponse.ok) {
             const notionResult = await notionResponse.json();
             onApiResponse('Added book to Notion');
-            console.log(notionResult);
         } else {
             onApiResponse('Error adding book to Notion');
         }

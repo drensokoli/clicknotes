@@ -65,7 +65,6 @@ export default function Movie({ id, title, overview, release_date, vote_average,
         if (notionResponse.ok) {
             const notionResult = await notionResponse.json();
             onApiResponse('Added movie to Notion');
-            console.log(notionResult);
         }
         else {
             onApiResponse('Error adding movie to Notion');

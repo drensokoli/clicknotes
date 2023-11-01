@@ -65,7 +65,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
             &times;
           </div>
           Need help connecting your account to Notion?{" "}
-          <Link href="/help" target="_blank">
+          <Link href="/help" target="_blank" aria-label='Help page'>
             <span className="text-blue-500"
               onClick={() => setShowInfoBubble(false)}
             >Click here</span>

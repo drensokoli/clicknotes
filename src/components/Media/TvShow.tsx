@@ -69,7 +69,6 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
     if (notionResponse.ok) {
       const notionResult = await notionResponse.json();
       onApiResponse('Added TV show to Notion');
-      console.log(notionResult);
     } else {
       onApiResponse('Error adding TV show to Notion');
     }

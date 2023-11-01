@@ -23,7 +23,7 @@ const NotionResponse = ({ apiResponse, setApiResponse }: { apiResponse: string |
         return (
             <div className="error-message">
                 <p>{apiResponse}</p>
-                Need <Link href="/help" target="_blank">
+                Need <Link href="/help" target="_blank" aria-label='Help page'>
                     <span className="text-blue-500">help</span>?
                 </Link>
             </div>

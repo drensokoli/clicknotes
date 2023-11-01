@@ -19,15 +19,15 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                 <div className='movie-image'>
                     {poster_path ? (
                         <Image
-                            src={poster_path} height={300} width={200}
+                            src={poster_path} width={200}
                             alt={title}
-                            className="h-[300px] rounded-sm"
+                            className="rounded-sm h-auto"
                         />
                     ) : (
                         <div className="w-[200px] h-[300px]"></div>
                     )}
 
-                    <Link href={link} passHref target='_blank'>
+                    <Link href={link} passHref target='_blank' aria-label='Media'>
                         <Image
                             src="/share-black.png"
                             className="arrows"
