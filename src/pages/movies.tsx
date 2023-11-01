@@ -1,33 +1,23 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import SearchBar from '@/components/SearchBar';
-import NotionAd from '@/components/NotionAd';
-import Movie from '@/components/Movie';
+import SearchBar from '@/components/Layout/SearchBar';
+import NotionAd from '@/components/Notion/NotionAd';
+import Movie from '@/components/Media/Movie';
 import { useSession } from 'next-auth/react';
 import { searchMovieByTitle } from '@/lib/movieHelpers';
-import NotionResponse from '@/components/NotionResponse';
-
-interface Movie {
-    id: number;
-    title: string;
-    original_title: string;
-    overview: string;
-    poster_path: string;
-    vote_average: number;
-    release_date: string;
-    genre_ids: number[];
-}
+import NotionResponse from '@/components/Notion/NotionResponse';
+import { Movie as MovieInterface } from '@/lib/interfaces';
 
 export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     tmdbApiKey: string;
     cryptoKey: string;
-    popularMovies: Movie[];
+    popularMovies: MovieInterface[];
 }) {
 
     const { data: session } = useSession();
 
     const [input, setInput] = useState('');
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const [movies, setMovies] = useState<MovieInterface[]>([]);
     const [notionApiKey, setNotionApiKey] = useState('');
     const [moviesPageLink, setMoviesPageLink] = useState('');
     const [apiResponse, setApiResponse] = useState<string | null>(null);
@@ -61,7 +51,6 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     return (
         <>
             <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
-
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">

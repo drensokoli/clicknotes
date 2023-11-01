@@ -1,34 +1,23 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import TvShow from '../components/TvShow';
-import SearchBar from '@/components/SearchBar';
-import NotionAd from '@/components/NotionAd';
-import NotionResponse from '@/components/NotionResponse';
+import TvShow from '../components/Media/TvShow';
+import SearchBar from '@/components/Layout/SearchBar';
+import NotionAd from '@/components/Notion/NotionAd';
+import NotionResponse from '@/components/Notion/NotionResponse';
 import { useSession } from 'next-auth/react';
 import { searchTvShowByTitle } from '@/lib/tvShowHelpers';
-
-interface TvShow {
-    id: number;
-    title: string;
-    original_name: string;
-    name: string;
-    overview: string;
-    poster_path: string;
-    vote_average: number;
-    vote_count: number;
-    release_date: string;
-}
+import { TvShow as TvShowInterface } from '@/lib/interfaces';
 
 export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
     tmdbApiKey: string;
     cryptoKey: string;
-    popularTvShows: TvShow[];
+    popularTvShows: TvShowInterface[];
 }) {
 
     const { data: session } = useSession();
 
     const [input, setInput] = useState('');
-    const [tvShows, setTvShows] = useState<TvShow[]>([]);
+    const [tvShows, setTvShows] = useState<TvShowInterface[]>([]);
     const [notionApiKey, setNotionApiKey] = useState<string>('');
     const [tvShowsPageLink, setTvShowPageLink] = useState<string>('');
     const [apiResponse, setApiResponse] = useState<string | null>(null);

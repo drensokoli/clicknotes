@@ -1,6 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { IonSearchbar } from '@ionic/react';
-import { searchCircle } from 'ionicons/icons';
 
 interface Props {
   input: string;

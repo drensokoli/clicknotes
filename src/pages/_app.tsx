@@ -3,8 +3,8 @@ import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 import { SessionProvider, useSession } from 'next-auth/react';
 import React, { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import Navbar from '@/components/Layout/Navbar';
+import Footer from '@/components/Layout/Footer';
 import { NextRouter } from 'next/router';
 import { Analytics } from '@vercel/analytics/react';
 

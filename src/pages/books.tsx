@@ -1,41 +1,20 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Book from '../components/Book';
-import SearchBar from '@/components/SearchBar';
+import Book from '../components/Media/Book';
+import SearchBar from '@/components/Layout/SearchBar';
 import { debounce } from 'lodash';
-import NotionAd from '@/components/NotionAd';
-import NotionResponse from '@/components/NotionResponse';
+import NotionAd from '@/components/Notion/NotionAd';
+import NotionResponse from '@/components/Notion/NotionResponse';
+import { Book as BookInterface } from '@/lib/interfaces';
 
-interface Book {
-    saleInfo: any;
-    id: string;
-    volumeInfo: {
-        publisher: any;
-        language: any;
-        title: string;
-        authors: string[];
-        description: string;
-        imageLinks: {
-            thumbnail: string;
-        };
-        previewLink: string;
-        publishedDate: string;
-        averageRating: number;
-        infoLink: string;
-        pageCount: number;
-    };
-}
-
-interface Props {
+export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bestsellers }: {
     cryptoKey: string;
     googleBooksApiKey: string;
     nyTimesApiKey: string;
-    bestsellers: Book[];
-}
-
-const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bestsellers }) => {
+    bestsellers: BookInterface[];
+}) {
     const [input, setInput] = useState('');
-    const [books, setBooks] = useState<Book[]>([]);
+    const [books, setBooks] = useState<BookInterface[]>([]);
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
@@ -71,7 +50,7 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey, b
                 <div className="content-container w-5/6">
                     <NotionAd path={"books"} />
                     <div className="movie-container">
-                        {books.map((book: Book) => (
+                        {books.map((book: BookInterface) => (
                             <Book
                                 key={book.id}
                                 id={book.id}
@@ -97,7 +76,7 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey, b
                             <>
                                 <div className='movie-container'>
                                     {
-                                        bestsellers.map((book: Book) => (
+                                        bestsellers.map((book: BookInterface) => (
                                             <Book
                                                 key={book.id}
                                                 id={book.id}
@@ -129,8 +108,6 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey, b
         </>
     );
 };
-
-export default Books;
 
 export const getStaticProps = async () => {
 
