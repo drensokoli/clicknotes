@@ -34,7 +34,7 @@ export async function searchTvShowByTitle({ title, tmdbApiKey }: { title: string
     }
 };
 
-export async function fetchGenres({ id, tmdbApiKey }: { id: string, tmdbApiKey: string }) {
+export async function fetchGenres({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
     const response = await fetch(
         `https://api.themoviedb.org/3/tv/${id}?api_key=${tmdbApiKey}&language=en-US`
     );
@@ -51,5 +51,52 @@ export async function fetchGenres({ id, tmdbApiKey }: { id: string, tmdbApiKey: 
     }
 
     return genresArray;
-    // setGenres(genresArray);
+};
+
+
+export async function fetchCast({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
+    const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${tmdbApiKey}&language=en-US`
+    );
+
+    const credits = await response.json();
+    const theCast = credits.cast.map((cast: { name: any; }) => cast.name);
+    const castArray = [];
+
+    for (let index = 0; index < 11; index++) {
+        if (theCast[index]) {
+            const element = theCast[index];
+            castArray.push({ "name": element });
+        }
+    }
+    return castArray;
+};
+
+export async function fetchDirector({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
+
+    const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${tmdbApiKey}&language=en-US`
+    );
+
+    const credits = await response.json();
+    const director = credits.crew.filter((person: { job: string; }) => person.job === 'Director').map((crew: { name: any; }) => crew.name);
+    return director[0];
+};
+
+export async function fetchTrailer({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
+
+    const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${tmdbApiKey}&language=en-US`
+    );
+    const videoData = await response.json();
+    const trailers = videoData.results.filter((video: { type: string; }) => video.type === 'Trailer');
+
+    if (trailers.length > 0) {
+        const trailerID = trailers[0].key;
+        const trailer = `https://www.youtube.com/watch?v=${trailerID}`;
+        return trailer;
+    }
+
+    return '';
+
 };

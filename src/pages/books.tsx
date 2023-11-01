@@ -132,7 +132,7 @@ const Books: React.FC<Props> = ({ cryptoKey, googleBooksApiKey, nyTimesApiKey, b
 
 export default Books;
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
 
     const cryptoKey = process.env.CRYPTO_KEY;
     const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY;
@@ -151,5 +151,7 @@ export const getServerSideProps = async () => {
             nyTimesApiKey,
             bestsellers
         },
+
+        revalidate: 60 * 60 * 24 // 24 hours
     };
 }

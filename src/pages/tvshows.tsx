@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TvShow from '../components/TvShow';
 import SearchBar from '@/components/SearchBar';
-import { debounce } from 'lodash';
 import NotionAd from '@/components/NotionAd';
 import NotionResponse from '@/components/NotionResponse';
 import { useSession } from 'next-auth/react';
@@ -76,7 +75,10 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                     backdrop_path={''}
                                     onApiResponse={(error: string) => setApiResponse(error)}
                                     cryptoKey={cryptoKey}
-                                    tmdbApiKey={tmdbApiKey} />
+                                    tmdbApiKey={tmdbApiKey}
+                                    notionApiKey={notionApiKey}
+                                    tvShowsPageLink={tvShowsPageLink}
+                                />
                             ))}
                     </div>
                     {tvShows.length === 0 && (
@@ -90,7 +92,10 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                         backdrop_path={''}
                                         onApiResponse={(error: string) => setApiResponse(error)}
                                         cryptoKey={cryptoKey}
-                                        tmdbApiKey={tmdbApiKey} />
+                                        tmdbApiKey={tmdbApiKey}
+                                        notionApiKey={notionApiKey}
+                                        tvShowsPageLink={tvShowsPageLink}
+                                    />
                                 ))}
                             </div>
                         </>
@@ -111,7 +116,7 @@ export const getStaticProps = async () => {
     const popularTvShowsResponsePageTwo = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=2`);
     const popularTvShowsResponsePageThree = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=3`);
     const popularTvShowsResponsePageFour = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=4`);
-    
+
     const popularTvShowsResponse = {
         data: {
             results: [

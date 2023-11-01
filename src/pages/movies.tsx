@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { searchMovieByTitle } from '@/lib/movieHelpers';
 import NotionResponse from '@/components/NotionResponse';
 
-interface MovieMedia {
+interface Movie {
     id: number;
     title: string;
     original_title: string;
@@ -21,13 +21,13 @@ interface MovieMedia {
 export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     tmdbApiKey: string;
     cryptoKey: string;
-    popularMovies: MovieMedia[];
+    popularMovies: Movie[];
 }) {
 
     const { data: session } = useSession();
 
     const [input, setInput] = useState('');
-    const [movies, setMovies] = useState<MovieMedia[]>([]);
+    const [movies, setMovies] = useState<Movie[]>([]);
     const [notionApiKey, setNotionApiKey] = useState('');
     const [moviesPageLink, setMoviesPageLink] = useState('');
     const [apiResponse, setApiResponse] = useState<string | null>(null);
