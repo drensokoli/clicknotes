@@ -82,7 +82,7 @@ export default function Book({ id, title, description, publishedDate, averageRat
             title={title}
             poster_path={cover_image}
             release_date={publishedDate}
-            link={`http://books.google.com/books?id=${id}`}
+            link={`https://books.google.com/books?id=${id}`}
             handleAddToNotion={handleAddToNotion}
         />
     );
