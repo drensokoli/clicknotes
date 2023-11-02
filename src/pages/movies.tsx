@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { searchMovieByTitle } from '@/lib/movieHelpers';
 import NotionResponse from '@/components/Notion/NotionResponse';
 import { Movie as MovieInterface } from '@/lib/interfaces';
+import Head from 'next/head';
 
 export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     tmdbApiKey: string;
@@ -49,6 +50,17 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
 
     return (
         <>
+            <Head>
+                <title>ClickNotes - Movies</title>
+                <meta name="description" content="Save popular and trending movies to your Notion list or search for your favorites. All your movies in one place, displayed in a beautiful Notion template." />
+                <meta name="robots" content="all"></meta>
+                <meta property="og:title" content="ClickNotes - Movies" />
+                <meta property="og:description" content="Save popular and trending movies to your Notion list or search for your favorites. All your movies in one place, displayed in a beautiful Notion template." />
+                <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="author" content="Dren Sokoli" />
+                <link rel="icon" href="/public/favicon.ico" />
+            </Head>
             <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />

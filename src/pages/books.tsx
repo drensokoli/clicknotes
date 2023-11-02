@@ -6,6 +6,7 @@ import { debounce } from 'lodash';
 import NotionAd from '@/components/Notion/NotionAd';
 import NotionResponse from '@/components/Notion/NotionResponse';
 import { Book as BookInterface } from '@/lib/interfaces';
+import Head from 'next/head';
 
 export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bestsellers }: {
     cryptoKey: string;
@@ -44,6 +45,17 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
 
     return (
         <>
+            <Head>
+                <title>ClickNotes - Books</title>
+                <meta name="description" content="Save the New York Times best sellers to your Notion list or search for your books. All your Books in one place, displayed in a beautiful Notion template." />
+                <meta name="robots" content="index, follow"></meta>
+                <meta property="og:title" content="ClickNotes - Books" />
+                <meta property="og:description" content="Save the New York Times best sellers to your Notion list or search for your books. All your Books in one place, displayed in a beautiful Notion template." />
+                <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="author" content="Dren Sokoli" />
+                <link rel="icon" href="/public/favicon.ico" />
+            </Head>
             <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />

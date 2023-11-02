@@ -6,8 +6,9 @@ import { decryptData } from '../lib/crypto';
 import 'flowbite';
 import { notionApiKeySubmit, moviesLinkSubmit, tvShowsLinkSubmit, booksLinkSubmit } from '../lib/profileHelpers';
 import Send from '../../public/send.png';
+import Head from 'next/head';
 
-export default function Profile({ cryptoKey } : { cryptoKey: string }) {
+export default function Profile({ cryptoKey }: { cryptoKey: string }) {
     const { data: session, status } = useSession();
     const userEmail = session?.user?.email;
 
@@ -82,6 +83,14 @@ export default function Profile({ cryptoKey } : { cryptoKey: string }) {
 
     return (
         <>
+            <Head>
+                <title>ClickNotes - Profile</title>
+                <meta name="robots" content="noindex,nofollow"></meta>
+                <meta property="og:title" content="ClickNotes - Profile" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="author" content="Dren Sokoli" />
+                <link rel="icon" href="/public/favicon.ico" />
+            </Head>
             <div className="antialiased flex justify-center items-center sm:h-[650px] h-[700px] h-screen-larger-than-15inch" title='Profile'>
                 <div className="container">
                     <div className="bg-white relative w-5/6 md:w-5/6  lg:w-4/6 xl:w-3/6 mx-auto rounded-md drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">

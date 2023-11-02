@@ -1,0 +1,19 @@
+
+User-agent: *
+Disallow: /profile
+
+# Allow all crawlers
+User-agent: *
+Allow: /movies
+
+# Allow all crawlers
+User-agent: *
+Allow: /tvshows
+
+# Allow all crawlers
+User-agent: *
+Allow: /books
+
+# Allow all crawlers
+User-agent: *
+Allow: /help
