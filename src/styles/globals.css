@@ -63,13 +63,12 @@
   height: 20px;
   top: 10px;
   right: 10px;
-  display: none;
 }
-
+/* 
 .movie-image:hover .arrows {
   display: block;
   cursor: pointer;
-}
+} */
 
 .movie-image .overlay {
   transition: 0.3s ease-in-out;
@@ -131,16 +130,16 @@
 
 .movie-card-button {
   width: 90%;
-  display: none;
+  display: inline-block;
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
 }
-
+/* 
 .movie-card-image-container:hover .movie-card-button {
   display: inline-block;
-}
+} */
 
 .profile-icon {
   font-size: 24px;
