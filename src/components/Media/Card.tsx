@@ -25,6 +25,7 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                             height={300}
                             alt={title}
                             className="rounded-sm h-auto"
+                            loading="lazy"
                         />
                     ) : (
                         <div className="w-[200px] h-[300px]"></div>
@@ -34,9 +35,10 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                         <Image
                             src="/share-black.png"
                             className="arrows"
-                            alt=""
+                            alt="link"
                             width={30}
                             height={30}
+                            loading="lazy"
                         />
                     </Link>
                     <button type="button"
