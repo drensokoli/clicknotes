@@ -29,6 +29,10 @@ export default function Book({ id, title, description, publishedDate, averageRat
 
     const handleAddToNotion = async () => {
         onApiResponse('Adding book to Notion...');
+        if (!session) {
+            signIn('google');
+            return;
+        }
         const response = await fetch('/api/getUser', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

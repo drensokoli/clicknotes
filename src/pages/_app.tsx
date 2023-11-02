@@ -27,28 +27,30 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
   const [showInfoBubble, setShowInfoBubble] = React.useState(false);
 
   useEffect(() => {
-    const getUser = async () => {
-      const response = await fetch('/api/getUser', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userEmail: session?.user?.email }),
-      });
-      const user = await response.json();
+    if (session) {
+      const getUser = async () => {
+        const response = await fetch('/api/getUser', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userEmail: session?.user?.email }),
+        });
+        const user = await response.json();
 
-      if (router.pathname === '/help' || router.pathname === '/auth/signin') {
-        setShowInfoBubble(false);
-      } else if (
-        !session ||
-        !user?.notionApiKey ||
-        (!user?.moviesPageLink && !user?.tvShowsPageLink && !user?.booksPageLink)
-      ) {
-        setShowInfoBubble(true);
-      } else {
-        setShowInfoBubble(false);
-      }
-    };
+        if (router.pathname === '/help' || router.pathname === '/auth/signin') {
+          setShowInfoBubble(false);
+        } else if (
+          !session ||
+          !user?.notionApiKey ||
+          (!user?.moviesPageLink && !user?.tvShowsPageLink && !user?.booksPageLink)
+        ) {
+          setShowInfoBubble(true);
+        } else {
+          setShowInfoBubble(false);
+        }
+      };
 
-    getUser();
+      getUser();
+    }
   }, [session, router.pathname]);
 
 

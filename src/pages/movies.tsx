@@ -35,17 +35,19 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     };
 
     useEffect(() => {
-        const fetchUser = async () => {
-            const response = await fetch('/api/getUser', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userEmail: session?.user?.email }),
-            });
-            const user = await response.json();
-            setNotionApiKey(user.notionApiKey);
-            setMoviesPageLink(user.moviesPageLink);
-        };
-        fetchUser();
+        if (session) {
+            const fetchUser = async () => {
+                const response = await fetch('/api/getUser', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: session?.user?.email }),
+                });
+                const user = await response.json();
+                setNotionApiKey(user.notionApiKey);
+                setMoviesPageLink(user.moviesPageLink);
+            };
+            fetchUser();
+        }
     }, [session]);
 
     return (

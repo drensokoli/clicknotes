@@ -16,11 +16,6 @@
   }
 }
 
-body {
-  background-image: url('/src/styles/media/background.png');
-  background-repeat: repeat;
-}
-
 .movie-info {
   display: flex;
   flex-direction: column;

@@ -35,17 +35,19 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
     };
 
     useEffect(() => {
-        const fetchUser = async () => {
-            const response = await fetch('/api/getUser', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userEmail: session?.user?.email }),
-            });
-            const user = await response.json();
-            setNotionApiKey(user.notionApiKey);
-            setTvShowPageLink(user.tvShowsPageLink);
-        };
-        fetchUser();
+        if (session) {
+            const fetchUser = async () => {
+                const response = await fetch('/api/getUser', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: session?.user?.email }),
+                });
+                const user = await response.json();
+                setNotionApiKey(user.notionApiKey);
+                setTvShowPageLink(user.tvShowsPageLink);
+            };
+            fetchUser();
+        }
     }, [session]);
 
     return (
