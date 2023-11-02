@@ -39,7 +39,7 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                     </button>
                 </div>
 
-                <Link href={link} passHref target='_blank' aria-label={`${title} web link`}>
+                <Link href={link} passHref target='_blank' aria-label={`${title} ${release_date}`}>
                     <h2 className="text-l font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200">
                         <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
                     </h2>
