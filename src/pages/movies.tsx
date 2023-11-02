@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import SearchBar from '@/components/Layout/SearchBar';
+import SearchBar from '@/components/Helpers/SearchBar';
 import NotionAd from '@/components/Notion/NotionAd';
 import Movie from '@/components/Media/Movie';
 import { useSession } from 'next-auth/react';
@@ -8,6 +8,7 @@ import { searchMovieByTitle } from '@/lib/movieHelpers';
 import NotionResponse from '@/components/Notion/NotionResponse';
 import { Movie as MovieInterface } from '@/lib/interfaces';
 import Head from 'next/head';
+import LoadMore from '@/components/Helpers/LoadMore';
 
 export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     tmdbApiKey: string;
@@ -22,6 +23,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     const [notionApiKey, setNotionApiKey] = useState('');
     const [moviesPageLink, setMoviesPageLink] = useState('');
     const [apiResponse, setApiResponse] = useState<string | null>(null);
+    const [displayCount, setDisplayCount] = useState(20);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
@@ -86,24 +88,32 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                             ))}
                     </div>
                     {movies.length === 0 && (
-                        <div className="movie-container">
-                            {popularMovies
-                                .filter((item) => item.vote_average > 6)
-                                .map((item) => (
-                                    <Movie
-                                        {...item}
-                                        key={item.id}
-                                        runtime={0}
-                                        adult={false}
-                                        backdrop_path={''}
-                                        onApiResponse={(error: string) => setApiResponse(error)}
-                                        tmdbApiKey={tmdbApiKey}
-                                        cryptoKey={cryptoKey}
-                                        notionApiKey={notionApiKey}
-                                        moviesPageLink={moviesPageLink}
-                                    />
-                                ))}
-                        </div>
+                        <>
+                            <div className="movie-container">
+                                {popularMovies
+                                    .filter((item) => item.vote_average > 6)
+                                    .slice(0, displayCount)
+                                    .map((item) => (
+                                        <Movie
+                                            {...item}
+                                            key={item.id}
+                                            runtime={0}
+                                            adult={false}
+                                            backdrop_path={''}
+                                            onApiResponse={(error: string) => setApiResponse(error)}
+                                            tmdbApiKey={tmdbApiKey}
+                                            cryptoKey={cryptoKey}
+                                            notionApiKey={notionApiKey}
+                                            moviesPageLink={moviesPageLink}
+                                        />
+                                    ))}
+                            </div>
+                            <LoadMore
+                                displayCount={displayCount}
+                                setDisplayCount={setDisplayCount}
+                                media={popularMovies}
+                            />
+                        </>
                     )}
                 </div>
             </div>
@@ -122,14 +132,26 @@ export const getStaticProps = async () => {
     const popularMoviesResponsePageTwo = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=2&include_adult=false`);
     const popularMoviesResponsePageThree = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=3&include_adult=false`);
     const popularMoviesResponsePageFour = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=4&include_adult=false`);
+    const popularMoviesResponsePageFive = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=5&include_adult=false`);
+    const popularMoviesResponsePageSix = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=6&include_adult=false`);
+    const popularMoviesResponsePageSeven = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=7&include_adult=false`);
+    const popularMoviesResponsePageEight = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=8&include_adult=false`);
+    const popularMoviesResponsePageNine = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=9&include_adult=false`);
+    const popularMoviesResponsePageTen = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=10&include_adult=false`);
 
     const popularMoviesResponse = {
         data: {
             results: [
                 ...popularMoviesResponsePageOne.data.results,
-                // ...popularMoviesResponsePageTwo.data.results,
-                // ...popularMoviesResponsePageThree.data.results,
-                // ...popularMoviesResponsePageFour.data.results
+                ...popularMoviesResponsePageTwo.data.results,
+                ...popularMoviesResponsePageThree.data.results,
+                ...popularMoviesResponsePageFour.data.results,
+                ...popularMoviesResponsePageFive.data.results,
+                ...popularMoviesResponsePageSix.data.results,
+                ...popularMoviesResponsePageSeven.data.results,
+                ...popularMoviesResponsePageEight.data.results,
+                ...popularMoviesResponsePageNine.data.results,
+                ...popularMoviesResponsePageTen.data.results
             ]
         }
     };

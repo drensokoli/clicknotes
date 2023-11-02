@@ -1,7 +1,7 @@
 import React from 'react';
 import { decryptData } from '@/lib/crypto';
 import { genresMapping, getCast, getDirector, getImdb, getTrailer } from '@/lib/movieHelpers';
-import Card from './Card';
+import Card from '../Helpers/Card';
 
 export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, cryptoKey, tmdbApiKey, genre_ids, notionApiKey, moviesPageLink }: {
     id: number;

@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TvShow from '../components/Media/TvShow';
-import SearchBar from '@/components/Layout/SearchBar';
+import SearchBar from '@/components/Helpers/SearchBar';
 import NotionAd from '@/components/Notion/NotionAd';
 import NotionResponse from '@/components/Notion/NotionResponse';
 import { useSession } from 'next-auth/react';
 import { searchTvShowByTitle } from '@/lib/tvShowHelpers';
 import { TvShow as TvShowInterface } from '@/lib/interfaces';
 import Head from 'next/head';
+import LoadMore from '@/components/Helpers/LoadMore';
 
 export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
     tmdbApiKey: string;
@@ -22,6 +23,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
     const [notionApiKey, setNotionApiKey] = useState<string>('');
     const [tvShowsPageLink, setTvShowPageLink] = useState<string>('');
     const [apiResponse, setApiResponse] = useState<string | null>(null);
+    const [displayCount, setDisplayCount] = useState(20);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
@@ -87,19 +89,28 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                     {tvShows.length === 0 && (
                         <>
                             <div className="movie-container">
-                                {popularTvShows.map((item) => (
-                                    <TvShow
-                                        {...item}
-                                        key={item.id}
-                                        first_air_date={''}
-                                        backdrop_path={''}
-                                        onApiResponse={(error: string) => setApiResponse(error)}
-                                        cryptoKey={cryptoKey}
-                                        tmdbApiKey={tmdbApiKey}
-                                        notionApiKey={notionApiKey}
-                                        tvShowsPageLink={tvShowsPageLink}
-                                    />
-                                ))}
+                                <>
+                                    {popularTvShows
+                                        .slice(0, displayCount)
+                                        .map((item) => (
+                                            <TvShow
+                                                {...item}
+                                                key={item.id}
+                                                first_air_date={''}
+                                                backdrop_path={''}
+                                                onApiResponse={(error: string) => setApiResponse(error)}
+                                                cryptoKey={cryptoKey}
+                                                tmdbApiKey={tmdbApiKey}
+                                                notionApiKey={notionApiKey}
+                                                tvShowsPageLink={tvShowsPageLink}
+                                            />
+                                        ))}
+                                        <LoadMore
+                                            displayCount={displayCount}
+                                            setDisplayCount={setDisplayCount}
+                                            media={popularTvShows}
+                                        />
+                                </>
                             </div>
                         </>
                     )}
@@ -119,14 +130,26 @@ export const getStaticProps = async () => {
     const popularTvShowsResponsePageTwo = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=2`);
     const popularTvShowsResponsePageThree = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=3`);
     const popularTvShowsResponsePageFour = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=4`);
+    const popularTvShowsResponsePageFive = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=5`);
+    const popularTvShowsResponsePageSix = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=6`);
+    const popularTvShowsResponsePageSeven = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=7`);
+    const popularTvShowsResponsePageEight = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=8`);
+    const popularTvShowsResponsePageNine = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=9`);
+    const popularTvShowsResponsePageTen = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=10`);
 
     const popularTvShowsResponse = {
         data: {
             results: [
                 ...popularTvShowsResponsePageOne.data.results,
-                // ...popularTvShowsResponsePageTwo.data.results,
-                // ...popularTvShowsResponsePageThree.data.results,
-                // ...popularTvShowsResponsePageFour.data.results
+                ...popularTvShowsResponsePageTwo.data.results,
+                ...popularTvShowsResponsePageThree.data.results,
+                ...popularTvShowsResponsePageFour.data.results,
+                ...popularTvShowsResponsePageFive.data.results,
+                ...popularTvShowsResponsePageSix.data.results,
+                ...popularTvShowsResponsePageSeven.data.results,
+                ...popularTvShowsResponsePageEight.data.results,
+                ...popularTvShowsResponsePageNine.data.results,
+                ...popularTvShowsResponsePageTen.data.results
             ]
         }
     };

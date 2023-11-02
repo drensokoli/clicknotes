@@ -3,7 +3,7 @@ import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
 import Link from 'next/link';
-import Card from './Card';
+import Card from '../Helpers/Card';
 
 export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, language, price, publisher, availability, cryptoKey }: {
     id: string;

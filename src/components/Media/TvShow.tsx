@@ -4,7 +4,7 @@ import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/crypto';
 import Link from 'next/link';
 import { fetchCast, fetchDirector, fetchGenres, fetchTrailer } from '@/lib/tvShowHelpers';
-import Card from './Card';
+import Card from '../Helpers/Card';
 
 export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, cryptoKey, tmdbApiKey, notionApiKey, tvShowsPageLink }: {
   id: number;

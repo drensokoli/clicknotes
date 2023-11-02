@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Book from '../components/Media/Book';
-import SearchBar from '@/components/Layout/SearchBar';
+import SearchBar from '@/components/Helpers/SearchBar';
 import { debounce } from 'lodash';
 import NotionAd from '@/components/Notion/NotionAd';
 import NotionResponse from '@/components/Notion/NotionResponse';
