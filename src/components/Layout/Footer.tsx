@@ -10,13 +10,13 @@ const Footer: React.FC = () => {
       </Link>
       <h1 className='text-gray-800'>Made with ❤️ by
         <span className="text-blue-400">
-          <Link href="https://www.linkedin.com/in/dren-sokoli-0003a81a1/" target="_blank" aria-label='LinkedIn Profile'> Dren Sokoli</Link>
+          <Link href="https://www.linkedin.com/in/dren-sokoli-0003a81a1/" target="_blank" aria-label='Dren Sokoli LinkedIn Profile'> Dren Sokoli</Link>
         </span>
       </h1>
       <p className="text-gray-800 mr-2 ">
         &copy; {new Date().getFullYear()}{' '}
         <span className="text-blue-400">
-          <Link href="https://github.com/drensokoli/clicknotes" target="_blank" aria-label='GitHub Repo'>ClickNotes</Link>
+          <Link href="https://github.com/drensokoli/clicknotes" target="_blank" aria-label='ClickNotes GitHub Repo'>ClickNotes</Link>
         </span>
       </p>
     </footer>

@@ -56,7 +56,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
     <div>
       <Navbar />
       <Component {...pageProps} />
-      {showInfoBubble && (
+      {/* {showInfoBubble && (
         <div className="info-bubble sm:w-[300px] w-[230px]">
           <div
             className="info-bubble__close"
@@ -71,7 +71,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
             >Help Page</span>
           </Link>
         </div>
-      )}
+      )} */}
       <Analytics />
       <Footer />
     </div>
