@@ -47,7 +47,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
         <>
             <Head>
                 <title>ClickNotes - Books</title>
-                <meta name="description" content="Save the New York Times best sellers to your Notion list or search for your books. All your Books in one place, displayed in a beautiful Notion template." />
+                <meta name="description" content="Save the New York Times best sellers to your Notion list or search for your favourite books. All your Books in one place, displayed in a beautiful Notion template." />
                 <meta name="robots" content="index, follow"></meta>
                 <meta property="og:title" content="ClickNotes - Books" />
                 <meta property="og:description" content="Save the New York Times best sellers to your Notion list or search for your books. All your Books in one place, displayed in a beautiful Notion template." />
