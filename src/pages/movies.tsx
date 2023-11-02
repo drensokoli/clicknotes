@@ -113,9 +113,9 @@ export const getStaticProps = async () => {
         data: {
             results: [
                 ...popularMoviesResponsePageOne.data.results,
-                ...popularMoviesResponsePageTwo.data.results,
-                ...popularMoviesResponsePageThree.data.results,
-                ...popularMoviesResponsePageFour.data.results
+                // ...popularMoviesResponsePageTwo.data.results,
+                // ...popularMoviesResponsePageThree.data.results,
+                // ...popularMoviesResponsePageFour.data.results
             ]
         }
     };
