@@ -129,6 +129,17 @@ export default function Navbar() {
                                                             </h1>
                                                         )}
                                                     </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <Link
+                                                                href="/help"
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                aria-label='Help'
+                                                            >
+                                                                help
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
                                                 </Menu.Items>
                                             </Transition>
                                         </Menu>

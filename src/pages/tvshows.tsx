@@ -37,7 +37,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
     };
 
     useEffect(() => {
-        if (session) {
+        if (session && !notionApiKey && !tvShowsPageLink) {
             const fetchUser = async () => {
                 const response = await fetch('/api/getUser', {
                     method: 'POST',

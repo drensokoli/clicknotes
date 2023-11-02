@@ -7,6 +7,7 @@ import NotionAd from '@/components/Notion/NotionAd';
 import NotionResponse from '@/components/Notion/NotionResponse';
 import { Book as BookInterface } from '@/lib/interfaces';
 import Head from 'next/head';
+import { useSession } from 'next-auth/react';
 
 export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bestsellers }: {
     cryptoKey: string;
@@ -14,8 +15,11 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
     nyTimesApiKey: string;
     bestsellers: BookInterface[];
 }) {
+    const { data: session } = useSession();
     const [input, setInput] = useState('');
     const [books, setBooks] = useState<BookInterface[]>([]);
+    const [notionApiKey, setNotionApiKey] = useState<string>('');
+    const [booksPageLink, setBooksPageLink] = useState<string>('');
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
 
@@ -42,6 +46,23 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
             return () => clearTimeout(timer);
         }
     }, [apiResponse]);
+
+    useEffect(() => {
+        if (session && !notionApiKey && !booksPageLink) {
+            const fetchUser = async () => {
+                const response = await fetch('/api/getUser', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: session?.user?.email }),
+                });
+                const user = await response.json();
+                setNotionApiKey(user.notionApiKey);
+                setBooksPageLink(user.tvShowsPageLink);
+            };
+            fetchUser();
+        }
+    }, [session]);
+
 
     return (
         <>
@@ -82,6 +103,8 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
                                 availability={book.saleInfo.saleability}
                                 onApiResponse={(error: string) => setApiResponse(error)}
                                 cryptoKey={cryptoKey}
+                                notionApiKey={notionApiKey}
+                                booksPageLink={booksPageLink}
                             />
                         ))}
                         {books.length === 0 && (
@@ -108,6 +131,8 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
                                                 availability={book.saleInfo.saleability}
                                                 onApiResponse={(error: string) => setApiResponse(error)}
                                                 cryptoKey={cryptoKey}
+                                                notionApiKey={notionApiKey}
+                                                booksPageLink={booksPageLink}
                                             />
                                         ))
                                     }

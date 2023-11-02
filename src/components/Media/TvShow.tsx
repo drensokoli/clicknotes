@@ -26,13 +26,6 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
   const handleAddToNotion = async () => {
     onApiResponse('Adding TV show to Notion...');
 
-    const response = await fetch('/api/getUser', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userEmail: session?.user?.email }),
-    });
-
-    const user = await response.json();
     const rounded_vote_average = Math.round(vote_average * 10) / 10;
     const tmdb_link = `https://www.themoviedb.org/tv/${id}`;
     const defaultDate = "0001-01-01";

@@ -37,7 +37,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     };
 
     useEffect(() => {
-        if (session) {
+        if (session && !notionApiKey && !moviesPageLink) {
             const fetchUser = async () => {
                 const response = await fetch('/api/getUser', {
                     method: 'POST',

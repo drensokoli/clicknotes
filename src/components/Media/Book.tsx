@@ -5,7 +5,7 @@ import { decryptData } from '@/lib/crypto';
 import Link from 'next/link';
 import Card from '../Helpers/Card';
 
-export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, language, price, publisher, availability, cryptoKey }: {
+export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, language, price, publisher, availability, cryptoKey, notionApiKey, booksPageLink }: {
     id: string;
     title: string;
     description: string;
@@ -23,23 +23,15 @@ export default function Book({ id, title, description, publishedDate, averageRat
     publisher?: string;
     availability?: string;
     cryptoKey: string;
+    notionApiKey: string;
+    booksPageLink: string;
 }) {
 
     const { data: session } = useSession();
 
     const handleAddToNotion = async () => {
         onApiResponse('Adding book to Notion...');
-        if (!session) {
-            signIn('google');
-            return;
-        }
-        const response = await fetch('/api/getUser', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userEmail: session?.user?.email }),
-        });
-
-        const user = await response.json();
+        
         const defaultDate = '0001-01-01'
 
         if (description) {
@@ -67,8 +59,8 @@ export default function Book({ id, title, description, publishedDate, averageRat
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                notionApiKey: decryptData(user.notionApiKey, cryptoKey),
-                db_id: decryptData(user.booksPageLink, cryptoKey),
+                notionApiKey: decryptData(notionApiKey, cryptoKey),
+                db_id: decryptData(booksPageLink, cryptoKey),
                 bookData: bookData,
             }),
         });
