@@ -89,7 +89,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                 <meta property="og:title" content="ClickNotes - Profile" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta name="author" content="Dren Sokoli" />
-                <link rel="icon" href="/public/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="antialiased flex justify-center items-center sm:h-[650px] h-[700px] h-screen-larger-than-15inch" title='Profile'>
                 <div className="container">

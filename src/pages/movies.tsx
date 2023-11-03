@@ -63,7 +63,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                 <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta name="author" content="Dren Sokoli" />
-                <link rel="icon" href="/public/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
             </Head>
             <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
