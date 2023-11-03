@@ -72,7 +72,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
     <Card
       id={id}
       title={name}
-      poster_path={`https://image.tmdb.org/t/p/w500${poster_path}`}
+      poster_path={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null}
       release_date={''}
       link={`https://www.themoviedb.org/tv/${id}`}
       handleAddToNotion={handleAddToNotion}

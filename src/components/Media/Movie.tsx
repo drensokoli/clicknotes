@@ -75,7 +75,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
         <Card
             id={id}
             title={title}
-            poster_path={`https://image.tmdb.org/t/p/w500${poster_path}`}
+            poster_path={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null}
             release_date={release_date}
             link={`https://www.themoviedb.org/movie/${id}`}
             handleAddToNotion={handleAddToNotion}
