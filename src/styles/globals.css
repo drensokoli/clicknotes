@@ -49,12 +49,12 @@
   position: relative;
   transition: transform 0.4s, box-shadow 0.2s;
   border-radius: 4px;
-  box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.3);
 }
 
 .movie-image:hover {
   transform: scale(1.01);
-  box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.5);
 }
 
 .movie-image .arrows {
@@ -64,11 +64,6 @@
   top: 10px;
   right: 10px;
 }
-/* 
-.movie-image:hover .arrows {
-  display: block;
-  cursor: pointer;
-} */
 
 .movie-image .overlay {
   transition: 0.3s ease-in-out;
