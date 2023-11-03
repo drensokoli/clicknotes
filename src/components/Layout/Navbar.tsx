@@ -113,31 +113,33 @@ export default function Navbar() {
                                                         {({ active }) => (
                                                             <Link
                                                                 href="/profile"
-                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                target="_blank"
+                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                                 aria-label='Profile'
                                                             >
-                                                                Your Profile
+                                                                Profile
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (  
+                                                            <Link
+                                                                href="/help"
+                                                                target="_blank"
+                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                aria-label='Help'
+                                                            >
+                                                                Help
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <h1
-                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                                 onClick={() => signOut()}>
                                                                 Sign out
                                                             </h1>
-                                                        )}
-                                                    </Menu.Item>
-                                                    <Menu.Item>
-                                                        {({ active }) => (
-                                                            <Link
-                                                                href="/help"
-                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                aria-label='Help'
-                                                            >
-                                                                help
-                                                            </Link>
                                                         )}
                                                     </Menu.Item>
                                                 </Menu.Items>
@@ -156,7 +158,7 @@ export default function Navbar() {
                                         as="a"
                                         href={item.href}
                                         className={`text-gray-500 hover:bg-gray-900 hover:text-white w-full text-center block rounded-md px-3 py-2 text-base font-medium ${router.pathname === item.href ? ' bg-gray-900 text-white' : ''
-                                                        }`}
+                                            }`}
                                         aria-current={item.current ? 'page' : undefined}
                                     >
                                         {item.name}

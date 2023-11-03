@@ -69,7 +69,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
-                    <NotionAd path={"tvshows"} />
+                    {/* <NotionAd path={"tvshows"} /> */}
                     <div className="movie-container">
                         {tvShows
                             .map((item) => (
