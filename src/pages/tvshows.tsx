@@ -105,11 +105,13 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                                 tvShowsPageLink={tvShowsPageLink}
                                             />
                                         ))}
+                                    {displayCount < 180 &&
                                         <LoadMore
                                             displayCount={displayCount}
                                             setDisplayCount={setDisplayCount}
                                             media={popularTvShows}
                                         />
+                                    }
                                 </>
                             </div>
                         </>

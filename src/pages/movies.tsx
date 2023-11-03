@@ -108,11 +108,13 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                                         />
                                     ))}
                             </div>
-                            <LoadMore
-                                displayCount={displayCount}
-                                setDisplayCount={setDisplayCount}
-                                media={popularMovies}
-                            />
+                            {displayCount < 180 &&
+                                <LoadMore
+                                    displayCount={displayCount}
+                                    setDisplayCount={setDisplayCount}
+                                    media={popularMovies}
+                                />
+                            }
                         </>
                     )}
                 </div>
