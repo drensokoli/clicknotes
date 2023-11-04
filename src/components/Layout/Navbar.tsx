@@ -88,7 +88,7 @@ export default function Navbar() {
                                                     >Sign in</button>
 
                                                 ) : (
-                                                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                                                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 mx-[26px]">
                                                         <Image
                                                             className="h-8 w-8 rounded-full"
                                                             src={session?.user?.image?.toString()!}
