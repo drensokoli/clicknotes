@@ -25,17 +25,27 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
-        searchBooksByTitle(event.target.value);
+        searchBooksByTitle(event.target.value)
+            .then(books => {
+                if (books) {
+                    setBooks(books);
+                }
+            })
+            .catch(error => console.error(error));
     };
 
     const searchBooksByTitle = async (title: string) => {
         try {
+            if (title.length === 0) {
+                return [];
+            }
             const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&key=${googleBooksApiKey}`);
-            setBooks(response.data.items);
+            return response.data.items;
         } catch (error) {
             console.error(error);
         }
     };
+
 
     useEffect(() => {
         if (apiResponse !== 'Adding book to Notion...') {
