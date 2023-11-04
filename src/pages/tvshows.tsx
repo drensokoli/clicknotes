@@ -60,7 +60,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                 <meta name="robots" content="all"></meta>
                 <meta property="og:title" content="ClickNotes - TV Shows" />
                 <meta property="og:description" content="Save popular and trending TV shows to your Notion list or search for your favorites. All your TV shows in one place, displayed in a beautiful Notion template." />
-                {/* <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" /> */}
+                <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta name="author" content="Dren Sokoli" />
                 <link rel="icon" href="/favicon.ico" />
@@ -69,7 +69,6 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
-                    {/* <NotionAd path={"tvshows"} /> */}
                     <div className="movie-container">
                         {tvShows
                             .map((item) => (
@@ -85,39 +84,35 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                     tvShowsPageLink={tvShowsPageLink}
                                 />
                             ))}
-                    </div>
-                    {tvShows.length === 0 && (
-                        <>
-                            <div className="movie-container">
-                                <>
-                                    {popularTvShows
-                                        .slice(0, displayCount)
-                                        .map((item) => (
-                                            <TvShow
-                                                {...item}
-                                                key={item.id}
-                                                first_air_date={''}
-                                                backdrop_path={''}
-                                                onApiResponse={(error: string) => setApiResponse(error)}
-                                                cryptoKey={cryptoKey}
-                                                tmdbApiKey={tmdbApiKey}
-                                                notionApiKey={notionApiKey}
-                                                tvShowsPageLink={tvShowsPageLink}
-                                            />
-                                        ))}
-                                    {displayCount < 180 &&
-                                        <LoadMore
-                                            displayCount={displayCount}
-                                            setDisplayCount={setDisplayCount}
-                                            media={popularTvShows}
+                        {tvShows.length === 0 && (
+                            <>
+                                {popularTvShows
+                                    .slice(0, displayCount)
+                                    .map((item) => (
+                                        <TvShow
+                                            {...item}
+                                            key={item.id}
+                                            first_air_date={''}
+                                            backdrop_path={''}
+                                            onApiResponse={(error: string) => setApiResponse(error)}
+                                            cryptoKey={cryptoKey}
+                                            tmdbApiKey={tmdbApiKey}
+                                            notionApiKey={notionApiKey}
+                                            tvShowsPageLink={tvShowsPageLink}
                                         />
-                                    }
-                                </>
-                            </div>
-                        </>
-                    )}
+                                    ))}
+                                {displayCount < 180 &&
+                                    <LoadMore
+                                        displayCount={displayCount}
+                                        setDisplayCount={setDisplayCount}
+                                        media={popularTvShows}
+                                    />
+                                }
+                            </>
+                        )}
+                    </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 

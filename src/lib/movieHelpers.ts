@@ -50,12 +50,19 @@ export async function searchMovieByTitle({ title, tmdbApiKey }: { title: string,
         const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${title}&language=en-US&page=1&include_adult=false`);
 
         const movies = response.data.results;
-        return movies;
 
-        // MOVIE FILTERING
+        const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
+
+        return movies
+            .filter((item: { vote_average: number; }) => item.vote_average > 6)
+            .filter((item: { title: string; }) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
+            .filter((item: { original_title: string; }) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
+            .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)))
+            // .filter((item: { original_language: string; }) => item.original_language === 'yue');
+            
+        // KEYWORD FILTERING
+
         // const movieIds = response.data.results.map((movie: { id: any; }) => movie.id);
-        // const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
-
         // const movies = [];
         // for (let id of movieIds) {
         //     const movieResponse = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${tmdbApiKey}&append_to_response=keywords`);
@@ -67,12 +74,6 @@ export async function searchMovieByTitle({ title, tmdbApiKey }: { title: string,
         //     }
         // }
 
-        // return movies;
-
-            // .filter((item) => item.vote_average > 6)
-            // .filter((item) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
-            // .filter((item) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
-            // .filter((item) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)));
     } catch (error) {
         console.error(error);
     }

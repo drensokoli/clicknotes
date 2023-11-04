@@ -69,7 +69,6 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
-                    {/* <NotionAd path={"movies"} /> */}
                     <div className="movie-container">
                         {movies
                             .map((item) => (
@@ -86,10 +85,8 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                                     moviesPageLink={moviesPageLink}
                                 />
                             ))}
-                    </div>
-                    {movies.length === 0 && (
-                        <>
-                            <div className="movie-container">
+                        {movies.length === 0 && (
+                            <>
                                 {popularMovies
                                     .filter((item) => item.vote_average > 6)
                                     .slice(0, displayCount)
@@ -107,16 +104,16 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                                             moviesPageLink={moviesPageLink}
                                         />
                                     ))}
-                            </div>
-                            {displayCount < 180 &&
-                                <LoadMore
-                                    displayCount={displayCount}
-                                    setDisplayCount={setDisplayCount}
-                                    media={popularMovies}
-                                />
-                            }
-                        </>
-                    )}
+                                {displayCount < 180 &&
+                                    <LoadMore
+                                        displayCount={displayCount}
+                                        setDisplayCount={setDisplayCount}
+                                        media={popularMovies}
+                                    />
+                                }
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
         </>

@@ -24,7 +24,7 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                             width={200}
                             height={300}
                             alt={title}
-                            className="rounded-sm max-h-[300px] mi-h-[300px] h-auto"
+                            className="rounded-sm max-h-[300px] min-h-[300px] h-auto"
                             loading="lazy"
                         />
                     ) : (
