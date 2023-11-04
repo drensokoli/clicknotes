@@ -55,10 +55,10 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
     return (
         <>
             <Head>
-                <title>ClickNotes - TV Shows</title>
+                <title>ClickNotes | TV Shows</title>
                 <meta name="description" content="Save popular and trending TV shows to your Notion list or search for your favourites. All your TV shows in one place, displayed in a beautiful Notion template." />
                 <meta name="robots" content="all"></meta>
-                <meta property="og:title" content="ClickNotes - TV Shows" />
+                <meta property="og:title" content="ClickNotes | TV Shows" />
                 <meta property="og:description" content="Save popular and trending TV shows to your Notion list or search for your favorites. All your TV shows in one place, displayed in a beautiful Notion template." />
                 <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />

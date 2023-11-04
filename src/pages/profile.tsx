@@ -84,9 +84,9 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
     return (
         <>
             <Head>
-                <title>ClickNotes - Profile</title>
+                <title>ClickNotes | Profile</title>
                 <meta name="robots" content="noindex,nofollow"></meta>
-                <meta property="og:title" content="ClickNotes - Profile" />
+                <meta property="og:title" content="ClickNotes | Profile" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta name="author" content="Dren Sokoli" />
                 <link rel="icon" href="/favicon.ico" />

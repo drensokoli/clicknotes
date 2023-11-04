@@ -55,10 +55,10 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     return (
         <>
             <Head>
-                <title>ClickNotes - Movies</title>
+                <title>ClickNotes | Movies</title>
                 <meta name="description" content="Save popular and trending movies to your Notion list or search for your favourites. All your movies in one place, displayed in a beautiful Notion template." />
                 <meta name="robots" content="all"></meta>
-                <meta property="og:title" content="ClickNotes - Movies" />
+                <meta property="og:title" content="ClickNotes | Movies" />
                 <meta property="og:description" content="Save popular and trending movies to your Notion list or search for your favorites. All your movies in one place, displayed in a beautiful Notion template." />
                 <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
