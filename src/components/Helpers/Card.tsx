@@ -25,9 +25,8 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                             height={300}
                             alt={title}
                             className="rounded-sm max-h-[300px] min-h-[300px] h-auto"
-                            // loading="lazy"
                             priority={true}
-                            quality={70}
+                            unoptimized={true}
                         />
                     ) : (
                         <Image
@@ -36,9 +35,8 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                             height={300}
                             alt={title}
                             className="rounded-sm h-auto"
-                            // loading="lazy"
                             priority={true}
-                            quality={70}
+                            unoptimized={true}
                         />
                     )}
                     <button type="button"
