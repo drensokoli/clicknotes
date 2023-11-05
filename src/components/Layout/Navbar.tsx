@@ -41,13 +41,8 @@ export default function Navbar() {
                                 <div className="flex flex-1 items-center justify-between">
                                     <div className="flex-shrink-0 hidden sm:block sm:items-center mx-[40px]">
                                         <Link href="/" aria-label='Home'>
-                                            <Image src="/logo.png" alt="logo" width={30} height={40}
-                                                className="block h-8 w-auto lg:hidden"
-                                            />
-                                        </Link>
-                                        <Link href="/" aria-label='Home'>
-                                            <Image src="/logo.png" alt="logo" width={30} height={40}
-                                                className="hidden h-8 w-auto lg:block"
+                                            <Image src="/logo.png" alt="logo" width={60} height={40}
+                                                className="h-auto"
                                             />
                                         </Link>
                                     </div>
@@ -57,7 +52,7 @@ export default function Navbar() {
                                                 <Link
                                                     key={item.name}
                                                     href={item.href}
-                                                    aria-label='Navigation Link'
+                                                    aria-label={`${item.name} Navigation Link`}
                                                     className={`text-gray-500 border-b-2 hover:border-b-2 hover:border-indigo-400 text-sm font-medium ${router.pathname === item.href ? ' text-gray-800 border-b-2 border-blue-700' : 'border-b-transparent'
                                                         }`}
                                                 >{item.name}
