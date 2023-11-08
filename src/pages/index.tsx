@@ -22,7 +22,7 @@ const IndexPage = () => {
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="author" content="Dren Sokoli" />
       <link rel="icon" href="/favicon.ico" />
-      <link rel="canonical" href="https://clicknotes.site/movies" />
+      {/* <link rel="canonical" href="https://clicknotes.site/movies" /> */}
     </Head>
   )
 };
