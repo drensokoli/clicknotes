@@ -22,6 +22,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
     const [booksPageLink, setBooksPageLink] = useState<string>('');
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
+    const [pageLink, setPageLink] = useState('');
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
@@ -87,7 +88,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
                 <meta name="author" content="Dren Sokoli" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
+            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
@@ -111,6 +112,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
                                 publisher={book.volumeInfo.publisher}
                                 availability={book.saleInfo.saleability}
                                 onApiResponse={(error: string) => setApiResponse(error)}
+                                setPageLink={setPageLink}
                                 cryptoKey={cryptoKey}
                                 notionApiKey={notionApiKey}
                                 booksPageLink={booksPageLink}
@@ -138,6 +140,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
                                             publisher={book.volumeInfo.publisher}
                                             availability={book.saleInfo.saleability}
                                             onApiResponse={(error: string) => setApiResponse(error)}
+                                            setPageLink={setPageLink}
                                             cryptoKey={cryptoKey}
                                             notionApiKey={notionApiKey}
                                             booksPageLink={booksPageLink}

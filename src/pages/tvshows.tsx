@@ -23,6 +23,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
     const [notionApiKey, setNotionApiKey] = useState<string>('');
     const [tvShowsPageLink, setTvShowPageLink] = useState<string>('');
     const [apiResponse, setApiResponse] = useState<string | null>(null);
+    const [pageLink, setPageLink] = useState('');
     const [displayCount, setDisplayCount] = useState(20);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +66,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                 <meta name="author" content="Dren Sokoli" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
+            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
@@ -78,6 +79,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                     first_air_date={''}
                                     backdrop_path={''}
                                     onApiResponse={(error: string) => setApiResponse(error)}
+                                    setPageLink={setPageLink}
                                     cryptoKey={cryptoKey}
                                     tmdbApiKey={tmdbApiKey}
                                     notionApiKey={notionApiKey}
@@ -95,6 +97,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                             first_air_date={''}
                                             backdrop_path={''}
                                             onApiResponse={(error: string) => setApiResponse(error)}
+                                            setPageLink={setPageLink}
                                             cryptoKey={cryptoKey}
                                             tmdbApiKey={tmdbApiKey}
                                             notionApiKey={notionApiKey}

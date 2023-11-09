@@ -23,6 +23,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
     const [notionApiKey, setNotionApiKey] = useState('');
     const [moviesPageLink, setMoviesPageLink] = useState('');
     const [apiResponse, setApiResponse] = useState<string | null>(null);
+    const [pageLink, setPageLink] = useState('');
     const [displayCount, setDisplayCount] = useState(20);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +67,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                 <link rel="icon" href="/favicon.ico" />
                 <link rel="canonical" href="https://clicknotes.site/movies" />
             </Head>
-            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} />
+            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
@@ -80,6 +81,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                                     adult={false}
                                     backdrop_path={''}
                                     onApiResponse={(error: string) => setApiResponse(error)}
+                                    setPageLink={setPageLink}
                                     tmdbApiKey={tmdbApiKey}
                                     cryptoKey={cryptoKey}
                                     notionApiKey={notionApiKey}
@@ -99,6 +101,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                                             adult={false}
                                             backdrop_path={''}
                                             onApiResponse={(error: string) => setApiResponse(error)}
+                                            setPageLink={setPageLink}
                                             tmdbApiKey={tmdbApiKey}
                                             cryptoKey={cryptoKey}
                                             notionApiKey={notionApiKey}

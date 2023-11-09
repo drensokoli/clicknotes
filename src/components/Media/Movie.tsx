@@ -3,7 +3,7 @@ import { decryptData } from '@/lib/crypto';
 import { genresMapping, getCast, getDirector, getImdb, getTrailer } from '@/lib/movieHelpers';
 import Card from '../Helpers/Card';
 
-export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, cryptoKey, tmdbApiKey, genre_ids, notionApiKey, moviesPageLink }: {
+export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, cryptoKey, tmdbApiKey, genre_ids, notionApiKey, moviesPageLink }: {
     id: number;
     title: string;
     overview: string;
@@ -14,6 +14,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
     backdrop_path: string;
     runtime: number;
     onApiResponse: (error: string) => void;
+    setPageLink: (pageLink: string) => void;
     cryptoKey: string;
     tmdbApiKey: string;
     genre_ids: number[];
@@ -65,6 +66,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
         if (notionResponse.ok) {
             const notionResult = await notionResponse.json();
             onApiResponse('Added movie to Notion');
+            setPageLink(notionResult.pageUrl);
         }
         else {
             onApiResponse('Error adding movie to Notion');

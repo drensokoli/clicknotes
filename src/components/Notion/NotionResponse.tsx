@@ -2,7 +2,7 @@ import { set } from 'lodash';
 import Link from 'next/link';
 import React from 'react';
 
-const NotionResponse = ({ apiResponse, setApiResponse }: { apiResponse: string | null, setApiResponse: any }) => {
+const NotionResponse = ({ apiResponse, setApiResponse, pageLink }: { apiResponse: string | null, setApiResponse: any, pageLink: string }) => {
     if (apiResponse === 'Added movie to Notion' || apiResponse === 'Added TV show to Notion' || apiResponse === 'Added book to Notion') {
 
         setTimeout(() => {
@@ -17,7 +17,10 @@ const NotionResponse = ({ apiResponse, setApiResponse }: { apiResponse: string |
                     </svg>
                     <span className="sr-only">Check icon</span>
                 </div>
-                <div className="ml-3 text-sm font-normal">{apiResponse}</div>
+                <div>
+                    <div className="ml-3 text-md font-normal">{apiResponse}</div>
+                    <div className="ml-3 text-sm font-normal"><a href={pageLink} target='_blank' className='text-blue-700 underline font-semibold'>Go to page</a></div>
+                </div>
                 <button type="button"
                     onClick={() => setApiResponse(null)}
                     className="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">

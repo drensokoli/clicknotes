@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { fetchCast, fetchDirector, fetchGenres, fetchTrailer } from '@/lib/tvShowHelpers';
 import Card from '../Helpers/Card';
 
-export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, cryptoKey, tmdbApiKey, notionApiKey, tvShowsPageLink }: {
+export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, cryptoKey, tmdbApiKey, notionApiKey, tvShowsPageLink }: {
   id: number;
   name: string;
   overview: string;
@@ -15,6 +15,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
   poster_path: string;
   backdrop_path: string;
   onApiResponse: (error: string) => void;
+  setPageLink: (pageLink: string) => void;
   cryptoKey: string;
   tmdbApiKey: string;
   notionApiKey: string;
@@ -62,6 +63,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
     if (notionResponse.ok) {
       const notionResult = await notionResponse.json();
       onApiResponse('Added TV show to Notion');
+      setPageLink(notionResult.pageUrl);
     } else {
       onApiResponse('Error adding TV show to Notion');
     }

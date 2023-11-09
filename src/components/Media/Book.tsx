@@ -5,7 +5,7 @@ import { decryptData } from '@/lib/crypto';
 import Link from 'next/link';
 import Card from '../Helpers/Card';
 
-export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, language, price, publisher, availability, cryptoKey, notionApiKey, booksPageLink }: {
+export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, setPageLink, language, price, publisher, availability, cryptoKey, notionApiKey, booksPageLink }: {
     id: string;
     title: string;
     description: string;
@@ -18,6 +18,7 @@ export default function Book({ id, title, description, publishedDate, averageRat
     cover_image?: string;
     previewLink: string;
     onApiResponse: (error: string) => void;
+    setPageLink: (pageLink: string) => void;
     language?: string;
     price?: number;
     publisher?: string;
@@ -68,6 +69,7 @@ export default function Book({ id, title, description, publishedDate, averageRat
         if (notionResponse.ok) {
             const notionResult = await notionResponse.json();
             onApiResponse('Added book to Notion');
+            setPageLink(notionResult.pageUrl);
         } else {
             onApiResponse('Error adding book to Notion');
         }

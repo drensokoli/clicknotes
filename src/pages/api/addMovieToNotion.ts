@@ -127,6 +127,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 ],
 
             });
+
+            const pageUrl = `https://www.notion.so/${existingPageId.replace(/-/g, '')}`;
+
+            res.status(200).json({ message: "Movie updated in Notion.", pageUrl });
         }
         else {
             const newPage = await notion.pages.create({
@@ -244,8 +248,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 ],
             });
 
+            const pageUrl = `https://www.notion.so/${newPage.id.replace(/-/g, '')}`;
+
+            res.status(200).json({ message: "Movie added to Notion.", pageUrl });
         }
-        res.status(200).json({ message: "Movie added/updated to Notion.", movieData });
     } catch (error) {
         res.status(500).json({ message: "Error occurred while adding/updating movie to Notion.", error });
     }

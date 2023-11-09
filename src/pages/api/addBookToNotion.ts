@@ -135,6 +135,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 ],
             });
+
+            const pageUrl = `https://www.notion.so/${existingPageId.replace(/-/g, '')}`;
+
+            res.status(200).json({ message: "Book added/updated to Notion.", pageUrl });
         } else {
             const newPage = await notion.pages.create({
                 parent: {
@@ -252,8 +256,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 ],
             });
+
+            const pageUrl = `https://www.notion.so/${newPage.id.replace(/-/g, '')}`;
+
+            res.status(200).json({ message: "Book added/updated to Notion.", pageUrl });
         }
-        res.status(200).json({ message: "Book added/updated to Notion.", bookData });
     } catch (error) {
         res.status(500).json({ message: "Error occurred while adding/updating book to Notion.", error });
     }
