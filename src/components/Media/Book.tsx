@@ -28,8 +28,6 @@ export default function Book({ id, title, description, publishedDate, averageRat
     booksPageLink: string;
 }) {
 
-    const { data: session } = useSession();
-
     const handleAddToNotion = async () => {
         onApiResponse('Adding book to Notion...');
         

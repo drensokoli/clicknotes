@@ -108,7 +108,6 @@ export default function Navbar() {
                                                         {({ active }) => (
                                                             <Link
                                                                 href="/profile"
-                                                                target="_blank"
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                                 aria-label='Profile'
                                                             >
@@ -120,7 +119,6 @@ export default function Navbar() {
                                                         {({ active }) => (  
                                                             <Link
                                                                 href="/help"
-                                                                target="_blank"
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                                 aria-label='Help'
                                                             >

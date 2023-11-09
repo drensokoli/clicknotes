@@ -68,7 +68,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
                 });
                 const user = await response.json();
                 setNotionApiKey(user.notionApiKey);
-                setBooksPageLink(user.tvShowsPageLink);
+                setBooksPageLink(user.booksPageLink);
             };
             fetchUser();
         }
