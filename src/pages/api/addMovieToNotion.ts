@@ -85,48 +85,48 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
             });
 
-            const contentUpdateResponse = await notion.blocks.children.append({
-                block_id: existingPageId,
-                children: [
-                    {
-                        object: 'block',
-                        type: 'embed',
-                        embed: {
-                            url: movieData.poster_path,
-                        },
-                    },
-                    {
-                        object: 'block',
-                        type: 'paragraph',
-                        paragraph: {
-                            rich_text: [
-                                {
-                                    type: 'text',
-                                    text: {
-                                        content: movieData.overview,
-                                    },
-                                },
-                            ],
+            // const contentUpdateResponse = await notion.blocks.children.append({
+            //     block_id: existingPageId,
+            //     children: [
+            //         {
+            //             object: 'block',
+            //             type: 'embed',
+            //             embed: {
+            //                 url: movieData.poster_path,
+            //             },
+            //         },
+            //         {
+            //             object: 'block',
+            //             type: 'paragraph',
+            //             paragraph: {
+            //                 rich_text: [
+            //                     {
+            //                         type: 'text',
+            //                         text: {
+            //                             content: movieData.overview,
+            //                         },
+            //                     },
+            //                 ],
 
-                        },
-                    },
-                    {
-                        object: 'block',
-                        type: 'embed',
-                        embed: {
-                            url: movieData.trailer,
-                        },
-                    },
-                    // {
-                    //     object: 'block',
-                    //     type: 'bookmark',
-                    //     bookmark: {
-                    //         url: movieData.tpb_link,
-                    //     },
-                    // }
-                ],
+            //             },
+            //         },
+            //         {
+            //             object: 'block',
+            //             type: 'embed',
+            //             embed: {
+            //                 url: movieData.trailer,
+            //             },
+            //         },
+            //         // {
+            //         //     object: 'block',
+            //         //     type: 'bookmark',
+            //         //     bookmark: {
+            //         //         url: movieData.tpb_link,
+            //         //     },
+            //         // }
+            //     ],
 
-            });
+            // });
 
             const pageUrl = `https://www.notion.so/${existingPageId.replace(/-/g, '')}`;
 

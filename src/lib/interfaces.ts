@@ -5,6 +5,7 @@ export interface Movie {
     original_title: string;
     overview: string;
     poster_path: string;
+    backdrop_path: string;
     vote_average: number;
     release_date: string;
     genre_ids: number[];
@@ -17,6 +18,7 @@ export interface TvShow {
     name: string;
     overview: string;
     poster_path: string;
+    backdrop_path: string;
     vote_average: number;
     vote_count: number;
     release_date: string;

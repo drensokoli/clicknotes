@@ -77,7 +77,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                     {...item}
                                     key={item.id}
                                     first_air_date={''}
-                                    backdrop_path={''}
+                                    backdrop_path={item.backdrop_path}
                                     onApiResponse={(error: string) => setApiResponse(error)}
                                     setPageLink={setPageLink}
                                     cryptoKey={cryptoKey}
@@ -95,7 +95,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                             {...item}
                                             key={item.id}
                                             first_air_date={''}
-                                            backdrop_path={''}
+                                            backdrop_path={item.backdrop_path}
                                             onApiResponse={(error: string) => setApiResponse(error)}
                                             setPageLink={setPageLink}
                                             cryptoKey={cryptoKey}

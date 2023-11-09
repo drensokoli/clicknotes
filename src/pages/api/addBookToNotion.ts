@@ -100,41 +100,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
             });
 
-            const contentUpdateResponse = await notion.blocks.children.append({
-                block_id: existingPageId,
-                children: [
-                    {
-                        object: 'block',
-                        type: 'paragraph',
-                        paragraph: {
-                            rich_text: [
-                                {
-                                    type: 'text',
-                                    text: {
-                                        content: bookData.description,
-                                    },
-                                },
-                            ],
-                        },
+            // const contentUpdateResponse = await notion.blocks.children.append({
+            //     block_id: existingPageId,
+            //     children: [
+            //         {
+            //             object: 'block',
+            //             type: 'paragraph',
+            //             paragraph: {
+            //                 rich_text: [
+            //                     {
+            //                         type: 'text',
+            //                         text: {
+            //                             content: bookData.description,
+            //                         },
+            //                     },
+            //                 ],
+            //             },
 
-                    },
-                    {
-                        object: 'block',
-                        type: 'embed',
-                        embed: {
-                            url: bookData.cover_image,
-                            caption: [
-                                {
-                                    type: 'text',
-                                    text: {
-                                        content: 'Book Cover Image',
-                                    },
-                                },
-                            ],
-                        },
-                    }
-                ],
-            });
+            //         },
+            //         {
+            //             object: 'block',
+            //             type: 'embed',
+            //             embed: {
+            //                 url: bookData.cover_image,
+            //                 caption: [
+            //                     {
+            //                         type: 'text',
+            //                         text: {
+            //                             content: 'Book Cover Image',
+            //                         },
+            //                     },
+            //                 ],
+            //             },
+            //         }
+            //     ],
+            // });
 
             const pageUrl = `https://www.notion.so/${existingPageId.replace(/-/g, '')}`;
 
