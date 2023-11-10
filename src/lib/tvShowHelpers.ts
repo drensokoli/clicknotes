@@ -10,11 +10,11 @@ export async function searchTvShowByTitle({ title, tmdbApiKey }: { title: string
         const response = await axios.get(`https://api.themoviedb.org/3/search/tv?api_key=${tmdbApiKey}&query=${title}&with_genres=${include_genres}&certification_country=${certification_country}&certification=${certification}`);
         const tvShows = response.data.results;
 
-        return tvShows;
-            // .filter((item: { vote_average: number; }) => item.vote_average > 6)
-            // .filter((item: { name: string; }) => !adultContent.some((word) => item.name && item.name.toLowerCase().includes(word)))
-            // .filter((item: { title: string; }) => !adultContent.some((word) => item.title && item.title.toLowerCase().includes(word)))
-            // .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview && item.overview.toLowerCase().includes(word)))
+        return tvShows
+            .filter((item: { vote_average: number; }) => item.vote_average > 6)
+            .filter((item: { name: string; }) => !adultContent.some((word) => item.name && item.name.toLowerCase().includes(word)))
+            .filter((item: { title: string; }) => !adultContent.some((word) => item.title && item.title.toLowerCase().includes(word)))
+            .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview && item.overview.toLowerCase().includes(word)))
             // .filter((item: { original_language: string; }) => item.original_language === 'yue');
 
         // KEYWORD FILTERING

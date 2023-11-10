@@ -53,12 +53,11 @@ export async function searchMovieByTitle({ title, tmdbApiKey }: { title: string,
 
         const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
 
-        return movies;
-            // .filter((item: { vote_average: number; }) => item.vote_average > 6)
-            // .filter((item: { title: string; }) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
-            // .filter((item: { original_title: string; }) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
-            // .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)))
-            // .filter((item: { original_language: string; }) => item.original_language === 'yue');
+        return movies
+            .filter((item: { vote_average: number; }) => item.vote_average > 6)
+            .filter((item: { title: string; }) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
+            .filter((item: { original_title: string; }) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
+            .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)))
             
         // KEYWORD FILTERING
 
