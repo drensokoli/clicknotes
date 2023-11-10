@@ -14,7 +14,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
 
     const [notionApiKey, setNotionApiKey] = useState('');
     const [moviesPageLink, setMoviesPageLink] = useState('');
-    const [tvShowsPageLink, setTvShowsPageLink] = useState('');
+    // const [tvShowsPageLink, setTvShowsPageLink] = useState('');
     const [booksPageLink, setBooksPageLink] = useState('');
 
     const router = useRouter();
@@ -35,13 +35,13 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
         }
     }
 
-    async function handleTvShowsPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
-        try {
-            tvShowsLinkSubmit(tvShowsPageLink, userEmail, cryptoKey);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+    // async function handleTvShowsPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
+    //     try {
+    //         tvShowsLinkSubmit(tvShowsPageLink, userEmail, cryptoKey);
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // }
 
     async function handleBooksPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
@@ -66,7 +66,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
 
             data.notionApiKey && setNotionApiKey(decryptData(data.notionApiKey, cryptoKey));
             data.moviesPageLink && setMoviesPageLink(decryptData(data.moviesPageLink, cryptoKey));
-            data.tvShowsPageLink && setTvShowsPageLink(decryptData(data.tvShowsPageLink, cryptoKey));
+            // data.tvShowsPageLink && setTvShowsPageLink(decryptData(data.tvShowsPageLink, cryptoKey));
             data.booksPageLink && setBooksPageLink(decryptData(data.booksPageLink, cryptoKey));
 
         } catch (error) {
