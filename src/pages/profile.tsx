@@ -92,20 +92,13 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="flex justify-center items-center" title='Profile'>
-                <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] pt-10 2xl:mt-10 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">
+                <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] pt-12 2xl:mt-10 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">
                     <div className="flex justify-center">
                         <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={50} height={50} />
                     </div>
                     <h1 className="font-bold text-center text-3xl text-gray-900 mt-2">{session?.user?.name}</h1>
                     <div className="w-full">
                         <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm pb-4">
-                            <button data-tooltip-target="tooltip-dark"
-                                type="button"
-                                className="text-white bg-pink-500  font-medium rounded-3xl text-center shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none fixed top-4 right-4 w-8 h-8"
-                                onClick={() => router.push('/help')}
-                            >
-                                ?
-                            </button>
                             <div id="tooltip-dark" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-xs font-small text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                                 Need help?
                                 <div className="tooltip-arrow" data-popper-arrow></div>
@@ -154,6 +147,16 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                                     </div>
                                 </form>
                             </div>
+                            <a
+                                className='flex flex-row justify-center items-center gap-2 py-4'
+                                href='/help'
+                            >
+                                <button
+                                    type="button"
+                                    className="text-white bg-pink-500  font-medium rounded-3xl text-center shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none w-8 h-8"
+                                >?</button>
+                                <h1 className='text-md font-semibold hover:underline text-gray-600'>Not sure what to do?</h1>
+                            </a>
                         </div>
                     </div>
                 </div>
