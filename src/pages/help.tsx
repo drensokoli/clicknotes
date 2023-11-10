@@ -30,8 +30,10 @@ export default function Help() {
             <div className="flex flex-col justify-center items-center w-full">
                 <div className="flex flex-col py-8 px-8 sm:px-16 justify-center lg:w-4/6 w-full">
                     <h1 className="text-2xl font-semibold">What is ClickNotes?</h1>
+                    <p className="py-6">ClickNotes uses the TMDB, Google Books and NY Times API to fetch movies, tv shows and books which they can then save to their Notion databases using the Notion API.</p>
                     {/* <Image src={Logo} width={180} height={200} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8" /> */}
                     <h1 className="text-2xl font-semibold">What is Notion?</h1>
+                    <p className="py-6">Notion is a freemium productivity and note-taking web application developed by Notion Labs Inc. It offers organizational tools including task management, project tracking, to-do lists, and bookmarking.</p>
                     <h1 className="text-2xl font-semibold">Connecting ClickNotes to Your Notion Account</h1>
                     <p className="pt-6">Setting up a connection between ClickNotes and your Notion account may seem intimidating, but it's very straightforward. I've broken down the process into three easy steps that should take no more than five minutes to complete.</p>
                     <p>If you want to learn more about the technical implementaion of this project, make sure to read the <span className="text-blue-500"><Link href="https://github.com/drensokoli/clicknotes" aria-label='GitHub Repo'>documentation</Link></span>.</p>
