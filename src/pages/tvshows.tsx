@@ -47,7 +47,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                 });
                 const user = await response.json();
                 setNotionApiKey(user.notionApiKey);
-                setTvShowPageLink(user.tvShowsPageLink);
+                setTvShowPageLink(user.moviesPageLink);
             };
             fetchUser();
         }
