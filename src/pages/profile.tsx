@@ -91,6 +91,9 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta name="author" content="Dren Sokoli" />
                 <link rel="icon" href="/favicon.ico" />
+                <meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta>
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script>
             </Head>
             <div className="flex justify-center items-center" title='Profile'>
                 <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] pt-12 2xl:mt-10 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">
