@@ -7,6 +7,7 @@ import 'flowbite';
 import { notionApiKeySubmit, moviesLinkSubmit, tvShowsLinkSubmit, booksLinkSubmit } from '../lib/profileHelpers';
 import Send from '../../public/send.png';
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Profile({ cryptoKey }: { cryptoKey: string }) {
     const { data: session, status } = useSession();
@@ -147,7 +148,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                                     </div>
                                 </form>
                             </div>
-                            <a
+                            <Link
                                 className='flex flex-row justify-center items-center gap-2 py-4'
                                 href='/help'
                             >
@@ -156,7 +157,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                                     className="text-white bg-pink-500  font-medium rounded-3xl text-center shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none w-8 h-8"
                                 >?</button>
                                 <h1 className='text-md font-semibold hover:underline text-gray-600'>Not sure what to do?</h1>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
