@@ -100,7 +100,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                     <div className="flex justify-center">
                         <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={50} height={50} />
                     </div>
-                    <h1 className="font-bold text-center text-3xl text-gray-900 mt-2">{session?.user?.name}</h1>
+                    <h1 className="font-bold text-center text-3xl text-gray-700 mt-2">{session?.user?.name}</h1>
                     <div className="w-full">
                         <div className="mt-5 w-full flex flex-col items-center overflow-hidden text-sm pb-4">
                             <div id="tooltip-dark" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-xs font-small text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">

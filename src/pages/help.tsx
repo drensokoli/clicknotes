@@ -28,24 +28,37 @@ export default function Help() {
                     crossOrigin="anonymous"></script>
             </Head>
             <div className="flex flex-col justify-center items-center w-full">
-                <div className="flex flex-col py-8 px-8 sm:px-16 justify-center lg:w-4/6 w-full">
-                    <h1 className="text-2xl font-semibold">What is ClickNotes?</h1>
-                    <p className="py-6">ClickNotes uses the TMDB, Google Books and NY Times API to fetch movies, tv shows and books which they can then save to their Notion databases using the Notion API.</p>
-                    {/* <Image src={Logo} width={180} height={200} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8" /> */}
-                    <h1 className="text-2xl font-semibold">What is Notion?</h1>
-                    <p className="py-6">Notion is a freemium productivity and note-taking web application developed by Notion Labs Inc. It offers organizational tools including task management, project tracking, to-do lists, and bookmarking.</p>
+                <div className="flex flex-col py-4 px-8 sm:px-16 justify-center lg:w-4/6 w-full">
                     <h1 className="text-2xl font-semibold">Connecting ClickNotes to Your Notion Account</h1>
+
                     <p className="pt-6">Setting up a connection between ClickNotes and your Notion account may seem intimidating, but it's very straightforward. I've broken down the process into three easy steps that should take no more than five minutes to complete.</p>
-                    <p>If you want to learn more about the technical implementaion of this project, make sure to read the <span className="text-blue-500"><Link href="https://github.com/drensokoli/clicknotes" aria-label='GitHub Repo'>documentation</Link></span>.</p>
+                    <p>If you want to learn more about the technical implementaion of this project, make sure to read the <span className="text-blue-600 hover:underline"><Link href="https://github.com/drensokoli/clicknotes" aria-label='GitHub Repo' target="_blank">documentation</Link></span>.</p>
+
+                    <iframe src="https://www.youtube.com/embed/gp2yhkVw0z4" title="What is Notion?" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        className="w-full md:h-[450px] h-48 my-4"
+                    ></iframe>
+
+                    <h1 className="text-2xl font-semibold">What is ClickNotes?</h1>
+                    <p className="py-6">ClickNotes is an open source project written in React intended on simplifying the note-taking of your movies, tvshows and books list. ClickNotes uses the TMDB, Google Books and NY Times API to fetch movies, tv shows and books which users can then save to their Notion databases using the Notion API - all this done in the single click of a button.</p>
+                    {/* <Image src={Logo} width={150} height={200} alt={""} className="py-4 m-auto" /> */}
+
+                    <h1 className="text-2xl font-semibold">What is Notion?</h1>
+                    <p className="py-6">Notion is a freemium productivity and note-taking web application developed by Notion Labs Inc. It offers organizational tools including task management, project tracking, to-do lists, and bookmarking. It's known for its flexibility, allowing users to create databases, manage projects, take notes, collaborate with teams, and more. Notion uses a block-based system where different types of content—text, images, databases, files, and more—are organized into blocks that can be manipulated and arranged in various ways. This flexibility enables users to create custom structures that suit their specific needs, whether it's for personal task management, team collaboration, or knowledge organization. Its adaptability makes it popular among individuals and teams looking for a centralized workspace that can be customized to fit their workflows.</p>
+                    <p className="pb-4 m-auto text-lg">Use this <span className="text-blue-600 hover:underline"><Link target="_blank" href="https://affiliate.notion.so/8ieljsf8weuq" aria-label='Notion'>link</Link></span> to create a Notion account if you don't already have one.</p>
+
+                    <iframe src="https://www.youtube.com/embed/gp2yhkVw0z4" title="What is Notion?" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        className="w-full md:h-96 h-48 mb-4"
+                    ></iframe>
+
                     <div className="flex flex-col mt-10 justify-center w-full">
                         <h1 className="text-xl font-semibold">Step 1: Create an Integration in Notion</h1>
-                        <p className="pt-4">If you don't already have a Notion account, you can create one <span className="text-blue-500"><Link href="https://www.notion.so/" aria-label='Notion'>here</Link></span>.</p>
-                        <p>Once you've set up your account, navigate to the <span className="text-blue-500 underline"><Link href="https://www.notion.so/my-integrations" aria-label='Your Notion Integrations'>notion.so/my-integrations</Link></span> section and click on "Create new integration." Give it a name and Notion will generate an Internal Integration Token for you. This token will be used to establish a connection between ClickNotes and Notion.</p>
-                        <Image src={StepOne} width={700} height={600} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8" />
+                        <p className="pt-4">In order to connect ClickNotes to your Notion account, you'll need to create an Integration in Notion. This is a simple process that requires no coding knowledge.</p>
+                        <p>Once you've set up your account, navigate to the <span className="text-blue-600 hover:underline"><Link target="_blank" href="https://www.notion.so/my-integrations" aria-label='Your Notion Integrations'>notion.so/my-integrations</Link></span> section and click on "Create new integration". Give it a name and Notion will generate an Internal Integration Token for you. This token will be used to establish a connection between ClickNotes and Notion.</p>
+                        <Image src={StepOne} width={700} height={600} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8 shadow-xl" />
                     </div>
                     <div className="flex flex-col mt-10 justify-center w-full">
                         <h1 className="text-xl font-semibold">Step 2: Duplicate the ClickNotes Official Templates</h1>
-                        <p className="pt-4">I've created three Notion templates that you'll need to duplicate to store your content. The column names and types of these templates are compatible with the ClickNotes API, so make sure not to modify them. Feel free to add new columns, but note that they won't be affected by the ClickNotes API and will need to be filled in manually (e.g "My rating").</p>
+                        <p className="pt-4">I've created these Notion templates that you'll need to duplicate to store your content. The column names and types of these templates are compatible with the ClickNotes API, so make sure not to modify them. Feel free to add new columns, but note that they won't be affected by the ClickNotes API and will need to be filled in manually (e.g "My rating").</p>
                         <div className="flex md:flex-row flex-col justify-center items-center gap-4 py-4">
                             <div className="flex flex-col justify-center items-center">
                                 <Link
@@ -76,10 +89,9 @@ export default function Help() {
                     </div>
                     <div className="flex flex-col mt-10 justify-center w-full">
                         <h1 className="text-xl font-semibold">Step 3: Connect Your Database</h1>
-                        <p className="pt-4">After duplicating the templates, you'll need to add the Token generated in the previous step as a connection by clicking on the "Add connections" button and searching for it by name. This action grants your Integration Token read and write permissions to the corresponding Notion page.</p>
-                        <Image src={StepThree} width={700} height={600} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8" />
-                        <p>Finally, save your page (database) link in your ClickNotes profile page by clicking "Share," "Copy link," and pasting it in the appropriate input field in your ClickNotes profile page.</p>
-                        <p>These steps apply to any of the three content types you want to save. Just add the respective template and save the link to the corresponding field in your profile page.</p>
+                        <p className="pt-4">After duplicating the templates, you'll need to add the Integration Token generated in the previous step as a connection by clicking on the "Add connections" button and searching for it by name. This action grants your Integration Token read and write permissions to the corresponding Notion page.</p>
+                        <p>Finally, click "Share", "Copy link" and paste your page link into your <span className="text-blue-600 hover:underline"><Link href="https://clicknotes.site/profile" aria-label='GitHub Repo' target="_blank">ClickNotes profile page</Link></span>.</p>
+                        <Image src={StepThree} width={700} height={600} alt={""} style={{ display: 'block', margin: 'auto' }} className="py-8 shadow-xl" />
                     </div>
                     <div className="flex flex-col mt-10 justify-center w-full">
                         <p className="text-center">🎉 That's it! You've successfully connected your Notion database to ClickNotes! 🎉</p>
