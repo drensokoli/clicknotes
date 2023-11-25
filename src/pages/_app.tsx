@@ -33,21 +33,21 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
         {router.pathname === '/movies' ? (
           <Link
             href="/help" >
-            <Image src="/connectmovies.png" alt="Movies Logo" width={250} height={250}
+            <Image src="/connectmovies.png" alt="Connect Movies" width={250} height={250}
             // className='py-2 px-6 shadow-2xl rounded-lg'
             />
           </Link>
         ) : router.pathname === '/tvshows' ? (
           <Link
             href="/help" >
-            <Image src="/connecttvshows.png" alt="TV Shows Logo" width={250} height={250}
+            <Image src="/connecttvshows.png" alt="Connect TVShows" width={250} height={250}
             // className='py-2 px-6 shadow-2xl rounded-lg'
             />
           </Link>
         ) : router.pathname === '/books' ? (
           <Link
             href="/help" >
-            <Image src="/connectbooks.png" alt="Books Logo" width={250} height={250}
+            <Image src="/connectbooks.png" alt="Connect Books" width={250} height={250}
             // className='py-2 px-6 shadow-2xl rounded-lg'
             />
           </Link>

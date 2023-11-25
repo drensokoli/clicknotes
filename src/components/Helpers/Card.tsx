@@ -3,7 +3,7 @@ import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import Link from 'next/link';
 
-export default function fCard({ id, title, poster_path, release_date, link, handleAddToNotion }: {
+export default function Card({ id, title, poster_path, release_date, link, handleAddToNotion }: {
     id: number | string;
     title: string;
     poster_path: string | null | undefined;
