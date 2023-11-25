@@ -46,7 +46,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       director: director || '[Missing]',
       vote_average: rounded_vote_average,
       tmdb_link: tmdb_link,
-      poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
+      poster_path: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null,
       backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
     };
 

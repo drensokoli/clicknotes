@@ -3,7 +3,7 @@ import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import Link from 'next/link';
 
-export default function Card({ id, title, poster_path, release_date, link, handleAddToNotion }: {
+export default function fCard({ id, title, poster_path, release_date, link, handleAddToNotion }: {
     id: number | string;
     title: string;
     poster_path: string | null | undefined;
@@ -47,7 +47,7 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                 </div>
 
                 <Link href={link} passHref target='_blank' aria-label={`${title} ${release_date}`}>
-                    <h2 className="text-l font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200">
+                    <h2 className="font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200">
                         <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
                     </h2>
                 </Link>

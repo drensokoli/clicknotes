@@ -8,6 +8,7 @@ import Footer from '@/components/Layout/Footer';
 import { NextRouter } from 'next/router';
 import { Analytics } from '@vercel/analytics/react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface WrappedAppProps extends Omit<AppProps, 'router'> {
   router: NextRouter;
@@ -28,6 +29,31 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
   return (
     <div>
       <Navbar />
+      <div className='flex flex-row justify-center items-center pb-8'>
+        {router.pathname === '/movies' ? (
+          <Link
+            href="/help" >
+            <Image src="/connectmovies.png" alt="Movies Logo" width={250} height={250}
+            // className='py-2 px-6 shadow-2xl rounded-lg'
+            />
+          </Link>
+        ) : router.pathname === '/tvshows' ? (
+          <Link
+            href="/help" >
+            <Image src="/connecttvshows.png" alt="TV Shows Logo" width={250} height={250}
+            // className='py-2 px-6 shadow-2xl rounded-lg'
+            />
+          </Link>
+        ) : router.pathname === '/books' ? (
+          <Link
+            href="/help" >
+            <Image src="/connectbooks.png" alt="Books Logo" width={250} height={250}
+            // className='py-2 px-6 shadow-2xl rounded-lg'
+            />
+          </Link>
+        ) : null
+        }
+      </div>
       <Component {...pageProps} />
       <Analytics />
       <Footer />

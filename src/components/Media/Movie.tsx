@@ -48,7 +48,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
             imdb_link: imdb_link,
             director: director || "[Missing]",
             trailer: trailer || '',
-            poster_path: `https://image.tmdb.org/t/p/w500${poster_path}`,
+            poster_path: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null,
             backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
         };
 

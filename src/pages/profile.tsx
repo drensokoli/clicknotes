@@ -96,7 +96,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                     crossOrigin="anonymous"></script>
             </Head>
             <div className="flex justify-center items-center" title='Profile'>
-                <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] pt-12 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]">
+                <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] pt-12 shadow-xl">
                     <div className="flex justify-center">
                         <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={50} height={50} />
                     </div>
