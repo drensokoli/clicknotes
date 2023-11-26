@@ -31,7 +31,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
       <Navbar />
       <div>
         <Link href="https://affiliate.notion.so/8ieljsf8weuq" target='_blank' aria-label='Notion'>
-          <Image src="/affiliate-black.png" alt="logo" width={130} height={130} className='fixed bottom-5 right-5 z-10 shadow-xl' />
+          <Image src="/affiliate-white.png" alt="logo" width={130} height={130} className='fixed bottom-5 right-5 z-10 shadow-xl' />
         </Link>
       </div>
       <div className='flex flex-row justify-center items-center pb-8'>
