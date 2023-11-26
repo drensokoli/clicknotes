@@ -6,6 +6,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/dist/client/image';
+import { BsPersonFill, BsQuestionCircleFill, BsBoxArrowInRight } from 'react-icons/bs';
 
 export default function Navbar() {
     const { data: session, status } = useSession();
@@ -111,28 +112,62 @@ export default function Navbar() {
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                                 aria-label='Profile'
                                                             >
-                                                                Profile
-                                                            </Link>
-                                                        )}
-                                                    </Menu.Item>
-                                                    <Menu.Item>
-                                                        {({ active }) => (  
-                                                            <Link
-                                                                href="/help"
-                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                aria-label='Help'
-                                                            >
-                                                                Help
+                                                                <div className='flex flex-row justify-start items-center gap-1'>
+                                                                    <BsPersonFill />
+                                                                    <h1>Profile</h1>
+                                                                </div>
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <h1
+                                                            <Link
+                                                                href="/help"
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                onClick={() => signOut()}>
-                                                                Sign out
-                                                            </h1>
+                                                                aria-label='Help'
+                                                            >
+                                                                <div className='flex flex-row justify-start items-center gap-1'>
+                                                                    <BsQuestionCircleFill />
+                                                                    <h1>Help</h1>
+                                                                </div>
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <Link
+                                                                href="https://affiliate.notion.so/8ieljsf8weuq"
+                                                                target='_blank'
+                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                aria-label='Notion'
+                                                            >
+                                                                <div className='flex flex-row justify-start items-center gap-1'>
+                                                                    <Image src="/notion-logo-block-mono-black.png" width={15} height={15} alt={''} />
+                                                                    <h1>Notion</h1>
+                                                                </div>
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+
+                                                            <button
+                                                                onClick={() => signOut()}
+                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200 w-full' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                aria-label='Notion'
+                                                            >
+                                                                <div className='flex flex-row justify-start items-center gap-1'>
+                                                                    <BsBoxArrowInRight />
+                                                                    <h1>Sign Out</h1>
+                                                                </div>
+                                                            </button>
+                                                            // <div
+                                                            // className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'px-4 py-2 text-sm text-gray-700 flex flex-row justify-start items-center gap-1')}>
+                                                            //     <BsGrid3X3GapFill />
+                                                            //     <h1
+                                                            //         onClick={() => signOut()}>Sign out</h1>
+                                                            // </div>
+
                                                         )}
                                                     </Menu.Item>
                                                 </Menu.Items>

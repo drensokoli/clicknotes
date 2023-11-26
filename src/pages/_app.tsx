@@ -29,26 +29,31 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
   return (
     <div>
       <Navbar />
+      <div>
+        <Link href="https://affiliate.notion.so/8ieljsf8weuq" target='_blank' aria-label='Notion'>
+          <Image src="/affiliate-black.png" alt="logo" width={130} height={130} className='fixed bottom-5 right-5 z-10 shadow-xl' />
+        </Link>
+      </div>
       <div className='flex flex-row justify-center items-center pb-8'>
         {router.pathname === '/movies' ? (
           <Link
             href="/help" >
             <Image src="/connectmovies.png" alt="Connect Movies" width={250} height={250}
-            // className='py-2 px-6 shadow-2xl rounded-lg'
+            className='py-2 px-6 hover:shadow-2xl shadow-lg rounded-lg'
             />
           </Link>
         ) : router.pathname === '/tvshows' ? (
           <Link
             href="/help" >
             <Image src="/connecttvshows.png" alt="Connect TVShows" width={250} height={250}
-            // className='py-2 px-6 shadow-2xl rounded-lg'
+            className='py-2 px-6 hover:shadow-2xl shadow-lg rounded-lg'
             />
           </Link>
         ) : router.pathname === '/books' ? (
           <Link
             href="/help" >
             <Image src="/connectbooks.png" alt="Connect Books" width={250} height={250}
-            // className='py-2 px-6 shadow-2xl rounded-lg'
+            className='py-2 px-6 hover:shadow-2xl shadow-lg rounded-lg'
             />
           </Link>
         ) : null
