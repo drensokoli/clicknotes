@@ -55,7 +55,7 @@ export default function Help() {
                     <Header>Step 1: Create an Integration in Notion</Header>
                     <p>In order to connect ClickNotes to your Notion account, you'll need to create an Integration in Notion. This is a simple process that requires no coding knowledge.</p>
                     <p>Once you've set up your account, navigate to the <span className="text-blue-600 hover:underline"><Link target="_blank" href="https://www.notion.so/my-integrations" aria-label='Your Notion Integrations'>notion.so/my-integrations</Link></span> section and click on "Create new integration". Give it a name and Notion will generate an Internal Integration Token for you. This token will be used to establish a connection between ClickNotes and Notion.</p>
-                    <Image src={StepOne} width={700} height={600} alt={""} className="my-4 shadow-xl" />
+                    <Image src={StepOne} width={700} height={600} alt={""} className="m-auto my-4 shadow-xl" />
 
                     <Header>Step 2: Duplicate the ClickNotes Official Templates</Header>
                     <p>I've created these Notion templates that you'll need to duplicate to store your content. The column names and types of these templates are compatible with the ClickNotes API, so make sure not to modify them. Feel free to add new columns, but note that they won't be affected by the ClickNotes API and will need to be filled in manually (e.g "My rating").</p>
