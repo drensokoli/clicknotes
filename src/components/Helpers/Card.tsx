@@ -19,14 +19,16 @@ export default function Card({ id, title, poster_path, release_date, link, handl
             <div className="movie-card-image-container">
                 <div className='movie-image'>
                     {poster_path ? (
-                        <Image
-                            src={poster_path}
-                            width={200}
-                            height={300}
-                            alt={title}
-                            className="rounded-sm max-h-[300px] min-h-[300px] h-auto"
-                            loading="lazy"
-                        />
+                        <Link href={link} passHref target='_blank' aria-label={`${title} ${release_date}`}>
+                            <Image
+                                src={poster_path}
+                                width={200}
+                                height={300}
+                                alt={title}
+                                className="rounded-sm max-h-[300px] min-h-[300px] h-auto"
+                                loading="lazy"
+                            />
+                        </Link>
                     ) : (
                         <Image
                             src="/no-image.png"
