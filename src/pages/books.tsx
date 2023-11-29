@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Book from '../components/Media/Book';
 import SearchBar from '@/components/Helpers/SearchBar';
-import { debounce } from 'lodash';
-import NotionAd from '@/components/Notion/NotionAd';
 import NotionResponse from '@/components/Notion/NotionResponse';
 import { Book as BookInterface } from '@/lib/interfaces';
 import Head from 'next/head';

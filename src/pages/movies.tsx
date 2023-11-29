@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import SearchBar from '@/components/Helpers/SearchBar';
-import NotionAd from '@/components/Notion/NotionAd';
 import Movie from '@/components/Media/Movie';
 import { useSession } from 'next-auth/react';
 import { searchMovieByTitle } from '@/lib/movieHelpers';

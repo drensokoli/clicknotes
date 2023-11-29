@@ -9,6 +9,7 @@ import { NextRouter } from 'next/router';
 import { Analytics } from '@vercel/analytics/react';
 import Link from 'next/link';
 import Image from 'next/image';
+import NotionBanner from '@/components/Notion/NotionBanner';
 
 interface WrappedAppProps extends Omit<AppProps, 'router'> {
   router: NextRouter;
@@ -24,47 +25,36 @@ export default function App({ Component, pageProps, router }: AppProps) {
 }
 
 function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
-  const { data: session } = useSession();
+
+  const notionBanners = [
+    { path: '/movies', image: '/connectmovies.png' },
+    { path: '/tvshows', image: '/connecttvshows.png' },
+    { path: '/books', image: '/connectbooks.png' },
+  ];
+
+  const banner = notionBanners.find((banner) => banner.path === router.pathname);
 
   return (
     <div>
       <Navbar />
-      <div>
-        <Link href="https://affiliate.notion.so/8ieljsf8weuq" target='_blank' aria-label='Notion'>
-          <Image src="/affiliate-white.png" alt="logo" width={130} height={130} className='fixed bottom-5 right-5 z-10 shadow-xl' />
-        </Link>
-      </div>
-      <div className='flex flex-row justify-center items-center'>
-        {router.pathname === '/movies' ? (
-          <Link
-            href="https://affiliate.notion.so/connect-to-notion"
-            target='_blank'
-            className='w-[90%] sm:w-[70%] h-[100px] rounded-md mb-4 flex flex-row justify-center items-center hover:shadow-xl border-2 hover:border-gray-500'
-          >
-            <Image src="/connectmovies.png" alt="Connect TVShows" width={250} height={250} />
-          </Link>
-        ) : router.pathname === '/tvshows' ? (
-          <Link
-            href="https://affiliate.notion.so/connect-to-notion"
-            target='_blank'
-            className='w-[90%] sm:w-[70%] h-[100px] rounded-md mb-4 flex flex-row justify-center items-center hover:shadow-xl border-2 hover:border-gray-500'
-          >
-            <Image src="/connecttvshows.png" alt="Connect TVShows" width={250} height={250} />
-          </Link>
-        ) : router.pathname === '/books' ? (
-          <Link
-            href="https://affiliate.notion.so/connect-to-notion"
-            target='_blank'
-            className='w-[90%] sm:w-[70%] h-[100px] rounded-md mb-4 flex flex-row justify-center items-center hover:shadow-xl border-2 hover:border-gray-500'
-          >
-            <Image src="/connectbooks.png" alt="Connect TVShows" width={250} height={250} />
-          </Link>
-        ) : null
-        }
-      </div>
+
+      {banner && (
+        <NotionBanner image={banner.image} />
+      )}
+
       <Component {...pageProps} />
       <Analytics />
       <Footer />
+
+      <Link
+        href="https://affiliate.notion.so/8ieljsf8weuq"
+        target='_blank'
+        aria-label='Notion affiliate link'
+        className='fixed bottom-5 right-5 z-10 shadow-xl'
+      >
+        <Image src="/affiliate-white.png" alt="logo" width={130} height={130} />
+      </Link>
+
     </div>
   );
 }

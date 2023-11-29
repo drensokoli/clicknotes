@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TvShow from '../components/Media/TvShow';
 import SearchBar from '@/components/Helpers/SearchBar';
-import NotionAd from '@/components/Notion/NotionAd';
 import NotionResponse from '@/components/Notion/NotionResponse';
 import { useSession } from 'next-auth/react';
 import { searchTvShowByTitle } from '@/lib/tvShowHelpers';
