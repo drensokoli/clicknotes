@@ -37,24 +37,27 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
       <div className='flex flex-row justify-center items-center'>
         {router.pathname === '/movies' ? (
           <Link
-            href="/help" >
-            <Image src="/connectmovies.png" alt="Connect Movies" width={250} height={250}
-            className='py-2 px-6 hover:shadow-2xl shadow-lg rounded-lg mb-8'
-            />
+            href="https://affiliate.notion.so/connect-to-notion"
+            target='_blank'
+            className='w-[90%] sm:w-[70%] h-[100px] rounded-md mb-4 flex flex-row justify-center items-center hover:shadow-xl border-2 hover:border-gray-500'
+          >
+            <Image src="/connectmovies.png" alt="Connect TVShows" width={250} height={250} />
           </Link>
         ) : router.pathname === '/tvshows' ? (
           <Link
-            href="/help" >
-            <Image src="/connecttvshows.png" alt="Connect TVShows" width={250} height={250}
-            className='py-2 px-6 hover:shadow-2xl shadow-lg rounded-lg mb-8'
-            />
+            href="https://affiliate.notion.so/connect-to-notion"
+            target='_blank'
+            className='w-[90%] sm:w-[70%] h-[100px] rounded-md mb-4 flex flex-row justify-center items-center hover:shadow-xl border-2 hover:border-gray-500'
+          >
+            <Image src="/connecttvshows.png" alt="Connect TVShows" width={250} height={250} />
           </Link>
         ) : router.pathname === '/books' ? (
           <Link
-            href="/help" >
-            <Image src="/connectbooks.png" alt="Connect Books" width={250} height={250}
-            className='py-2 px-6 hover:shadow-2xl shadow-lg rounded-lg mb-8'
-            />
+            href="https://affiliate.notion.so/connect-to-notion"
+            target='_blank'
+            className='w-[90%] sm:w-[70%] h-[100px] rounded-md mb-4 flex flex-row justify-center items-center hover:shadow-xl border-2 hover:border-gray-500'
+          >
+            <Image src="/connectbooks.png" alt="Connect TVShows" width={250} height={250} />
           </Link>
         ) : null
         }

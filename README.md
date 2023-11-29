@@ -2,7 +2,7 @@
 ## Overview
 ClickNotes is a Next.js application built with TypeScript that allows users to search for movies, TV shows, and books using the TMDB API, Google Books API, and New York Times API (for bestsellers endpoint). Users can log in with Google authentication provided by NextAuth and save their favorite items to their Notion databases by submitting their Notion API key and database IDs which are encrypted using Advanced Encryption Standard (AES) encryption.
 
-**You can learn about connecting your ClickNotes account to Notion [HERE](https://clicknotes.vercel.app/help).**
+**You can learn about connecting your ClickNotes account to Notion [HERE](https://affiliate.notion.so/connect-to-notion).**
 
 ## Getting Started
 ### Running Locally

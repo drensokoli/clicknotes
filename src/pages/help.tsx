@@ -33,27 +33,27 @@ export default function Help() {
 
                     <Header>Connecting ClickNotes to Your Notion Account</Header>
                     <p>Setting up a connection between ClickNotes and your Notion account may seem intimidating, but it's very straightforward. I've broken down the process into three easy steps that should take no more than five minutes to complete.</p>
-                    <p>If you want to learn more about the technical implementaion of this project, make sure to read the <span className="text-blue-600 underline"><Link href="https://github.com/drensokoli/clicknotes" aria-label='GitHub Repo' target="_blank">documentation</Link></span>.</p>
+                    <p>If you want to learn more about the technical implementaion of this project, make sure to read the <span className="text-blue-600 underline"><Link href="https://github.com/drensokoli/clicknotes#clicknotes-documentation" aria-label='GitHub Repo' target="_blank">documentation</Link></span>.</p>
 
                     <iframe src="https://www.youtube.com/embed/gp2yhkVw0z4" title="What is Notion?" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         className="w-full md:h-[450px] h-48 my-4"
                     ></iframe>
 
                     <Header>What is ClickNotes?</Header>
-                    <p>ClickNotes is an open source project written in React intended on simplifying the note-taking of your movies, tvshows and books list. ClickNotes uses the TMDB, Google Books and NY Times API to fetch movies, tv shows and books which users can then save to their Notion databases using the Notion API - all this done in the single click of a button.</p>
+                    <p>ClickNotes is an open source project that intends to simplify the note-taking experience for your movies, tvshows and books. ClickNotes uses the TMDB (<span className="text-blue-600 underline "><Link target="_blank" href="https://themoviedb.org" aria-label='Notion'>themoviedb.org</Link></span>), Google Books and NY Times API to fetch movies, tv shows and books which users can then save to their Notion databases using the Notion API - all this done in the single click of a button.</p>
 
                     <Header>What is Notion?</Header>
-                    <p>Notion is a freemium productivity and note-taking web application developed by Notion Labs Inc. It offers organizational tools including task management, project tracking, to-do lists, and bookmarking. It's known for its flexibility, allowing users to create databases, manage projects, take notes, collaborate with teams, and more. Notion uses a block-based system where different types of content—text, images, databases, files, and more—are organized into blocks that can be manipulated and arranged in various ways. This flexibility enables users to create custom structures that suit their specific needs, whether it's for personal task management, team collaboration, or knowledge organization. Its adaptability makes it popular among individuals and teams looking for a centralized workspace that can be customized to fit their workflows.</p>
+                    <p>Notion is a note-taking web application which offers organizational tools including task management, project tracking, to-do lists, and bookmarking. It's known for its flexibility, allowing users to create databases, manage projects, take notes, collaborate with teams, and more. This flexibility enables users to create custom structures that suit their specific needs, whether it's for personal task management, team collaboration, knowledge organization or in our case - media listing and organizing.</p>
                     <iframe
                         src="https://www.youtube.com/embed/gp2yhkVw0z4"
                         title="What is Notion?" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         className="w-full md:h-96 h-48 my-4"
                     ></iframe>
-                    <p className="text-center text-lg">Use my <span className="text-blue-600 underline italic"><Link target="_blank" href="https://affiliate.notion.so/8ieljsf8weuq" aria-label='Notion'>affiliate link</Link></span> to create a Notion account if you don't already have one.</p>
+                    <p className="text-center text-lg font-semibold">Use my <span className="text-blue-600 underline italic"><Link target="_blank" href="https://affiliate.notion.so/8ieljsf8weuq" aria-label='Notion'>affiliate link</Link></span> to create a Notion account if you don't already have one.</p>
 
                     <Header>Step 1: Create an Integration in Notion</Header>
                     <p>In order to connect ClickNotes to your Notion account, you'll need to create an Integration in Notion. This is a simple process that requires no coding knowledge.</p>
-                    <p>Once you've set up your account, navigate to the <span className="text-blue-600 underline"><Link target="_blank" href="https://www.notion.so/my-integrations" aria-label='Your Notion Integrations'>notion.so/my-integrations</Link></span> section and click on "Create new integration". Give it a name and Notion will generate an Internal Integration Token for you. This token will be used to establish a connection between ClickNotes and Notion.</p>
+                    <p>Once you've set up your account, navigate to the <span className="text-blue-600 underline"><Link target="_blank" href="https://affiliate.notion.so/my-integrations" aria-label='Your Notion Integrations'>notion.so/my-integrations</Link></span> section and click on "Create new integration". This token will be used to establish a connection between ClickNotes and Notion.</p>
                     <Image src={StepOne} width={700} height={600} alt={""} className="m-auto my-4 shadow-xl" />
 
                     <Header>Step 2: Duplicate the ClickNotes Official Templates</Header>
@@ -86,8 +86,8 @@ export default function Help() {
                     </div>
 
                     <Header>Step 3: Connect Your Database</Header>
-                    <p>After duplicating the templates, you'll need to add the Integration Token generated in the previous step as a connection by clicking on the "Add connections" button and searching for it by name. This action grants your Integration Token read and write permissions to the corresponding Notion page.</p>
-                    <p>Finally, click "Share", "Copy link" and paste your page link into your <span className="text-blue-600 underline"><Link href="https://clicknotes.site/profile" aria-label='GitHub Repo' target="_blank">ClickNotes profile page</Link></span>.</p>
+                    <p>Add the Integration Token to your new Notion template by clicking on the "Add connections" button and searching for it by name. This action grants your Integration Token read and write permissions to your Notion page.</p>
+                    <p>Finally, copy the link of your Notion template and submit it in your <span className="text-blue-600 underline"><Link href="https://clicknotes.site/profile" aria-label='GitHub Repo' target="_blank">ClickNotes profile page</Link></span>.</p>
                     <Image src={StepThree} width={700} height={600} alt={""} className="m-auto my-4 shadow-xl" />
                     <div className="flex flex-col mt-10 justify-center w-full">
                         <p className="text-center">🎉 That's it! You've successfully connected your Notion database to ClickNotes! 🎉</p>
