@@ -35,7 +35,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
   const banner = notionBanners.find((banner) => banner.path === router.pathname);
 
   return (
-    <div>
+    <div className='flex flex-col min-h-screen'>
       <Navbar />
 
       {banner && (

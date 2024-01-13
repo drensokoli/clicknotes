@@ -39,7 +39,7 @@ const SearchBar: React.FC<Props> = ({
             placeholder="Enter title"
             value={input}
             onChange={handleInputChange}
-            className="bg-white h-12 w-full px-12 rounded-lg focus:outline-none hover:cursor-pointer border-2 border-blue-500"
+            className="bg-white h-12 w-full px-12 rounded-lg focus:outline-none hover:cursor-pointer border-2 border-blue-500 select-none"
             ref={inputRef}
           />
         </div>

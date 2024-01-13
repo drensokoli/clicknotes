@@ -95,7 +95,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script>
             </Head>
-            <div className="flex justify-center items-center" title='Profile'>
+            <div className="flex justify-center items-center flex-grow" title='Profile'>
                 <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] shadow-xl">
                     <div className="flex justify-center">
                         <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={50} height={50} />
