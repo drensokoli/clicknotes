@@ -13,6 +13,13 @@ export async function notionApiKeySubmit(notionApiKey: any, userEmail: any, cryp
                 notionApiKey: encryptedNotionApiKey,
             }),
         });
+        
+        
+        const data = await response.json();
+        const message = data.message;
+
+        return message;
+
     } catch (error) {
         console.error('Error:', error);
     }
@@ -20,8 +27,8 @@ export async function notionApiKeySubmit(notionApiKey: any, userEmail: any, cryp
 
 export async function moviesLinkSubmit(link: string, userEmail: any, cryptoKey: string) {
     try {
-        const extractedValue = extractValueFromUrl(link);
-        const encryptedValue = encryptData(extractedValue, cryptoKey);
+
+        const encryptedValue = encryptData(link, cryptoKey);
         const response = await fetch('/api/updateUser', {
             method: 'POST',
             headers: {
@@ -32,6 +39,11 @@ export async function moviesLinkSubmit(link: string, userEmail: any, cryptoKey: 
                 moviesPageLink: encryptedValue,
             }),
         });
+
+        const data = await response.json();
+        const message = data.message;
+
+        return message;
     } catch (error) {
         console.error('Error:', error);
     }
@@ -39,8 +51,8 @@ export async function moviesLinkSubmit(link: string, userEmail: any, cryptoKey: 
 
 export async function tvShowsLinkSubmit(link: string, userEmail: any, cryptoKey: string) {
     try {
-        const extractedValue = extractValueFromUrl(link);
-        const encryptedValue = encryptData(extractedValue, cryptoKey);
+        
+        const encryptedValue = encryptData(link, cryptoKey);
         const response = await fetch('/api/updateUser', {
             method: 'POST',
             headers: {
@@ -58,8 +70,7 @@ export async function tvShowsLinkSubmit(link: string, userEmail: any, cryptoKey:
 
 export async function booksLinkSubmit(link: string, userEmail: any, cryptoKey: string) {
     try {
-        const extractedValue = extractValueFromUrl(link);
-        const encryptedValue = encryptData(extractedValue, cryptoKey);
+        const encryptedValue = encryptData(link, cryptoKey);
         const response = await fetch('/api/updateUser', {
             method: 'POST',
             headers: {
@@ -70,12 +81,17 @@ export async function booksLinkSubmit(link: string, userEmail: any, cryptoKey: s
                 booksPageLink: encryptedValue,
             }),
         });
+        
+        const data = await response.json();
+        const message = data.message;
+
+        return message;
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-function extractValueFromUrl(url: string) {
+export function extractValueFromUrl(url: string) {
     const regex = /([a-f0-9]{32})/;
     const match = url.match(regex);
     return match ? match[1] : '';

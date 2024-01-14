@@ -4,7 +4,7 @@ import SearchBar from '@/components/Helpers/SearchBar';
 import Movie from '@/components/Media/Movie';
 import { useSession } from 'next-auth/react';
 import { searchMovieByTitle } from '@/lib/movieHelpers';
-import NotionResponse from '@/components/Notion/NotionResponse';
+import Toast from '@/components/Helpers/Toast';
 import { Movie as MovieInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
@@ -69,7 +69,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script>
             </Head>
-            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
+            <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">

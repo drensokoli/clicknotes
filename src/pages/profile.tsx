@@ -1,28 +1,36 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession, getSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import Image from 'next/dist/client/image';
 import { decryptData } from '../lib/crypto';
 import 'flowbite';
-import { notionApiKeySubmit, moviesLinkSubmit, tvShowsLinkSubmit, booksLinkSubmit } from '../lib/profileHelpers';
-import Send from '../../public/send.png';
+import { notionApiKeySubmit, moviesLinkSubmit, tvShowsLinkSubmit, booksLinkSubmit, extractValueFromUrl } from '../lib/profileHelpers';
 import Head from 'next/head';
 import Link from 'next/link';
+import Toast from '@/components/Helpers/Toast';
+import Input from '@/components/Helpers/Input';
 
 export default function Profile({ cryptoKey }: { cryptoKey: string }) {
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     const userEmail = session?.user?.email;
 
+    const [input, setInput] = useState('');
     const [notionApiKey, setNotionApiKey] = useState('');
     const [moviesPageLink, setMoviesPageLink] = useState('');
-    // const [tvShowsPageLink, setTvShowsPageLink] = useState('');
     const [booksPageLink, setBooksPageLink] = useState('');
 
-    const router = useRouter();
+    const [apiResponse, setApiResponse] = useState<string | null>(null);
 
     async function handleNotionApiKeySubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
-            notionApiKeySubmit(notionApiKey, userEmail, cryptoKey);
+            e.preventDefault();
+            if (!input.startsWith('secret_') || input.length < 50 || input === '') {
+                setApiResponse('Please enter a valid Notion Integration Token');
+                return 'Please enter a valid Notion Integration Token';
+            }
+
+            const notionApiKeyResponse = await notionApiKeySubmit(input, userEmail, cryptoKey);
+            setApiResponse(notionApiKeyResponse);
+            setNotionApiKey(input);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -30,23 +38,35 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
 
     async function handleMoviesPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
-            moviesLinkSubmit(moviesPageLink, userEmail, cryptoKey);
+            e.preventDefault();
+
+            if (!input.startsWith('https://www.notion.so/') || input.length < 50 || input === '') {
+                setApiResponse('Please enter a valid Notion link');
+                return 'Please enter a valid Notion link';
+            }
+
+            const extractedValue = extractValueFromUrl(input);
+            const moviesLinkResponse = await moviesLinkSubmit(extractedValue, userEmail, cryptoKey);
+            setApiResponse(moviesLinkResponse);
+            setMoviesPageLink(extractedValue);
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    // async function handleTvShowsPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
-    //     try {
-    //         tvShowsLinkSubmit(tvShowsPageLink, userEmail, cryptoKey);
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // }
-
     async function handleBooksPageLinkSubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
-            booksLinkSubmit(booksPageLink, userEmail, cryptoKey);
+            e.preventDefault();
+
+            if (!input.startsWith('https://www.notion.so/') || input.length < 50 || input === '') {
+                setApiResponse('Please enter a valid Notion link');
+                return 'Please enter a valid Notion link';
+            }
+
+            const extractedValue = extractValueFromUrl(input);
+            const booksLinkResponse = await booksLinkSubmit(extractedValue, userEmail, cryptoKey);
+            setApiResponse(booksLinkResponse);
+            setBooksPageLink(extractedValue);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -67,14 +87,12 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
 
             data.notionApiKey && setNotionApiKey(decryptData(data.notionApiKey, cryptoKey));
             data.moviesPageLink && setMoviesPageLink(decryptData(data.moviesPageLink, cryptoKey));
-            // data.tvShowsPageLink && setTvShowsPageLink(decryptData(data.tvShowsPageLink, cryptoKey));
             data.booksPageLink && setBooksPageLink(decryptData(data.booksPageLink, cryptoKey));
 
         } catch (error) {
             console.error('Error:', error);
         }
     }
-
 
     useEffect(() => {
         if (session) {
@@ -95,6 +113,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script>
             </Head>
+            <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={undefined} />
             <div className="flex justify-center items-center flex-grow" title='Profile'>
                 <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] shadow-xl">
                     <div className="flex justify-center">
@@ -108,48 +127,9 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                                 <div className="tooltip-arrow" data-popper-arrow></div>
                             </div>
                             <div className='w-full pl-2 pr-2'>
-                                <form className='mb-4 border-b-2 border-gray pb-6 px-6' onSubmit={handleNotionApiKeySubmit}>
-                                    <label className="block mb-2 text-sm text-gray-500">Notion Token</label>
-                                    <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
-                                        <input
-                                            type="text"
-                                            onChange={(e) => setNotionApiKey(e.target.value)}
-                                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
-                                            placeholder={notionApiKey || "Enter your Notion Token"}
-                                        />
-                                        <button type="submit" className='py-2 px-2'>
-                                            <Image src={Send} alt="" width={25} height={25} />
-                                        </button>
-                                    </div>
-                                </form>
-                                <form className='mb-4 px-6' onSubmit={handleMoviesPageLinkSubmit}>
-                                    <label className="block mb-2 text-sm text-gray-500">Movies and TV Shows Page link</label>
-                                    <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
-                                        <input
-                                            type="text"
-                                            onChange={(e) => setMoviesPageLink(e.target.value)}
-                                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
-                                            placeholder={moviesPageLink || "Enter your Movies and TV Shows Page link"}
-                                        />
-                                        <button type="submit" className='py-2 px-2'>
-                                            <Image src={Send} alt="" width={25} height={25} />
-                                        </button>
-                                    </div>
-                                </form>
-                                <form className='mb-4 px-6' onSubmit={handleBooksPageLinkSubmit}>
-                                    <label className="block mb-2 text-sm text-gray-500">Books Page link</label>
-                                    <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
-                                        <input
-                                            type="text"
-                                            onChange={(e) => setBooksPageLink(e.target.value)}
-                                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
-                                            placeholder={booksPageLink || "Enter your Books Page link"}
-                                        />
-                                        <button type="submit" className='py-2 px-2'>
-                                            <Image src={Send} alt="" width={25} height={25} />
-                                        </button>
-                                    </div>
-                                </form>
+                                <Input label="Notion Integration Token" placeHolder="Enter your Notion Integration Token" field={notionApiKey} link="https://www.notion.so/my-integrations" setLink={setNotionApiKey} setInput={setInput} handleSubmit={handleNotionApiKeySubmit} />
+                                <Input label="Movies and Shows Page Link" placeHolder="Enter your Movies and Shows Page Link" field={moviesPageLink} link={`https://www.notion.so/` + moviesPageLink} setLink={setMoviesPageLink} setInput={setInput} handleSubmit={handleMoviesPageLinkSubmit} />
+                                <Input label="Books Page Link" placeHolder="Enter your Books Page Link" field={booksPageLink} link={`https://www.notion.so/` + booksPageLink} setLink={setBooksPageLink} setInput={setInput} handleSubmit={handleBooksPageLinkSubmit} />
                             </div>
                             <Link
                                 className='flex flex-row justify-center items-center gap-2 py-4'

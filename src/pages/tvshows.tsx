@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TvShow from '../components/Media/TvShow';
 import SearchBar from '@/components/Helpers/SearchBar';
-import NotionResponse from '@/components/Notion/NotionResponse';
+import Toast from '@/components/Helpers/Toast';
 import { useSession } from 'next-auth/react';
 import { searchTvShowByTitle } from '@/lib/tvShowHelpers';
 import { TvShow as TvShowInterface } from '@/lib/interfaces';
@@ -68,7 +68,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script>
             </Head>
-            <NotionResponse apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
+            <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container w-5/6">
