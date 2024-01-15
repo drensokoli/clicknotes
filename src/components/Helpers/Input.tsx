@@ -34,9 +34,7 @@ export default function Input(
                                 href={link}
                                 target='_blank'
                                 className='hover:text-blue-500 hover:underline w-[75%] line-clamp-3 text-gray-600'
-                            >
-                                <input type="password" value={field} />
-                            </Link>
+                            >**************************************************</Link>
                         ) : (
                             <Link
                                 href={link}
