@@ -26,7 +26,7 @@ export default function Input(
     return (
         <>
             {field ? (
-                <div className='pb-4 mb-4 px-6 border-b-2 border-gray'>
+                <div className='pb-4 mb-2 px-6'>
                     <label className="block mb-2 text-sm text-gray-500">{label}</label>
                     <div className='flex flex-row justify-between items-center'>
                         {field.startsWith('secret_') ? (
@@ -48,7 +48,7 @@ export default function Input(
                     </div>
                 </div>
             ) : (
-                <form className='mb-4 border-b-2 border-gray pb-4 px-6' onSubmit={handleSubmit}>
+                <form className='pb-4 px-6' onSubmit={handleSubmit}>
                     <label className="block mb-2 text-sm text-gray-500">{label}</label>
                     <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                         <input
