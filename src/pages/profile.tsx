@@ -23,7 +23,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
     async function handleNotionApiKeySubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
             e.preventDefault();
-            if (!input.startsWith('secret_') || input.length < 50 || input === '') {
+            if (!input.startsWith('secret_') || input.length < 45 || input === '') {
                 setApiResponse('Please enter a valid Notion Integration Token');
                 return 'Please enter a valid Notion Integration Token';
             }
@@ -40,7 +40,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
         try {
             e.preventDefault();
 
-            if (!input.startsWith('https://www.notion.so/') || input.length < 50 || input === '') {
+            if (!input.startsWith('https://www.notion.so/') || input.length < 45 || input === '') {
                 setApiResponse('Please enter a valid Notion link');
                 return 'Please enter a valid Notion link';
             }
