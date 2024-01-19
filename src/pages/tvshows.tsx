@@ -71,8 +71,8 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
-                <div className="content-container w-5/6">
-                    <div className="movie-container">
+                <div className="content-container sm:w-5/6">
+                    <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
                         {tvShows
                             .map((item) => (
                                 <TvShow
