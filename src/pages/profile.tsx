@@ -152,7 +152,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
 
 export const getServerSideProps = async (context: any) => {
     const session = await getSession(context);
-    const cryptoKey = process.env.CRYPTO_KEY;
+    const cryptoKey = process.env.ENCRYPTION_KEY;
 
     if (!session) {
         return {

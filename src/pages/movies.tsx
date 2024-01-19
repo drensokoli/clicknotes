@@ -130,7 +130,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
 
 export const getStaticProps = async () => {
 
-    const cryptoKey = process.env.CRYPTO_KEY;
+    const cryptoKey = process.env.ENCRYPTION_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
 
     const popularMoviesResponsePageOne = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=1&include_adult=false`);

@@ -125,7 +125,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
 
 export const getStaticProps = async () => {
 
-    const cryptoKey = process.env.CRYPTO_KEY;
+    const cryptoKey = process.env.ENCRYPTION_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
 
     const popularTvShowsResponsePageOne = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=1`);

@@ -159,7 +159,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
 
 export const getStaticProps = async () => {
 
-    const cryptoKey = process.env.CRYPTO_KEY;
+    const cryptoKey = process.env.ENCRYPTION_KEY;
     const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY;
     const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
