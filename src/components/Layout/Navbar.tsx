@@ -24,7 +24,10 @@ export default function Navbar() {
 
     return (
         <>
-            <Disclosure as="nav" className="backdrop-blur-md bg-white bg-opacity-75 fixed w-full top-0 z-10 shadow-lg ">
+            <Disclosure
+                as="nav"
+                className="backdrop-blur-md bg-gradient-to-t from-white/70 via-white/95 to-white fixed w-full top-0 z-10 shadow-lg"
+            >
                 {({ open }) => (
                     <>
                         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 h-18">
