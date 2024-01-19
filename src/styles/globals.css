@@ -21,7 +21,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #000000;
 }
 
 .movie-container {
@@ -40,7 +39,7 @@
 }
 
 .movie-card {
-  width: 200px;
+  width: 150px;
   /* cursor: pointer; */
   margin-bottom: 7px;
 }
@@ -131,10 +130,6 @@
   left: 50%;
   transform: translateX(-50%);
 }
-/* 
-.movie-card-image-container:hover .movie-card-button {
-  display: inline-block;
-} */
 
 .profile-icon {
   font-size: 24px;
