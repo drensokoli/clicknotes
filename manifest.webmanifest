@@ -3,10 +3,10 @@
     "background_color": "#ffffff",
     "display": "fullscreen",
     "scope": "/",
-    "start_url": "/",
-    "name": "Clicknotes",
-    "description": "Clicknotes",
-    "short_name": "Clicknotes",
+    "start_url": "/movies",
+    "name": "clicknotes",
+    "description": "clicknotes",
+    "short_name": "clicknotes",
     "icons": [
         {
             "src": "/icons/icon-192x192.png",
