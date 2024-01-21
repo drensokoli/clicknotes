@@ -79,47 +79,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
             });
 
-            // const contentUpdateResponse = await notion.blocks.children.append({
-            //     block_id: existingPageId,
-            //     children: [
-            //         {
-            //             object: 'block',
-            //             type: 'embed',
-            //             embed: {
-            //                 url: tvShowData.poster_path,
-            //             },
-            //         },
-            //         {
-            //             object: 'block',
-            //             type: 'paragraph',
-            //             paragraph: {
-            //                 rich_text: [
-            //                     {
-            //                         type: 'text',
-            //                         text: {
-            //                             content: tvShowData.overview,
-            //                         },
-            //                     },
-            //                 ],
-            //             },
-            //         },
-            //         {
-            //             object: 'block',
-            //             type: 'embed',
-            //             embed: {
-            //                 url: tvShowData.trailer,
-            //             },
-            //         },
-            //         // {
-            //         //     object: 'block',
-            //         //     type: 'bookmark',
-            //         //     bookmark: {
-            //         //         url: tvShowData.tpb_link,
-            //         //     },
-            //         // }
-            //     ],
-            // });
-
             const pageUrl = `https://www.notion.so/${existingPageId.replace(/-/g, '')}`;
 
             res.status(200).json({ message: "TV show added/updated to Notion.", pageUrl });

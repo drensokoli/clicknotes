@@ -9,9 +9,9 @@ import { TvShow as TvShowInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
 
-export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
+export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
     tmdbApiKey: string;
-    cryptoKey: string;
+    encryptionKey: string;
     popularTvShows: TvShowInterface[];
 }) {
 
@@ -82,7 +82,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                     backdrop_path={item.backdrop_path}
                                     onApiResponse={(error: string) => setApiResponse(error)}
                                     setPageLink={setPageLink}
-                                    cryptoKey={cryptoKey}
+                                    encryptionKey={encryptionKey}
                                     tmdbApiKey={tmdbApiKey}
                                     notionApiKey={notionApiKey}
                                     tvShowsPageLink={tvShowsPageLink}
@@ -100,7 +100,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
                                             backdrop_path={item.backdrop_path}
                                             onApiResponse={(error: string) => setApiResponse(error)}
                                             setPageLink={setPageLink}
-                                            cryptoKey={cryptoKey}
+                                            encryptionKey={encryptionKey}
                                             tmdbApiKey={tmdbApiKey}
                                             notionApiKey={notionApiKey}
                                             tvShowsPageLink={tvShowsPageLink}
@@ -125,7 +125,7 @@ export default function TvShows({ tmdbApiKey, cryptoKey, popularTvShows }: {
 
 export const getStaticProps = async () => {
 
-    const cryptoKey = process.env.ENCRYPTION_KEY;
+    const encryptionKey = process.env.ENCRYPTION_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
 
     const popularTvShowsResponsePageOne = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=1`);
@@ -161,7 +161,7 @@ export const getStaticProps = async () => {
     return {
         props: {
             tmdbApiKey,
-            cryptoKey,
+            encryptionKey,
             popularTvShows
         },
 

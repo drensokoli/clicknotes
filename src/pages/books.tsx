@@ -7,8 +7,8 @@ import { Book as BookInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
 
-export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bestsellers }: {
-    cryptoKey: string;
+export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey, bestsellers }: {
+    encryptionKey: string;
     googleBooksApiKey: string;
     nyTimesApiKey: string;
     bestsellers: BookInterface[];
@@ -114,7 +114,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
                                 availability={book.saleInfo.saleability}
                                 onApiResponse={(error: string) => setApiResponse(error)}
                                 setPageLink={setPageLink}
-                                cryptoKey={cryptoKey}
+                                encryptionKey={encryptionKey}
                                 notionApiKey={notionApiKey}
                                 booksPageLink={booksPageLink}
                             />
@@ -142,7 +142,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
                                             availability={book.saleInfo.saleability}
                                             onApiResponse={(error: string) => setApiResponse(error)}
                                             setPageLink={setPageLink}
-                                            cryptoKey={cryptoKey}
+                                            encryptionKey={encryptionKey}
                                             notionApiKey={notionApiKey}
                                             booksPageLink={booksPageLink}
                                         />
@@ -159,7 +159,7 @@ export default function Books({ cryptoKey, googleBooksApiKey, nyTimesApiKey, bes
 
 export const getStaticProps = async () => {
 
-    const cryptoKey = process.env.ENCRYPTION_KEY;
+    const encryptionKey = process.env.ENCRYPTION_KEY;
     const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY;
     const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
@@ -171,7 +171,7 @@ export const getStaticProps = async () => {
 
     return {
         props: {
-            cryptoKey,
+            encryptionKey,
             googleBooksApiKey,
             nyTimesApiKey,
             bestsellers

@@ -1,9 +1,9 @@
 import React from 'react';
-import { decryptData } from '@/lib/crypto';
+import { decryptData } from '@/lib/encryption';
 import { genresMapping, getCast, getDirector, getImdb, getTrailer } from '@/lib/movieHelpers';
 import Card from '../Helpers/Card';
 
-export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, cryptoKey, tmdbApiKey, genre_ids, notionApiKey, moviesPageLink }: {
+export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, genre_ids, notionApiKey, moviesPageLink }: {
     id: number;
     title: string;
     overview: string;
@@ -15,7 +15,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
     runtime: number;
     onApiResponse: (error: string) => void;
     setPageLink: (pageLink: string) => void;
-    cryptoKey: string;
+    encryptionKey: string;
     tmdbApiKey: string;
     genre_ids: number[];
     notionApiKey: string;
@@ -56,8 +56,8 @@ export default function Movie({ id, title, overview, release_date, vote_average,
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                notionApiKey: decryptData(notionApiKey, cryptoKey),
-                db_id: decryptData(moviesPageLink, cryptoKey),
+                notionApiKey: decryptData(notionApiKey, encryptionKey),
+                db_id: decryptData(moviesPageLink, encryptionKey),
                 movieData: movieData,
             }),
         });

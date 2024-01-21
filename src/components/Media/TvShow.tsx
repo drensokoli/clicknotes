@@ -1,12 +1,12 @@
 import React from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
-import { decryptData } from '@/lib/crypto';
+import { decryptData } from '@/lib/encryption';
 import Link from 'next/link';
 import { fetchCast, fetchDirector, fetchGenres, fetchTrailer } from '@/lib/tvShowHelpers';
 import Card from '../Helpers/Card';
 
-export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, cryptoKey, tmdbApiKey, notionApiKey, tvShowsPageLink }: {
+export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, notionApiKey, tvShowsPageLink }: {
   id: number;
   name: string;
   overview: string;
@@ -16,7 +16,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
   backdrop_path: string;
   onApiResponse: (error: string) => void;
   setPageLink: (pageLink: string) => void;
-  cryptoKey: string;
+  encryptionKey: string;
   tmdbApiKey: string;
   notionApiKey: string;
   tvShowsPageLink: string;
@@ -54,8 +54,8 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        notionApiKey: decryptData(notionApiKey, cryptoKey),
-        db_id: decryptData(tvShowsPageLink, cryptoKey),
+        notionApiKey: decryptData(notionApiKey, encryptionKey),
+        db_id: decryptData(tvShowsPageLink, encryptionKey),
         tvShowData: tvShowData,
       }),
     });

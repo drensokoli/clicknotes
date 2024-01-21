@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession, getSession } from 'next-auth/react';
 import Image from 'next/dist/client/image';
-import { decryptData } from '../lib/crypto';
+import { decryptData } from '../lib/encryption';
 import 'flowbite';
 import { notionApiKeySubmit, moviesLinkSubmit, tvShowsLinkSubmit, booksLinkSubmit, extractValueFromUrl } from '../lib/profileHelpers';
 import Head from 'next/head';
@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Toast from '@/components/Helpers/Toast';
 import Input from '@/components/Helpers/Input';
 
-export default function Profile({ cryptoKey }: { cryptoKey: string }) {
+export default function Profile({ encryptionKey }: { encryptionKey: string }) {
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
 
@@ -28,7 +28,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
                 return 'Please enter a valid Notion Integration Token';
             }
 
-            const notionApiKeyResponse = await notionApiKeySubmit(input, userEmail, cryptoKey);
+            const notionApiKeyResponse = await notionApiKeySubmit(input, userEmail, encryptionKey);
             setApiResponse(notionApiKeyResponse);
             setNotionApiKey(input);
         } catch (error) {
@@ -46,7 +46,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
             }
 
             const extractedValue = extractValueFromUrl(input);
-            const moviesLinkResponse = await moviesLinkSubmit(extractedValue, userEmail, cryptoKey);
+            const moviesLinkResponse = await moviesLinkSubmit(extractedValue, userEmail, encryptionKey);
             setApiResponse(moviesLinkResponse);
             setMoviesPageLink(extractedValue);
         } catch (error) {
@@ -64,7 +64,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
             }
 
             const extractedValue = extractValueFromUrl(input);
-            const booksLinkResponse = await booksLinkSubmit(extractedValue, userEmail, cryptoKey);
+            const booksLinkResponse = await booksLinkSubmit(extractedValue, userEmail, encryptionKey);
             setApiResponse(booksLinkResponse);
             setBooksPageLink(extractedValue);
         } catch (error) {
@@ -85,9 +85,9 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
             });
             const data = await response.json();
 
-            data.notionApiKey && setNotionApiKey(decryptData(data.notionApiKey, cryptoKey));
-            data.moviesPageLink && setMoviesPageLink(decryptData(data.moviesPageLink, cryptoKey));
-            data.booksPageLink && setBooksPageLink(decryptData(data.booksPageLink, cryptoKey));
+            data.notionApiKey && setNotionApiKey(decryptData(data.notionApiKey, encryptionKey));
+            data.moviesPageLink && setMoviesPageLink(decryptData(data.moviesPageLink, encryptionKey));
+            data.booksPageLink && setBooksPageLink(decryptData(data.booksPageLink, encryptionKey));
 
         } catch (error) {
             console.error('Error:', error);
@@ -152,7 +152,7 @@ export default function Profile({ cryptoKey }: { cryptoKey: string }) {
 
 export const getServerSideProps = async (context: any) => {
     const session = await getSession(context);
-    const cryptoKey = process.env.ENCRYPTION_KEY;
+    const encryptionKey = process.env.ENCRYPTION_KEY;
 
     if (!session) {
         return {
@@ -165,7 +165,7 @@ export const getServerSideProps = async (context: any) => {
     return {
         props: {
             session,
-            cryptoKey
+            encryptionKey
         },
     };
 };

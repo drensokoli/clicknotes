@@ -1,11 +1,11 @@
 import React from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
-import { decryptData } from '@/lib/crypto';
+import { decryptData } from '@/lib/encryption';
 import Link from 'next/link';
 import Card from '../Helpers/Card';
 
-export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, setPageLink, language, price, publisher, availability, cryptoKey, notionApiKey, booksPageLink }: {
+export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, setPageLink, language, price, publisher, availability, encryptionKey, notionApiKey, booksPageLink }: {
     id: string;
     title: string;
     description: string;
@@ -23,7 +23,7 @@ export default function Book({ id, title, description, publishedDate, averageRat
     price?: number;
     publisher?: string;
     availability?: string;
-    cryptoKey: string;
+    encryptionKey: string;
     notionApiKey: string;
     booksPageLink: string;
 }) {
@@ -58,8 +58,8 @@ export default function Book({ id, title, description, publishedDate, averageRat
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                notionApiKey: decryptData(notionApiKey, cryptoKey),
-                db_id: decryptData(booksPageLink, cryptoKey),
+                notionApiKey: decryptData(notionApiKey, encryptionKey),
+                db_id: decryptData(booksPageLink, encryptionKey),
                 bookData: bookData,
             }),
         });

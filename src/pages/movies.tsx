@@ -9,9 +9,9 @@ import { Movie as MovieInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
 
-export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
+export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
     tmdbApiKey: string;
-    cryptoKey: string;
+    encryptionKey: string;
     popularMovies: MovieInterface[];
 }) {
 
@@ -85,7 +85,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                                     onApiResponse={(error: string) => setApiResponse(error)}
                                     setPageLink={setPageLink}
                                     tmdbApiKey={tmdbApiKey}
-                                    cryptoKey={cryptoKey}
+                                    encryptionKey={encryptionKey}
                                     notionApiKey={notionApiKey}
                                     moviesPageLink={moviesPageLink}
                                 />
@@ -105,7 +105,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
                                             onApiResponse={(error: string) => setApiResponse(error)}
                                             setPageLink={setPageLink}
                                             tmdbApiKey={tmdbApiKey}
-                                            cryptoKey={cryptoKey}
+                                            encryptionKey={encryptionKey}
                                             notionApiKey={notionApiKey}
                                             moviesPageLink={moviesPageLink}
                                         />
@@ -130,7 +130,7 @@ export default function Movies({ tmdbApiKey, cryptoKey, popularMovies }: {
 
 export const getStaticProps = async () => {
 
-    const cryptoKey = process.env.ENCRYPTION_KEY;
+    const encryptionKey = process.env.ENCRYPTION_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
 
     const popularMoviesResponsePageOne = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=1&include_adult=false`);
@@ -166,7 +166,7 @@ export const getStaticProps = async () => {
     return {
         props: {
             tmdbApiKey,
-            cryptoKey,
+            encryptionKey,
             popularMovies
         },
 
