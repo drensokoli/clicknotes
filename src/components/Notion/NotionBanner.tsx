@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function NotionBanner({
     image,
 }: {
-    image: string;
+    image: any;
 }) {
 
     return (

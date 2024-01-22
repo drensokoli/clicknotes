@@ -25,6 +25,32 @@ export default function App({ Component, pageProps, router }: AppProps) {
 }
 
 function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
+  const { data: session } = useSession();
+  const [showBanner, setShowBanner] = React.useState(false);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await fetch('/api/getUser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail: session?.user?.email }),
+      });
+
+      const user = await response.json();
+
+      if (
+        !session ||
+        !user?.notionApiKey ||
+        (!user?.moviesPageLink && !user?.booksPageLink)
+      ) {
+        setShowBanner(true);
+      } else {
+        setShowBanner(false);
+      }
+    };
+
+    getUser();
+  }, [session, router.pathname]);
 
   const notionBanners = [
     { path: '/movies', image: '/connectmovies.png' },
@@ -38,7 +64,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
     <div className='flex flex-col min-h-screen'>
       <Navbar />
 
-      {banner && (
+      {banner && showBanner && (
         <NotionBanner image={banner.image} />
       )}
 
