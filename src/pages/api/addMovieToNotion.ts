@@ -72,6 +72,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             name: 'Movie',
                         },
                     },
+                    'Poster': {
+                        url: movieData.poster_path,
+                    },
                 },
                 icon: {
                     type: 'emoji',
@@ -149,6 +152,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         select: {
                             name: 'To watch',
                         },
+                    },
+                    'Poster': {
+                        url: movieData.poster_path,
                     },
                 },
                 icon: {

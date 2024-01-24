@@ -6,7 +6,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/dist/client/image';
-import { BsPersonFill, BsQuestionCircleFill, BsBoxArrowInRight } from 'react-icons/bs';
+import { BsPersonFill, BsQuestionCircleFill, BsBoxArrowInRight, BsListNested } from 'react-icons/bs';
 
 export default function Navbar() {
     const { data: session, status } = useSession();
@@ -111,6 +111,20 @@ export default function Navbar() {
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
+                                                                href="/gallery"
+                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                aria-label='Gallery'
+                                                            >
+                                                                <div className='flex flex-row justify-start items-center gap-1'>
+                                                                    <BsListNested />
+                                                                    <h1>Gallery</h1>
+                                                                </div>
+                                                            </Link>
+                                                        )}
+                                                    </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <Link
                                                                 href="/profile"
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                                 aria-label='Profile'
@@ -164,13 +178,6 @@ export default function Navbar() {
                                                                     <h1>Sign Out</h1>
                                                                 </div>
                                                             </button>
-                                                            // <div
-                                                            // className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'px-4 py-2 text-sm text-gray-700 flex flex-row justify-start items-center gap-1')}>
-                                                            //     <BsGrid3X3GapFill />
-                                                            //     <h1
-                                                            //         onClick={() => signOut()}>Sign out</h1>
-                                                            // </div>
-
                                                         )}
                                                     </Menu.Item>
                                                 </Menu.Items>
