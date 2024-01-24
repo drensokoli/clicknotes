@@ -9,7 +9,7 @@ export default function Toast({ apiResponse, setApiResponse, pageLink }: { apiRe
         }, 5000);
 
         return (
-            <div id="toast-success" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-green-400 fixed left-5 bottom-8 z-10 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+            <div id="toast-success" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-green-400 fixed left-5 bottom-8 z-20 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
                 <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
                     <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
@@ -38,7 +38,7 @@ export default function Toast({ apiResponse, setApiResponse, pageLink }: { apiRe
         }, 5000);
 
         return (
-            <div id="toast-danger" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-red-400 fixed left-5 bottom-8 z-10 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+            <div id="toast-danger" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-red-400 fixed left-5 bottom-8 z-20 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
                 <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
                     <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
@@ -65,7 +65,7 @@ export default function Toast({ apiResponse, setApiResponse, pageLink }: { apiRe
         );
     } else if (apiResponse === 'Adding movie to Notion...' || apiResponse === 'Adding TV show to Notion...' || apiResponse === 'Adding book to Notion...') {
         return (
-            <div id="toast-danger" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-blue-400 fixed left-5 bottom-8 z-10 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+            <div id="toast-danger" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-blue-400 fixed left-5 bottom-8 z-20 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
                 <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 rounded-lg dark:bg-blue-800 dark:text-blue-200">
                     <svg className="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9" />
@@ -82,7 +82,7 @@ export default function Toast({ apiResponse, setApiResponse, pageLink }: { apiRe
         }, 5000);
 
         return (
-            <div id="toast-success" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-green-400 fixed left-5 bottom-8 z-10 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+            <div id="toast-success" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-green-400 fixed left-5 bottom-8 z-20 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
                 <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
                     <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
@@ -107,7 +107,7 @@ export default function Toast({ apiResponse, setApiResponse, pageLink }: { apiRe
         }, 5000);
 
         return (
-            <div id="toast-danger" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-red-400 fixed left-5 bottom-8 z-10 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+            <div id="toast-danger" className="flex items-center w-full max-w-xs p-4 text-gray-800 bg-white border-2 border-red-400 fixed left-5 bottom-8 z-20 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
                 <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
                     <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
