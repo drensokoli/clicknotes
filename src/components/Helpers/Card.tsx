@@ -9,7 +9,7 @@ export default function Card({ id, title, poster_path, release_date, link, handl
     poster_path: string | null | undefined;
     release_date: string;
     link: string;
-    handleAddToNotion: () => void;
+    handleAddToNotion: any;
 }) {
 
     const { data: session } = useSession();
