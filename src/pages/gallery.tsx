@@ -61,6 +61,7 @@ export default function Gallery({ encryptionKey }: { encryptionKey: string }) {
                             <>
                                 {movies.map((movie: any) => (
                                     <Card
+                                        key={movie.id}
                                         id={movie.id}
                                         title={movie.properties.Name.title[0].text.content}
                                         poster_path={movie.properties.Poster.url || movie.cover.external.url}
