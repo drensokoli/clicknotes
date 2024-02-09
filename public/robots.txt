@@ -14,3 +14,11 @@ Allow: /books
 # Allow all crawlers
 User-agent: *
 Allow: /help
+
+# Allow all crawlers
+User-agent: *
+Allow: /privacy-policy.html
+
+# Allow all crawlers
+User-agent: *
+Allow: /terms-and-conditions.html
