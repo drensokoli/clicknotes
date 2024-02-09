@@ -1,6 +1,7 @@
 
-export async function getMovies(notionApiKey: string, db_id: string, setMovies: any) {
-    const response = await fetch('/api/getNotionDb', {
+export async function getMovies(notionApiKey: string, db_id: string ) {
+    const url = process.env.NEXTAUTH_URL;
+    const response = await fetch(`${url}/api/getNotionDb`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -9,6 +10,5 @@ export async function getMovies(notionApiKey: string, db_id: string, setMovies: 
     });
 
     const data = await response.json();
-    setMovies(data.response.results);
     return data.response.results;
 }
