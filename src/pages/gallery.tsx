@@ -4,6 +4,7 @@ import { decryptData } from "@/lib/encryption";
 import { getMovies } from "@/lib/notion";
 import { getSession } from "next-auth/react";
 import { useState } from "react";
+import fetch from 'node-fetch';
 
 export default function Gallery({ movies }: { movies: any }) {
 
@@ -56,12 +57,13 @@ export const getServerSideProps = async (context: any) => {
 
     const encryptionKey = process.env.ENCRYPTION_KEY as string;
     const url = process.env.URL;
+    const userEmail = session?.user?.email;
 
     async function fetchMovies() {
         const response = await fetch(`${url}/api/getUser`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userEmail: session?.user?.email }),
+            body: JSON.stringify({ userEmail }),
         });
         const user = await response.json();
 
