@@ -1,26 +1,63 @@
 import Card from "@/components/Helpers/Card";
 import SearchBar from "@/components/Helpers/SearchBar";
+import Movie from "@/components/Media/Movie";
 import { decryptData } from "@/lib/encryption";
 import { getMovies } from "@/lib/notion";
-import { getSession } from "next-auth/react";
-import { useState } from "react";
-import fetch from 'node-fetch';
+import { set } from "lodash";
+import { useSession } from "next-auth/react";
+import { JSXElementConstructor, Key, ReactElement, ReactFragment, useEffect, useState } from "react";
 
-export default function Gallery({ movies }: { movies: any }) {
+export default function Gallery({ encryptionKey }: { encryptionKey: string }) {
 
+    const { data: session } = useSession();
     const [input, setInput] = useState('');
+    const [notionApiKey, setNotionApiKey] = useState<string>('');
+    const [databaseId, setDatabaseId] = useState<string>('');
+    const [movies, setMovies] = useState<any>();
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
+        // const data = getMovies(notionApiKey, databaseId);
+
     };
+
+    useEffect(() => {
+        if (session && !movies) {
+            const fetchUser = async () => {
+                const response = await fetch('/api/getUser', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: session?.user?.email }),
+                });
+                const user = await response.json();
+
+                const notionApiKey = user.notionApiKey;
+                const databaseId = user.moviesPageLink;
+                const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
+                const decryptedDatabaseId = decryptData(databaseId, encryptionKey);
+
+                setNotionApiKey(decryptedNotionApiKey);
+                setDatabaseId(decryptedDatabaseId);
+                const data = await getMovies(decryptedNotionApiKey, decryptedDatabaseId, setMovies);
+
+                console.log("data: ", data);
+
+            };
+            fetchUser();
+        }
+    }, [session, notionApiKey, databaseId, movies, setMovies]);
+    useEffect(() => {
+        console.log("movies: ", movies);
+    }, [movies]);
 
     return (
         <>
+
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container sm:w-5/6">
                     <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
-                        {movies ? (
+                        {movies && (
                             <>
                                 {movies.map((movie: any) => (
                                     <Card
@@ -34,8 +71,6 @@ export default function Gallery({ movies }: { movies: any }) {
                                     />
                                 ))}
                             </>
-                        ) : (
-                            <p>No movies found</p>
                         )}
                     </div>
                 </div>
@@ -44,46 +79,13 @@ export default function Gallery({ movies }: { movies: any }) {
     )
 }
 
-export const getServerSideProps = async (context: any) => {
-    const session = await getSession(context);
+export const getStaticProps = async () => {
 
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/movies',
-            },
-        };
-    }
-
-    const encryptionKey = process.env.ENCRYPTION_KEY as string;
-    const url = process.env.URL;
-    const userEmail = session?.user?.email;
-
-    async function fetchMovies() {
-        const response = await fetch(`${url}/api/getUser`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userEmail }),
-        });
-        const user = await response.json();
-
-        const notionApiKey = user.notionApiKey;
-        const databaseId = user.moviesPageLink;
-        const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
-        const decryptedDatabaseId = decryptData(databaseId, encryptionKey);
-
-        const data = await getMovies(decryptedNotionApiKey, decryptedDatabaseId);
-
-        return data;
-
-    };
-
-    const movies = await fetchMovies();
+    const encryptionKey = process.env.ENCRYPTION_KEY;
 
     return {
         props: {
-            session,
-            movies,
+            encryptionKey,
         },
     };
 }
