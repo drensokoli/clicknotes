@@ -1,6 +1,6 @@
 
 export async function getMovies(notionApiKey: string, db_id: string ) {
-    const url = process.env.NEXTAUTH_URL;
+    const url = process.env.URL;
     const response = await fetch(`${url}/api/getNotionDb`, {
         method: 'POST',
         headers: {

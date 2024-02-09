@@ -55,7 +55,7 @@ export const getServerSideProps = async (context: any) => {
     }
 
     const encryptionKey = process.env.ENCRYPTION_KEY as string;
-    const url = process.env.NEXTAUTH_URL;
+    const url = process.env.URL;
 
     async function fetchMovies() {
         const response = await fetch(`${url}/api/getUser`, {
