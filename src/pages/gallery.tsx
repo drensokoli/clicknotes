@@ -47,13 +47,13 @@ export default function Gallery({ movies }: { movies: any }) {
 export const getServerSideProps = async (context: any) => {
     const session = await getSession(context);
 
-    // if (!session) {
-    //     return {
-    //         redirect: {
-    //             destination: '/movies',
-    //         },
-    //     };
-    // }
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/movies',
+            },
+        };
+    }
 
     const encryptionKey = process.env.ENCRYPTION_KEY as string;
     const url = process.env.URL;
