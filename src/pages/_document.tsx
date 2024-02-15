@@ -1,7 +1,5 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 import { Analytics } from '@vercel/analytics/react';
-import { useEffect } from 'react';
-import { Metadata } from 'next';
 
 export default function Document({ }: any) {
   return (

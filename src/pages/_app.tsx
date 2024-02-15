@@ -10,7 +10,6 @@ import { Analytics } from '@vercel/analytics/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import NotionBanner from '@/components/Notion/NotionBanner';
-import { Metadata } from 'next';
 
 interface WrappedAppProps extends Omit<AppProps, 'router'> {
   router: NextRouter;
