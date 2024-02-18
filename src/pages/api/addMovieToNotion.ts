@@ -3,6 +3,8 @@ import { Client } from '@notionhq/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, movieData } = req.body;
+    const watchLinkName = movieData.title.replace(/ /g, '%20').toLowerCase();
+    const watchLink = `https://movie-web.app/media/tmdb-movie-${movieData.id}-${watchLinkName}`
 
     try {
         const notion = new Client({ auth: notionApiKey });
@@ -74,6 +76,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     'Poster': {
                         url: movieData.poster_path,
+                    },
+                    'Overview': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: movieData.overview,
+                                },
+                            },
+                        ],
+                    },
+                    'Trailer': {
+                        url: movieData.trailer,
+                    },
+                    'Watch Link': {
+                        url: watchLink,
                     },
                 },
                 icon: {
@@ -155,6 +172,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     'Poster': {
                         url: movieData.poster_path,
+                    },
+                    'Watch Link': {
+                        url: watchLink,
+                    },
+                    'Overview': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: movieData.overview,
+                                },
+                            },
+                        ],
+                    },
+                    'Trailer': {
+                        url: movieData.trailer,
                     },
                 },
                 icon: {

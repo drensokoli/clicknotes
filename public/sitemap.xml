@@ -25,4 +25,14 @@
       <changefreq>yearly</changefreq>
       <priority>0.5</priority>
    </url>
+   <url>
+      <loc>https://www.clicknotes.site/terms-and-conditions.html</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://www.clicknotes.site/privacy-policy.html</loc>
+      <changefreq>yearly</changefreq>
+      <priority>0.8</priority>
+   </url>
 </urlset>

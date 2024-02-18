@@ -19,6 +19,7 @@ export default async function handler(
 
         const response = await notion.databases.query({
             database_id: db_id,
+            page_size: 20,
         });
 
         res.status(200).json({ response });
