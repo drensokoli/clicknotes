@@ -5,7 +5,7 @@ import { decryptData } from "@/lib/encryption";
 import { getMovies } from "@/lib/notion";
 import { set } from "lodash";
 import { useSession } from "next-auth/react";
-import { JSXElementConstructor, Key, ReactElement, ReactFragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Gallery({ encryptionKey }: { encryptionKey: string }) {
 
@@ -46,6 +46,7 @@ export default function Gallery({ encryptionKey }: { encryptionKey: string }) {
             fetchUser();
         }
     }, [session, notionApiKey, databaseId, movies, setMovies]);
+
     useEffect(() => {
         console.log("movies: ", movies);
     }, [movies]);
