@@ -15,8 +15,8 @@ export default function Document({ }: any) {
       <meta property="og:site_name" content="ClickNotes" />
       <meta property="og:type" content="website" />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@drensokoli" />
-      <meta name="twitter:creator" content="@drensokoli" />
+      <meta name="twitter:site" content="@SokoliDren" />
+      <meta name="twitter:creator" content="@SokoliDren" />
       <meta name="twitter:title" content="ClickNotes - Save your media content to Notion" />
       <meta name="twitter:description" content="Save popular and trending media content to your Notion list or search for your favorites. All your media content in one place, displayed in a beautiful Notion template." />
       <meta name="twitter:image" content="https://www.clicknotes.site/og/movies.png" />
