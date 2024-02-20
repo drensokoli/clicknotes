@@ -6,7 +6,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/dist/client/image';
-import { BsPersonFill, BsQuestionCircleFill, BsBoxArrowInRight, BsListNested } from 'react-icons/bs';
+import { BsPersonFillGear, BsQuestionCircleFill, BsBoxArrowInRight, BsList } from 'react-icons/bs';
 
 export default function Navbar() {
     const { data: session, status } = useSession();
@@ -20,7 +20,6 @@ export default function Navbar() {
     function classNames(...classes: string[]) {
         return classes.filter(Boolean).join(' ')
     };
-
 
     return (
         <>
@@ -111,13 +110,13 @@ export default function Navbar() {
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
-                                                                href="/gallery"
+                                                                href="/lists"
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                aria-label='Gallery'
+                                                                aria-label='Lists'
                                                             >
                                                                 <div className='flex flex-row justify-start items-center gap-1'>
-                                                                    <BsListNested />
-                                                                    <h1>Gallery</h1>
+                                                                    <BsList />
+                                                                    <h1>Lists</h1>
                                                                 </div>
                                                             </Link>
                                                         )}
@@ -125,13 +124,13 @@ export default function Navbar() {
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
-                                                                href="/profile"
+                                                                href="/profile-settings"
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                aria-label='Profile'
+                                                                aria-label='Settings'
                                                             >
                                                                 <div className='flex flex-row justify-start items-center gap-1'>
-                                                                    <BsPersonFill />
-                                                                    <h1>Profile</h1>
+                                                                    <BsPersonFillGear />
+                                                                    <h1>Settings</h1>
                                                                 </div>
                                                             </Link>
                                                         )}

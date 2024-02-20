@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Toast from '@/components/Helpers/Toast';
 import Input from '@/components/Helpers/Input';
 
-export default function Profile({ encryptionKey }: { encryptionKey: string }) {
+export default function ProfileSettings({ encryptionKey }: { encryptionKey: string }) {
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
 
