@@ -84,7 +84,7 @@ export default function Lists({ encryptionKey, movies }: { encryptionKey: string
 export const getServerSideProps = async (context: any) => {
     const session = await getSession(context);
     const encryptionKey = process.env.ENCRYPTION_KEY as string;
-
+    const baseUrl = process.env.BASE_URL as string;
     if (!session) {
         return {
             redirect: {
@@ -94,7 +94,7 @@ export const getServerSideProps = async (context: any) => {
     }
 
     const fetchUser = async () => {
-        const response = await fetch('http://localhost:3000/api/getUser', {
+        const response = await fetch(`${baseUrl}/api/getUser`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userEmail: session?.user?.email }),
