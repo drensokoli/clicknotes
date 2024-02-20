@@ -8,7 +8,7 @@ import { getSession, useSession } from "next-auth/react";
 import { JSXElementConstructor, Key, ReactElement, ReactFragment, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
 
-export default function nameList({ movies, books, nameList, movieStatusList, bookStatusList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any }) {
+export default function Lists({ movies, books, nameList, movieStatusList, bookStatusList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any }) {
 
     const { data: session } = useSession();
     const [input, setInput] = useState('');
