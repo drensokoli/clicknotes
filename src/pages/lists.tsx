@@ -8,7 +8,7 @@ import { getSession, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
 
-export default function Lists({ encryptionKey, movies }: { encryptionKey: string, movies: any }) {
+export default function Lists({ encryptionKey, movies, books }: { encryptionKey: string, movies: any, books: any }) {
 
     const { data: session } = useSession();
     const [input, setInput] = useState('');
@@ -19,59 +19,35 @@ export default function Lists({ encryptionKey, movies }: { encryptionKey: string
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         // const data = getMovies(notionApiKey, databaseId);
-
     };
-
-    // useEffect(() => {
-    //     if (session && !movies) {
-    //         const fetchUser = async () => {
-    //             const response = await fetch('/api/getUser', {
-    //                 method: 'POST',
-    //                 headers: { 'Content-Type': 'application/json' },
-    //                 body: JSON.stringify({ userEmail: session?.user?.email }),
-    //             });
-    //             const user = await response.json();
-
-    //             const notionApiKey = user.notionApiKey;
-    //             const databaseId = user.moviesPageLink;
-    //             const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
-    //             const decryptedDatabaseId = decryptData(databaseId, encryptionKey);
-
-    //             setNotionApiKey(decryptedNotionApiKey);
-    //             setDatabaseId(decryptedDatabaseId);
-    //             const data = await getMovies(decryptedNotionApiKey, decryptedDatabaseId, setMovies);
-
-    //             console.log("data: ", data);
-
-    //         };
-    //         fetchUser();
-    //     }
-    // }, [session, notionApiKey, databaseId, movies, setMovies]);
-
-    useEffect(() => {
-        console.log("movies: ", movies);
-    }, [movies]);
 
     return (
         <>
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
+                {movies.length === 0 && (
+                    <div>
+                        No movies found
+                    </div>
+                )}
                 <div className="content-container sm:w-5/6">
                     <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
                         {movies && (
                             <>
-                                {movies.map((movie: any) => (
-                                    <Card
-                                        key={movie.id}
-                                        id={movie.id}
-                                        title={movie.properties.Name.title[0].text.content}
-                                        poster_path={movie.properties.Poster.url || movie.cover.external.url}
-                                        release_date="2002"
-                                        link={`https://www.themoviedb.org/movie/${movie.id}`}
-                                        handleAddToNotion={handleInputChange}
-                                    />
-                                ))}
+                                {movies
+                                    .filter((movie: any) => movie.properties.Status.select.name === 'To watch' || movie.properties.Status.select.name === 'Watching')
+                                    .map((movie: any) => (
+                                        <Card
+                                            key={movie.id}
+                                            id={movie.id}
+                                            title={movie.properties.Name.title[0].text.content}
+                                            poster_path={movie.properties.Poster.url || movie.cover.external.url}
+                                            release_date=""
+                                            link={`https://www.themoviedb.org/movie/${movie.id}`}
+                                            handleAddToNotion={handleInputChange}
+                                        />
+                                    ))}
                             </>
                         )}
                     </div>
@@ -83,8 +59,7 @@ export default function Lists({ encryptionKey, movies }: { encryptionKey: string
 
 export const getServerSideProps = async (context: any) => {
     const session = await getSession(context);
-    const encryptionKey = process.env.ENCRYPTION_KEY as string;
-    const baseUrl = process.env.BASE_URL as string;
+
     if (!session) {
         return {
             redirect: {
@@ -92,6 +67,9 @@ export const getServerSideProps = async (context: any) => {
             },
         };
     }
+
+    const encryptionKey = process.env.ENCRYPTION_KEY as string;
+    const baseUrl = process.env.BASE_URL as string;
 
     const fetchUser = async () => {
         const response = await fetch(`${baseUrl}/api/getUser`, {
@@ -101,31 +79,44 @@ export const getServerSideProps = async (context: any) => {
         });
         const user = await response.json();
 
+        if (!user.notionApiKey)
+            return { movies: [], books: [] };
+
         const notionApiKey = user.notionApiKey;
-        const databaseId = user.moviesPageLink;
         const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
-        const decryptedDatabaseId = decryptData(databaseId, encryptionKey);
-
-        // const data = await getMoviesInSSR(decryptedNotionApiKey, decryptedDatabaseId);
-
-        // console.log("data: ", data);
 
         const notion = new Client({ auth: decryptedNotionApiKey });
 
-        const notionResponse =await notion.databases.query({
-            database_id: decryptedDatabaseId,
-            page_size: 20,
-        });
+        let moviesResponse, booksResponse;
 
-        return notionResponse.results;
+        if (user.moviesPageLink) {
+            const decryptedMoviesPageLink = decryptData(user.moviesPageLink, encryptionKey);
+            moviesResponse = await notion.databases.query({
+                database_id: decryptedMoviesPageLink
+            });
+        } else {
+            moviesResponse = { results: [] };
+        }
+
+        if (user.booksPageLink) {
+            const decryptedBooksPageLink = decryptData(user.booksPageLink, encryptionKey);
+            booksResponse = await notion.databases.query({
+                database_id: decryptedBooksPageLink
+            });
+        } else {
+            booksResponse = { results: [] };
+        }
+
+        return { movies: moviesResponse.results, books: booksResponse.results };
     };
 
-    const movies = await fetchUser();
+    const { movies, books } = await fetchUser();
 
     return {
         props: {
             encryptionKey,
-            movies
+            movies,
+            books,
         },
     };
 }
