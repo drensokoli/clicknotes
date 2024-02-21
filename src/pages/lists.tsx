@@ -5,12 +5,13 @@ import { getSession, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
 import ListsCard from "@/components/Helpers/ListsCard";
+import LoadMore from "@/components/Helpers/LoadMore";
 
 export default function Lists({ movies, books, nameList, movieStatusList, bookStatusList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any }) {
 
     const [input, setInput] = useState('');
     const [moviesList, setMoviesList] = useState(movies.filter((movie: any) => movie.properties.Status.status.name === 'To watch'));
-
+    const [displayCount, setDisplayCount] = useState(20);
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         // const data = getMovies(notionApiKey, databaseId);
@@ -40,6 +41,7 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                             value={nameList[0].name}
                             onChange={(e) => {
                                 setMoviesList(movies.filter((movie: any) => movie.properties.Status.status.name === e.target.value));
+                                setDisplayCount(20);
                             }}
                         >
                             {movieStatusList.map((status: any) => (
@@ -68,7 +70,7 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                         {moviesList && (
                             <>
                                 {moviesList
-                                    // .filter((movie: any) => movie.properties.Status.status.name === 'Watched')
+                                    .slice(0, displayCount)
                                     .map((movie: any) => (
                                         <ListsCard
                                             key={movie.id}
@@ -88,6 +90,13 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                                         />
                                     ))
                                 }
+                                {displayCount < moviesList.length && (
+                                    <LoadMore
+                                        displayCount={displayCount}
+                                        setDisplayCount={setDisplayCount}
+                                        media={moviesList}
+                                    />
+                                )}
                             </>
                         )}
                     </div>
@@ -127,9 +136,26 @@ export const getServerSideProps = async (context: any) => {
 
         const notion = new Client({ auth: decryptedNotionApiKey });
 
-        let moviesResponse, booksResponse;
+        const fetchAllPages = async (databaseId: string) => {
+            const allResults = [];
+            let cursor = undefined;
+
+            do {
+                const response = await notion.databases.query({
+                    database_id: databaseId,
+                    start_cursor: cursor,
+                });
+
+                allResults.push(...response.results);
+                cursor = response.next_cursor;
+            } while (cursor);
+
+            return allResults;
+        };
 
         const nameList = [];
+        let movies = [] as any;
+        let books = [] as any;
         let movieStatusList = [] as any;
         let bookStatusList = [] as any;
 
@@ -141,13 +167,9 @@ export const getServerSideProps = async (context: any) => {
             nameList.push({ databaseName: moviesDatabaseName });
 
             movieStatusList = moviesDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
-
-            moviesResponse = await notion.databases.query({
-                database_id: decryptedMoviesPageLink
-                // page_size: 20
-            });
+            movies = await fetchAllPages(decryptedMoviesPageLink);
         } else {
-            moviesResponse = { results: [] };
+            movies = { results: [] };
         }
 
         if (user.booksPageLink) {
@@ -158,18 +180,14 @@ export const getServerSideProps = async (context: any) => {
             nameList.push({ databaseName: booksDatabaseName });
 
             bookStatusList = booksDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
-
-            booksResponse = await notion.databases.query({
-                database_id: decryptedBooksPageLink
-                // page_size: 20
-            });
+            books = await fetchAllPages(decryptedBooksPageLink);
         } else {
-            booksResponse = { results: [] };
+            books = { results: [] };
         }
 
         return {
-            movies: moviesResponse.results,
-            books: booksResponse.results,
+            movies,
+            books,
             nameList,
             movieStatusList,
             bookStatusList
