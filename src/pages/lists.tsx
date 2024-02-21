@@ -79,6 +79,7 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                                             overview={movie.properties['Overview']?.rich_text[0]?.text?.content}
                                             rating={movie.properties.Rating.number}
                                             watch_link={movie.properties['Watch Link'].url}
+                                            notion_link={`https://www.notion.so/${movie.id.replace(/-/g, '')}`}
                                         />
                                     ))
                                 }

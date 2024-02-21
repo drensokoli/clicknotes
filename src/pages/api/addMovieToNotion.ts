@@ -87,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         ],
                     },
                     'Trailer': {
-                        url: movieData.trailer,
+                        url: movieData.trailer || null,
                     },
                     'Watch Link': {
                         url: watchLink,

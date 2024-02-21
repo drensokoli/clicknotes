@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { over } from 'lodash';
 
-export default function ListsCard({ id, title, poster_path, release_date, link, handleStatusChange, statusList, status, trailer, overview, rating, watch_link }: {
+export default function ListsCard({ id, title, poster_path, release_date, link, handleStatusChange, statusList, status, trailer, overview, rating, watch_link, notion_link }: {
     id: number | string;
     title: string;
     poster_path: string | null | undefined;
@@ -18,6 +19,7 @@ export default function ListsCard({ id, title, poster_path, release_date, link, 
     overview: any;
     rating: number;
     watch_link: string;
+    notion_link: string;
 }) {
     const [open, setOpen] = useState(false);
 
@@ -100,7 +102,7 @@ export default function ListsCard({ id, title, poster_path, release_date, link, 
                                         <div className="sm:flex sm:items-start">
                                             <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                                                 <Link href="youtube.com">
-                                                    <Image src="/affiliate-white-sm.png" width={100} height={100} alt={''} />
+                                                    <Image src={poster_path || "/no-image.png"} width={200} height={100} alt={''} />
                                                 </Link>
                                             </div>
                                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
@@ -113,12 +115,26 @@ export default function ListsCard({ id, title, poster_path, release_date, link, 
                                                     </div>
                                                 </Dialog.Title>
                                                 <div className="mt-2 gap-2 flex flex-col">
-                                                    <p className="text-sm text-gray-500 text-left">Overview:</p>
-                                                    <p className="text-sm text-gray-900 text-left">{overview}</p>
-                                                    <p className="text-sm text-gray-500 text-left">Trailer:</p>
-                                                    <Link href={trailer} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{trailer}</Link>
-                                                    <p className="text-sm text-gray-500 text-left">Watch:</p>
-                                                    <Link href={watch_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{watch_link}</Link>
+                                                    <p className="text-sm text-gray-500 text-left mt-2">Overview:</p>
+                                                    {overview ? (
+                                                        <p className="text-sm text-gray-900 text-left">{overview}</p>
+                                                    ) : (
+                                                        <p className="text-sm text-gray-400 text-left">No Overview for this movie</p>
+                                                    )}
+                                                    <p className="text-sm text-gray-500 text-left mt-2">Trailer:</p>
+                                                    {trailer ? (
+                                                        <Link href={trailer} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{trailer}</Link>
+                                                    ) : (
+                                                        <p className="text-sm text-gray-400 text-left">No Trailer for this movie</p>
+                                                    )}
+                                                    <p className="text-sm text-gray-500 text-left mt-2">Watch:</p>
+                                                    {watch_link ? (
+                                                        <Link href={watch_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{watch_link}</Link>
+                                                    ) : (
+                                                        <p className="text-sm text-gray-400 text-left">No Watch Link for this movie</p>
+                                                    )}
+                                                    <p className="text-sm text-gray-500 text-left mt-2">Notion:</p>
+                                                    <Link href={notion_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{notion_link}</Link>
                                                 </div>
                                             </div>
                                         </div>

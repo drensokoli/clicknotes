@@ -4,6 +4,8 @@ import { Client } from '@notionhq/client';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, tvShowData } = req.body;
 
+    const watchLinkName = tvShowData.name.replace(/ /g, '%20').toLowerCase();
+    const watchLink = `https://movie-web.app/media/tmdb-tv-${tvShowData.id}-${watchLinkName}`
     try {
         const notion = new Client({ auth: notionApiKey });
 
@@ -56,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         select: {
                             name: 'TvShow',
                         },
-                    },                    
+                    },
                     'Director': {
                         rich_text: [
                             {
@@ -65,6 +67,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 },
                             },
                         ],
+                    },
+                    'Poster': {
+                        url: tvShowData.poster_path,
+                    },
+                    'Trailer': {
+                        url: tvShowData.trailer || null,
+                    },
+                    'Overview': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: tvShowData.overview,
+                                },
+                            },
+                        ],
+                    },
+                    'Watch Link': {
+                        url: watchLink,
                     },
                 },
                 icon: {
@@ -121,7 +141,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         select: {
                             name: 'TvShow',
                         },
-                    },                    
+                    },
                     'Director': {
                         rich_text: [
                             {
@@ -130,7 +150,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 },
                             },
                         ],
-                    },                    
+                    },
                     'Status': {
                         select: {
                             name: 'To watch',
