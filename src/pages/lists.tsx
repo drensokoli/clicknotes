@@ -62,7 +62,7 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                         {movies && (
                             <>
                                 {movies
-                                    .filter((movie: any) => movie.properties.Status.select.name === 'To watch' || movie.properties.Status.select.name === 'Watching')
+                                    // .filter((movie: any) => movie.properties.Status.select.name === 'To watch' || movie.properties.Status.select.name === 'Watching')
                                     .map((movie: any) => (
                                         <Card
                                             key={movie.id}
@@ -126,7 +126,7 @@ export const getServerSideProps = async (context: any) => {
             const moviesDatabaseName = moviesDatabaseInfo.icon.emoji + moviesDatabaseInfo.title[0].plain_text;
             nameList.push({ databaseName: moviesDatabaseName });
 
-            movieStatusList = moviesDatabaseInfo.properties.Status.select.options.map((status: any) => status.name);
+            movieStatusList = moviesDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
 
             moviesResponse = await notion.databases.query({
                 database_id: decryptedMoviesPageLink,
@@ -143,7 +143,7 @@ export const getServerSideProps = async (context: any) => {
             const booksDatabaseName = booksDatabaseInfo.icon.emoji + booksDatabaseInfo.title[0].plain_text;
             nameList.push({ databaseName: booksDatabaseName });
 
-            bookStatusList = booksDatabaseInfo.properties.Status.select.options.map((status: any) => status.name);
+            bookStatusList = booksDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
 
             booksResponse = await notion.databases.query({
                 database_id: decryptedBooksPageLink,
