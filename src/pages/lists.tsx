@@ -1,20 +1,13 @@
 import Card from "@/components/Helpers/Card";
 import SearchBar from "@/components/Helpers/SearchBar";
-import Movie from "@/components/Media/Movie";
 import { decryptData } from "@/lib/encryption";
-import { getMovies, getMoviesInSSR } from "@/lib/notion";
-import { set } from "lodash";
 import { getSession, useSession } from "next-auth/react";
-import { JSXElementConstructor, Key, ReactElement, ReactFragment, useEffect, useState } from "react";
+import { useState } from "react";
 import { Client } from '@notionhq/client';
 
 export default function Lists({ movies, books, nameList, movieStatusList, bookStatusList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any }) {
 
-    const { data: session } = useSession();
     const [input, setInput] = useState('');
-    const [notionApiKey, setNotionApiKey] = useState<string>('');
-    const [databaseId, setDatabaseId] = useState<string>('');
-    // const [movies, setMovies] = useState<any>();
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
@@ -136,7 +129,8 @@ export const getServerSideProps = async (context: any) => {
             movieStatusList = moviesDatabaseInfo.properties.Status.select.options.map((status: any) => status.name);
 
             moviesResponse = await notion.databases.query({
-                database_id: decryptedMoviesPageLink
+                database_id: decryptedMoviesPageLink,
+                page_size: 20
             });
         } else {
             moviesResponse = { results: [] };
@@ -152,7 +146,8 @@ export const getServerSideProps = async (context: any) => {
             bookStatusList = booksDatabaseInfo.properties.Status.select.options.map((status: any) => status.name);
 
             booksResponse = await notion.databases.query({
-                database_id: decryptedBooksPageLink
+                database_id: decryptedBooksPageLink,
+                page_size: 20
             });
         } else {
             booksResponse = { results: [] };

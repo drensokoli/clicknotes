@@ -165,11 +165,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             name: 'Movie',
                         },
                     },
-                    'Status': {
-                        select: {
-                            name: 'To watch',
-                        },
-                    },
                     'Poster': {
                         url: movieData.poster_path,
                     },
