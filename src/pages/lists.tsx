@@ -12,6 +12,7 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
     const [input, setInput] = useState('');
     const [moviesList, setMoviesList] = useState(movies.filter((movie: any) => movie.properties.Status.status.name === 'To watch'));
     const [displayCount, setDisplayCount] = useState(20);
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         // const data = getMovies(notionApiKey, databaseId);
@@ -138,17 +139,17 @@ export const getServerSideProps = async (context: any) => {
 
         const fetchAllPages = async (databaseId: string) => {
             const allResults = [];
-            let cursor = undefined;
 
-            do {
-                const response = await notion.databases.query({
-                    database_id: databaseId,
-                    start_cursor: cursor,
-                });
+            // do {
+            const response = await notion.databases.query({
+                database_id: databaseId,
+                // start_cursor: cursor,
+                page_size: 100,
+            });
 
-                allResults.push(...response.results);
-                cursor = response.next_cursor;
-            } while (cursor);
+            allResults.push(...response.results);
+            //     cursor = response.next_cursor;
+            // } while (cursor);
 
             return allResults;
         };
