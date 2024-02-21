@@ -2,8 +2,9 @@ import Card from "@/components/Helpers/Card";
 import SearchBar from "@/components/Helpers/SearchBar";
 import { decryptData } from "@/lib/encryption";
 import { getSession, useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
+import ListsCard from "@/components/Helpers/ListsCard";
 
 export default function Lists({ movies, books, nameList, movieStatusList, bookStatusList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any }) {
 
@@ -62,18 +63,25 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                         {movies && (
                             <>
                                 {movies
-                                    // .filter((movie: any) => movie.properties.Status.select.name === 'To watch' || movie.properties.Status.select.name === 'Watching')
+                                    // .filter((movie: any) => movie.properties.Status.status.name === 'Watched')
                                     .map((movie: any) => (
-                                        <Card
+                                        <ListsCard
                                             key={movie.id}
                                             id={movie.id}
                                             title={movie.properties.Name.title[0].text.content}
                                             poster_path={movie.properties.Poster.url || movie.cover.external.url}
-                                            release_date=""
+                                            release_date={movie.properties['Release Date'].date.start}
                                             link={`https://www.themoviedb.org/movie/${movie.id}`}
-                                            handleAddToNotion={handleInputChange}
+                                            handleStatusChange={handleInputChange}
+                                            statusList={movieStatusList}
+                                            status={movie.properties.Status.status.name}
+                                            trailer={movie.properties.Trailer.url}
+                                            overview={movie.properties['Overview']?.rich_text[0]?.text?.content}
+                                            rating={movie.properties.Rating.number}
+                                            watch_link={movie.properties['Watch Link'].url}
                                         />
-                                    ))}
+                                    ))
+                                }
                             </>
                         )}
                     </div>
