@@ -3,8 +3,6 @@ import Image from 'next/dist/client/image';
 import Link from 'next/link';
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { over } from 'lodash';
 
 export default function ListsCard({ id, title, poster_path, release_date, link, handleStatusChange, statusList, status, trailer, overview, rating, watch_link, notion_link }: {
     id: number | string;
@@ -53,16 +51,21 @@ export default function ListsCard({ id, title, poster_path, release_date, link, 
                         />
                     )}
                     <select
-                        className="movie-card-button select-none border-2 text-white bg-red-600 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 dark:focus:ring-red-800"
-                    // value={status}
+                        className={`movie-card-button backdrop-blur-sm select-none text-white border-2 bg-transparent hover:bg-opacity-80 focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 ${
+                                status === 'To watch' ? 'border-red-700 hover:bg-red-800 focus:ring-red-800 focus:bg-red-800' :
+                                status === 'Watching' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800' :
+                                'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800'
+                            }`}
+                        value={status}
                     // onChange={(e) => handleStatusChange(e, id)}
                     >
                         {statusList.map((status: any) => (
-                            <option key={status} value={status} className='bg-gray-100 text-gray-800 '>
+                            <option key={status} value={status} className='bg-gray-100 text-gray-800'>
                                 {status}
                             </option>
                         ))}
                     </select>
+
                 </div>
 
                 {/* <Link href={link} passHref target='_blank' aria-label={`${title} ${release_date}`}> */}
@@ -100,10 +103,8 @@ export default function ListsCard({ id, title, poster_path, release_date, link, 
                                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                                     <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                         <div className="sm:flex sm:items-start">
-                                            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                                <Link href="youtube.com">
-                                                    <Image src={poster_path || "/no-image.png"} width={200} height={100} alt={''} />
-                                                </Link>
+                                            <div className="mx-auto flex items-center justify-center ">
+                                                <Image src={poster_path || "/no-image.png"} width={200} height={200} alt={title} className='sm:w-[350px] w-[200px] h-auto' />
                                             </div>
                                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                                 <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">

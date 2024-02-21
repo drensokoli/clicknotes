@@ -9,6 +9,7 @@ import ListsCard from "@/components/Helpers/ListsCard";
 export default function Lists({ movies, books, nameList, movieStatusList, bookStatusList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any }) {
 
     const [input, setInput] = useState('');
+    const [moviesList, setMoviesList] = useState(movies.filter((movie: any) => movie.properties.Status.status.name === 'To watch'));
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
@@ -21,7 +22,7 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="flex justify-end items-center w-[90%] sm:w-[70%] gap-2">
-                    <div>
+                    {/* <div>
                         <select
                             className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         // value={nameList[0].name}
@@ -32,14 +33,18 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                                 </option>
                             ))}
                         </select>
-                    </div>
+                    </div> */}
                     <div>
                         <select
                             className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        // value={nameList[0].name}
+                            value={nameList[0].name}
+                            onChange={(e) => {
+                                setMoviesList(movies.filter((movie: any) => movie.properties.Status.status.name === e.target.value));
+                            }}
                         >
                             {movieStatusList.map((status: any) => (
-                                <option key={status} value={status}>
+                                <option key={status} value={status}
+                                >
                                     {status}
                                 </option>
                             ))}
@@ -60,9 +65,9 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                 </div>
                 <div className="content-container sm:w-5/6">
                     <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
-                        {movies && (
+                        {moviesList && (
                             <>
-                                {movies
+                                {moviesList
                                     // .filter((movie: any) => movie.properties.Status.status.name === 'Watched')
                                     .map((movie: any) => (
                                         <ListsCard
@@ -77,7 +82,7 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                                             status={movie.properties.Status.status.name}
                                             trailer={movie.properties.Trailer.url}
                                             overview={movie.properties['Overview']?.rich_text[0]?.text?.content}
-                                            rating={movie.properties['My rating'].number}
+                                            rating={movie.properties['My Rating'].number}
                                             watch_link={movie.properties['Watch Link'].url}
                                             notion_link={`https://www.notion.so/${movie.id.replace(/-/g, '')}`}
                                         />
@@ -138,8 +143,8 @@ export const getServerSideProps = async (context: any) => {
             movieStatusList = moviesDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
 
             moviesResponse = await notion.databases.query({
-                database_id: decryptedMoviesPageLink,
-                page_size: 20
+                database_id: decryptedMoviesPageLink
+                // page_size: 20
             });
         } else {
             moviesResponse = { results: [] };
@@ -155,8 +160,8 @@ export const getServerSideProps = async (context: any) => {
             bookStatusList = booksDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
 
             booksResponse = await notion.databases.query({
-                database_id: decryptedBooksPageLink,
-                page_size: 20
+                database_id: decryptedBooksPageLink
+                // page_size: 20
             });
         } else {
             booksResponse = { results: [] };
