@@ -78,7 +78,7 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                                             id={movie.id}
                                             title={movie.properties.Name.title[0].text.content}
                                             poster_path={movie.properties.Poster.url || movie.cover.external.url}
-                                            release_date={movie.properties['Release Date'].date.start}
+                                            release_date={movie.properties['Release Date'].date.start || ''}
                                             link={`https://www.themoviedb.org/movie/${movie.id}`}
                                             handleStatusChange={handleInputChange}
                                             statusList={movieStatusList}

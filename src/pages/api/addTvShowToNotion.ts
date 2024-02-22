@@ -6,6 +6,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const watchLinkName = tvShowData.name.replace(/ /g, '%20').toLowerCase();
     const watchLink = `https://movie-web.app/media/tmdb-tv-${tvShowData.id}-${watchLinkName}`
+
+    const checkProperties = [
+        { name: 'Name', type: 'title', structure: [{ text: { content: tvShowData.name } }], data: tvShowData.name },
+        { name: 'Release Date', type: 'date', structure: { start: tvShowData.release_date }, data: tvShowData.release_date },
+        { name: 'Genres', type: 'multi_select', structure: tvShowData.genres, data: tvShowData.genres },
+        { name: 'Cast', type: 'multi_select', structure: tvShowData.cast, data: tvShowData.cast },
+        { name: 'TMDB Rating', type: 'number', structure: tvShowData.vote_average, data: tvShowData.vote_average },
+        { name: 'TMDB Link', type: 'url', structure: tvShowData.tmdb_link, data: tvShowData.tmdb_link },
+        { name: 'iMDB Link', type: 'url', structure: tvShowData.imdb_link, data: tvShowData.imdb_link },
+        { name: 'Director', type: 'rich_text', structure: [{ text: { content: tvShowData.director } }], data: tvShowData.director },
+        { name: 'Type', type: 'select', structure: { name: 'TvShow' }, data: tvShowData.name },
+        { name: 'Poster', type: 'url', structure: tvShowData.poster_path, data: tvShowData.poster_path },
+        { name: 'Watch Link', type: 'url', structure: watchLink },
+        { name: 'Overview', type: 'rich_text', structure: [{ text: { content: tvShowData.overview } }], data: tvShowData.overview },
+        { name: 'Trailer', type: 'url', structure: tvShowData.trailer, data: tvShowData.trailer },
+        { name: 'Watch Link', type: 'url', structure: watchLink, data: watchLink}
+    ];
+
     try {
         const notion = new Client({ auth: notionApiKey });
 
@@ -22,71 +40,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (existingPages.results.length > 0) {
             const existingPageId = existingPages.results[0].id;
 
+            const page = await notion.pages.retrieve({
+                page_id: existingPageId,
+            });
+
+            const existingProperties = (page as any).properties;
+            const updatedProperties = {} as any;
+
+            checkProperties.forEach((property) => {
+                if (existingProperties[property.name] && property.data) {
+                    updatedProperties[property.name] = {
+                        [property.type]: property.structure,
+                    };
+                }
+            });
             await notion.pages.update({
                 page_id: existingPageId,
-                properties: {
-                    'ID': {
-                        number: tvShowData.id,
-                    },
-                    'Name': {
-                        title: [
-                            {
-                                text: {
-                                    content: tvShowData.name,
-                                },
-                            },
-                        ],
-                    },
-                    'Release Date': {
-                        date: {
-                            start: tvShowData.first_air_date,
-                        },
-                    },
-                    'Genres': {
-                        multi_select: tvShowData.genres,
-                    },
-                    'Cast': {
-                        multi_select: tvShowData.cast,
-                    },
-                    'TMDB Rating': {
-                        number: tvShowData.vote_average,
-                    },
-                    'TMDB Link': {
-                        url: tvShowData.tmdb_link,
-                    },
-                    'Type': {
-                        select: {
-                            name: 'TvShow',
-                        },
-                    },
-                    'Director': {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: tvShowData.director,
-                                },
-                            },
-                        ],
-                    },
-                    'Poster': {
-                        url: tvShowData.poster_path,
-                    },
-                    'Trailer': {
-                        url: tvShowData.trailer || null,
-                    },
-                    'Overview': {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: tvShowData.overview,
-                                },
-                            },
-                        ],
-                    },
-                    'Watch Link': {
-                        url: watchLink,
-                    },
-                },
+                properties: updatedProperties,
                 icon: {
                     type: 'emoji',
                     emoji: '📺',
@@ -111,51 +81,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'ID': {
                         number: tvShowData.id,
                     },
-                    'Name': {
-                        title: [
-                            {
-                                text: {
-                                    content: tvShowData.name,
-                                },
-                            },
-                        ],
-                    },
-                    'Release Date': {
-                        date: {
-                            start: tvShowData.first_air_date,
-                        },
-                    },
-                    'Genres': {
-                        multi_select: tvShowData.genres,
-                    },
-                    'Cast': {
-                        multi_select: tvShowData.cast,
-                    },
-                    'TMDB Rating': {
-                        number: tvShowData.vote_average,
-                    },
-                    'TMDB Link': {
-                        url: tvShowData.tmdb_link,
-                    },
-                    'Type': {
-                        select: {
-                            name: 'TvShow',
-                        },
-                    },
-                    'Director': {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: tvShowData.director,
-                                },
-                            },
-                        ],
-                    },
-                    'Status': {
-                        select: {
-                            name: 'To watch',
-                        },
-                    },
                 },
                 icon: {
                     type: 'emoji',
@@ -167,6 +92,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         url: tvShowData.backdrop_path,
                     },
                 },
+            });
+
+            const existingProperties = (newPage as any).properties;
+            const updatedProperties = {} as any;
+
+            checkProperties.forEach((property) => {
+                if (existingProperties[property.name] && property.data) {
+                    updatedProperties[property.name] = {
+                        [property.type]: property.structure,
+                    };
+                }
+            });
+
+            await notion.pages.update({
+                page_id: newPage.id,
+                properties: updatedProperties
             });
 
             const contentUpdateResponse = await notion.blocks.children.append({

@@ -30,7 +30,7 @@ export default function ListsCard({ id, title, poster_path, release_date, link, 
                     {poster_path ? (
                         <div
                             onClick={() => setOpen(true)}
-                            aria-label={`${title} ${release_date}`}>
+                            aria-label={title}>
                             <Image
                                 src={poster_path}
                                 width={200}

@@ -29,7 +29,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
 
     const rounded_vote_average = Math.round(vote_average * 10) / 10;
     const tmdb_link = `https://www.themoviedb.org/tv/${id}`;
-    const defaultDate = "0001-01-01";
+    const defaultDate = "2000-01-01";
     const genres = await fetchGenres({ id, tmdbApiKey });
     const cast = await fetchCast({ id, tmdbApiKey });
     const director = await fetchDirector({ id, tmdbApiKey });
@@ -41,9 +41,9 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       overview: overview,
       genres: genres,
       cast: cast,
-      first_air_date: first_air_date || defaultDate,
+      release_date: first_air_date || defaultDate,
       trailer: trailer,
-      director: director || '[Missing]',
+      director: director,
       vote_average: rounded_vote_average,
       tmdb_link: tmdb_link,
       poster_path: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null,
@@ -75,7 +75,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       id={id}
       title={name}
       poster_path={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null}
-      release_date={''}
+      release_date={first_air_date}
       link={`https://www.themoviedb.org/tv/${id}`}
       handleAddToNotion={handleAddToNotion}
     />

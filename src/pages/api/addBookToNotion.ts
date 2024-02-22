@@ -5,17 +5,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { notionApiKey, db_id, bookData } = req.body;
 
     const checkProperties = [
-        { name: 'Title', type: 'title', structure: [{ text: { content: bookData.title } }] },
-        { name: 'Type', type: 'select', structure: { name: 'Book' } },
-        { name: 'Google Books Link', type: 'url', structure: bookData.previewLink },
-        { name: 'Published Date', type: 'date', structure: { start: bookData.publishedDate } },
-        { name: 'Average Rating', type: 'number', structure: bookData.averageRating },
-        { name: 'Authors', type: 'rich_text', structure: [{ text: { content: bookData.authors.join(', ') } }] },
-        { name: 'Language', type: 'rich_text', structure: [{ text: { content: bookData.language } }] },
-        { name: 'Publisher', type: 'rich_text', structure: [{ text: { content: bookData.publisher } }] },
-        { name: 'Page Count', type: 'number', structure: bookData.pageCount },
-        { name: 'Description', type: 'rich_text', structure: [{ text: { content: bookData.description } }] },
-        { name: 'Cover Image', type: 'url', structure: bookData.cover_image }
+        { name: 'Title', type: 'title', structure: [{ text: { content: bookData.title } }], data: bookData.title },
+        { name: 'Type', type: 'select', structure: { name: 'Book' }, data: bookData.title },
+        { name: 'Google Books Link', type: 'url', structure: bookData.previewLink, data: bookData.previewLink },
+        { name: 'Published Date', type: 'date', structure: { start: bookData.publishedDate }, data: bookData.publishedDate },
+        { name: 'Average Rating', type: 'number', structure: bookData.averageRating, data: bookData.averageRating },
+        { name: 'Authors', type: 'rich_text', structure: [{ text: { content: bookData.authors.join(', ') } }], data: bookData.authors },
+        { name: 'Language', type: 'rich_text', structure: [{ text: { content: bookData.language } }], data: bookData.language },
+        { name: 'Publisher', type: 'rich_text', structure: [{ text: { content: bookData.publisher } }], data: bookData.publisher },
+        { name: 'Page Count', type: 'number', structure: bookData.pageCount, data: bookData.pageCount },
+        { name: 'Description', type: 'rich_text', structure: [{ text: { content: bookData.description } }], data: bookData.description },
+        { name: 'Cover Image', type: 'url', structure: bookData.cover_image, data: bookData.cover_image }
     ];
 
     try {
@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const updatedProperties = {} as any;
 
             checkProperties.forEach((property) => {
-                if (existingProperties[property.name]) {
+                if (existingProperties[property.name] && property.data) {
                     updatedProperties[property.name] = {
                         [property.type]: property.structure,
                     };
@@ -100,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const updatedProperties = {} as any;
 
             checkProperties.forEach((property) => {
-                if (existingProperties[property.name]) {
+                if (existingProperties[property.name] && property.data) {
                     updatedProperties[property.name] = {
                         [property.type]: property.structure,
                     };

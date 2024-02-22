@@ -12,6 +12,7 @@ export interface Movie {
 }
 
 export interface TvShow {
+    first_air_date: string;
     id: number;
     title: string;
     original_name: string;
@@ -21,7 +22,6 @@ export interface TvShow {
     backdrop_path: string;
     vote_average: number;
     vote_count: number;
-    release_date: string;
 }
 
 export interface Book {

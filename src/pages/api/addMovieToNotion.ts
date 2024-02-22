@@ -9,19 +9,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const watchLink = `https://movie-web.app/media/tmdb-movie-${movieData.id}-${watchLinkName}`
 
     const checkProperties = [
-        { name: 'Name', type: 'title', structure: [{ text: { content: movieData.title } }] },
-        { name: 'Release Date', type: 'date', structure: { start: movieData.release_date } },
-        { name: 'Genres', type: 'multi_select', structure: movieData.genres },
-        { name: 'Cast', type: 'multi_select', structure: movieData.cast },
-        { name: 'TMDB Rating', type: 'number', structure: movieData.vote_average },
-        { name: 'TMDB Link', type: 'url', structure: movieData.tmdb_link },
-        { name: 'iMDB Link', type: 'url', structure: movieData.imdb_link },
-        { name: 'Director', type: 'rich_text', structure: [{ text: { content: movieData.director } }] },
-        { name: 'Type', type: 'select', structure: { name: 'Movie' } },
-        { name: 'Poster', type: 'url', structure: movieData.poster_path },
+        { name: 'Name', type: 'title', structure: [{ text: { content: movieData.title } }], data: movieData.title},
+        { name: 'Release Date', type: 'date', structure: { start: movieData.release_date }, data: movieData.release_date},
+        { name: 'Genres', type: 'multi_select', structure: movieData.genres, data: movieData.genres},
+        { name: 'Cast', type: 'multi_select', structure: movieData.cast, data: movieData.cast},
+        { name: 'TMDB Rating', type: 'number', structure: movieData.vote_average, data: movieData.vote_average},
+        { name: 'TMDB Link', type: 'url', structure: movieData.tmdb_link, data: movieData.tmdb_link},
+        { name: 'iMDB Link', type: 'url', structure: movieData.imdb_link, data: movieData.imdb_link},
+        { name: 'Director', type: 'rich_text', structure: [{ text: { content: movieData.director } }], data: movieData.director},
+        { name: 'Type', type: 'select', structure: { name: 'Movie' }, data: movieData.title},
+        { name: 'Poster', type: 'url', structure: movieData.poster_path, data: movieData.poster_path},
         { name: 'Watch Link', type: 'url', structure: watchLink },
-        { name: 'Overview', type: 'rich_text', structure: [{ text: { content: movieData.overview } }] },
-        { name: 'Trailer', type: 'url', structure: movieData.trailer }
+        { name: 'Overview', type: 'rich_text', structure: [{ text: { content: movieData.overview } }], data: movieData.overview},
+        { name: 'Trailer', type: 'url', structure: movieData.trailer, data: movieData.trailer},
+        { name: 'Watch Link', type: 'url', structure: watchLink, data: watchLink}
     ];
 
     try {
@@ -48,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const updatedProperties = {} as any;
 
             checkProperties.forEach((property) => {
-                if (existingProperties[property.name]) {
+                if (existingProperties[property.name] && property.data) {
                     updatedProperties[property.name] = {
                         [property.type]: property.structure,
                     };
@@ -99,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const updatedProperties = {} as any;
 
             checkProperties.forEach((property) => {
-                if (existingProperties[property.name]) {
+                if (existingProperties[property.name] && property.data) {
                     updatedProperties[property.name] = {
                         [property.type]: property.structure,
                     };

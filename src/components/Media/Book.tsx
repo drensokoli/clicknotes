@@ -42,16 +42,16 @@ export default function Book({ id, title, description, publishedDate, averageRat
         const bookData = {
             id: id,
             title: title,
-            description: description || '',
-            publishedDate: publishedDate || defaultDate,
-            averageRating: averageRating || 0,
-            authors: authors || [],
-            thumbnail: thumbnail || '',
-            cover_image: cover_image || 'https://www.frontlist.in/storage/uploads/2019/10/Google-Books-Update.png',
-            previewLink: previewLink || '',
-            language: language || '',
-            publisher: publisher || '',
-            pageCount: pageCount || 0,
+            description: description,
+            publishedDate: publishedDate,
+            averageRating: averageRating,
+            authors: authors,
+            thumbnail: thumbnail,
+            cover_image: cover_image,
+            previewLink: previewLink,
+            language: language,
+            publisher: publisher,
+            pageCount: pageCount,
         };
 
         const notionResponse = await fetch('/api/addBookToNotion', {
