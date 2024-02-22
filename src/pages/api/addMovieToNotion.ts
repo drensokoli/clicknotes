@@ -1,10 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
+import { update } from 'lodash';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, movieData } = req.body;
+
     const watchLinkName = movieData.title.replace(/ /g, '%20').toLowerCase();
     const watchLink = `https://movie-web.app/media/tmdb-movie-${movieData.id}-${watchLinkName}`
+
+    const checkProperties = [
+        { name: 'Name', type: 'title', structure: [{ text: { content: movieData.title } }] },
+        { name: 'Release Date', type: 'date', structure: { start: movieData.release_date } },
+        { name: 'Genres', type: 'multi_select', structure: movieData.genres },
+        { name: 'Cast', type: 'multi_select', structure: movieData.cast },
+        { name: 'TMDB Rating', type: 'number', structure: movieData.vote_average },
+        { name: 'TMDB Link', type: 'url', structure: movieData.tmdb_link },
+        { name: 'iMDB Link', type: 'url', structure: movieData.imdb_link },
+        { name: 'Director', type: 'rich_text', structure: [{ text: { content: movieData.director } }] },
+        { name: 'Type', type: 'select', structure: { name: 'Movie' } },
+        { name: 'Poster', type: 'url', structure: movieData.poster_path },
+        { name: 'Watch Link', type: 'url', structure: watchLink },
+        { name: 'Overview', type: 'rich_text', structure: [{ text: { content: movieData.overview } }] },
+        { name: 'Trailer', type: 'url', structure: movieData.trailer }
+    ];
 
     try {
         const notion = new Client({ auth: notionApiKey });
@@ -22,77 +40,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (existingPages.results.length > 0) {
             const existingPageId = existingPages.results[0].id;
 
+            const page = await notion.pages.retrieve({
+                page_id: existingPageId,
+            });
+
+            const existingProperties = (page as any).properties;
+            const updatedProperties = {} as any;
+
+            checkProperties.forEach((property) => {
+                if (existingProperties[property.name]) {
+                    updatedProperties[property.name] = {
+                        [property.type]: property.structure,
+                    };
+                }
+            });
+
             await notion.pages.update({
                 page_id: existingPageId,
-                properties: {
-                    'ID': {
-                        number: movieData.id,
-                    },
-                    'Name': {
-                        title: [
-                            {
-                                text: {
-                                    content: movieData.title,
-                                },
-                            },
-                        ],
-                    },
-                    'Release Date': {
-                        date: {
-                            start: movieData.release_date,
-                        },
-                    },
-                    'Genres': {
-                        multi_select: movieData.genres,
-                    },
-                    'Cast': {
-                        multi_select: movieData.cast,
-                    },
-                    'TMDB Rating': {
-                        number: movieData.vote_average,
-                    },
-                    'TMDB Link': {
-                        url: movieData.tmdb_link,
-                    },
-                    'iMDB Link': {
-                        url: movieData.imdb_link,
-                    },
-                    'Director': {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: movieData.director,
-                                },
-                            },
-                        ],
-                    },
-                    // 'Adult': {
-                    //     checkbox: movieData.adult,
-                    // },
-                    'Type': {
-                        select: {
-                            name: 'Movie',
-                        },
-                    },
-                    'Poster': {
-                        url: movieData.poster_path,
-                    },
-                    'Overview': {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: movieData.overview,
-                                },
-                            },
-                        ],
-                    },
-                    'Trailer': {
-                        url: movieData.trailer || null,
-                    },
-                    'Watch Link': {
-                        url: watchLink,
-                    },
-                },
+                properties: updatedProperties,
                 icon: {
                     type: 'emoji',
                     emoji: '🎬',
@@ -108,8 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const pageUrl = `https://www.notion.so/${existingPageId.replace(/-/g, '')}`;
 
             res.status(200).json({ message: "Movie updated in Notion.", pageUrl });
-        }
-        else {
+        } else {
             const newPage = await notion.pages.create({
                 parent: {
                     database_id: db_id,
@@ -117,71 +81,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 properties: {
                     'ID': {
                         number: movieData.id,
-                    },
-                    'Name': {
-
-                        title: [
-                            {
-                                text: {
-                                    content: movieData.title,
-                                },
-                            },
-                        ],
-                    },
-                    'Release Date': {
-                        date: {
-                            start: movieData.release_date,
-                        },
-                    },
-                    'Genres': {
-                        multi_select: movieData.genres,
-                    },
-                    'Cast': {
-                        multi_select: movieData.cast,
-                    },
-                    'TMDB Rating': {
-                        number: movieData.vote_average,
-                    },
-                    'TMDB Link': {
-                        url: movieData.tmdb_link,
-                    },
-                    'iMDB Link': {
-                        url: movieData.imdb_link,
-                    },
-                    'Director': {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: movieData.director,
-                                },
-                            },
-                        ],
-                    },
-                    // 'Adult': {
-                    //     checkbox: movieData.adult,
-                    // },
-                    'Type': {
-                        select: {
-                            name: 'Movie',
-                        },
-                    },
-                    'Poster': {
-                        url: movieData.poster_path,
-                    },
-                    'Watch Link': {
-                        url: watchLink,
-                    },
-                    'Overview': {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: movieData.overview,
-                                },
-                            },
-                        ],
-                    },
-                    'Trailer': {
-                        url: movieData.trailer,
                     },
                 },
                 icon: {
@@ -194,6 +93,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         url: movieData.backdrop_path,
                     },
                 },
+            });
+
+            const existingProperties = (newPage as any).properties;
+            const updatedProperties = {} as any;
+
+            checkProperties.forEach((property) => {
+                if (existingProperties[property.name]) {
+                    updatedProperties[property.name] = {
+                        [property.type]: property.structure,
+                    };
+                }
+            });
+
+            await notion.pages.update({
+                page_id: newPage.id,
+                properties: updatedProperties
             });
 
             const contentUpdateResponse = await notion.blocks.children.append({

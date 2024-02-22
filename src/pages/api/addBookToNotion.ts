@@ -4,6 +4,20 @@ import { Client } from '@notionhq/client';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, bookData } = req.body;
 
+    const checkProperties = [
+        { name: 'Title', type: 'title', structure: [{ text: { content: bookData.title } }] },
+        { name: 'Type', type: 'select', structure: { name: 'Book' } },
+        { name: 'Google Books Link', type: 'url', structure: bookData.previewLink },
+        { name: 'Published Date', type: 'date', structure: { start: bookData.publishedDate } },
+        { name: 'Average Rating', type: 'number', structure: bookData.averageRating },
+        { name: 'Authors', type: 'rich_text', structure: [{ text: { content: bookData.authors.join(', ') } }] },
+        { name: 'Language', type: 'rich_text', structure: [{ text: { content: bookData.language } }] },
+        { name: 'Publisher', type: 'rich_text', structure: [{ text: { content: bookData.publisher } }] },
+        { name: 'Page Count', type: 'number', structure: bookData.pageCount },
+        { name: 'Description', type: 'rich_text', structure: [{ text: { content: bookData.description } }] },
+        { name: 'Cover Image', type: 'url', structure: bookData.cover_image }
+    ];
+
     try {
         const notion = new Client({ auth: notionApiKey });
 
@@ -27,99 +41,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const existingProperties = (page as any).properties;
             const updatedProperties = {} as any;
 
-            if (existingProperties['Title'] && bookData.title) {
-                updatedProperties['Title'] = {
-                    title: [{ text: { content: bookData.title } }],
-                };
-            }
-
-            if (existingProperties['Type']) {
-                updatedProperties['Type'] = {
-                    select: {
-                        name: 'Book',
-                    },
-                };
-            }
-
-            if (existingProperties['Google Books Link'] && bookData.previewLink) {
-                updatedProperties['Google Books Link'] = {
-                    url: bookData.previewLink,
-                };
-            }
-
-            if (existingProperties['Published Date'] && bookData.publishedDate) {
-                updatedProperties['Published Date'] = {
-                    date: {
-                        start: bookData.publishedDate,
-                    },
-                };
-            }
-
-            if (existingProperties['Average Rating'] && bookData.averageRating) {
-                updatedProperties['Average Rating'] = {
-                    number: bookData.averageRating,
-                };
-            }
-
-            if (existingProperties['Authors'] && bookData.authors) {
-                updatedProperties['Authors'] = {
-                    rich_text: [
-                        {
-                            text: {
-                                content: bookData.authors.join(', '),
-                            },
-                        },
-                    ],
-                };
-            }
-
-            if (existingProperties['Language'] && bookData.language) {
-                updatedProperties['Language'] = {
-                    rich_text: [
-                        {
-                            text: {
-                                content: bookData.language,
-                            },
-                        },
-                    ],
-                };
-            }
-
-            if (existingProperties['Publisher'] && bookData.publisher) {
-                updatedProperties['Publisher'] = {
-                    rich_text: [
-                        {
-                            text: {
-                                content: bookData.publisher,
-                            },
-                        },
-                    ],
-                };
-            }
-
-            if (existingProperties['Page Count'] && bookData.pageCount) {
-                updatedProperties['Page Count'] = {
-                    number: bookData.pageCount,
-                };
-            }
-
-            if (existingProperties['Description'] && bookData.description) {
-                updatedProperties['Description'] = {
-                    rich_text: [
-                        {
-                            text: {
-                                content: bookData.description,
-                            },
-                        },
-                    ],
-                };
-            }
-
-            if (existingProperties['Cover Image'] && bookData.cover_image) {
-                updatedProperties['Cover Image'] = {
-                    url: bookData.cover_image,
-                };
-            }
+            checkProperties.forEach((property) => {
+                if (existingProperties[property.name]) {
+                    updatedProperties[property.name] = {
+                        [property.type]: property.structure,
+                    };
+                }
+            });
 
             await notion.pages.update({
                 page_id: existingPageId,
@@ -171,99 +99,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const existingProperties = (newPage as any).properties;
             const updatedProperties = {} as any;
 
-            if (existingProperties['Title'] && bookData.title) {
-                updatedProperties['Title'] = {
-                    title: [{ text: { content: bookData.title } }],
-                };
-            }
-
-            if (existingProperties['Type']) {
-                updatedProperties['Type'] = {
-                    select: {
-                        name: 'Book',
-                    },
-                };
-            }
-
-            if (existingProperties['Google Books Link'] && bookData.previewLink) {
-                updatedProperties['Google Books Link'] = {
-                    url: bookData.previewLink,
-                };
-            }
-
-            if (existingProperties['Published Date'] && bookData.publishedDate) {
-                updatedProperties['Published Date'] = {
-                    date: {
-                        start: bookData.publishedDate,
-                    },
-                };
-            }
-
-            if (existingProperties['Average Rating'] && bookData.averageRating) {
-                updatedProperties['Average Rating'] = {
-                    number: bookData.averageRating,
-                };
-            }
-
-            if (existingProperties['Authors'] && bookData.authors) {
-                updatedProperties['Authors'] = {
-                    rich_text: [
-                        {
-                            text: {
-                                content: bookData.authors.join(', '),
-                            },
-                        },
-                    ],
-                };
-            }
-
-            if (existingProperties['Language'] && bookData.language) {
-                updatedProperties['Language'] = {
-                    rich_text: [
-                        {
-                            text: {
-                                content: bookData.language,
-                            },
-                        },
-                    ],
-                };
-            }
-
-            if (existingProperties['Publisher'] && bookData.publisher) {
-                updatedProperties['Publisher'] = {
-                    rich_text: [
-                        {
-                            text: {
-                                content: bookData.publisher,
-                            },
-                        },
-                    ],
-                };
-            }
-
-            if (existingProperties['Page Count'] && bookData.pageCount) {
-                updatedProperties['Page Count'] = {
-                    number: bookData.pageCount,
-                };
-            }
-
-            if (existingProperties['Description'] && bookData.description) {
-                updatedProperties['Description'] = {
-                    rich_text: [
-                        {
-                            text: {
-                                content: bookData.description,
-                            },
-                        },
-                    ],
-                };
-            }
-
-            if (existingProperties['Cover Image'] && bookData.cover_image) {
-                updatedProperties['Cover Image'] = {
-                    url: bookData.cover_image,
-                };
-            }
+            checkProperties.forEach((property) => {
+                if (existingProperties[property.name]) {
+                    updatedProperties[property.name] = {
+                        [property.type]: property.structure,
+                    };
+                }
+            });
 
             await notion.pages.update({
                 page_id: newPage.id,
