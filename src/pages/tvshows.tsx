@@ -49,6 +49,7 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                 setTvShowPageLink(user.moviesPageLink);
             };
             fetchUser();
+            console.log("popular tv shows", popularTvShows.length)
         }
     }, [session]);
 
@@ -101,7 +102,8 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                                     notionApiKey={notionApiKey}
                                     tvShowsPageLink={tvShowsPageLink}
                                 />
-                            ))}
+                            ))
+                        }
                         {tvShows.length === 0 && (
                             <>
                                 {popularTvShows
@@ -119,14 +121,15 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                                             notionApiKey={notionApiKey}
                                             tvShowsPageLink={tvShowsPageLink}
                                         />
-                                    ))}
-                                {displayCount < 180 &&
+                                    ))
+                                }
+                                {displayCount < popularTvShows.length && (
                                     <LoadMore
                                         displayCount={displayCount}
                                         setDisplayCount={setDisplayCount}
                                         media={popularTvShows}
                                     />
-                                }
+                                )}
                             </>
                         )}
                     </div>

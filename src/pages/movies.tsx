@@ -49,6 +49,7 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                 setMoviesPageLink(user.moviesPageLink);
             };
             fetchUser();
+            console.log('POPULAR MOVIES', popularMovies.length);
         }
     }, [session]);
 
@@ -87,7 +88,7 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
                 <div className="content-container sm:w-5/6">
-                <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
+                    <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
                         {movies
                             .map((item) => (
                                 <Movie
@@ -103,11 +104,11 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                                     notionApiKey={notionApiKey}
                                     moviesPageLink={moviesPageLink}
                                 />
-                            ))}
+                            ))
+                        }
                         {movies.length === 0 && (
                             <>
                                 {popularMovies
-                                    .filter((item) => item.vote_average > 6)
                                     .slice(0, displayCount)
                                     .map((item) => (
                                         <Movie
@@ -124,13 +125,13 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                                             moviesPageLink={moviesPageLink}
                                         />
                                     ))}
-                                {displayCount < 180 &&
+                                {displayCount < popularMovies.length && (
                                     <LoadMore
                                         displayCount={displayCount}
                                         setDisplayCount={setDisplayCount}
                                         media={popularMovies}
                                     />
-                                }
+                                )}
                             </>
                         )}
                     </div>
