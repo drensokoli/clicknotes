@@ -87,6 +87,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     'Page Count': {
                         "number": bookData.pageCount
                     },
+                    'Description': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: bookData.description,
+                                },
+                            },
+                        ],
+                    },
+                    'Cover Image': {
+                        url: bookData.cover_image,
+                    },
                 },
                 icon: {
                     type: 'emoji',
@@ -172,6 +184,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     'Page Count': {
                         "number": bookData.pageCount
+                    },
+                    'Description': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: bookData.description,
+                                },
+                            },
+                        ],
+                    },
+                    'Cover Image': {
+                        url: bookData.cover_image,
                     },
                 },
                 icon: {
