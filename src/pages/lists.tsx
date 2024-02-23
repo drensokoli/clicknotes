@@ -18,11 +18,25 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
         // const data = getMovies(notionApiKey, databaseId);
     };
 
+    const shuffleMovies = (array: any[]) => {
+        const randomIndex = Math.floor(Math.random() * array.length);
+        const randomMovie = array[randomIndex];
+        setMoviesList([randomMovie]);
+        return [randomMovie];
+    }
+
+
     return (
         <>
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
+                <button className="flex flex-row gap-2 justify-center items-center"
+                    onClick={() => shuffleMovies(movies)}
+                >
+                    <h1 className="text-2xl">Shuffle</h1>
+                    <img src="/shuffle.png" alt="hero" className="w-10 h-10" />
+                </button>
                 <div className="flex justify-end items-center w-[90%] sm:w-[70%] gap-2">
                     {/* <div>
                         <select
