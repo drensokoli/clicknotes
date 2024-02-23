@@ -6,17 +6,24 @@ export async function getCast({ id, tmdbApiKey }: { id: number, tmdbApiKey: stri
     );
 
     const credits = await response.json();
+    console.log("Credits: ", credits.cast.slice(0, 11).map((cast: { name: any; }) => ({ "name": cast.name })));
     return credits.cast.slice(0, 11).map((cast: { name: any; }) => ({ "name": cast.name }));
 };
 
-export async function getDirector({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
+export async function getCrew({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
     const response = await fetch(
-
         `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${tmdbApiKey}&language=en-US`
     );
 
     const credits = await response.json();
-    return credits.crew.filter((crew: { job: string; }) => crew.job === 'Director').map((crew: { name: any; }) => crew.name)[0];
+    const crew = credits.crew
+        .filter((crew: { job: string; known_for_department: string; }) =>
+            crew.job.includes('Director') ||
+            crew.known_for_department.includes('Directing') ||
+            crew.known_for_department.includes('Writing'))
+        .map((crew: { name: any; }) => ({ "name": crew.name }))
+        .filter((name: string, index: number, self: string[]) => self.indexOf(name) === index);
+    return crew;
 }
 
 export async function getTrailer({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
@@ -54,11 +61,11 @@ export async function searchMovieByTitle({ title, tmdbApiKey }: { title: string,
         const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
 
         return movies
-            // .filter((item: { vote_average: number; }) => item.vote_average > 6)
-            // .filter((item: { title: string; }) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
-            // .filter((item: { original_title: string; }) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
-            // .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)))
-            
+        // .filter((item: { vote_average: number; }) => item.vote_average > 6)
+        // .filter((item: { title: string; }) => !adultContent.some((word) => item.title.toLowerCase().includes(word)))
+        // .filter((item: { original_title: string; }) => !adultContent.some((word) => item.original_title.toLowerCase().includes(word)))
+        // .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview.toLowerCase().includes(word)))
+
         // KEYWORD FILTERING
 
         // const movieIds = response.data.results.map((movie: { id: any; }) => movie.id);

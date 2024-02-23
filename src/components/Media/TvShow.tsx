@@ -3,7 +3,7 @@ import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/encryption';
 import Link from 'next/link';
-import { fetchCast, fetchDirector, fetchGenres, fetchTrailer } from '@/lib/tvShowHelpers';
+import { fetchCast, fetchCrew, fetchGenres, fetchTrailer } from '@/lib/tvShowHelpers';
 import Card from '../Helpers/Card';
 
 export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, notionApiKey, tvShowsPageLink }: {
@@ -22,8 +22,6 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
   tvShowsPageLink: string;
 }) {
 
-  const { data: session } = useSession();
-
   const handleAddToNotion = async () => {
     onApiResponse('Adding TV show to Notion...');
 
@@ -32,7 +30,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
     const defaultDate = "2000-01-01";
     const genres = await fetchGenres({ id, tmdbApiKey });
     const cast = await fetchCast({ id, tmdbApiKey });
-    const director = await fetchDirector({ id, tmdbApiKey });
+    const crew = await fetchCrew({ id, tmdbApiKey });
     const trailer = await fetchTrailer({ id, tmdbApiKey });
 
     const tvShowData = {
@@ -43,7 +41,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       cast: cast,
       release_date: first_air_date || defaultDate,
       trailer: trailer,
-      director: director,
+      crew: crew,
       vote_average: rounded_vote_average,
       tmdb_link: tmdb_link,
       poster_path: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null,

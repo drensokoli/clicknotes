@@ -11,11 +11,11 @@ export async function searchTvShowByTitle({ title, tmdbApiKey }: { title: string
         const tvShows = response.data.results;
 
         return tvShows
-            // .filter((item: { vote_average: number; }) => item.vote_average > 6)
-            // .filter((item: { name: string; }) => !adultContent.some((word) => item.name && item.name.toLowerCase().includes(word)))
-            // .filter((item: { title: string; }) => !adultContent.some((word) => item.title && item.title.toLowerCase().includes(word)))
-            // .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview && item.overview.toLowerCase().includes(word)))
-            // .filter((item: { original_language: string; }) => item.original_language === 'yue');
+        // .filter((item: { vote_average: number; }) => item.vote_average > 6)
+        // .filter((item: { name: string; }) => !adultContent.some((word) => item.name && item.name.toLowerCase().includes(word)))
+        // .filter((item: { title: string; }) => !adultContent.some((word) => item.title && item.title.toLowerCase().includes(word)))
+        // .filter((item: { overview: string; }) => !adultContent.some((word) => item.overview && item.overview.toLowerCase().includes(word)))
+        // .filter((item: { original_language: string; }) => item.original_language === 'yue');
 
         // KEYWORD FILTERING
 
@@ -75,15 +75,20 @@ export async function fetchCast({ id, tmdbApiKey }: { id: number, tmdbApiKey: st
     return castArray;
 };
 
-export async function fetchDirector({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
-
+export async function fetchCrew({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
     const response = await fetch(
         `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${tmdbApiKey}&language=en-US`
     );
 
     const credits = await response.json();
-    const director = credits.crew.filter((person: { job: string; }) => person.job === 'Director').map((crew: { name: any; }) => crew.name);
-    return director[0];
+    const crew = credits.crew
+        .filter((crew: { job: string; known_for_department: string; }) =>
+            crew.job.includes('Director') ||
+            crew.known_for_department.includes('Directing') ||
+            crew.known_for_department.includes('Writing'))
+        .map((crew: { name: any; }) => ({ "name": crew.name }))
+        .filter((name: string, index: number, self: string[]) => self.indexOf(name) === index);
+    return crew;
 };
 
 export async function fetchTrailer({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {

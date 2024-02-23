@@ -1,6 +1,6 @@
 import React from 'react';
 import { decryptData } from '@/lib/encryption';
-import { genresMapping, getCast, getDirector, getImdb, getTrailer } from '@/lib/movieHelpers';
+import { genresMapping, getCast, getCrew, getImdb, getTrailer } from '@/lib/movieHelpers';
 import Card from '../Helpers/Card';
 
 export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, genre_ids, notionApiKey, moviesPageLink }: {
@@ -27,11 +27,11 @@ export default function Movie({ id, title, overview, release_date, vote_average,
 
         const genres = [...genresMapping.genres.filter((genre: { id: number; }) => genre_ids.includes(genre.id)).map((genre: { name: any; }) => ({ name: genre.name }))];
         const cast = await getCast({ id, tmdbApiKey });
-        const defaultDate = "0001-01-01";
+        const defaultDate = "2000-01-01";
         const rounded_vote_average = Math.round(vote_average * 10) / 10;
         const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
         const imdb_link = await getImdb({ id, tmdbApiKey });
-        const director = await getDirector({ id, tmdbApiKey });
+        const crew = await getCrew({ id, tmdbApiKey });
         const trailer = await getTrailer({ id, tmdbApiKey });
 
         const movieData = {
@@ -40,13 +40,13 @@ export default function Movie({ id, title, overview, release_date, vote_average,
             overview: overview,
             genres: genres,
             cast: cast,
-            release_date: release_date,
+            release_date: release_date || defaultDate,
             vote_average: rounded_vote_average,
             adult: adult,
             runtime: runtime,
             tmdb_link: tmdb_link,
             imdb_link: imdb_link,
-            director: director,
+            crew: crew,
             trailer: trailer,
             poster_path: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null,
             backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,

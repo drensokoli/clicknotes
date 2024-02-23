@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { name: 'TMDB Rating', type: 'number', structure: movieData.vote_average, data: movieData.vote_average},
         { name: 'TMDB Link', type: 'url', structure: movieData.tmdb_link, data: movieData.tmdb_link},
         { name: 'iMDB Link', type: 'url', structure: movieData.imdb_link, data: movieData.imdb_link},
-        { name: 'Director', type: 'rich_text', structure: [{ text: { content: movieData.director } }], data: movieData.director},
+        { name: 'Crew', type: 'multi_select', structure: movieData.crew, data: movieData.crew},
         { name: 'Type', type: 'select', structure: { name: 'Movie' }, data: movieData.title},
         { name: 'Poster', type: 'url', structure: movieData.poster_path, data: movieData.poster_path},
         { name: 'Watch Link', type: 'url', structure: watchLink },
