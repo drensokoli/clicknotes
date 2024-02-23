@@ -2,75 +2,94 @@ import Card from "@/components/Helpers/Card";
 import SearchBar from "@/components/Helpers/SearchBar";
 import { decryptData } from "@/lib/encryption";
 import { getSession, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
-import ListsCard from "@/components/Helpers/ListsCard";
+import MoviesListCard from "@/components/Helpers/MoviesListCard";
 import LoadMore from "@/components/Helpers/LoadMore";
+import BooksListCard from "@/components/Helpers/BooksListCard";
 
-export default function Lists({ movies, books, nameList, movieStatusList, bookStatusList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any }) {
+export default function Lists({ movies, books, nameList, movieStatusList, bookStatusList, movieTypeList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any, movieTypeList: any}) {
 
     const [input, setInput] = useState('');
-    const [moviesList, setMoviesList] = useState(movies.filter((movie: any) => movie.properties.Status.status.name === 'To watch'));
     const [displayCount, setDisplayCount] = useState(20);
+    const [list, setList] = useState(movies);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         // const data = getMovies(notionApiKey, databaseId);
     };
 
-    const shuffleMovies = (array: any[]) => {
-        const randomIndex = Math.floor(Math.random() * array.length);
-        const randomMovie = array[randomIndex];
-        setMoviesList([randomMovie]);
-        return [randomMovie];
-    }
-
+    useEffect(() => {
+        console.log("List: ", list);
+    }, [list]);
 
     return (
         <>
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
-                <button className="flex flex-row gap-2 justify-center items-center"
-                    onClick={() => shuffleMovies(movies)}
-                >
-                    <h1 className="text-2xl">Shuffle</h1>
-                    <img src="/shuffle.png" alt="hero" className="w-10 h-10" />
-                </button>
                 <div className="flex justify-end items-center w-[90%] sm:w-[70%] gap-2">
-                    {/* <div>
-                        <select
-                            className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        // value={nameList[0].name}
-                        >
-                            {bookStatusList.map((status: any) => (
-                                <option key={status} value={status}>
-                                    {status}
-                                </option>
-                            ))}
-                        </select>
-                    </div> */}
+                    {list[0].properties.Type.select.name === "Movie" || list[0].properties.Type.select.name === "TvShow" ? (
+                        <>
+                            <div>
+                                <select
+                                    className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    value={nameList[0].name}
+                                    onChange={(e) => {
+                                        setList(movies.filter((movie: any) => movie.properties.Status.status.name === e.target.value));
+                                        setDisplayCount(20);
+                                    }}
+                                >
+                                    {movieStatusList.map((status: any) => (
+                                        <option key={status} value={status}
+                                        >
+                                            {status}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <select
+                                    className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    value={nameList[0].name}
+                                    onChange={(e) => {
+                                        setList(movies.filter((movie: any) => movie.properties.Type.select.name === e.target.value));
+                                        setDisplayCount(20);
+                                    }}
+                                >
+                                    {movieTypeList.map((movieType: any) => (
+                                        <option key={movieType} value={movieType}
+                                        >
+                                            {movieType}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </>
+                    ) : list[0].properties.Type.select.name === "Book" || list[0].properties.Type.select.name === "Article" ? (
+                        <div>
+                            <select
+                                className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                value={nameList[0].name}
+                                onChange={(e) => {
+                                    setList(books.filter((book: any) => book.properties.Status.status.name === e.target.value));
+                                    setDisplayCount(20);
+                                }}
+                            >
+                                {bookStatusList.map((status: any) => (
+                                    <option key={status} value={status}>
+                                        {status}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    ) : null}
+
                     <div>
                         <select
                             className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             value={nameList[0].name}
-                            onChange={(e) => {
-                                setMoviesList(movies.filter((movie: any) => movie.properties.Status.status.name === e.target.value));
-                                setDisplayCount(20);
-                            }}
-                        >
-                            {movieStatusList.map((status: any) => (
-                                <option key={status} value={status}
-                                >
-                                    {status}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <select
-                            className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        // value={nameList[0].name}
+                            onChange={(e) => setList(e.target.value === nameList[0].databaseName ? movies : books)}
                         >
                             {nameList.map((list: { databaseName: any; }) => (
                                 <option key={list.databaseName} value={list.databaseName}>
@@ -82,37 +101,63 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
                 </div>
                 <div className="content-container sm:w-5/6">
                     <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
-                        {moviesList && (
+                        {list[0].properties.Type.select.name === "Movie" || list[0].properties.Type.select.name === "TvShow" ? (
                             <>
-                                {moviesList
+                                {list
                                     .slice(0, displayCount)
-                                    .map((movie: any) => (
-                                        <ListsCard
-                                            key={movie.id}
-                                            id={movie.id}
-                                            title={movie.properties.Name.title[0].text.content}
-                                            poster_path={movie.properties.Poster.url || movie.cover.external.url}
-                                            release_date={movie.properties['Release Date'].date.start || ''}
-                                            link={`https://www.themoviedb.org/movie/${movie.id}`}
+                                    .map((listItem: any) => (
+                                        <MoviesListCard
+                                            key={listItem.id}
+                                            id={listItem.id}
+                                            title={listItem.properties.Name.title[0].text.content}
+                                            poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
+                                            release_date={listItem.properties['Release Date'].date.start || ''}
+                                            link={`https://www.themoviedb.org/movie/${listItem.id}`}
                                             handleStatusChange={handleInputChange}
                                             statusList={movieStatusList}
-                                            status={movie.properties.Status.status.name}
-                                            trailer={movie.properties.Trailer.url}
-                                            overview={movie.properties['Overview']?.rich_text[0]?.text?.content}
-                                            rating={movie.properties['My Rating'].number}
-                                            watch_link={movie.properties['Watch Link'].url}
-                                            notion_link={`https://www.notion.so/${movie.id.replace(/-/g, '')}`}
+                                            status={listItem.properties.Status.status.name}
+                                            trailer={listItem.properties.Trailer.url}
+                                            overview={listItem.properties['Overview']?.rich_text[0]?.text?.content}
+                                            rating={listItem.properties['My Rating'].number}
+                                            watch_link={listItem.properties['Watch Link'].url}
+                                            notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
                                         />
                                     ))
                                 }
-                                {displayCount < moviesList.length && (
-                                    <LoadMore
-                                        displayCount={displayCount}
-                                        setDisplayCount={setDisplayCount}
-                                        media={moviesList}
-                                    />
-                                )}
                             </>
+                        ) : list[0].properties.Type.select.name === "Book" || list[0].properties.Type.select.name === "Article" ? (
+                            <>
+                                {list
+                                    .slice(0, displayCount)
+                                    .map((listItem: any) => (
+                                        <BooksListCard
+                                            key={listItem.id}
+                                            id={listItem.id}
+                                            title={listItem.properties.Title.title[0].text.content}
+                                            cover={listItem.properties['Cover Image'].url}
+                                            published_date={listItem.properties['Published Date'].date.start || ''}
+                                            link={`google.com/books/${listItem.id}`}
+                                            handleStatusChange={handleInputChange}
+                                            statusList={bookStatusList}
+                                            status={listItem.properties.Status.status.name}
+                                            rating={listItem.properties['My Rating'].number}
+                                            description={listItem.properties['Description']?.rich_text[0]?.text?.content}
+                                            pageCount={listItem.properties['Page Count'].number}
+                                            author={listItem.properties['Authors']?.rich_text[0]?.text?.content}
+                                            notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
+                                        />
+                                    ))
+                                }
+                            </>
+                        ) : (
+                            <h1 className="">No Lists</h1>
+                        )}
+                        {displayCount < list.length && (
+                            <LoadMore
+                                displayCount={displayCount}
+                                setDisplayCount={setDisplayCount}
+                                media={list}
+                            />
                         )}
                     </div>
                 </div>
@@ -172,6 +217,7 @@ export const getServerSideProps = async (context: any) => {
         let movies = [] as any;
         let books = [] as any;
         let movieStatusList = [] as any;
+        let movieTypeList = [] as any;
         let bookStatusList = [] as any;
 
         if (user.moviesPageLink) {
@@ -182,6 +228,7 @@ export const getServerSideProps = async (context: any) => {
             nameList.push({ databaseName: moviesDatabaseName });
 
             movieStatusList = moviesDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
+            movieTypeList = moviesDatabaseInfo.properties.Type.select.options.map((type: any) => type.name);
             movies = await fetchAllPages(decryptedMoviesPageLink);
         } else {
             movies = { results: [] };
@@ -205,11 +252,12 @@ export const getServerSideProps = async (context: any) => {
             books,
             nameList,
             movieStatusList,
-            bookStatusList
+            bookStatusList,
+            movieTypeList
         };
     };
 
-    const { movies, books, nameList, movieStatusList, bookStatusList } = await fetchUser();
+    const { movies, books, nameList, movieStatusList, bookStatusList, movieTypeList } = await fetchUser();
 
     return {
         props: {
@@ -217,7 +265,8 @@ export const getServerSideProps = async (context: any) => {
             books,
             nameList,
             movieStatusList,
-            bookStatusList
+            bookStatusList,
+            movieTypeList
         },
     };
 }
