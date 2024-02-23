@@ -158,7 +158,7 @@ export const getServerSideProps = async (context: any) => {
             const response = await notion.databases.query({
                 database_id: databaseId,
                 // start_cursor: cursor,
-                page_size: 40,
+                // page_size: 40,
             });
 
             allResults.push(...response.results);

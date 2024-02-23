@@ -17,7 +17,7 @@ export default async function handler(
 
         const response = await notion.databases.query({
             database_id: db_id,
-            page_size: 20,
+            // page_size: 20,
             // sorts: [
             //     {
             //         property: 'TMDB Rating',
