@@ -44,7 +44,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             if (title.length === 0) {
                 return [];
             }
-            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=20&key=${googleBooksApiKey}`);
+            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=15&key=${googleBooksApiKey}`);
 
             return response.data.items;
         } catch (error) {
@@ -57,7 +57,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             if (author.length === 0) {
                 return [];
             }
-            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}&maxResults=20&key=${googleBooksApiKey}`);
+            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}&maxResults=15&key=${googleBooksApiKey}`);
             return response.data.items;
         } catch (error) {
             console.error(error);

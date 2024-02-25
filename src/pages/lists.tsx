@@ -7,8 +7,9 @@ import { Client } from '@notionhq/client';
 import MoviesListCard from "@/components/Helpers/MoviesListCard";
 import LoadMore from "@/components/Helpers/LoadMore";
 import BooksListCard from "@/components/Helpers/BooksListCard";
+import Filter from "@/components/Helpers/Filter";
 
-export default function Lists({ movies, books, nameList, movieStatusList, bookStatusList, movieTypeList }: { movies: any, books: any, nameList: any, movieStatusList: any, bookStatusList: any, movieTypeList: any}) {
+export default function Lists({ databaseNameList, movies, tvShows, movieStatusList, movieTypeList, books, bookStatusList }: { databaseNameList: any, movies: any, tvShows: any, movieStatusList: any, movieTypeList: any, books: any, bookStatusList: any }) {
 
     const [input, setInput] = useState('');
     const [displayCount, setDisplayCount] = useState(20);
@@ -19,147 +20,147 @@ export default function Lists({ movies, books, nameList, movieStatusList, bookSt
         // const data = getMovies(notionApiKey, databaseId);
     };
 
-    useEffect(() => {
-        console.log("List: ", list);
-    }, [list]);
-
     return (
         <>
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
-                <div className="flex justify-end items-center w-[90%] sm:w-[70%] gap-2">
-                    {list[0].properties.Type.select.name === "Movie" || list[0].properties.Type.select.name === "TvShow" ? (
-                        <>
-                            <div>
-                                <select
-                                    className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    value={nameList[0].name}
-                                    onChange={(e) => {
-                                        setList(movies.filter((movie: any) => movie.properties.Status.status.name === e.target.value));
-                                        setDisplayCount(20);
-                                    }}
-                                >
-                                    {movieStatusList.map((status: any) => (
-                                        <option key={status} value={status}
-                                        >
-                                            {status}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <select
-                                    className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    value={nameList[0].name}
-                                    onChange={(e) => {
-                                        setList(movies.filter((movie: any) => movie.properties.Type.select.name === e.target.value));
-                                        setDisplayCount(20);
-                                    }}
-                                >
-                                    {movieTypeList.map((movieType: any) => (
-                                        <option key={movieType} value={movieType}
-                                        >
-                                            {movieType}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </>
-                    ) : list[0].properties.Type.select.name === "Book" || list[0].properties.Type.select.name === "Article" ? (
-                        <div>
-                            <select
-                                className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                value={nameList[0].name}
-                                onChange={(e) => {
-                                    setList(books.filter((book: any) => book.properties.Status.status.name === e.target.value));
-                                    setDisplayCount(20);
-                                }}
-                            >
-                                {bookStatusList.map((status: any) => (
-                                    <option key={status} value={status}>
-                                        {status}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    ) : null}
 
+                <div className="flex justify-start items-center w-[90%] sm:w-[70%] gap-2 overflow-auto">
                     <div>
                         <select
                             className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            value={nameList[0].name}
-                            onChange={(e) => setList(e.target.value === nameList[0].databaseName ? movies : books)}
+                            onChange={(e) => setList(e.target.value === databaseNameList[0].databaseName ? movies : books)}
                         >
-                            {nameList.map((list: { databaseName: any; }) => (
+                            {databaseNameList.map((list: { databaseName: any; }) => (
                                 <option key={list.databaseName} value={list.databaseName}>
                                     {list.databaseName}
                                 </option>
                             ))}
                         </select>
                     </div>
+                    {list == movies || list == tvShows ? (
+                        <>
+                            <div>
+                                <select
+                                    className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    onChange={(e) => setList(e.target.value === movieTypeList[0] ? movies : tvShows)}
+                                >
+                                    {movieTypeList.map((list: any) => (
+                                        <option key={list} value={list}>
+                                            {list}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <select
+                                    className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    onChange={(e) => setList(list.filter((movie: any) => movie.properties.Status.status.name === e.target.value))}
+                                >
+                                    {movieStatusList.map((list: any) => (
+                                        <option key={list} value={list}>
+                                            {list}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </>
+                    ) : null}
+                    {list == books ? (
+                        <div>
+                            <select
+                                className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                onChange={(e) => {
+                                    setList(list.filter((book: any) => book.properties.Status.status.name === e.target.value));
+                                    console.log("list", list);
+                                }}
+                            >
+                                {bookStatusList.map((list: any) => (
+                                    <option key={list} value={list}>
+                                        {list}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    ) : null}
                 </div>
-                <div className="content-container sm:w-5/6">
-                    <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
-                        {list[0].properties.Type.select.name === "Movie" || list[0].properties.Type.select.name === "TvShow" ? (
-                            <>
-                                {list
-                                    .slice(0, displayCount)
-                                    .map((listItem: any) => (
-                                        <MoviesListCard
-                                            key={listItem.id}
-                                            id={listItem.id}
-                                            title={listItem.properties.Name.title[0].text.content}
-                                            poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
-                                            release_date={listItem.properties['Release Date'].date.start || ''}
-                                            link={`https://www.themoviedb.org/movie/${listItem.id}`}
-                                            handleStatusChange={handleInputChange}
-                                            statusList={movieStatusList}
-                                            status={listItem.properties.Status.status.name}
-                                            trailer={listItem.properties.Trailer.url}
-                                            overview={listItem.properties['Overview']?.rich_text[0]?.text?.content}
-                                            rating={listItem.properties['My Rating'].number}
-                                            watch_link={listItem.properties['Watch Link'].url}
-                                            notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
-                                        />
-                                    ))
-                                }
-                            </>
-                        ) : list[0].properties.Type.select.name === "Book" || list[0].properties.Type.select.name === "Article" ? (
-                            <>
-                                {list
-                                    .slice(0, displayCount)
-                                    .map((listItem: any) => (
-                                        <BooksListCard
-                                            key={listItem.id}
-                                            id={listItem.id}
-                                            title={listItem.properties.Title.title[0].text.content}
-                                            cover={listItem.properties['Cover Image'].url}
-                                            published_date={listItem.properties['Published Date'].date.start || ''}
-                                            link={`google.com/books/${listItem.id}`}
-                                            handleStatusChange={handleInputChange}
-                                            statusList={bookStatusList}
-                                            status={listItem.properties.Status.status.name}
-                                            rating={listItem.properties['My Rating'].number}
-                                            description={listItem.properties['Description']?.rich_text[0]?.text?.content}
-                                            pageCount={listItem.properties['Page Count'].number}
-                                            author={listItem.properties['Authors']?.rich_text[0]?.text?.content}
-                                            notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
-                                        />
-                                    ))
-                                }
-                            </>
-                        ) : (
-                            <h1 className="">No Lists</h1>
-                        )}
-                        {displayCount < list.length && (
-                            <LoadMore
-                                displayCount={displayCount}
-                                setDisplayCount={setDisplayCount}
-                                media={list}
-                            />
-                        )}
-                    </div>
+
+                <div className='grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 sm:gap-4 gap-0'>
+                    {list == movies ? (
+                        <>
+                            {list
+                                .slice(0, displayCount)
+                                .map((listItem: any) => (
+                                    <MoviesListCard
+                                        key={listItem.id}
+                                        id={listItem.id}
+                                        title={listItem.properties.Name.title[0].text.content}
+                                        poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
+                                        release_date={listItem.properties['Release Date'].date.start || ''}
+                                        link={`https://www.themoviedb.org/movie/${listItem.id}`}
+                                        handleStatusChange={handleInputChange}
+                                        statusList={movieStatusList}
+                                        status={listItem.properties.Status.status.name}
+                                        trailer={listItem.properties.Trailer.url}
+                                        overview={listItem.properties['Overview']?.rich_text[0]?.text?.content}
+                                        rating={listItem.properties['My Rating'].number}
+                                        watch_link={listItem.properties['Watch Link'].url}
+                                        notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
+                                    />
+                                ))
+                            }
+                        </>
+                    ) : list == tvShows ? (
+                        <>
+                            {list
+                                .slice(0, displayCount)
+                                .map((listItem: any) => (
+                                    <MoviesListCard
+                                        key={listItem.id}
+                                        id={listItem.id}
+                                        title={listItem.properties.Name.title[0].text.content}
+                                        poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
+                                        release_date={listItem.properties['Release Date'].date.start || ''}
+                                        link={`https://www.themoviedb.org/movie/${listItem.id}`}
+                                        handleStatusChange={handleInputChange}
+                                        statusList={movieStatusList}
+                                        status={listItem.properties.Status.status.name}
+                                        trailer={listItem.properties.Trailer.url}
+                                        overview={listItem.properties['Overview']?.rich_text[0]?.text?.content}
+                                        rating={listItem.properties['My Rating'].number}
+                                        watch_link={listItem.properties['Watch Link'].url}
+                                        notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
+                                    />
+                                ))
+                            }
+                        </>
+                    ) : list == books ? (
+                        <>
+                            {list
+                                .slice(0, displayCount)
+                                .map((listItem: any) => (
+                                    <BooksListCard
+                                        key={listItem.id}
+                                        id={listItem.id}
+                                        title={listItem.properties.Title.title[0].text.content}
+                                        cover={listItem.properties['Cover Image'].url}
+                                        published_date={listItem.properties['Published Date'].date.start || ''}
+                                        link={`google.com/books/${listItem.id}`}
+                                        handleStatusChange={handleInputChange}
+                                        statusList={bookStatusList}
+                                        status={listItem.properties.Status.status.name}
+                                        rating={listItem.properties['My Rating'].number}
+                                        description={listItem.properties['Description']?.rich_text[0]?.text?.content}
+                                        pageCount={listItem.properties['Page Count'].number}
+                                        author={listItem.properties['Authors']?.rich_text[0]?.text?.content}
+                                        notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
+                                    />
+                                ))
+                            }
+                        </>
+                    ) : null}
+
                 </div>
             </div>
         </>
@@ -196,25 +197,23 @@ export const getServerSideProps = async (context: any) => {
 
         const notion = new Client({ auth: decryptedNotionApiKey });
 
-        const fetchAllPages = async (databaseId: string) => {
+        const fetchAllPages = async (databaseId: string, filter: any) => {
             const allResults = [];
 
-            // do {
             const response = await notion.databases.query({
                 database_id: databaseId,
+                filter: filter,
+                page_size: 30,
                 // start_cursor: cursor,
-                // page_size: 40,
             });
 
             allResults.push(...response.results);
-            //     cursor = response.next_cursor;
-            // } while (cursor);
-
             return allResults;
         };
 
-        const nameList = [];
+        const databaseNameList = [];
         let movies = [] as any;
+        let tvShows = [] as any;
         let books = [] as any;
         let movieStatusList = [] as any;
         let movieTypeList = [] as any;
@@ -225,11 +224,12 @@ export const getServerSideProps = async (context: any) => {
             const moviesDatabaseInfo = await notion.databases.retrieve({ database_id: decryptedMoviesPageLink }) as any;
 
             const moviesDatabaseName = moviesDatabaseInfo.icon.emoji + moviesDatabaseInfo.title[0].plain_text;
-            nameList.push({ databaseName: moviesDatabaseName });
+            databaseNameList.push({ databaseName: moviesDatabaseName });
 
             movieStatusList = moviesDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
             movieTypeList = moviesDatabaseInfo.properties.Type.select.options.map((type: any) => type.name);
-            movies = await fetchAllPages(decryptedMoviesPageLink);
+            movies = await fetchAllPages(decryptedMoviesPageLink, { property: 'Type', select: { equals: 'Movie' } });
+            tvShows = await fetchAllPages(decryptedMoviesPageLink, { property: 'Type', select: { equals: 'TvShow' } });
         } else {
             movies = { results: [] };
         }
@@ -239,34 +239,36 @@ export const getServerSideProps = async (context: any) => {
             const booksDatabaseInfo = await notion.databases.retrieve({ database_id: decryptedBooksPageLink }) as any;
 
             const booksDatabaseName = booksDatabaseInfo.icon.emoji + booksDatabaseInfo.title[0].plain_text;
-            nameList.push({ databaseName: booksDatabaseName });
+            databaseNameList.push({ databaseName: booksDatabaseName });
 
             bookStatusList = booksDatabaseInfo.properties.Status.status.options.map((status: any) => status.name);
-            books = await fetchAllPages(decryptedBooksPageLink);
+            books = await fetchAllPages(decryptedBooksPageLink, { property: 'Type', select: { equals: 'Book' } });
         } else {
             books = { results: [] };
         }
 
         return {
+            databaseNameList,
             movies,
-            books,
-            nameList,
+            tvShows,
             movieStatusList,
-            bookStatusList,
-            movieTypeList
+            movieTypeList,
+            books,
+            bookStatusList
         };
     };
 
-    const { movies, books, nameList, movieStatusList, bookStatusList, movieTypeList } = await fetchUser();
+    const { databaseNameList, movies, tvShows, movieStatusList, movieTypeList, books, bookStatusList } = await fetchUser();
 
     return {
         props: {
+            databaseNameList,
             movies,
-            books,
-            nameList,
+            tvShows,
             movieStatusList,
-            bookStatusList,
-            movieTypeList
+            movieTypeList,
+            books,
+            bookStatusList
         },
     };
 }

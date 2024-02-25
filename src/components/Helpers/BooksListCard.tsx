@@ -25,60 +25,58 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
     const cancelButtonRef = useRef(null);
 
     return (
-        <div key={id} className="movie-card sm:w-[200px]" >
-            <div className="movie-card-image-container">
-                <div className='movie-image'>
-                    {cover ? (
-                        <div
-                            onClick={() => setOpen(true)}
-                            aria-label={title}>
-                            <Image
-                                src={cover}
-                                width={200}
-                                height={300}
-                                alt={title}
-                                className="rounded-sm max-h-[240px] min-h-[240px] sm:max-h-[300px] sm:min-h-[300px] h-auto select-none object-cover"
-                                loading="lazy"
-                            />
-                        </div>
-                    ) : (
-                        <div
-                            onClick={() => setOpen(true)}
-                            aria-label={title}>
-                            <Image
-                                src="/no-image.png"
-                                width={200}
-                                height={300}
-                                alt={title}
-                                className="rounded-sm h-auto select-none"
-                                loading="lazy"
-                            />
-                        </div>
-                    )}
-                    <select
-                        className={`movie-card-button backdrop-blur-sm select-none text-white border-2 bg-transparent hover:bg-opacity-80 focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 ${status === 'To watch' ? 'border-red-700 hover:bg-red-800 focus:ring-red-800 focus:bg-red-800' :
-                            status === 'Watching' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800' :
-                                'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800'
-                            }`}
-                        value={status}
-                    // onChange={(e) => handleStatusChange(e, id)}
-                    >
-                        {statusList.map((status: any) => (
-                            <option key={status} value={status} className='bg-gray-100 text-gray-800'>
-                                {status}
-                            </option>
-                        ))}
-                    </select>
-
-                </div>
-
-                {/* <Link href={link} passHref target='_blank' aria-label={`${title} ${published_date}`}> */}
-                <h2 className="font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200 mt-1"
-                    onClick={() => setOpen(true)}
+        <div key={id} className="w-[200px] px-4 sm:px-0 py-2 sm:py-0" >
+            <div className='movie-image'>
+                {cover ? (
+                    <div
+                        onClick={() => setOpen(true)}
+                        aria-label={title}>
+                        <Image
+                            src={cover}
+                            width={200}
+                            height={300}
+                            alt={title}
+                            className="rounded-sm max-h-[240px] min-h-[240px] sm:max-h-[300px] sm:min-h-[300px] h-auto select-none object-cover"
+                            loading="lazy"
+                        />
+                    </div>
+                ) : (
+                    <div
+                        onClick={() => setOpen(true)}
+                        aria-label={title}>
+                        <Image
+                            src="/no-image.png"
+                            width={200}
+                            height={300}
+                            alt={title}
+                            className="rounded-sm h-auto select-none"
+                            loading="lazy"
+                        />
+                    </div>
+                )}
+                <select
+                    className={`movie-card-button backdrop-blur-sm select-none text-white border-2 bg-transparent hover:bg-opacity-80 focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 ${status === 'To watch' ? 'border-red-700 hover:bg-red-800 focus:ring-red-800 focus:bg-red-800' :
+                        status === 'Watching' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800' :
+                            'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800'
+                        }`}
+                    value={status}
+                // onChange={(e) => handleStatusChange(e, id)}
                 >
-                    <span>{title} {published_date ? ` (${published_date.split('-')[0]})` : ''}</span>
-                </h2>
+                    {statusList.map((status: any) => (
+                        <option key={status} value={status} className='bg-gray-100 text-gray-800'>
+                            {status}
+                        </option>
+                    ))}
+                </select>
+
             </div>
+
+            {/* <Link href={link} passHref target='_blank' aria-label={`${title} ${published_date}`}> */}
+            <h2 className="font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200 mt-1"
+                onClick={() => setOpen(true)}
+            >
+                <span>{title} {published_date ? ` (${published_date.split('-')[0]})` : ''}</span>
+            </h2>
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
                     <Transition.Child
