@@ -13,7 +13,6 @@ export default function MyLists({ databaseNameList, movies, tvShows, books }: { 
     return (
         <>
             <div className="min-h-screen flex-grow">
-                {/* <h1 className="text-2xl text-center mb-8 text-gray-700">Find your Notion lists and collections here</h1> */}
                 <div className="w-full sm:px-20 px-4">
                     <h1 className="text-sm text-gray-500">MY LISTS</h1>
                 </div>
