@@ -110,13 +110,13 @@ export default function Navbar() {
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
-                                                                href="/lists"
+                                                                href="/my-lists"
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                aria-label='Lists'
+                                                                aria-label='My Lists'
                                                             >
                                                                 <div className='flex flex-row justify-start items-center gap-1'>
                                                                     <BsList />
-                                                                    <h1>Lists</h1>
+                                                                    <h1>My Lists</h1>
                                                                 </div>
                                                             </Link>
                                                         )}

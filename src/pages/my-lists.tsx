@@ -2,76 +2,32 @@ import { decryptData } from "@/lib/encryption";
 import { getSession, useSession } from "next-auth/react";
 import { use, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
+import ListsCard from "@/components/Helpers/ListsCard";
 
 export default function MyLists({ databaseNameList, movies, tvShows, books }: { databaseNameList: any, movies: any, tvShows: any, books: any }) {
 
-
+    useEffect(() => {
+        console.log("movies: ", movies);
+    }, [movies]);
 
     return (
         <>
             <div className="min-h-screen flex-grow">
-                <div className="flex md:flex-row flex-col justify-center gap-4 ">
-                    <div className="max-w-sm rounded overflow-hidden movie-image">
-                        <div className="flex flex-row justify-center items-center">
-                            {movies.map((movie: any) => (
-                                <img src={movie.properties.Poster.url} alt="" className="h-[200px] object-cover w-full" />
-                            ))}
-                        </div>
-                        <div className="px-6 py-4">
-                            <div className="font-bold text-xl mb-2">{databaseNameList[0].databaseName} - Movies</div>
-                            <p className="text-gray-700 text-base">
-                                Recents:
-                            </p>
-                        </div>
-                        <div className="px-6 pb-2">
-                            {
-                                movies.map((movie: any) => (
-                                    <button className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:shadow-lg">{movie.properties.Name.title[0].text.content}</button>
-                                ))
-                            }
-                        </div>
-                    </div>
-                    <div className="max-w-sm rounded overflow-hidden movie-image">
-                        <div className="flex flex-row justify-center items-center">
-                            {tvShows.map((movie: any) => (
-                                <img src={movie.properties.Poster.url} alt="" className="h-[200px] object-cover w-full" />
-                            ))}
-                        </div>
-                        <div className="px-6 py-4">
-                            <div className="font-bold text-xl mb-2">{databaseNameList[0].databaseName} - TV Shows</div>
-                            <p className="text-gray-700 text-base">
-                                Recents:
-                            </p>
-                        </div>
-                        <div className="px-6 pb-2">
-                            {
-                                tvShows.map((tvShow: any) => (
-                                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{tvShow.properties.Name.title[0].text.content}</span>
-                                ))
-                            }
-                        </div>
-                    </div>
-                    <div className="max-w-sm rounded overflow-hidden movie-image">
-                        <div className="flex flex-row justify-center items-center">
-                            {books.map((movie: any) => (
-                                <img src={movie.properties["Cover Image"].url} alt="" className="h-[200px] object-cover w-full" />
-                            ))}
-                        </div>
-                        <div className="px-6 py-4">
-                            <div className="font-bold text-xl mb-2">{databaseNameList[1].databaseName}</div>
-                            <p className="text-gray-700 text-base">
-                                Recents:
-                            </p>
-                        </div>
-                        <div className="px-6 pb-2">
-                            {
-                                books.map((book: any) => (
-                                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{book.properties.Title.title[0].text.content}</span>
-                                ))
-                            }
-                        </div>
-                    </div>
+                {/* <h1 className="text-2xl text-center mb-8 text-gray-700">Find your Notion lists and collections here</h1> */}
+                <div className="w-full sm:px-20 px-4">
+                    <h1 className="text-sm text-gray-500">MY LISTS</h1>
                 </div>
+                <hr className="sm:mx-20 mx-4 border-gray-500 py-2" />
+                <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">
+                    <ListsCard name="Movies" id={movies[0].parent.database_id} databaseNameList={databaseNameList[0].databaseName} list={movies} path="/my-lists/movies" />
+                    <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} databaseNameList={databaseNameList[0].databaseName} list={tvShows} path="/my-lists/tvshows" />
+                    <ListsCard name="Books" id={books[0].parent.database_id} databaseNameList={databaseNameList[1].databaseName} list={books} path="/my-lists/books" />
+                </div>
+                <div className="w-full sm:px-20 px-4 mt-8">
+                    <h1 className="text-sm text-gray-500">MY COLLECTIONS</h1>
+                </div>
+                <hr className="sm:mx-20 mx-4 border-gray-500 py-2" />
+                <h1 className="text-center">Coming Soon ...</h1>
             </div>
         </>
     )
@@ -113,7 +69,7 @@ export const getServerSideProps = async (context: any) => {
             const response = await notion.databases.query({
                 database_id: databaseId,
                 filter: filter,
-                page_size: 4,
+                page_size: 3,
             });
 
             allResults.push(...response.results);
