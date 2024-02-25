@@ -125,7 +125,7 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                         </>
                     )}
                 </div>
-                {displayCount < popularTvShows.length && (
+                {displayCount < popularTvShows.length && tvShows.length === 0 && (
                     <LoadMore
                         displayCount={displayCount}
                         setDisplayCount={setDisplayCount}
@@ -135,7 +135,6 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
             </div>
         </>
     );
-
 };
 
 export const getStaticProps = async () => {

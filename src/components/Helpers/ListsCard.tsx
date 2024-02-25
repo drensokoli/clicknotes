@@ -16,7 +16,7 @@ export default function ListsCard({ name, id, databaseNameList, list, path }: { 
                 {
                     list.map((list: any, index: any) => (
                         <Link href={`https://www.notion.so/${list.id.replace(/-/g, '')}`} target='_blank' key={index} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                            {list.properties.Name ? list.properties.Name.title[0].plain_text : list.properties.Title.title[0].plain_text}
+                            {list.icon.emoji} {list.properties.Name ? list.properties.Name.title[0].plain_text : list.properties.Title.title[0].plain_text}
                         </Link>
                     ))
                 }
