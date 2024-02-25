@@ -87,55 +87,54 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
-                <div className="content-container sm:w-5/6">
-                    <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
-                        {movies
-                            .map((item) => (
-                                <Movie
-                                    {...item}
-                                    key={item.id}
-                                    runtime={0}
-                                    adult={false}
-                                    backdrop_path={item.backdrop_path}
-                                    onApiResponse={(error: string) => setApiResponse(error)}
-                                    setPageLink={setPageLink}
-                                    tmdbApiKey={tmdbApiKey}
-                                    encryptionKey={encryptionKey}
-                                    notionApiKey={notionApiKey}
-                                    moviesPageLink={moviesPageLink}
-                                />
-                            ))
-                        }
-                        {movies.length === 0 && (
-                            <>
-                                {popularMovies
-                                    .slice(0, displayCount)
-                                    .map((item) => (
-                                        <Movie
-                                            {...item}
-                                            key={item.id}
-                                            runtime={0}
-                                            adult={false}
-                                            backdrop_path={item.backdrop_path}
-                                            onApiResponse={(error: string) => setApiResponse(error)}
-                                            setPageLink={setPageLink}
-                                            tmdbApiKey={tmdbApiKey}
-                                            encryptionKey={encryptionKey}
-                                            notionApiKey={notionApiKey}
-                                            moviesPageLink={moviesPageLink}
-                                        />
-                                    ))}
-                                {displayCount < popularMovies.length && (
-                                    <LoadMore
-                                        displayCount={displayCount}
-                                        setDisplayCount={setDisplayCount}
-                                        media={popularMovies}
+
+                <div className='grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 sm:gap-4 gap-0'>
+                    {movies
+                        .map((item) => (
+                            <Movie
+                                {...item}
+                                key={item.id}
+                                runtime={0}
+                                adult={false}
+                                backdrop_path={item.backdrop_path}
+                                onApiResponse={(error: string) => setApiResponse(error)}
+                                setPageLink={setPageLink}
+                                tmdbApiKey={tmdbApiKey}
+                                encryptionKey={encryptionKey}
+                                notionApiKey={notionApiKey}
+                                moviesPageLink={moviesPageLink}
+                            />
+                        ))
+                    }
+                    {movies.length === 0 && (
+                        <>
+                            {popularMovies
+                                .slice(0, displayCount)
+                                .map((item) => (
+                                    <Movie
+                                        {...item}
+                                        key={item.id}
+                                        runtime={0}
+                                        adult={false}
+                                        backdrop_path={item.backdrop_path}
+                                        onApiResponse={(error: string) => setApiResponse(error)}
+                                        setPageLink={setPageLink}
+                                        tmdbApiKey={tmdbApiKey}
+                                        encryptionKey={encryptionKey}
+                                        notionApiKey={notionApiKey}
+                                        moviesPageLink={moviesPageLink}
                                     />
-                                )}
-                            </>
-                        )}
-                    </div>
+                                ))}
+                        </>
+                    )}
                 </div>
+                {displayCount < popularMovies.length && (
+                    <LoadMore
+                        displayCount={displayCount}
+                        setDisplayCount={setDisplayCount}
+                        media={popularMovies}
+                    />
+                )}
             </div>
         </>
     );

@@ -15,8 +15,7 @@ export default function Card({ id, title, poster_path, release_date, link, handl
     const { data: session } = useSession();
 
     return (
-        <div key={id} className="movie-card sm:w-[200px]" >
-            <div className="movie-card-image-container">
+        <div key={id} className="w-[200px] px-4 sm:px-0 py-2 sm:py-0" >
                 <div className='movie-image'>
                     {poster_path ? (
                         <Link href={link} passHref target='_blank' aria-label={`${title} ${release_date}`}>
@@ -52,7 +51,6 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                         <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
                     </h2>
                 </Link>
-            </div>
         </div>
     )
 }

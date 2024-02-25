@@ -30,22 +30,22 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
 
             console.log("Title Results: ", titleResults);
             console.log("Author Results: ", authorResults);
-    
+
             const combinedResults = [...titleResults, ...authorResults];
-    
+
             setBooks(combinedResults);
         } catch (error) {
             console.error(error);
         }
     };
-    
+
     const searchBooksByTitle = async (title: string) => {
         try {
             if (title.length === 0) {
                 return [];
             }
             const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=20&key=${googleBooksApiKey}`);
-            
+
             return response.data.items;
         } catch (error) {
             console.error(error);
@@ -124,67 +124,65 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
-                <div className="content-container sm:w-5/6">
-                    <div className="movie-container grid grid-cols-2 gap-2 sm:grid-cols-1">
-                        {books.map((book: BookInterface) => (
-                            <Book
-                                key={book.id}
-                                id={book.id}
-                                title={book.volumeInfo.title}
-                                previewLink={book.volumeInfo.previewLink}
-                                cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                description={book.volumeInfo.description}
-                                publishedDate={book.volumeInfo.publishedDate}
-                                averageRating={book.volumeInfo.averageRating}
-                                authors={book.volumeInfo.authors}
-                                infoLink={book.volumeInfo.infoLink}
-                                pageCount={book.volumeInfo.pageCount}
-                                thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-                                language={book.volumeInfo.language}
-                                price={book.saleInfo.listPrice?.amount}
-                                publisher={book.volumeInfo.publisher}
-                                availability={book.saleInfo.saleability}
-                                onApiResponse={(error: string) => setApiResponse(error)}
-                                setPageLink={setPageLink}
-                                encryptionKey={encryptionKey}
-                                notionApiKey={notionApiKey}
-                                booksPageLink={booksPageLink}
-                            />
-                        ))}
-                        {books.length === 0 && (
-                            <>
-                                {
-                                    bestsellers.map((book: BookInterface) => (
-                                        <Book
-                                            key={book.id}
-                                            id={book.id}
-                                            title={book.volumeInfo.title}
-                                            previewLink={book.volumeInfo.previewLink}
-                                            cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                            description={book.volumeInfo.description}
-                                            publishedDate={book.volumeInfo.publishedDate}
-                                            averageRating={book.volumeInfo.averageRating}
-                                            authors={book.volumeInfo.authors}
-                                            infoLink={book.volumeInfo.infoLink}
-                                            pageCount={book.volumeInfo.pageCount}
-                                            thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-                                            language={book.volumeInfo.language}
-                                            price={book.saleInfo.listPrice?.amount}
-                                            publisher={book.volumeInfo.publisher}
-                                            availability={book.saleInfo.saleability}
-                                            onApiResponse={(error: string) => setApiResponse(error)}
-                                            setPageLink={setPageLink}
-                                            encryptionKey={encryptionKey}
-                                            notionApiKey={notionApiKey}
-                                            booksPageLink={booksPageLink}
-                                        />
-                                    ))
-                                }
-                            </>
-                        )}
-                    </div>
+                <div className='grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 sm:gap-4 gap-0'>
+                    {books.map((book: BookInterface) => (
+                        <Book
+                            key={book.id}
+                            id={book.id}
+                            title={book.volumeInfo.title}
+                            previewLink={book.volumeInfo.previewLink}
+                            cover_image={book.volumeInfo.imageLinks?.thumbnail}
+                            description={book.volumeInfo.description}
+                            publishedDate={book.volumeInfo.publishedDate}
+                            averageRating={book.volumeInfo.averageRating}
+                            authors={book.volumeInfo.authors}
+                            infoLink={book.volumeInfo.infoLink}
+                            pageCount={book.volumeInfo.pageCount}
+                            thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+                            language={book.volumeInfo.language}
+                            price={book.saleInfo.listPrice?.amount}
+                            publisher={book.volumeInfo.publisher}
+                            availability={book.saleInfo.saleability}
+                            onApiResponse={(error: string) => setApiResponse(error)}
+                            setPageLink={setPageLink}
+                            encryptionKey={encryptionKey}
+                            notionApiKey={notionApiKey}
+                            booksPageLink={booksPageLink}
+                        />
+                    ))}
+                    {books.length === 0 && (
+                        <>
+                            {
+                                bestsellers.map((book: BookInterface) => (
+                                    <Book
+                                        key={book.id}
+                                        id={book.id}
+                                        title={book.volumeInfo.title}
+                                        previewLink={book.volumeInfo.previewLink}
+                                        cover_image={book.volumeInfo.imageLinks?.thumbnail}
+                                        description={book.volumeInfo.description}
+                                        publishedDate={book.volumeInfo.publishedDate}
+                                        averageRating={book.volumeInfo.averageRating}
+                                        authors={book.volumeInfo.authors}
+                                        infoLink={book.volumeInfo.infoLink}
+                                        pageCount={book.volumeInfo.pageCount}
+                                        thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+                                        language={book.volumeInfo.language}
+                                        price={book.saleInfo.listPrice?.amount}
+                                        publisher={book.volumeInfo.publisher}
+                                        availability={book.saleInfo.saleability}
+                                        onApiResponse={(error: string) => setApiResponse(error)}
+                                        setPageLink={setPageLink}
+                                        encryptionKey={encryptionKey}
+                                        notionApiKey={notionApiKey}
+                                        booksPageLink={booksPageLink}
+                                    />
+                                ))
+                            }
+                        </>
+                    )}
                 </div>
-            </div >
+            </div>
         </>
     );
 };
