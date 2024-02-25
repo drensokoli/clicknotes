@@ -51,8 +51,8 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                 )}
                 <select
                     className={`movie-card-button backdrop-blur-sm select-none text-white border-2 bg-transparent hover:bg-opacity-80 focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 ${status === 'To watch' ? 'border-red-700 hover:bg-red-800 focus:ring-red-800 focus:bg-red-800' :
-                            status === 'Watching' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800' :
-                                'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800'
+                        status === 'Watching' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800' :
+                            'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800'
                         }`}
                     value={status}
                 // onChange={(e) => handleStatusChange(e, id)}
@@ -98,7 +98,18 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             >
                                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                                    <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                                    <button
+                                        onClick={() => setOpen(false)}
+                                        ref={cancelButtonRef}
+                                        type="button"
+                                        className="absolute top-2 right-2 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm p-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                                    >
+                                        <span className="sr-only">Close menu</span>
+                                        <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                    <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 mb-4">
                                         <div className="sm:flex sm:items-start">
                                             <div className="mx-auto flex items-center justify-center ">
                                                 <Image src={poster_path || "/no-image.png"} width={200} height={200} alt={title} className='sm:w-[350px] w-[200px] h-auto' />
@@ -121,31 +132,21 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                                     )}
                                                     <p className="text-sm text-gray-500 text-left mt-2">Trailer:</p>
                                                     {trailer ? (
-                                                        <Link href={trailer} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{trailer}</Link>
+                                                        <Link href={trailer} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{trailer}</Link>
                                                     ) : (
                                                         <p className="text-sm text-gray-400 text-left">No Trailer for this movie</p>
                                                     )}
                                                     <p className="text-sm text-gray-500 text-left mt-2">Watch:</p>
                                                     {watch_link ? (
-                                                        <Link href={watch_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{watch_link}</Link>
+                                                        <Link href={watch_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{watch_link}</Link>
                                                     ) : (
                                                         <p className="text-sm text-gray-400 text-left">No Watch Link for this movie</p>
                                                     )}
                                                     <p className="text-sm text-gray-500 text-left mt-2">Notion:</p>
-                                                    <Link href={notion_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{notion_link}</Link>
+                                                    <Link href={notion_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{notion_link}</Link>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                        <button
-                                            type="button"
-                                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                                            onClick={() => setOpen(false)}
-                                            ref={cancelButtonRef}
-                                        >
-                                            Cancel
-                                        </button>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
@@ -153,6 +154,6 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                     </div>
                 </Dialog>
             </Transition.Root>
-        </div>
+        </div >
     )
 }

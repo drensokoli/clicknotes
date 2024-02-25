@@ -140,47 +140,23 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
 };
 
 export const getStaticProps = async () => {
-
     const encryptionKey = process.env.ENCRYPTION_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
+    const totalPages = 20; // Total number of pages to fetch
 
-    const popularMoviesResponsePageOne = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=1&include_adult=false`);
-    const popularMoviesResponsePageTwo = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=2&include_adult=false`);
-    const popularMoviesResponsePageThree = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=3&include_adult=false`);
-    const popularMoviesResponsePageFour = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=4&include_adult=false`);
-    const popularMoviesResponsePageFive = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=5&include_adult=false`);
-    const popularMoviesResponsePageSix = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=6&include_adult=false`);
-    const popularMoviesResponsePageSeven = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=7&include_adult=false`);
-    const popularMoviesResponsePageEight = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=8&include_adult=false`);
-    const popularMoviesResponsePageNine = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=9&include_adult=false`);
-    const popularMoviesResponsePageTen = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=10&include_adult=false`);
+    let popularMoviesResults = [];
 
-    const popularMoviesResponse = {
-        data: {
-            results: [
-                ...popularMoviesResponsePageOne.data.results,
-                ...popularMoviesResponsePageTwo.data.results,
-                ...popularMoviesResponsePageThree.data.results,
-                ...popularMoviesResponsePageFour.data.results,
-                ...popularMoviesResponsePageFive.data.results,
-                ...popularMoviesResponsePageSix.data.results,
-                ...popularMoviesResponsePageSeven.data.results,
-                ...popularMoviesResponsePageEight.data.results,
-                ...popularMoviesResponsePageNine.data.results,
-                ...popularMoviesResponsePageTen.data.results
-            ]
-        }
-    };
-
-    const popularMovies = popularMoviesResponse.data.results;
+    for (let page = 1; page <= totalPages; page++) {
+        const popularMoviesResponse = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbApiKey}&language=en-US&page=${page}&include_adult=false`);
+        popularMoviesResults.push(...popularMoviesResponse.data.results);
+    }
 
     return {
         props: {
             tmdbApiKey,
             encryptionKey,
-            popularMovies
+            popularMovies: popularMoviesResults
         },
-
         revalidate: 60 * 60 * 24 // 24 hours
     };
 }

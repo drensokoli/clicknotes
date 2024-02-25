@@ -138,48 +138,23 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
 };
 
 export const getStaticProps = async () => {
-
     const encryptionKey = process.env.ENCRYPTION_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
+    const totalPages = 20; // Total number of pages to fetch
 
-    const popularTvShowsResponsePageOne = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=1`);
-    const popularTvShowsResponsePageTwo = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=2`);
-    const popularTvShowsResponsePageThree = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=3`);
-    const popularTvShowsResponsePageFour = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=4`);
-    const popularTvShowsResponsePageFive = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=5`);
-    const popularTvShowsResponsePageSix = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=6`);
-    const popularTvShowsResponsePageSeven = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=7`);
-    const popularTvShowsResponsePageEight = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=8`);
-    const popularTvShowsResponsePageNine = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=9`);
-    const popularTvShowsResponsePageTen = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=10`);
+    let popularTvShowsResults = [];
 
-    const popularTvShowsResponse = {
-        data: {
-            results: [
-                ...popularTvShowsResponsePageOne.data.results,
-                ...popularTvShowsResponsePageTwo.data.results,
-                ...popularTvShowsResponsePageThree.data.results,
-                ...popularTvShowsResponsePageFour.data.results,
-                ...popularTvShowsResponsePageFive.data.results,
-                ...popularTvShowsResponsePageSix.data.results,
-                ...popularTvShowsResponsePageSeven.data.results,
-                ...popularTvShowsResponsePageEight.data.results,
-                ...popularTvShowsResponsePageNine.data.results,
-                ...popularTvShowsResponsePageTen.data.results
-            ]
-        }
-    };
-
-    const popularTvShows = popularTvShowsResponse.data.results;
+    for (let page = 1; page <= totalPages; page++) {
+        const popularTvShowsResponse = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbApiKey}&language=en-US&page=${page}`);
+        popularTvShowsResults.push(...popularTvShowsResponse.data.results);
+    }
 
     return {
         props: {
             tmdbApiKey,
             encryptionKey,
-            popularTvShows
+            popularTvShows: popularTvShowsResults
         },
-
         revalidate: 60 * 60 * 24 // 24 hours
     };
-
 }
