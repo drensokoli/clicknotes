@@ -9,6 +9,7 @@ export default function MyLists({ movies, tvShows, books }: { movies: any, tvSho
     return (
         <>
             <div className="min-h-screen flex-grow">
+
                 <div className="w-full sm:px-20 px-4">
                     <h1 className="text-sm text-gray-500">MY LISTS</h1>
                 </div>
@@ -24,6 +25,7 @@ export default function MyLists({ movies, tvShows, books }: { movies: any, tvSho
                         <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" />
                     )}
                 </div>
+
                 <div className="w-full sm:px-20 px-4 mt-8">
                     <h1 className="text-sm text-gray-500">MY COLLECTIONS</h1>
                 </div>
@@ -54,6 +56,7 @@ export const getServerSideProps = async (context: any) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userEmail: session?.user?.email }),
         });
+
         const user = await response.json();
 
         if (!user.notionApiKey)

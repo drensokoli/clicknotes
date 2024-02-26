@@ -116,7 +116,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                             </div>
                                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                                 <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                    <div className="">
+                                                    <div className="w-[90%]">
                                                         {title} {release_date ? ` (${release_date.split('-')[0]})` : ''}
                                                         {rating && (
                                                             <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
@@ -128,19 +128,19 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                                     {overview ? (
                                                         <p className="text-sm text-gray-900 text-left">{overview}</p>
                                                     ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No Overview for this movie</p>
+                                                        <p className="text-sm text-gray-400 text-left">No overview for this movie</p>
                                                     )}
                                                     <p className="text-sm text-gray-500 text-left mt-2">Trailer:</p>
                                                     {trailer ? (
                                                         <Link href={trailer} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{trailer}</Link>
                                                     ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No Trailer for this movie</p>
+                                                        <p className="text-sm text-gray-400 text-left">No trailer for this movie</p>
                                                     )}
                                                     <p className="text-sm text-gray-500 text-left mt-2">Watch:</p>
                                                     {watch_link ? (
                                                         <Link href={watch_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{watch_link}</Link>
                                                     ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No Watch Link for this movie</p>
+                                                        <p className="text-sm text-gray-400 text-left">No watch link for this movie</p>
                                                     )}
                                                     <p className="text-sm text-gray-500 text-left mt-2">Notion:</p>
                                                     <Link href={notion_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{notion_link}</Link>

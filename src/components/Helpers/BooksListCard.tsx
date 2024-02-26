@@ -103,6 +103,17 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
                                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             >
                                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                                    <button
+                                        onClick={() => setOpen(false)}
+                                        ref={cancelButtonRef}
+                                        type="button"
+                                        className="absolute top-2 right-2 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm p-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                                    >
+                                        <span className="sr-only">Close menu</span>
+                                        <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
                                     <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                         <div className="sm:flex sm:items-start">
                                             <div className="mx-auto flex items-center justify-center ">
@@ -110,7 +121,7 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
                                             </div>
                                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                                 <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                    <div className="">
+                                                    <div className="w-[90%]">
                                                         {title} {published_date ? ` (${published_date.split('-')[0]})` : ''}
                                                         {rating && (
                                                             <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
@@ -122,19 +133,19 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
                                                     {description ? (
                                                         <p className="text-sm text-gray-900 text-left">{description}</p>
                                                     ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No Overview for this movie</p>
+                                                        <p className="text-sm text-gray-400 text-left">No description for this book</p>
                                                     )}
-                                                    <p className="text-sm text-gray-500 text-left mt-2">Trailer:</p>
-                                                    {pageCount ? (
-                                                        <p className="text-sm text-gray-900 text-left">{pageCount}</p>
-                                                    ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No Overview for this movie</p>
-                                                    )}
-                                                    <p className="text-sm text-gray-500 text-left mt-2">Watch:</p>
+                                                    <p className="text-sm text-gray-500 text-left mt-2">Author:</p>
                                                     {author ? (
                                                         <p className="text-sm text-gray-900 text-left">{author}</p>
                                                     ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No Overview for this movie</p>
+                                                        <p className="text-sm text-gray-400 text-left">No author for this book</p>
+                                                    )}
+                                                    <p className="text-sm text-gray-500 text-left mt-2">Page count:</p>
+                                                    {pageCount ? (
+                                                        <p className="text-sm text-gray-900 text-left">{pageCount}</p>
+                                                    ) : (
+                                                        <p className="text-sm text-gray-400 text-left">No page count for this book</p>
                                                     )}
                                                     <p className="text-sm text-gray-500 text-left mt-2">Notion:</p>
                                                     <Link href={notion_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">{notion_link}</Link>

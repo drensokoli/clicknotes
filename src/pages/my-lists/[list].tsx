@@ -46,7 +46,6 @@ export default function List({ list, statusList, listName }: { list: any, status
                                 .slice(0, displayCount)
                                 .map((listItem: any) => (
                                     <BooksListCard
-                                        key={listItem.id}
                                         id={listItem.id}
                                         title={listItem.properties.Title.title[0].text.content}
                                         cover={listItem.properties["Cover Image"].url}
@@ -56,6 +55,8 @@ export default function List({ list, statusList, listName }: { list: any, status
                                         statusList={statusList}
                                         status={listItem.properties.Status.status.name}
                                         rating={listItem.properties['My Rating'].number}
+                                        description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
+                                        pageCount={listItem.properties['Page Count'].number}
                                         author={listItem.properties.Authors.rich_text[0].text.content}
                                         notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
                                     />
