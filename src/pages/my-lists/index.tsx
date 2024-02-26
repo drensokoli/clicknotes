@@ -4,11 +4,7 @@ import { use, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
 import ListsCard from "@/components/Helpers/ListsCard";
 
-export default function MyLists({ databaseNameList, movies, tvShows, books }: { databaseNameList: any, movies: any, tvShows: any, books: any }) {
-
-    useEffect(() => {
-        console.log("movies: ", movies);
-    }, [movies]);
+export default function MyLists({ movies, tvShows, books }: { movies: any, tvShows: any, books: any }) {
 
     return (
         <>
@@ -18,9 +14,15 @@ export default function MyLists({ databaseNameList, movies, tvShows, books }: { 
                 </div>
                 <hr className="sm:mx-20 mx-4 border-gray-500 py-2" />
                 <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">
-                    <ListsCard name="Movies" id={movies[0].parent.database_id} databaseNameList={databaseNameList[0].databaseName} list={movies} path="/my-lists/movies" />
-                    <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} databaseNameList={databaseNameList[0].databaseName} list={tvShows} path="/my-lists/tvshows" />
-                    <ListsCard name="Books" id={books[0].parent.database_id} databaseNameList={databaseNameList[1].databaseName} list={books} path="/my-lists/books" />
+                    {movies.length > 0 && (
+                        <ListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" />
+                    )}
+                    {tvShows.length > 0 && (
+                        <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" />
+                    )}
+                    {books.length > 0 && (
+                        <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" />
+                    )}
                 </div>
                 <div className="w-full sm:px-20 px-4 mt-8">
                     <h1 className="text-sm text-gray-500">MY COLLECTIONS</h1>
@@ -55,7 +57,7 @@ export const getServerSideProps = async (context: any) => {
         const user = await response.json();
 
         if (!user.notionApiKey)
-            return { movies: [], moviesDatabaseName: '', books: [], booksDatabaseName: '' };
+            return { movies: [], tvShows: [], books: [] };
 
         const notionApiKey = user.notionApiKey;
         const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
@@ -75,7 +77,6 @@ export const getServerSideProps = async (context: any) => {
             return allResults;
         };
 
-        const databaseNameList = [];
         let movies = [] as any;
         let tvShows = [] as any;
         let books = [] as any;
@@ -85,12 +86,12 @@ export const getServerSideProps = async (context: any) => {
             const moviesDatabaseInfo = await notion.databases.retrieve({ database_id: decryptedMoviesPageLink }) as any;
 
             const moviesDatabaseName = moviesDatabaseInfo.icon.emoji + moviesDatabaseInfo.title[0].plain_text;
-            databaseNameList.push({ databaseName: moviesDatabaseName });
 
             movies = await fetchAllPages(decryptedMoviesPageLink, { property: 'Type', select: { equals: 'Movie' } });
             tvShows = await fetchAllPages(decryptedMoviesPageLink, { property: 'Type', select: { equals: 'TvShow' } });
         } else {
             movies = { results: [] };
+            tvShows = { results: [] };
         }
 
         if (user.booksPageLink) {
@@ -98,7 +99,6 @@ export const getServerSideProps = async (context: any) => {
             const booksDatabaseInfo = await notion.databases.retrieve({ database_id: decryptedBooksPageLink }) as any;
 
             const booksDatabaseName = booksDatabaseInfo.icon.emoji + booksDatabaseInfo.title[0].plain_text;
-            databaseNameList.push({ databaseName: booksDatabaseName });
 
             books = await fetchAllPages(decryptedBooksPageLink, { property: 'Type', select: { equals: 'Book' } });
         } else {
@@ -106,18 +106,16 @@ export const getServerSideProps = async (context: any) => {
         }
 
         return {
-            databaseNameList,
             movies,
             tvShows,
             books
         };
     };
 
-    const { databaseNameList, movies, tvShows, books } = await fetchUser();
+    const { movies, tvShows, books } = await fetchUser();
 
     return {
         props: {
-            databaseNameList,
             movies,
             tvShows,
             books
