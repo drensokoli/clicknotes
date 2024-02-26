@@ -46,6 +46,7 @@ export default function List({ list, statusList, listName }: { list: any, status
                                 .slice(0, displayCount)
                                 .map((listItem: any) => (
                                     <BooksListCard
+                                        key={listItem.id}
                                         id={listItem.id}
                                         title={listItem.properties.Title.title[0].text.content}
                                         cover={listItem.properties["Cover Image"].url}
