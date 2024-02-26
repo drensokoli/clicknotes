@@ -5,7 +5,7 @@ export default function ListsCard({ name, id, list, path }: { name: any, id: any
         <Link href={path} className="rounded overflow-hidden movie-image px-2">
             <div className="flex flex-row justify-center items-center">
                 {list.map((list: any, index: any) => (
-                    <img key={index} src={list.properties.Poster ? list.properties.Poster.url : list.properties["Cover Image"].url} alt="" className="h-[230px] object-cover w-full" />
+                    <img key={index} src={list.properties.Poster ? list.properties.Poster.url : list.properties["Cover Image"] ? list.properties["Cover Image"].url : list.cover.external.url} alt="" className="h-[230px] object-cover w-full" />
                 ))}
             </div>
             <div className="px-6 py-4">
