@@ -33,13 +33,13 @@ export default function Input(
                             <Link
                                 href={link}
                                 target='_blank'
-                                className='hover:text-blue-500 hover:underline w-[75%] line-clamp-3 text-gray-600'
-                            >**************************************************</Link>
+                                className='hover:text-blue-500 hover:underline w-[95%] truncate text-gray-600'
+                            >***************************************</Link>
                         ) : (
                             <Link
                                 href={link}
                                 target='_blank'
-                                className='hover:text-blue-500 hover:underline w-[75%] line-clamp-3 text-gray-600'
+                                className='hover:text-blue-500 hover:underline w-[95%] truncate text-gray-600'
                             >{`https://www.notion.so/` + field}</Link>
                         )}
                         <button onClick={() => setLink('')}>
