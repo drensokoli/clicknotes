@@ -3,8 +3,14 @@ import { getSession, useSession } from "next-auth/react";
 import { use, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
 import ListsCard from "@/components/Helpers/ListsCard";
+import NotionBanner from "@/components/Notion/NotionBanner";
 
 export default function MyLists({ movies, tvShows, books }: { movies: any, tvShows: any, books: any }) {
+    const notionBanners = [
+        { image: '/connectmovies.png' },
+        { image: '/connecttvshows.png' },
+        { image: '/connectbooks.png' },
+    ];
 
     return (
         <>
@@ -14,17 +20,27 @@ export default function MyLists({ movies, tvShows, books }: { movies: any, tvSho
                     <h1 className="text-sm text-gray-500">MY LISTS</h1>
                 </div>
                 <hr className="sm:mx-20 mx-4 border-gray-500 py-2" />
-                <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">
-                    {movies.length > 0 && (
-                        <ListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" />
-                    )}
-                    {tvShows.length > 0 && (
-                        <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" />
-                    )}
-                    {books.length > 0 && (
-                        <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" />
-                    )}
-                </div>
+                {movies.length === 0 && tvShows.length === 0 && books.length === 0 ? (
+                    <div className="flex flex-col gap-2 px-2">
+                        <h1 className="text-center text-lg">You have no lists.</h1>
+                        <h1 className="text-center text-lg">Follow the guide below to create your first ClickNotes list!</h1>
+                        <NotionBanner image={notionBanners[Math.floor(Math.random() * notionBanners.length)].image} />
+                    </div>
+                ) : (
+                    <>
+                        <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">
+                            {movies.length > 0 && (
+                                <ListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" />
+                            )}
+                            {tvShows.length > 0 && (
+                                <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" />
+                            )}
+                            {books.length > 0 && (
+                                <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" />
+                            )}
+                        </div>
+                    </>
+                )}
 
                 <div className="w-full sm:px-20 px-4 mt-8">
                     <h1 className="text-sm text-gray-500">MY COLLECTIONS</h1>
