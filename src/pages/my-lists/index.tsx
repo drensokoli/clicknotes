@@ -24,7 +24,7 @@ export default function MyLists() {
 
     const fetchLists = async () => {
         try {
-            const response = await fetch('/api/getMyLists', {
+            const response = await fetch('/api/getNotionDatabases', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

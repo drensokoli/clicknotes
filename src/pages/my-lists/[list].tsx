@@ -4,43 +4,80 @@ import { getSession, useSession } from "next-auth/react";
 import { use, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
 import MoviesListCard from "@/components/Helpers/MoviesListCard";
-import { useRouter } from "next/router";
 import LoadMore from "@/components/Helpers/LoadMore";
 import BooksListCard from "@/components/Helpers/BooksListCard";
 
-export default function List({ list, statusList, listName }: { list: any, statusList: any, listName: string }) {
+export default function List({ ssrList, statusList, listName }: { ssrList: any, statusList: any, listName: string }) {
+
+    const { data: session } = useSession();
+    const userEmail = session?.user?.email;
+
+    const [loading, setLoading] = useState(true);
+
+    const [list, setList] = useState<any[]>();
+    const [content, setContent] = useState(ssrList.filter((ssrList: any) => ssrList.properties.Status.status.name === statusList[0]));
 
     const [input, setInput] = useState('');
+
     const [displayCount, setDisplayCount] = useState(20);
-    const [content, setContent] = useState(list.filter((list: any) => list.properties.Status.status.name === statusList[0]));
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
         // const data = getMovies(notionApiKey, databaseId);
     };
 
+    const getNotionDatabasePages = async () => {
+        try {
+            const response = await fetch('/api/getNotionDatabasePages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userEmail, listName }),
+            });
+            const data = await response.json();
+
+            if (response.status !== 200) {
+                console.error(data.error.message);
+                return;
+            }
+
+            setList(data.list);
+            setContent(data.list.filter((list: any) => statusList && list.properties.Status.status.name === statusList[0]));
+            setLoading(false);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        if (userEmail) {
+            getNotionDatabasePages();
+        }
+    }, [session]);
+
     return (
         <>
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
 
-                <div className="flex justify-end items-center w-[90%] sm:w-[70%] gap-2 overflow-auto">
-                    <div>
-                        <select
-                            className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            onChange={(e) => setContent(list.filter((list: any) => list.properties.Status.status.name === e.target.value))}
-                        >
-                            {statusList.map((list: any) => (
-                                <option key={list} value={list}>
-                                    {list}
-                                </option>
-                            ))}
-                        </select>
+                {statusList && (
+                    <div className="flex justify-end items-center w-[90%] sm:w-[70%] gap-2 overflow-auto">
+                        <div>
+                            <select
+                                className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                onChange={(e) => list && setContent(list.filter((item: any) => item.properties.Status.status.name === e.target.value))}                        >
+                                {statusList.map((list: any) => (
+                                    <option key={list} value={list}>
+                                        {list}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <div className='grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 sm:gap-4 gap-0'>
-                    {listName === 'books' ? (
+                    {listName === 'books' && content ? (
                         <>
                             {content
                                 .slice(0, displayCount)
@@ -64,7 +101,7 @@ export default function List({ list, statusList, listName }: { list: any, status
                                 ))
                             }
                         </>
-                    ) : (
+                    ) : content && (
                         <>
                             {content
                                 .slice(0, displayCount)
@@ -90,7 +127,10 @@ export default function List({ list, statusList, listName }: { list: any, status
                         </>
                     )}
                 </div>
-                {displayCount < content.length && (
+                {loading && (
+                    <img src="/fetching.png" alt="loading" width={50} height={50} />
+                )}
+                {content && displayCount < content.length && (
                     <LoadMore displayCount={displayCount} setDisplayCount={setDisplayCount} media={content} />
                 )}
             </div>
@@ -168,7 +208,7 @@ export async function getServerSideProps(context: any) {
             break;
     }
 
-    let list = [] as any;
+    let ssrList = [] as any;
     let statusList = [] as any;
 
     if (pageLink) {
@@ -182,16 +222,16 @@ export async function getServerSideProps(context: any) {
             page_size: 30,
         });
 
-        list = response.results;
+        ssrList = response.results;
         statusList = databaseInfo.properties.Status.status.options.map((status: any) => status.name);
 
     } else {
-        list = { results: [] };
+        ssrList = { results: [] };
     }
 
     return {
         props: {
-            list,
+            ssrList,
             statusList,
             listName
         },
