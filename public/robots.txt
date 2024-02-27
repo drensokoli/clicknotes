@@ -17,6 +17,10 @@ Allow: /help
 
 # Allow all crawlers
 User-agent: *
+Allow: /my-lists
+
+# Allow all crawlers
+User-agent: *
 Allow: /privacy-policy.html
 
 # Allow all crawlers

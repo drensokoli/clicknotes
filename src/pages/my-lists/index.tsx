@@ -5,6 +5,7 @@ import { Client } from '@notionhq/client';
 import ListsCard from "@/components/Helpers/ListsCard";
 import NotionBanner from "@/components/Notion/NotionBanner";
 import MyListsSkeleton from "@/components/Helpers/MyListsSkeleton";
+import Head from "next/head";
 
 export default function MyLists() {
     const { data: session } = useSession();
@@ -55,8 +56,37 @@ export default function MyLists() {
 
     return (
         <>
-            <div className="min-h-screen flex-grow">
+            <Head>
+                <title>ClickNotes | My Lists</title>
+                <meta name="description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+                <meta name="robots" content="all"></meta>
+                <meta property="og:title" content="ClickNotes | My Lists" />
+                <meta property="og:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+                <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="author" content="Dren Sokoli" />
+                <meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta>
+                <meta property="og:title" content="ClickNotes - Save your movies to Notion" />
+                <meta property="og:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+                <meta property="og:image" content="https://www.clicknotes.site/og/my-lists.png" />
+                <meta property="og:url" content="https://clicknotes.site/my-lists" />
+                <meta property="og:site_name" content="ClickNotes" />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:site" content="@SokoliDren" />
+                <meta name="twitter:creator" content="@SokoliDren" />
+                <meta name="twitter:title" content="ClickNotes - Save your movies to Notion" />
+                <meta name="twitter:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+                <meta name="twitter:image" content="https://www.clicknotes.site/og/my-lists.png" />
+                <meta name="twitter:domain" content="clicknotes.site" />
+                <meta name="twitter:url" content="https://clicknotes.site/my-lists" />
+                <link rel="icon" href="/favicon.ico" />
+                <link rel="canonical" href="https://clicknotes.site/my-lists" />
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script>
+            </Head>
 
+            <div className="min-h-screen flex-grow">
                 <div className="w-full sm:px-20 px-4">
                     <h1 className="text-sm text-gray-500">MY LISTS</h1>
                 </div>
