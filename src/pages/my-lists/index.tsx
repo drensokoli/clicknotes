@@ -4,13 +4,54 @@ import { use, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
 import ListsCard from "@/components/Helpers/ListsCard";
 import NotionBanner from "@/components/Notion/NotionBanner";
+import MyListsSkeleton from "@/components/Helpers/MyListsSkeleton";
 
-export default function MyLists({ movies, tvShows, books }: { movies: any, tvShows: any, books: any }) {
+export default function MyLists() {
+    const { data: session } = useSession();
+    const userEmail = session?.user?.email;
+
     const notionBanners = [
         { image: '/connectmovies.png' },
         { image: '/connecttvshows.png' },
         { image: '/connectbooks.png' },
     ];
+
+    const [loading, setLoading] = useState(true);
+    const [movies, setMovies] = useState<any[]>();
+    const [tvShows, setTvShows] = useState<any[]>();
+    const [books, setBooks] = useState<any[]>();
+
+    const fetchLists = async () => {
+        try {
+            const response = await fetch('/api/getMyLists', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userEmail }),
+            });
+
+            const data = await response.json();
+
+            if (response.status !== 200) {
+                setLoading(false);
+            }
+
+            setMovies(data.movies);
+            setTvShows(data.tvShows);
+            setBooks(data.books);
+            setLoading(false);
+
+        } catch (error) {
+            console.error('Failed to fetch lists:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (userEmail) {
+            fetchLists();
+        }
+    }, [session]);
 
     return (
         <>
@@ -20,25 +61,29 @@ export default function MyLists({ movies, tvShows, books }: { movies: any, tvSho
                     <h1 className="text-sm text-gray-500">MY LISTS</h1>
                 </div>
                 <hr className="sm:mx-20 mx-4 border-gray-500 py-2" />
-                {movies.length === 0 && tvShows.length === 0 && books.length === 0 ? (
-                    <div className="flex flex-col gap-2 px-2">
-                        <h1 className="text-center text-lg">You have no lists.</h1>
-                        <h1 className="text-center text-lg">Follow the guide below to create your first ClickNotes list!</h1>
-                        <NotionBanner image={notionBanners[Math.floor(Math.random() * notionBanners.length)].image} />
-                    </div>
+                {loading ? (
+                    <MyListsSkeleton />
                 ) : (
                     <>
-                        <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">
-                            {movies.length > 0 && (
-                                <ListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" />
-                            )}
-                            {tvShows.length > 0 && (
-                                <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" />
-                            )}
-                            {books.length > 0 && (
-                                <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" />
-                            )}
-                        </div>
+                        {!movies && !tvShows && !books ? (
+                            <div className="flex flex-col gap-2 px-2">
+                                <h1 className="text-center text-lg">You have no lists.</h1>
+                                <h1 className="text-center text-lg">Follow the guide below to create your first ClickNotes list!</h1>
+                                <NotionBanner image={notionBanners[Math.floor(Math.random() * notionBanners.length)].image} />
+                            </div>
+                        ) : (
+                            <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">
+                                {movies && movies.length > 0 && (
+                                    <ListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" />
+                                )}
+                                {tvShows && tvShows.length > 0 && (
+                                    <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" />
+                                )}
+                                {books && books.length > 0 && (
+                                    <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" />
+                                )}
+                            </div>
+                        )}
                     </>
                 )}
 
@@ -46,7 +91,11 @@ export default function MyLists({ movies, tvShows, books }: { movies: any, tvSho
                     <h1 className="text-sm text-gray-500">MY COLLECTIONS</h1>
                 </div>
                 <hr className="sm:mx-20 mx-4 border-gray-500 py-2" />
-                <h1 className="text-center">Coming Soon ...</h1>
+                {loading ? (
+                    <MyListsSkeleton />
+                ) : (
+                    <h1 className="text-center">Coming Soon ...</h1>
+                )}
             </div>
         </>
     )
@@ -61,6 +110,10 @@ export const getServerSideProps = async (context: any) => {
                 destination: '/',
                 permanent: false,
             },
+        };
+    } else {
+        return {
+            props: {},
         };
     }
 
