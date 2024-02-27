@@ -49,10 +49,11 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                         loading="lazy"
                     />
                 )}
+
                 <select
-                    className={`movie-card-button backdrop-blur-sm select-none text-white border-2 bg-transparent hover:bg-opacity-80 focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 ${status === 'To watch' ? 'border-red-700 hover:bg-red-800 focus:ring-red-800 focus:bg-red-800' :
-                        status === 'Watching' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800' :
-                            'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800'
+                    className={`movie-card-button backdrop-blur-sm select-none text-white border-2 focus:border-red-700 bg-transparent focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 ${status === 'To watch' ? 'border-red-700 hover:bg-red-800 focus:ring-red-800  focus:bg-red-800' :
+                        status === 'Watching' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800 focus:border-blue-700' :
+                            'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800 focus:border-green-700'
                         }`}
                     value={status}
                 // onChange={(e) => handleStatusChange(e, id)}
@@ -72,6 +73,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
             >
                 <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
             </h2>
+
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
                     <Transition.Child
