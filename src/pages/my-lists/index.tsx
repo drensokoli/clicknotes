@@ -21,6 +21,8 @@ export default function MyLists() {
     const [movies, setMovies] = useState<any[]>();
     const [tvShows, setTvShows] = useState<any[]>();
     const [books, setBooks] = useState<any[]>();
+    const [movieDatabaseName, setMovieDatabaseName] = useState('');
+    const [bookDatabaseName, setBookDatabaseName] = useState('');
 
     const fetchLists = async () => {
         try {
@@ -42,7 +44,8 @@ export default function MyLists() {
             setTvShows(data.tvShows);
             setBooks(data.books);
             setLoading(false);
-
+            setMovieDatabaseName(data.moviesDatabaseName);
+            setBookDatabaseName(data.booksDatabaseName);
         } catch (error) {
             console.error('Failed to fetch lists:', error);
         }
@@ -104,13 +107,13 @@ export default function MyLists() {
                         ) : (
                             <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">
                                 {movies && movies.length > 0 && (
-                                    <ListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" />
+                                    <ListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" databaseName={movieDatabaseName} />
                                 )}
                                 {tvShows && tvShows.length > 0 && (
-                                    <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" />
+                                    <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" databaseName={movieDatabaseName} />
                                 )}
                                 {books && books.length > 0 && (
-                                    <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" />
+                                    <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" databaseName={bookDatabaseName} />
                                 )}
                             </div>
                         )}
