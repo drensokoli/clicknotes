@@ -5,7 +5,7 @@ import { decryptData } from '@/lib/encryption';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    const { userEmail, listName, cursor, statusFilter } = req.body;
+    const { userEmail, listName } = req.body;
     const encryptionKey = process.env.ENCRYPTION_KEY as string;
 
     const client = await clientPromise;
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const notion = new Client({ auth: decryptedNotionApiKey });
 
     let databaseId;
-    let filter = {} as any;
+    let filter;
 
     switch (listName) {
         case 'movies':
@@ -37,31 +37,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             break;
     }
 
-    let list = [] as any;
-    let nextCursor;
+    let statusList = [] as any;
 
     if (databaseId) {
-        const response = await notion.databases.query({
-            database_id: databaseId,
-            filter: {
-                and: [
-                    {...filter},
-                    {
-                        property: 'Status',
-                        status: { equals: statusFilter }
-                    },
-                ]
-            },
-            start_cursor: cursor
-        });
 
-        list = response.results;
-        nextCursor = response.next_cursor;
+        const databaseInfo = await notion.databases.retrieve({ database_id: databaseId }) as any;
+
+        statusList = databaseInfo.properties.Status.status.options.map((status: any) => status.name);
 
     } else {
         res.status(500).json({ message: "No connected Notion databases found" });
         return;
     }
 
-    res.status(200).json({ list, nextCursor });
+    res.status(200).json({ statusList });
 }

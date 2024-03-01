@@ -5,17 +5,51 @@ import { use, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
 import MoviesListCard from "@/components/Helpers/MoviesListCard";
 import LoadMore from "@/components/Helpers/LoadMore";
+import { set } from "lodash";
 import BooksListCard from "@/components/Helpers/BooksListCard";
 
-export default function List({ ssrList, statusList, listName }: { ssrList: any, statusList: any, listName: string }) {
+export default function List({ statusList, listName }: { statusList: any, listName: string }) {
 
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
 
     const [loading, setLoading] = useState(true);
 
-    const [list, setList] = useState<any[]>();
-    const [content, setContent] = useState(ssrList.filter((ssrList: any) => ssrList.properties.Status.status.name === statusList[0]));
+    const [listToWatch, setListToWatch] = useState<any[]>();
+    const [listWatching, setListWatching] = useState<any[]>();
+    const [listWatched, setListWatched] = useState<any[]>();
+
+    const [cursorToWatch, setCursorToWatch] = useState<string | undefined>();
+    const [cursorWatching, setCursorWatching] = useState<string | undefined>();
+    const [cursorWatched, setCursorWatched] = useState<string | undefined>();
+
+    const [content, setContent] = useState<any[]>();
+
+    const listStates = [
+        {
+            status: statusList[0],
+            list: listToWatch,
+            setList: setListToWatch,
+            cursor: cursorToWatch,
+            setCursor: setCursorToWatch,
+        },
+        {
+            status: statusList[1],
+            list: listWatching,
+            setList: setListWatching,
+            cursor: cursorWatching,
+            setCursor: setCursorWatching,
+        },
+        {
+            status: statusList[2],
+            list: listWatched,
+            setList: setListWatched,
+            cursor: cursorWatched,
+            setCursor: setCursorWatched,
+        }
+    ];
+
+    const [status, setStatus] = useState(statusList[0]);
 
     const [input, setInput] = useState('');
 
@@ -26,13 +60,15 @@ export default function List({ ssrList, statusList, listName }: { ssrList: any, 
         // const data = getMovies(notionApiKey, databaseId);
     };
 
-    const getNotionDatabasePages = async () => {
+    const getNotionDatabasePages = async (statusFilter: any, list: any, setList: any, cursor: any, setCursor: any) => {
         try {
+            if (cursor === null) return;
             const response = await fetch('/api/getNotionDatabasePages', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userEmail, listName }),
+                body: JSON.stringify({ userEmail, listName, cursor, statusFilter }),
             });
+
             const data = await response.json();
 
             if (response.status !== 200) {
@@ -40,9 +76,9 @@ export default function List({ ssrList, statusList, listName }: { ssrList: any, 
                 return;
             }
 
-            setList(data.list);
-            setContent(data.list.filter((list: any) => statusList && list.properties.Status.status.name === statusList[0]));
-            setLoading(false);
+            setList((prevList: any[]) => [...(prevList || []), ...data.list]);
+            setContent(listStates.find((listState) => listState.status === status)?.list || []);
+            setCursor(data.nextCursor);
 
         } catch (error) {
             console.error(error);
@@ -51,9 +87,15 @@ export default function List({ ssrList, statusList, listName }: { ssrList: any, 
 
     useEffect(() => {
         if (userEmail) {
-            getNotionDatabasePages();
+            listStates.forEach((listState) => {
+                getNotionDatabasePages(listState.status, listState.list, listState.setList, listState.cursor, listState.setCursor);
+            });
         }
-    }, [session]);
+    }, []);
+
+    useEffect(() => {
+        setContent(listStates.find((listState) => listState.status === status)?.list || []);
+    }, [listToWatch, listWatching, listWatched]);
 
     return (
         <>
@@ -65,7 +107,12 @@ export default function List({ ssrList, statusList, listName }: { ssrList: any, 
                         <div>
                             <select
                                 className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                onChange={(e) => list && setContent(list.filter((item: any) => item.properties.Status.status.name === e.target.value))}                        >
+                                onChange={(e) => {
+                                    setStatus(e.target.value);
+                                    setContent(listStates.find((listState) => listState.status === e.target.value)?.list || []);
+                                }}
+                                value={status}
+                            >
                                 {statusList.map((list: any) => (
                                     <option key={list} value={list}>
                                         {list}
@@ -127,9 +174,6 @@ export default function List({ ssrList, statusList, listName }: { ssrList: any, 
                         </>
                     )}
                 </div>
-                {loading && (
-                    <img src="/fetching.png" alt="loading" width={50} height={50} />
-                )}
                 {content && displayCount < content.length && (
                     <LoadMore displayCount={displayCount} setDisplayCount={setDisplayCount} media={content} />
                 )}
@@ -208,30 +252,20 @@ export async function getServerSideProps(context: any) {
             break;
     }
 
-    let ssrList = [] as any;
     let statusList = [] as any;
 
     if (pageLink) {
         const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
         const notion = new Client({ auth: decryptedNotionApiKey });
         const databaseInfo = await notion.databases.retrieve({ database_id: pageLink }) as any;
-
-        const response = await notion.databases.query({
-            database_id: pageLink,
-            filter: filter,
-            page_size: 30,
-        });
-
-        ssrList = response.results;
         statusList = databaseInfo.properties.Status.status.options.map((status: any) => status.name);
 
     } else {
-        ssrList = { results: [] };
+        statusList = { results: [] };
     }
 
     return {
         props: {
-            ssrList,
             statusList,
             listName
         },
