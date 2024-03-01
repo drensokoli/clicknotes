@@ -52,7 +52,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                 ]
             },
-            start_cursor: cursor
+            start_cursor: cursor,
+            page_size: 30
         });
 
         list = response.results;
