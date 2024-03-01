@@ -95,10 +95,8 @@ export default function ProfileSettings({ encryptionKey }: { encryptionKey: stri
     }
 
     useEffect(() => {
-        if (session) {
-            fetchUserData();
-        }
-    }, [session]);
+        fetchUserData();
+    }, []);
 
     return (
         <>

@@ -49,9 +49,8 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                 setMoviesPageLink(user.moviesPageLink);
             };
             fetchUser();
-            console.log('POPULAR MOVIES', popularMovies.length);
         }
-    }, [session]);
+    }, []);
 
     return (
         <>

@@ -88,8 +88,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             };
             fetchUser();
         }
-    }, [session]);
-
+    }, []);
 
     return (
         <>

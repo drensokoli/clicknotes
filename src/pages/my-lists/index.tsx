@@ -55,7 +55,7 @@ export default function MyLists() {
         if (userEmail) {
             fetchLists();
         }
-    }, [session]);
+    }, []);
 
     return (
         <>
