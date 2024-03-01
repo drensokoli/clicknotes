@@ -87,7 +87,7 @@ export default function Help() {
 
                     <Header>Step 3: Connect Your Database</Header>
                     <p>Add the Integration Token to your new Notion template by clicking on the "Add connections" button and searching for it by name. This action grants your Integration Token read and write permissions to your Notion page.</p>
-                    <p>Finally, copy the link of your Notion template and submit it in your <span className="text-blue-600 underline"><Link href="https://clicknotes.site/profile" aria-label='GitHub Repo' target="_blank">ClickNotes profile page</Link></span>.</p>
+                    <p>Finally, copy the link of your Notion template and submit it in your <span className="text-blue-600 underline"><Link href="https://clicknotes.site/profile-settings" aria-label='GitHub Repo' target="_blank">ClickNotes profile page</Link></span>.</p>
                     <Image src={StepThree} width={700} height={600} alt={""} className="m-auto my-4 shadow-xl" />
                     <div className="flex flex-col mt-10 justify-center w-full">
                         <p className="text-center">🎉 That's it! You've successfully connected your Notion database to ClickNotes! 🎉</p>
