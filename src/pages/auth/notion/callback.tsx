@@ -9,7 +9,7 @@ export default function NotionCallback({ response }: { response: any }) {
     }, [response]);
 
     return (
-            <div className="justify-center align-center flex h-screen">
+            <div className="flex flex-col items-center h-screen">
                 <h1>{response.access_token}</h1>
                 <h1>{response.duplicated_template_id}</h1>
             </div>
