@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function notionCallback({ response }: { response: any }) {
+export default function NotionCallback({ response }: { response: any }) {
 
     useEffect(() => {
         if (response) {
