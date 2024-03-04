@@ -111,6 +111,7 @@ export default function ProfileSettings({ encryptionKey }: { encryptionKey: stri
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script>
             </Head>
+            <Link href='https://api.notion.com/v1/oauth/authorize?client_id=8dcf46a2-d92a-44aa-a2f2-d42bb88d3cd0&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fnotion%2Fcallback' className='text-center'>Connect to Notion</Link>
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={undefined} />
             <div className="flex justify-center items-center flex-grow" title='Profile'>
                 <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] shadow-xl">
