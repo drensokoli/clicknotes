@@ -91,7 +91,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
                 getNotionDatabasePages(listState.status, listState.setList, listState.cursor, listState.setCursor);
             });
         }
-    }, []);
+    }, [session]);
 
     useEffect(() => {
         setContent(listStates.find((listState) => listState.status === status)?.list || []);
@@ -127,7 +127,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
                     <ListSkeleton />
                 ) : (
 
-                    <div className='grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 sm:gap-4 gap-0'>
+                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4'>
                         {listName === 'books' && content ? (
                             <>
                                 {content
