@@ -51,7 +51,7 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
             fetchUser();
             console.log("popular tv shows", popularTvShows.length)
         }
-    }, []);
+    }, [session]);
 
     return (
         <>

@@ -50,7 +50,7 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
             };
             fetchUser();
         }
-    }, []);
+    }, [session]);
 
     return (
         <>
