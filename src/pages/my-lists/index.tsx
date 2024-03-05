@@ -127,7 +127,7 @@ export default function MyLists() {
                 {loading ? (
                     <MyListsSkeleton />
                 ) : (
-                    <h1 className="text-center">Coming Soon ...</h1>
+                    <h1 className="text-center py-2 text-lg">Coming Soon ...</h1>
                 )}
             </div>
         </>
@@ -144,87 +144,9 @@ export const getServerSideProps = async (context: any) => {
                 permanent: false,
             },
         };
-    } else {
-        return {
-            props: {},
-        };
     }
 
-    const encryptionKey = process.env.ENCRYPTION_KEY as string;
-    const baseUrl = process.env.BASE_URL as string;
-
-    const fetchUser = async () => {
-        const response = await fetch(`${baseUrl}/api/getUser`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userEmail: session?.user?.email }),
-        });
-
-        const user = await response.json();
-
-        if (!user.notionApiKey)
-            return { movies: [], tvShows: [], books: [] };
-
-        const notionApiKey = user.notionApiKey;
-        const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
-
-        const notion = new Client({ auth: decryptedNotionApiKey });
-
-        const fetchAllPages = async (databaseId: string, filter: any) => {
-            const allResults = [];
-
-            const response = await notion.databases.query({
-                database_id: databaseId,
-                filter: filter,
-                page_size: 3,
-            });
-
-            allResults.push(...response.results);
-            return allResults;
-        };
-
-        let movies = [] as any;
-        let tvShows = [] as any;
-        let books = [] as any;
-
-        if (user.moviesPageLink) {
-            const decryptedMoviesPageLink = decryptData(user.moviesPageLink, encryptionKey);
-            const moviesDatabaseInfo = await notion.databases.retrieve({ database_id: decryptedMoviesPageLink }) as any;
-
-            const moviesDatabaseName = moviesDatabaseInfo.icon.emoji + moviesDatabaseInfo.title[0].plain_text;
-
-            movies = await fetchAllPages(decryptedMoviesPageLink, { property: 'Type', select: { equals: 'Movie' } });
-            tvShows = await fetchAllPages(decryptedMoviesPageLink, { property: 'Type', select: { equals: 'TvShow' } });
-        } else {
-            movies = { results: [] };
-            tvShows = { results: [] };
-        }
-
-        if (user.booksPageLink) {
-            const decryptedBooksPageLink = decryptData(user.booksPageLink, encryptionKey);
-            const booksDatabaseInfo = await notion.databases.retrieve({ database_id: decryptedBooksPageLink }) as any;
-
-            const booksDatabaseName = booksDatabaseInfo.icon.emoji + booksDatabaseInfo.title[0].plain_text;
-
-            books = await fetchAllPages(decryptedBooksPageLink, { property: 'Type', select: { equals: 'Book' } });
-        } else {
-            books = { results: [] };
-        }
-
-        return {
-            movies,
-            tvShows,
-            books
-        };
-    };
-
-    const { movies, tvShows, books } = await fetchUser();
-
     return {
-        props: {
-            movies,
-            tvShows,
-            books
-        },
+        props: {}
     };
 }
