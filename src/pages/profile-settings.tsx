@@ -19,7 +19,8 @@ export default function ProfileSettings({ encryptionKey }: { encryptionKey: stri
     const [booksPageLink, setBooksPageLink] = useState('');
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
-    const notionAuthUrl = process.env.NEXT_PUBLIC_AUTHORIZATION_URL as string;
+    const moviesNotionAuthUrl = process.env.NEXT_PUBLIC_MOVIES_AUTHORIZATION_URL as string
+    const booksNotionAuthUrl = process.env.NEXT_PUBLIC_BOOKS_AUTHORIZATION_URL as string
 
     async function handleNotionApiKeySubmit(e: React.FormEvent<HTMLFormElement>) {
         try {
@@ -112,7 +113,8 @@ export default function ProfileSettings({ encryptionKey }: { encryptionKey: stri
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script>
             </Head>
-            <Link href={notionAuthUrl} className='text-center'>Connect to Notion</Link>
+            <Link href={moviesNotionAuthUrl} className='text-center'>Connect to Notion - Movies</Link>
+            <Link href={booksNotionAuthUrl} className='text-center'>Connect to Notion - Books</Link>
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={undefined} />
             <div className="flex justify-center items-center flex-grow" title='Profile'>
                 <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] shadow-xl">
