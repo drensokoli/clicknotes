@@ -146,7 +146,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
                                             rating={listItem.properties['My Rating'].number}
                                             description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
                                             pageCount={listItem.properties['Page Count'].number}
-                                            author={listItem.properties.Authors.rich_text[0].text.content}
+                                            author={listItem.properties.Authors.multi_select.map((author: any) => author.name).join(', ')}
                                             notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
                                         />
                                     ))

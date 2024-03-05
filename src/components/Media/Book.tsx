@@ -45,11 +45,11 @@ export default function Book({ id, title, description, publishedDate, averageRat
             description: description,
             publishedDate: publishedDate,
             averageRating: averageRating,
-            authors: authors,
+            authors: authors.map(author => ({ name: author })),
             thumbnail: thumbnail,
             cover_image: cover_image,
             previewLink: previewLink,
-            language: language,
+            language: language?.toUpperCase(),
             publisher: publisher,
             pageCount: pageCount,
         };

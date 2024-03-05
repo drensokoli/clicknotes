@@ -22,21 +22,15 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
     const [apiResponse, setApiResponse] = useState<string | null>(null);
     const [pageLink, setPageLink] = useState('');
 
-    const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        try {
-            setInput(event.target.value);
-            const titleResults = await searchBooksByTitle(event.target.value);
-            const authorResults = await searchBooksByAuthor(event.target.value);
-
-            console.log("Title Results: ", titleResults);
-            console.log("Author Results: ", authorResults);
-
-            const combinedResults = [...titleResults, ...authorResults];
-
-            setBooks(combinedResults);
-        } catch (error) {
-            console.error(error);
-        }
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInput(event.target.value);
+        searchBooksByTitle(event.target.value)
+            .then(books => {
+                if (books) {
+                    setBooks(books);
+                }
+            })
+            .catch(error => console.error(error));
     };
 
     const searchBooksByTitle = async (title: string) => {
@@ -44,7 +38,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             if (title.length === 0) {
                 return [];
             }
-            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=15&key=${googleBooksApiKey}`);
+            const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=20&key=${googleBooksApiKey}`);
 
             return response.data.items;
         } catch (error) {
@@ -88,6 +82,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             };
             fetchUser();
         }
+        console.log("books: ", books);
     }, [session]);
 
     return (

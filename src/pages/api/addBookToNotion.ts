@@ -10,9 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { name: 'Google Books Link', type: 'url', structure: bookData.previewLink, data: bookData.previewLink },
         { name: 'Published Date', type: 'date', structure: { start: bookData.publishedDate }, data: bookData.publishedDate },
         { name: 'Average Rating', type: 'number', structure: bookData.averageRating, data: bookData.averageRating },
-        { name: 'Authors', type: 'rich_text', structure: [{ text: { content: bookData.authors.join(', ') } }], data: bookData.authors },
-        { name: 'Language', type: 'rich_text', structure: [{ text: { content: bookData.language } }], data: bookData.language },
-        { name: 'Publisher', type: 'rich_text', structure: [{ text: { content: bookData.publisher } }], data: bookData.publisher },
+        { name: 'Authors', type: 'multi_select', structure: bookData.authors, data: bookData.authors},
+        { name: 'Language', type: 'select', structure: { name: bookData.language }, data: bookData.language },
+        { name: 'Publisher', type: 'select', structure: { name: bookData.publisher }, data: bookData.publisher },
         { name: 'Page Count', type: 'number', structure: bookData.pageCount, data: bookData.pageCount },
         { name: 'Description', type: 'rich_text', structure: [{ text: { content: bookData.description } }], data: bookData.description },
         { name: 'Cover Image', type: 'url', structure: bookData.cover_image, data: bookData.cover_image }
