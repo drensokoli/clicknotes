@@ -78,7 +78,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
 
         const intervalId = setInterval(() => {
             setCurrentShuffleItem(Math.floor(Math.random() * (contentLength || 0)));
-        }, 100);
+        }, 70);
 
         if (cursor === null) {
             setTimeout(() => {
@@ -307,7 +307,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
                                                     trailer={content[currentShuffleItem].properties.Trailer.url}
                                                     watchLink={content[currentShuffleItem].properties['Watch Link'].url}
                                                     notionLink={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, '')}`}
-                                                    releaseDate={`(${content[currentShuffleItem].properties['Release Date'].date.start.split('-')[0]})`}
+                                                    releaseDate={content[currentShuffleItem].properties['Release Date'].date.start.split('-')[0]}
                                                 />
                                             )}
                                         </div>
