@@ -3,6 +3,7 @@ import Image from 'next/dist/client/image';
 import Link from 'next/link';
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import MovieModal from './MovieModal';
 
 export default function MoviesListCard({ id, title, poster_path, release_date, link, handleStatusChange, statusList, status, trailer, overview, rating, watch_link, notion_link }: {
     id: number | string;
@@ -107,44 +108,17 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
-                                    <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 mb-4">
-                                        <div className="sm:flex sm:items-start">
-                                            <div className="mx-auto flex items-center justify-center ">
-                                                <Image src={poster_path || "/no-image.png"} width={200} height={200} alt={title} className='sm:w-[350px] w-[200px] h-auto' />
-                                            </div>
-                                            <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                                <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                    <div className="w-[90%]">
-                                                        {title} {release_date ? ` (${release_date.split('-')[0]})` : ''}
-                                                        {rating && (
-                                                            <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
-                                                        )}
-                                                    </div>
-                                                </Dialog.Title>
-                                                <div className="mt-2 gap-2 flex flex-col">
-                                                    <p className="text-sm text-gray-500 text-left mt-2">Overview:</p>
-                                                    {overview ? (
-                                                        <p className="text-sm text-gray-900 text-left">{overview}</p>
-                                                    ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No overview for this movie</p>
-                                                    )}
-                                                    <p className="text-sm text-gray-500 text-left mt-2">Trailer:</p>
-                                                    {trailer ? (
-                                                        <Link href={trailer} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{trailer}</Link>
-                                                    ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No trailer for this movie</p>
-                                                    )}
-                                                    <p className="text-sm text-gray-500 text-left mt-2">Watch:</p>
-                                                    {watch_link ? (
-                                                        <Link href={watch_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{watch_link}</Link>
-                                                    ) : (
-                                                        <p className="text-sm text-gray-400 text-left">No watch link for this movie</p>
-                                                    )}
-                                                    <p className="text-sm text-gray-500 text-left mt-2">Notion:</p>
-                                                    <Link href={notion_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{notion_link}</Link>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div className="flex flex-row justify-center items-center p-10">
+                                        <MovieModal
+                                            id={id}
+                                            name={title}
+                                            poster={poster_path}
+                                            overview={overview}
+                                            trailer={trailer}
+                                            watchLink={watch_link}
+                                            notionLink={notion_link}
+                                            releaseDate={`(${release_date.split('-')[0]})`}
+                                        />
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

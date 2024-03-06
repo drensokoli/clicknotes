@@ -2,9 +2,9 @@ import { decryptData } from "@/lib/encryption";
 import { getSession, useSession } from "next-auth/react";
 import { use, useEffect, useState } from "react";
 import { Client } from '@notionhq/client';
-import ListsCard from "@/components/Helpers/ListsCard";
+import MyListsCard from "@/components/Lists/MyListsCard";
 import NotionBanner from "@/components/Notion/NotionBanner";
-import MyListsSkeleton from "@/components/Helpers/MyListsSkeleton";
+import MyListsSkeleton from "@/components/Lists/MyListsSkeleton";
 import Head from "next/head";
 
 export default function MyLists() {
@@ -91,9 +91,9 @@ export default function MyLists() {
 
             <div className="min-h-screen flex-grow">
                 <div className="w-full sm:px-20 px-4">
-                    <h1 className="text-sm text-gray-500">MY LISTS</h1>
+                    <h1 className="text-sm text-gray-400">MY LISTS</h1>
                 </div>
-                <hr className="sm:mx-20 mx-4 border-gray-500 py-2" />
+                <hr className="sm:mx-20 mx-4 border-gray-400 py-2" />
                 {loading ? (
                     <MyListsSkeleton />
                 ) : (
@@ -107,13 +107,13 @@ export default function MyLists() {
                         ) : (
                             <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">
                                 {movies && movies.length > 0 && (
-                                    <ListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" databaseName={movieDatabaseName} />
+                                    <MyListsCard name="Movies" id={movies[0].parent.database_id} list={movies} path="/my-lists/movies" databaseName={movieDatabaseName} />
                                 )}
                                 {tvShows && tvShows.length > 0 && (
-                                    <ListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" databaseName={movieDatabaseName} />
+                                    <MyListsCard name="TV Shows" id={tvShows[0].parent.database_id} list={tvShows} path="/my-lists/tvshows" databaseName={movieDatabaseName} />
                                 )}
                                 {books && books.length > 0 && (
-                                    <ListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" databaseName={bookDatabaseName} />
+                                    <MyListsCard name="Books" id={books[0].parent.database_id} list={books} path="/my-lists/books" databaseName={bookDatabaseName} />
                                 )}
                             </div>
                         )}
@@ -121,9 +121,9 @@ export default function MyLists() {
                 )}
 
                 <div className="w-full sm:px-20 px-4 mt-8">
-                    <h1 className="text-sm text-gray-500">MY COLLECTIONS</h1>
+                    <h1 className="text-sm text-gray-400">MY COLLECTIONS</h1>
                 </div>
-                <hr className="sm:mx-20 mx-4 border-gray-500 py-2" />
+                <hr className="sm:mx-20 mx-4 border-gray-400 py-2" />
                 {loading ? (
                     <MyListsSkeleton />
                 ) : (

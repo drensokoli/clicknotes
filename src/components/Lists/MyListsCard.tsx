@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function ListsCard({ name, id, list, path, databaseName }:
+export default function MyListsCard({ name, id, list, path, databaseName }:
     {
         name: any,
         id: any,
