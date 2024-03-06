@@ -43,7 +43,7 @@ export default function BookModal({ id, title, rating, coverImage, published_dat
                     <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
                 )}
             </h2>
-            <div className="sm:m-0 mx-6 gap-2 flex flex-col">
+            <div className="mx-6 gap-2 flex flex-col">
                 <p className="text-sm text-gray-500 text-left mt-2">Description:</p>
                 {description ? (
                     <p className="text-sm text-gray-900 text-left">{description}</p>
