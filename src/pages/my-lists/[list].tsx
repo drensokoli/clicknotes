@@ -289,6 +289,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
                                                 <BookModal
                                                     id={content[currentShuffleItem].id}
                                                     title={content[currentShuffleItem].properties.Title.title[0].text.content}
+                                                    rating={content[currentShuffleItem].properties['My Rating'].number}
                                                     coverImage={content[currentShuffleItem].properties["Cover Image"].url}
                                                     published_date={content[currentShuffleItem].properties['Published Date'].date.start || ''}
                                                     description={content[currentShuffleItem].properties["Description"]?.rich_text[0]?.text?.content}
@@ -300,6 +301,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
                                                 <MovieModal
                                                     id={content[currentShuffleItem].id}
                                                     name={content[currentShuffleItem].properties.Name.title[0].text.content}
+                                                    rating={content[currentShuffleItem].properties['My Rating'].number}
                                                     poster={content[currentShuffleItem].properties.Poster.url || content[currentShuffleItem].cover.external.url}
                                                     overview={content[currentShuffleItem].properties['Overview']?.rich_text[0]?.text?.content}
                                                     trailer={content[currentShuffleItem].properties.Trailer.url}
