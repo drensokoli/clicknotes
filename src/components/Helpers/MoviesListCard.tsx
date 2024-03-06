@@ -66,7 +66,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                 </select>
 
             </div>
-            <h2 className="font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200 mt-1">
+            <h2 className="font-bold text-center text-gray-800 mt-1">
                 <span>{title} {release_date ? ` (${release_date.split('-')[0]})` : ''}</span>
             </h2>
 

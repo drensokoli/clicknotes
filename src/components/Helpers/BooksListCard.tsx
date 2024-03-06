@@ -69,7 +69,7 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
                     ))}
                 </select>
             </div>
-            <h2 className="font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200 mt-1">
+            <h2 className="font-bold text-center text-gray-800 mt-1">
                 <span>{title} {published_date ? ` (${published_date.split('-')[0]})` : ''}</span>
             </h2>
             <Transition.Root show={open} as={Fragment}>
