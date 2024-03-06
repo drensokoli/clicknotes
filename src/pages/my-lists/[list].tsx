@@ -291,7 +291,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
                                                     title={content[currentShuffleItem].properties.Title.title[0].text.content}
                                                     rating={content[currentShuffleItem].properties['My Rating'].number}
                                                     coverImage={content[currentShuffleItem].properties["Cover Image"].url}
-                                                    published_date={content[currentShuffleItem].properties['Published Date'].date.start || ''}
+                                                    published_date={content[currentShuffleItem].properties['Published Date'].date.start.split('-')[0]}
                                                     description={content[currentShuffleItem].properties["Description"]?.rich_text[0]?.text?.content}
                                                     author={content[currentShuffleItem].properties.Authors.multi_select.map((author: any) => author.name).join(', ')}
                                                     pageCount={content[currentShuffleItem].properties['Page Count'].number}
