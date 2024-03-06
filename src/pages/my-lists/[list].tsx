@@ -153,7 +153,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
                 <SearchBar input={input} handleInputChange={handleInputChange} />
 
                 {statusList && (
-                    <div className="flex justify-end items-center w-[90%] sm:w-[70%] gap-2 overflow-auto">
+                    <div className="flex justify-between items-center w-[90%] sm:w-[70%] gap-2 overflow-auto">
                         <button
                             className="m-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                             onClick={() => {

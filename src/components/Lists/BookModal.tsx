@@ -21,7 +21,7 @@ export default function BookModal({ id, title, rating, coverImage, published_dat
                         <img
                             src={coverImage}
                             alt={title}
-                            className="rounded-sm max-h-[240px] min-h-[240px] sm:max-h-[300px] sm:min-h-[300px] h-auto select-none object-cover"
+                            className="rounded-sm max-h-[240px] min-h-[240px] sm:max-h-[300px] sm:min-h-[300px] h-auto select-none object-cover shadow-xl"
                             loading="lazy"
                         />
                     </div>
@@ -36,14 +36,14 @@ export default function BookModal({ id, title, rating, coverImage, published_dat
 
             </div>
 
-            <h2 className="font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200 mt-1"
+            <h2 className="font-bold text-center text-gray-800 mt-1"
             >
                 {title} {`(${published_date})`}
                 {rating && (
                     <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
                 )}
             </h2>
-            <div className="mx-6 gap-2 flex flex-col">
+            <div className="px-10 sm:px-0 gap-2 flex flex-col">
                 <p className="text-sm text-gray-500 text-left mt-2">Description:</p>
                 {description ? (
                     <p className="text-sm text-gray-900 text-left">{description}</p>
