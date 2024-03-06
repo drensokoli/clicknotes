@@ -112,12 +112,13 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                         <MovieModal
                                             id={id}
                                             name={title}
+                                            rating={rating}
                                             poster={poster_path}
                                             overview={overview}
                                             trailer={trailer}
                                             watchLink={watch_link}
                                             notionLink={notion_link}
-                                            releaseDate={`(${release_date.split('-')[0]})`}
+                                            releaseDate={release_date.split('-')[0]}
                                         />
                                     </div>
                                 </Dialog.Panel>

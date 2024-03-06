@@ -1,9 +1,10 @@
 import Link from "next/link";
 
-export default function MovieModal({ id, name, poster, overview, trailer, watchLink, notionLink, releaseDate }:
+export default function MovieModal({ id, name, rating, poster, overview, trailer, watchLink, notionLink, releaseDate }:
     {
         id: string | number,
         name: string,
+        rating: number | null | undefined,
         poster: string | null | undefined,
         overview: string,
         trailer: string,
@@ -38,7 +39,10 @@ export default function MovieModal({ id, name, poster, overview, trailer, watchL
 
             <h2 className="font-bold text-center text-gray-800 hover:text-blue-800 hover:underline transition-colors duration-200 mt-1"
             >
-                <span>{name} {releaseDate}</span>
+                {name} {`(${releaseDate})`}
+                {rating && (
+                    <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
+                )}
             </h2>
             <div className="sm:m-0 mx-6 gap-2 flex flex-col">
                 <p className="text-sm text-gray-500 text-left mt-2">Overview:</p>
