@@ -36,7 +36,7 @@ export default function BookModal({ id, title, rating, coverImage, published_dat
 
             </div>
 
-            <h2 className="font-bold text-center text-gray-800 mt-1"
+            <h2 className="font-bold text-center text-gray-800 mt-1 px-6"
             >
                 {title} {`(${published_date})`}
                 {rating && (
@@ -49,7 +49,7 @@ export default function BookModal({ id, title, rating, coverImage, published_dat
                     <p className="text-sm text-gray-900 text-left">{description}</p>
                 ) : (
                     <p className="text-sm text-gray-400 text-left">No description for this book</p>
-                )}
+                )}6
                 <p className="text-sm text-gray-500 text-left mt-2">Author:</p>
                 {author ? (
                     <p className="text-sm text-gray-900 text-left">{author}</p>

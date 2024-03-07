@@ -37,7 +37,7 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
 
             </div>
 
-            <h2 className="font-bold text-center text-gray-800 mt-1"
+            <h2 className="font-bold text-center text-gray-800 mt-1 px-6"
             >
                 {name} {`(${releaseDate})`}
                 {rating && (
