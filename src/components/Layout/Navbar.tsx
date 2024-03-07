@@ -124,18 +124,18 @@ export default function Navbar() {
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
-                                                                href="/profile-settings"
+                                                                href="/connect"
                                                                 className={classNames(active ? 'bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                aria-label='Settings'
+                                                                aria-label='Connect'
                                                             >
                                                                 <div className='flex flex-row justify-start items-center gap-1'>
                                                                     <BsPersonFillGear />
-                                                                    <h1>Settings</h1>
+                                                                    <h1>Connect</h1>
                                                                 </div>
                                                             </Link>
                                                         )}
                                                     </Menu.Item>
-                                                    <Menu.Item>
+                                                    {/* <Menu.Item>
                                                         {({ active }) => (
                                                             <Link
                                                                 href="/help"
@@ -148,7 +148,7 @@ export default function Navbar() {
                                                                 </div>
                                                             </Link>
                                                         )}
-                                                    </Menu.Item>
+                                                    </Menu.Item> */}
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <Link

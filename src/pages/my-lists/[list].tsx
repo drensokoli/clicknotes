@@ -11,11 +11,18 @@ import { Dialog, Transition } from '@headlessui/react'
 import Link from "next/link";
 import MovieModal from "@/components/Lists/MovieModal";
 import BookModal from "@/components/Lists/BookModal";
+import Head from "next/head";
 
-export default function List({ statusList, listName }: { statusList: any, listName: string }) {
+export default function List({ statusList, listName, notionApiKey, databaseId }: { statusList: any, listName: string, notionApiKey: string, databaseId: string }) {
 
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
+
+    const titleMapping = [
+        { path: 'movies', title: 'Movies' },
+        { path: 'tvshows', title: 'TV Shows' },
+        { path: 'books', title: 'Books' }
+    ];
 
     const [open, setOpen] = useState(false);
     const cancelButtonRef = useRef(null);
@@ -108,7 +115,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
             const response = await fetch('/api/getNotionDatabasePages', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userEmail, listName, cursor, statusFilter }),
+                body: JSON.stringify({ listName, cursor, statusFilter, notionApiKey, databaseId: databaseId }),
             });
 
             const data = await response.json();
@@ -149,6 +156,36 @@ export default function List({ statusList, listName }: { statusList: any, listNa
 
     return (
         <>
+            <Head>
+                <title>ClickNotes | {titleMapping.find((title) => title.path === listName)?.title} List</title>
+                <meta name="description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+                <meta name="robots" content="all"></meta>
+                <meta property="og:title" content={`ClickNotes | ${titleMapping.find((title) => title.path === listName)?.title} List`} />
+                <meta property="og:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+                <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="author" content="Dren Sokoli" />
+                <meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta>
+                <meta property="og:title" content="ClickNotes - Save your movies to Notion" />
+                <meta property="og:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+                <meta property="og:image" content="https://www.clicknotes.site/og/my-lists.png" />
+                <meta property="og:url" content={`https://clicknotes.site/my-lists/${listName}`} />
+                <meta property="og:site_name" content="ClickNotes" />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:site" content="@SokoliDren" />
+                <meta name="twitter:creator" content="@SokoliDren" />
+                <meta name="twitter:title" content="ClickNotes - Save your movies to Notion" />
+                <meta name="twitter:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+                <meta name="twitter:image" content="https://www.clicknotes.site/og/my-lists.png" />
+                <meta name="twitter:domain" content="www.clicknotes.site" />
+                <meta name="twitter:url" content={`https://clicknotes.site/my-lists/${listName}`} />
+                <link rel="icon" href="/favicon.ico" />
+                <link rel="canonical" href={`https://clicknotes.site/my-lists/${listName}`} />
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script>
+            </Head>
+
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
 
@@ -325,6 +362,7 @@ export default function List({ statusList, listName }: { statusList: any, listNa
 export async function getServerSideProps(context: any) {
 
     const session = await getSession(context);
+    const userEmail = session?.user?.email;
 
     if (!session) {
         return {
@@ -336,6 +374,13 @@ export async function getServerSideProps(context: any) {
     }
 
     const listName = context.params.list;
+    let connectionType = '';
+
+    if (listName === 'tvshows')
+        connectionType = 'movies';
+    else
+        connectionType = listName;
+
 
     const isValidList = ['movies', 'tvshows', 'books'].includes(listName);
 
@@ -348,19 +393,26 @@ export async function getServerSideProps(context: any) {
         };
     }
 
-    const encryptionKey = process.env.ENCRYPTION_KEY as string;
     const baseUrl = process.env.BASE_URL as string;
 
     const fetchUserData = async () => {
-        const response = await fetch(`${baseUrl}/api/getUser`, {
+        const response = await fetch(`${baseUrl}/api/getUserConnection`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userEmail: session?.user?.email }),
+            body: JSON.stringify({
+                userEmail,
+                connectionType
+            }),
         });
-        return await response.json();
+
+        const data = await response.json();
+        const notionApiKey = data.access_token;
+        const databaseId = data.template_id;
+
+        return { notionApiKey, databaseId };
     };
 
-    const { moviesPageLink, booksPageLink, notionApiKey } = await fetchUserData();
+    const { notionApiKey, databaseId } = await fetchUserData();
 
     if (!notionApiKey) {
         return {
@@ -371,33 +423,11 @@ export async function getServerSideProps(context: any) {
         };
     }
 
-    let pageLink;
-    let filter;
-
-    switch (listName) {
-        case 'movies':
-            pageLink = decryptData(moviesPageLink, encryptionKey);
-            filter = { property: 'Type', select: { equals: 'Movie' } };
-            break;
-        case 'tvshows':
-            pageLink = decryptData(moviesPageLink, encryptionKey);
-            filter = { property: 'Type', select: { equals: 'TvShow' } };
-            break;
-        case 'books':
-            pageLink = decryptData(booksPageLink, encryptionKey);
-            filter = { property: 'Type', select: { equals: 'Book' } };
-            break;
-        default:
-            pageLink = '';
-            break;
-    }
-
     let statusList = [] as any;
 
-    if (pageLink) {
-        const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
-        const notion = new Client({ auth: decryptedNotionApiKey });
-        const databaseInfo = await notion.databases.retrieve({ database_id: pageLink }) as any;
+    if (databaseId) {
+        const notion = new Client({ auth: notionApiKey });
+        const databaseInfo = await notion.databases.retrieve({ database_id: databaseId }) as any;
         statusList = databaseInfo.properties.Status.status.options.map((status: any) => status.name);
 
     } else {
@@ -407,7 +437,9 @@ export async function getServerSideProps(context: any) {
     return {
         props: {
             statusList,
-            listName
+            listName,
+            notionApiKey,
+            databaseId
         },
     };
 };

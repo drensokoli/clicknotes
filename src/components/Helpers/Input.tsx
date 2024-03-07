@@ -10,15 +10,17 @@ export default function Input(
         link,
         setLink,
         setInput,
-        handleSubmit
+        handleSubmit,
+        connectionType
     }: {
         label: string,
         placeHolder: string,
-        field: string,
-        link: string,
+        field: any,
+        link: any,
         setLink: any,
         setInput: any,
         handleSubmit: any
+        connectionType?: string
     }) {
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
@@ -26,35 +28,27 @@ export default function Input(
     return (
         <>
             {field ? (
-                <div className='pb-4 mb-2 px-6'>
-                    <label className="block mb-2 text-sm text-gray-500">{label}</label>
+                <div className='pb-4'>
+                    <label className="block mb-2 text-sm text-gray-400">{label}</label>
                     <div className='flex flex-row justify-between items-center'>
-                        {field.startsWith('secret_') ? (
-                            <Link
-                                href={link}
-                                target='_blank'
-                                className='hover:text-blue-500 hover:underline w-[95%] truncate text-gray-600'
-                            >***************************************</Link>
-                        ) : (
-                            <Link
-                                href={link}
-                                target='_blank'
-                                className='hover:text-blue-500 hover:underline w-[95%] truncate text-gray-600'
-                            >{`https://www.notion.so/` + field}</Link>
-                        )}
+                        <Link
+                            href={link}
+                            target='_blank'
+                            className='hover:text-blue-500 hover:underline w-[95%] truncate text-gray-600 text-sm'
+                        >{`https://www.notion.so/` + field}</Link>
                         <button onClick={() => setLink('')}>
                             <Image src="./edit.png" alt="" width={17} height={17} />
                         </button>
                     </div>
                 </div>
             ) : (
-                <form className='pb-4 px-6' onSubmit={handleSubmit}>
-                    <label className="block mb-2 text-sm text-gray-500">{label}</label>
+                <form className='pb-4' onSubmit={handleSubmit}>
+                    <label className="block mb-2 text-sm text-gray-400">{label}</label>
                     <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                         <input
                             type="text"
                             onChange={(e) => setInput(e.target.value)}
-                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md"
+                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md truncate"
                             placeholder={placeHolder}
                         />
                         <button type="submit" className='py-2 px-2'>

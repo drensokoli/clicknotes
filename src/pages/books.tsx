@@ -14,10 +14,13 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
     bestsellers: BookInterface[];
 }) {
     const { data: session } = useSession();
+    const userEmail = session?.user?.email;
+
     const [input, setInput] = useState('');
     const [books, setBooks] = useState<BookInterface[]>([]);
+
     const [notionApiKey, setNotionApiKey] = useState<string>('');
-    const [booksPageLink, setBooksPageLink] = useState<string>('');
+    const [booksDatabaseId, setBooksDatabaseId] = useState<string>('');
 
     const [apiResponse, setApiResponse] = useState<string | null>(null);
     const [pageLink, setPageLink] = useState('');
@@ -68,21 +71,31 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
         }
     }, [apiResponse]);
 
-    useEffect(() => {
-        if (session && !notionApiKey && !booksPageLink) {
-            const fetchUser = async () => {
-                const response = await fetch('/api/getUser', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userEmail: session?.user?.email }),
-                });
-                const user = await response.json();
-                setNotionApiKey(user.notionApiKey);
-                setBooksPageLink(user.booksPageLink);
-            };
-            fetchUser();
+    async function fetchUserData() {
+        try {
+            const response = await fetch('/api/getUserConnection', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userEmail,
+                    connectionType: "books",
+                }),
+            });
+
+            const connectionData = await response.json();
+            setNotionApiKey(connectionData.access_token);
+            setBooksDatabaseId(connectionData.template_id);
+        } catch (error) {
+            console.error('Error:', error);
         }
-        console.log("books: ", books);
+    }
+
+    useEffect(() => {
+        if (session && !notionApiKey && !booksDatabaseId) {
+            fetchUserData();
+        }
     }, [session]);
 
     return (
@@ -109,7 +122,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
                 <meta name="twitter:title" content="ClickNotes - Save your books to Notion" />
                 <meta name="twitter:description" content="Save popular and trending books to your Notion list or search for your favorites. All your books in one place, displayed in a beautiful Notion template." />
                 <meta name="twitter:image" content="https://www.clicknotes.site/og/books.png" />
-                <meta name="twitter:domain" content="clicknotes.site" />
+                <meta name="twitter:domain" content="www.clicknotes.site" />
                 <meta name="twitter:url" content="https://clicknotes.site/books" />
                 <link rel="icon" href="/favicon.ico" />
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
@@ -141,7 +154,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
                             setPageLink={setPageLink}
                             encryptionKey={encryptionKey}
                             notionApiKey={notionApiKey}
-                            booksPageLink={booksPageLink}
+                            booksDatabaseId={booksDatabaseId}
                         />
                     ))}
                     {books.length === 0 && (
@@ -169,7 +182,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
                                         setPageLink={setPageLink}
                                         encryptionKey={encryptionKey}
                                         notionApiKey={notionApiKey}
-                                        booksPageLink={booksPageLink}
+                                        booksDatabaseId={booksDatabaseId}
                                     />
                                 ))
                             }

@@ -3,7 +3,7 @@ import { decryptData } from '@/lib/encryption';
 import { genresMapping, getCast, getCrew, getImdb, getTrailer } from '@/lib/movieHelpers';
 import Card from '../Helpers/Card';
 
-export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, genre_ids, notionApiKey, moviesPageLink }: {
+export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, genre_ids, notionApiKey, moviesDatabaseId }: {
     id: number;
     title: string;
     overview: string;
@@ -19,7 +19,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
     tmdbApiKey: string;
     genre_ids: number[];
     notionApiKey: string;
-    moviesPageLink: string;
+    moviesDatabaseId: any;
 }) {
 
     const handleAddToNotion = async () => {
@@ -56,8 +56,8 @@ export default function Movie({ id, title, overview, release_date, vote_average,
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                notionApiKey: decryptData(notionApiKey, encryptionKey),
-                db_id: decryptData(moviesPageLink, encryptionKey),
+                notionApiKey,
+                db_id: moviesDatabaseId,
                 movieData: movieData,
             }),
         });

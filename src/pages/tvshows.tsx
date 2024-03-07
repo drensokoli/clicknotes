@@ -16,11 +16,14 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
 }) {
 
     const { data: session } = useSession();
+    const userEmail = session?.user?.email;
 
     const [input, setInput] = useState('');
     const [tvShows, setTvShows] = useState<TvShowInterface[]>([]);
+
     const [notionApiKey, setNotionApiKey] = useState<string>('');
-    const [tvShowsPageLink, setTvShowPageLink] = useState<string>('');
+    const [tvShowsDatabaseId, setTvShowDatabaseId] = useState<string>('');
+
     const [apiResponse, setApiResponse] = useState<string | null>(null);
     const [pageLink, setPageLink] = useState('');
     const [displayCount, setDisplayCount] = useState(20);
@@ -36,20 +39,30 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
             .catch(error => console.error(error));
     };
 
+    async function fetchUserData() {
+        try {
+            const response = await fetch('/api/getUserConnection', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userEmail,
+                    connectionType: "movies",
+                }),
+            });
+
+            const connectionData = await response.json();
+            setNotionApiKey(connectionData.access_token);
+            setTvShowDatabaseId(connectionData.template_id);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     useEffect(() => {
-        if (session && !notionApiKey && !tvShowsPageLink) {
-            const fetchUser = async () => {
-                const response = await fetch('/api/getUser', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userEmail: session?.user?.email }),
-                });
-                const user = await response.json();
-                setNotionApiKey(user.notionApiKey);
-                setTvShowPageLink(user.moviesPageLink);
-            };
-            fetchUser();
-            console.log("popular tv shows", popularTvShows.length)
+        if (session && !notionApiKey && !tvShowsDatabaseId) {
+            fetchUserData();
         }
     }, [session]);
 
@@ -77,7 +90,7 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                 <meta name="twitter:title" content="ClickNotes - Save your TV shows to Notion" />
                 <meta name="twitter:description" content="Save popular and trending TV shows to your Notion list or search for your favorites. All your TV shows in one place, displayed in a beautiful Notion template." />
                 <meta name="twitter:image" content="https://www.clicknotes.site/og/tvshows.png" />
-                <meta name="twitter:domain" content="clicknotes.site" />
+                <meta name="twitter:domain" content="www.clicknotes.site" />
                 <meta name="twitter:url" content="https://clicknotes.site/tvshows" />
                 <link rel="icon" href="/favicon.ico" />
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
@@ -99,7 +112,7 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                                 encryptionKey={encryptionKey}
                                 tmdbApiKey={tmdbApiKey}
                                 notionApiKey={notionApiKey}
-                                tvShowsPageLink={tvShowsPageLink}
+                                tvShowsDatabaseId={tvShowsDatabaseId}
                             />
                         ))
                     }
@@ -118,7 +131,7 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                                         encryptionKey={encryptionKey}
                                         tmdbApiKey={tmdbApiKey}
                                         notionApiKey={notionApiKey}
-                                        tvShowsPageLink={tvShowsPageLink}
+                                        tvShowsDatabaseId={tvShowsDatabaseId}
                                     />
                                 ))
                             }

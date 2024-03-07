@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { fetchCast, fetchCrew, fetchGenres, fetchTrailer } from '@/lib/tvShowHelpers';
 import Card from '../Helpers/Card';
 
-export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, notionApiKey, tvShowsPageLink }: {
+export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, notionApiKey, tvShowsDatabaseId }: {
   id: number;
   name: string;
   overview: string;
@@ -19,7 +19,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
   encryptionKey: string;
   tmdbApiKey: string;
   notionApiKey: string;
-  tvShowsPageLink: string;
+  tvShowsDatabaseId: any;
 }) {
 
   const handleAddToNotion = async () => {
@@ -52,8 +52,8 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        notionApiKey: decryptData(notionApiKey, encryptionKey),
-        db_id: decryptData(tvShowsPageLink, encryptionKey),
+        notionApiKey,
+        db_id: tvShowsDatabaseId,
         tvShowData: tvShowData,
       }),
     });

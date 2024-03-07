@@ -94,5 +94,5 @@ export async function booksLinkSubmit(link: string, userEmail: any, encryptionKe
 export function extractValueFromUrl(url: string) {
     const regex = /([a-f0-9]{32})/;
     const match = url.match(regex);
-    return match ? match[1] : '';
+    return match ? match[1] : '' as string;
 }

@@ -16,11 +16,13 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
 }) {
 
     const { data: session } = useSession();
-
+    const userEmail = session?.user?.email;
     const [input, setInput] = useState('');
     const [movies, setMovies] = useState<MovieInterface[]>([]);
+
     const [notionApiKey, setNotionApiKey] = useState('');
-    const [moviesPageLink, setMoviesPageLink] = useState('');
+    const [moviesDatabaseId, setMoviesDatabaseId] = useState<string | null>(null);
+
     const [apiResponse, setApiResponse] = useState<string | null>(null);
     const [pageLink, setPageLink] = useState('');
     const [displayCount, setDisplayCount] = useState(20);
@@ -36,19 +38,30 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
             .catch(error => console.error(error));
     };
 
+    async function fetchUserData() {
+        try {
+            const response = await fetch('/api/getUserConnection', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userEmail,
+                    connectionType: "movies",
+                }),
+            });
+
+            const connectionData = await response.json();
+            setNotionApiKey(connectionData.access_token);
+            setMoviesDatabaseId(connectionData.template_id);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     useEffect(() => {
-        if (session && !notionApiKey && !moviesPageLink) {
-            const fetchUser = async () => {
-                const response = await fetch('/api/getUser', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userEmail: session?.user?.email }),
-                });
-                const user = await response.json();
-                setNotionApiKey(user.notionApiKey);
-                setMoviesPageLink(user.moviesPageLink);
-            };
-            fetchUser();
+        if (session && !notionApiKey && !moviesDatabaseId) {
+            fetchUserData();
         }
     }, [session]);
 
@@ -76,7 +89,7 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                 <meta name="twitter:title" content="ClickNotes - Save your movies to Notion" />
                 <meta name="twitter:description" content="Save popular and trending movies to your Notion list or search for your favorites. All your movies in one place, displayed in a beautiful Notion template." />
                 <meta name="twitter:image" content="https://www.clicknotes.site/og/movies.png" />
-                <meta name="twitter:domain" content="clicknotes.site" />
+                <meta name="twitter:domain" content="www.clicknotes.site" />
                 <meta name="twitter:url" content="https://clicknotes.site/movies" />
                 <link rel="icon" href="/favicon.ico" />
                 <link rel="canonical" href="https://clicknotes.site/movies" />
@@ -100,7 +113,7 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                                 tmdbApiKey={tmdbApiKey}
                                 encryptionKey={encryptionKey}
                                 notionApiKey={notionApiKey}
-                                moviesPageLink={moviesPageLink}
+                                moviesDatabaseId={moviesDatabaseId}
                             />
                         ))
                     }
@@ -120,7 +133,7 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                                         tmdbApiKey={tmdbApiKey}
                                         encryptionKey={encryptionKey}
                                         notionApiKey={notionApiKey}
-                                        moviesPageLink={moviesPageLink}
+                                        moviesDatabaseId={moviesDatabaseId}
                                     />
                                 ))}
                         </>

@@ -1,4 +1,5 @@
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function NotionCallback({ response, type }: { response: any, type: any }) {
@@ -13,6 +14,7 @@ export default function NotionCallback({ response, type }: { response: any, type
                 body: JSON.stringify({
                     userEmail: userEmail,
                     data: response,
+                    templateId: response.duplicated_template_id.split('-').join(''),
                     type
                 })
             })
@@ -32,8 +34,8 @@ export default function NotionCallback({ response, type }: { response: any, type
 
     return (
         <div className="flex flex-col items-center h-screen">
-            <h1>{response.access_token}</h1>
-            <h1>{response.duplicated_template_id}</h1>
+            <h1>Success</h1>
+            <Link href='/'>Continue</Link>
         </div>
     );
 }
@@ -76,6 +78,7 @@ export async function getServerSideProps(context: any) {
     });
 
     const response = await res.json();
+    console.log("response", response);
 
     if (response.error) {
         return {

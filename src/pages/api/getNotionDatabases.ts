@@ -5,31 +5,42 @@ import { decryptData } from '@/lib/encryption';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { userEmail } = req.body;
-        const encryptionKey = process.env.ENCRYPTION_KEY as string;
+        const { userEmail, listType } = req.body;
 
         const dbName = process.env.MONGODB_DB_NAME;
-        const dbCollection = process.env.MONGODB_COLLECTION;
+        const dbCollection = 'connections';
 
         if (!dbName || !dbCollection) {
             throw new Error('Database name or collection not defined');
         }
 
+        let filter: any = {};
+        let connectionType: string = '';
+
+        if (listType === 'movies') {
+            connectionType = 'movies'
+            filter = { property: 'Type', select: { equals: 'Movie' } };
+        } else if (listType === 'tvshows') {
+            connectionType = 'movies'
+            filter = { property: 'Type', select: { equals: 'TvShow' } };
+        } else if (listType === 'books') {
+            connectionType = 'books'
+            filter = { property: 'Type', select: { equals: 'Book' } };
+        }
+
         const client = await clientPromise;
         const collection = client.db(dbName)?.collection(dbCollection);
-        const user = await collection?.findOne({ email: userEmail });
+        const connection = await collection?.findOne({ email: userEmail, connection_type: connectionType });
 
-        if (!user?.notionApiKey || (!user?.moviesPageLink && !user?.booksPageLink)) {
-            res.status(500).json({ message: "No connected Notion databases found" });
+        if (!connection || !connection.access_token || !connection.template_id) {
+            res.status(404).json({ message: 'Connection not found' });
             return;
         }
 
-        const notionApiKey = user.notionApiKey;
-        const decryptedNotionApiKey = decryptData(notionApiKey, encryptionKey);
-        const decryptedMoviesPageLink = decryptData(user.moviesPageLink, encryptionKey);
-        const decryptedBooksPageLink = decryptData(user.booksPageLink, encryptionKey);
+        const notionApiKey = connection.access_token;
+        const databaseId = connection.template_id;
 
-        const notion = new Client({ auth: decryptedNotionApiKey });
+        const notion = new Client({ auth: notionApiKey });
 
         const fetchAllPages = async (databaseId: string, filter: any) => {
             const response = await notion.databases.query({
@@ -41,17 +52,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return response.results;
         };
 
-        const movies = await fetchAllPages(decryptedMoviesPageLink, { property: 'Type', select: { equals: 'Movie' } });
-        const tvShows = await fetchAllPages(decryptedMoviesPageLink, { property: 'Type', select: { equals: 'TvShow' } });
-        const books = await fetchAllPages(decryptedBooksPageLink, { property: 'Type', select: { equals: 'Book' } });
+        const list = await fetchAllPages(databaseId, filter);
 
-        const moviesDatabaseInfo = await notion.databases.retrieve({ database_id: decryptedMoviesPageLink }) as any;
-        const moviesDatabaseName = moviesDatabaseInfo.icon.emoji + moviesDatabaseInfo.title[0].plain_text;
+        const databaseInfo = await notion.databases.retrieve({ database_id: databaseId }) as any;
+        const databaseName = databaseInfo.icon.emoji + databaseInfo.title[0].plain_text;
 
-        const booksDatabaseInfo = await notion.databases.retrieve({ database_id: decryptedBooksPageLink }) as any;
-        const booksDatabaseName = booksDatabaseInfo.icon.emoji + booksDatabaseInfo.title[0].plain_text;
-
-        res.status(200).json({ movies, tvShows, books, moviesDatabaseName, booksDatabaseName});
+        res.status(200).json({ list, databaseName });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });

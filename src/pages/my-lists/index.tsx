@@ -18,44 +18,54 @@ export default function MyLists() {
     ];
 
     const [loading, setLoading] = useState(true);
+
     const [movies, setMovies] = useState<any[]>();
     const [tvShows, setTvShows] = useState<any[]>();
     const [books, setBooks] = useState<any[]>();
+
     const [movieDatabaseName, setMovieDatabaseName] = useState('');
     const [bookDatabaseName, setBookDatabaseName] = useState('');
 
+    const connectionMapping = [
+        { listType: 'movies', list: movies, setList: setMovies, listName: movieDatabaseName, setListName: setMovieDatabaseName },
+        { listType: 'tvshows', list: tvShows, setList: setTvShows, listName: movieDatabaseName, setListName: setMovieDatabaseName },
+        { listType: 'books', list: books, setList: setBooks, listName: bookDatabaseName, setListName: setBookDatabaseName },
+    ];
+
     const fetchLists = async () => {
         try {
-            const response = await fetch('/api/getNotionDatabases', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userEmail }),
+            const fetchPromises = connectionMapping.map(async connection => {
+                const response = await fetch('/api/getNotionDatabases', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userEmail,
+                        listType: connection.listType,
+                    }),
+                });
+
+                const connectionData = await response.json();
+
+                connection.setList(connectionData.list);
+                connection.setListName(connectionData.databaseName);
             });
 
-            const data = await response.json();
+            await Promise.all(fetchPromises);
 
-            if (response.status !== 200) {
-                setLoading(false);
-            }
-
-            setMovies(data.movies);
-            setTvShows(data.tvShows);
-            setBooks(data.books);
             setLoading(false);
-            setMovieDatabaseName(data.moviesDatabaseName);
-            setBookDatabaseName(data.booksDatabaseName);
+
         } catch (error) {
             console.error('Failed to fetch lists:', error);
         }
-    };
+    }
 
     useEffect(() => {
         if (userEmail) {
             fetchLists();
         }
-    }, []);
+    }, [session]);
 
     return (
         <>
@@ -81,7 +91,7 @@ export default function MyLists() {
                 <meta name="twitter:title" content="ClickNotes - Save your movies to Notion" />
                 <meta name="twitter:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
                 <meta name="twitter:image" content="https://www.clicknotes.site/og/my-lists.png" />
-                <meta name="twitter:domain" content="clicknotes.site" />
+                <meta name="twitter:domain" content="www.clicknotes.site" />
                 <meta name="twitter:url" content="https://clicknotes.site/my-lists" />
                 <link rel="icon" href="/favicon.ico" />
                 <link rel="canonical" href="https://clicknotes.site/my-lists" />
@@ -127,7 +137,7 @@ export default function MyLists() {
                 {loading ? (
                     <MyListsSkeleton />
                 ) : (
-                    <h1 className="text-center py-2 text-lg">Coming Soon ...</h1>
+                    <h1 className="text-center py-2">Coming Soon ...</h1>
                 )}
             </div>
         </>

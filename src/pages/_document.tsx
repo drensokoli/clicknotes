@@ -20,7 +20,7 @@ export default function Document({ }: any) {
       <meta name="twitter:title" content="ClickNotes - Save your media content to Notion" />
       <meta name="twitter:description" content="Save popular and trending media content to your Notion list or search for your favorites. All your media content in one place, displayed in a beautiful Notion template." />
       <meta name="twitter:image" content="https://www.clicknotes.site/og/movies.png" />
-      <meta name="twitter:domain" content="clicknotes.site" />
+      <meta name="twitter:domain" content="www.clicknotes.site" />
       <meta name="twitter:url" content="https://clicknotes.site/" />
       <Head />
       <body>

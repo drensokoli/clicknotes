@@ -5,7 +5,7 @@ import { decryptData } from '@/lib/encryption';
 import Link from 'next/link';
 import Card from '../Helpers/Card';
 
-export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, setPageLink, language, price, publisher, availability, encryptionKey, notionApiKey, booksPageLink }: {
+export default function Book({ id, title, description, publishedDate, averageRating, authors, infoLink, pageCount, thumbnail, cover_image, previewLink, onApiResponse, setPageLink, language, price, publisher, availability, encryptionKey, notionApiKey, booksDatabaseId }: {
     id: string;
     title: string;
     description: string;
@@ -25,7 +25,7 @@ export default function Book({ id, title, description, publishedDate, averageRat
     availability?: string;
     encryptionKey: string;
     notionApiKey: string;
-    booksPageLink: string;
+    booksDatabaseId: any;
 }) {
 
     const handleAddToNotion = async () => {
@@ -58,8 +58,8 @@ export default function Book({ id, title, description, publishedDate, averageRat
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                notionApiKey: decryptData(notionApiKey, encryptionKey),
-                db_id: decryptData(booksPageLink, encryptionKey),
+                notionApiKey,
+                db_id: booksDatabaseId,
                 bookData: bookData,
             }),
         });
