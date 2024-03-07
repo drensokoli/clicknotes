@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Transition } from '@headlessui/react'
+import { useEffect, useState } from "react";
 
 export default function MyListsCard({ name, id, list, path, databaseName }:
     {
@@ -8,9 +10,28 @@ export default function MyListsCard({ name, id, list, path, databaseName }:
         path: any,
         databaseName: any
     }) {
+
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setShow(true);
+        }, 10);
+    }, []);
+
     return (
         <>
-            <div className="relative flex flex-col text-gray-700 bg-white shadow-md bg-clip-border rounded-xl hover:shadow-xl">
+            <Transition
+                className="relative flex flex-col text-gray-700 bg-white shadow-md bg-clip-border rounded-xl hover:shadow-xl"
+                show={show}
+                enter="transition-all ease-in-out duration-500 delay-[200ms]"
+                enterFrom="opacity-0 translate-y-6"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition-all ease-in-out duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+            >
+
                 <Link href={path}
                     className="flex flex-row justify-center h-56 mx-4 mt-6 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl bg-blue-gray-500 shadow-blue-gray-500/40 shadow-xl">
                     {list.map((list: any, index: any) => (
@@ -42,7 +63,7 @@ export default function MyListsCard({ name, id, list, path, databaseName }:
                         View List
                     </Link>
                 </div>
-            </div>
+            </Transition>
         </>
     )
 }

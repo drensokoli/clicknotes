@@ -53,9 +53,9 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
     <div className='flex flex-col min-h-screen'>
       <Navbar />
 
-      {banner && (
+      {/* {banner && (
         <NotionBanner image={banner.image} />
-      )}
+      )} */}
 
       <Component {...pageProps} />
       <Analytics />

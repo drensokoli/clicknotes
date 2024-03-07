@@ -130,7 +130,7 @@ export default function MyLists() {
                     </>
                 )}
 
-                <div className="w-full sm:px-20 px-4 mt-8">
+                {/* <div className="w-full sm:px-20 px-4 mt-8">
                     <h1 className="text-sm text-gray-400">MY COLLECTIONS</h1>
                 </div>
                 <hr className="sm:mx-20 mx-4 border-gray-400 py-2" />
@@ -138,7 +138,7 @@ export default function MyLists() {
                     <MyListsSkeleton />
                 ) : (
                     <h1 className="text-center py-2">Coming Soon ...</h1>
-                )}
+                )} */}
             </div>
         </>
     )

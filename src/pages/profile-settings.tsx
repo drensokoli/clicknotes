@@ -151,21 +151,20 @@ export default function ProfileSettings({ encryptionKey }: { encryptionKey: stri
 }
 
 export const getServerSideProps = async (context: any) => {
-    const session = await getSession(context);
-    const encryptionKey = process.env.ENCRYPTION_KEY;
+    // const session = await getSession(context);
+    // const encryptionKey = process.env.ENCRYPTION_KEY;
 
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/',
-            },
-        };
-    }
+    // if (!session) {
+    //     return {
+    //         redirect: {
+    //             destination: '/',
+    //         },
+    //     };
+    // }
 
     return {
-        props: {
-            session,
-            encryptionKey
+        redirect: {
+            destination: '/',
         },
     };
 };

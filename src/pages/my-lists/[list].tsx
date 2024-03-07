@@ -90,7 +90,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
         if (cursor === null) {
             setTimeout(() => {
                 clearInterval(intervalId);
-            }, 2500);
+            }, 2000);
         } else {
             while (cursor !== null) {
                 await getNotionDatabasePages(
@@ -225,7 +225,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                 {loading ? (
                     <ListSkeleton />
                 ) : (
-                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4'>
+                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
                         {listName === 'books' && content ? (
                             <>
                                 {content

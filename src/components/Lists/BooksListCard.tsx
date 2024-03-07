@@ -1,7 +1,7 @@
 
 import Image from 'next/dist/client/image';
 import Link from 'next/link';
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import BookModal from './BookModal';
 
@@ -22,11 +22,27 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
     notion_link: string;
 }) {
     const [open, setOpen] = useState(false);
-
+    const [show, setShow] = useState(false);
     const cancelButtonRef = useRef(null);
 
+    useEffect(() => {
+        if (show) return;
+        setTimeout(() => {
+            setShow(true);
+        }, 10);
+    }, []);
+
     return (
-        <div key={id} className="w-[200px] px-4 sm:px-0 py-2 sm:py-0" >
+        <Transition
+            className="w-[200px] px-4 sm:px-0 py-2 sm:py-0"
+            show={show}
+            enter="transition-all ease-in-out duration-500 delay-[200ms]"
+            enterFrom="opacity-0 translate-y-6"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition-all ease-in-out duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+        >
             <div className='movie-image'>
                 {cover ? (
                     <div
@@ -129,6 +145,6 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
                     </div>
                 </Dialog>
             </Transition.Root>
-        </div>
+        </Transition>
     )
 }
