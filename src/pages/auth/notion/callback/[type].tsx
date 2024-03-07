@@ -9,19 +9,23 @@ export default function NotionCallback({ response, type }: { response: any, type
 
     const updateNotionConnection = async () => {
         try {
-                        const res = await fetch('/api/updateUserConnection', {
+            const templateId = response.duplicated_template_id ? response.duplicated_template_id.split('-').join('') : null;
+            const res = await fetch('/api/updateUserConnection', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
-                    userEmail: userEmail,
+                    userEmail,
                     data: response,
-                    templateId: response.duplicated_template_id.split('-').join(''),
-                    type
-                })
-            })
+                    templateId: templateId,
+                    type: type,
+                }),
+            });
 
             const result = await res.json();
-            
+            console.log("result", result);
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -68,7 +72,7 @@ export default function NotionCallback({ response, type }: { response: any, type
             >
                 <h1 className='text-3xl text-center'>You successfully connected to Notion!</h1>
             </Transition>
-            <a href="/my-lists" className='m-10'>
+            <Link href="/my-lists" className='m-10'>
                 <Transition
                     className="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline text-lg"
                     show={show}
@@ -84,7 +88,7 @@ export default function NotionCallback({ response, type }: { response: any, type
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                     </svg>
                 </Transition>
-            </a>
+            </Link>
         </div>
     );
 }
@@ -138,5 +142,10 @@ export async function getServerSideProps(context: any) {
         }
     }
 
-    return { props: { response, type } };
+    return {
+        props: {
+            response,
+            type
+        }
+    };
 }
