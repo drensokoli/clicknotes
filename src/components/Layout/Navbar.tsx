@@ -42,7 +42,7 @@ export default function Navbar() {
                                     </Disclosure.Button>
                                 </div>
                                 <div className="flex flex-1 items-center justify-between">
-                                    <div className="flex-shrink-0 hidden sm:block sm:items-center mx-[40px]">
+                                    <div className="flex-shrink-0 hidden sm:block sm:items-center mx-[40px] select-none">
                                         <Link href="/" aria-label='Home'>
                                             <Image src="/logo.png" alt="logo" width={70} height={40}
                                                 className="h-auto"
@@ -88,7 +88,7 @@ export default function Navbar() {
                                                 ) : (
                                                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 md:mx-[26px] mx-1">
                                                         <Image
-                                                            className="h-8 w-8 rounded-full"
+                                                            className="h-8 w-8 rounded-full select-none"
                                                             src={session?.user?.image?.toString()!}
                                                             width={30} height={40}
                                                             alt=""

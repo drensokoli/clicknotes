@@ -36,7 +36,7 @@ export default function Input(
                             target='_blank'
                             className='hover:text-blue-500 hover:underline w-[95%] truncate text-gray-600 text-sm'
                         >{`https://www.notion.so/` + field}</Link>
-                        <button onClick={() => setLink('')}>
+                        <button onClick={() => setLink('')} className=" select-none">
                             <Image src="./edit.png" alt="" width={17} height={17} />
                         </button>
                     </div>
@@ -48,11 +48,13 @@ export default function Input(
                         <input
                             type="text"
                             onChange={(e) => setInput(e.target.value)}
-                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-l-md truncate"
+                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-md truncate"
                             placeholder={placeHolder}
                         />
-                        <button type="submit" className='py-2 px-2'>
-                            <Image src="./send.png" alt="" width={25} height={25} />
+                        <button className='bg-gray-100 py-2 px-2 rounded-md'>
+                            <h1 className="text-blue-600 text-xs font-semibold hover:underline">
+                                Update
+                            </h1>
                         </button>
                     </div>
                 </form>

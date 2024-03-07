@@ -36,7 +36,7 @@ export default function MyListsCard({ name, id, list, path, databaseName }:
                     className="flex flex-row justify-center h-56 mx-4 mt-6 overflow-hidden text-white shadow-lg bg-clip-border rounded-xl bg-blue-gray-500 shadow-blue-gray-500/40 shadow-xl">
                     {list.map((list: any, index: any) => (
                         <img key={index} src={list.properties.Poster ? list.properties.Poster.url : list.properties["Cover Image"] ? list.properties["Cover Image"].url : list.cover.external.url} alt=""
-                            className="object-cover lg:w-full"
+                            className="object-cover lg:w-full select-none"
                         />
                     ))}
                 </Link>

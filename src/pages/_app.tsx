@@ -72,7 +72,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
           alt="logo"
           width={130}
           height={130}
-          className='h-[50px] w-auto cursor-pointer'
+          className='h-[50px] w-auto cursor-pointer select-none'
         />
       </Link>
 
