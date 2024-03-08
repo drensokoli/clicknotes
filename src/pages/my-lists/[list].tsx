@@ -12,6 +12,7 @@ import Link from "next/link";
 import MovieModal from "@/components/Lists/MovieModal";
 import BookModal from "@/components/Lists/BookModal";
 import Head from "next/head";
+import WidthKeeper from "@/components/Lists/WidthKeeper";
 
 export default function List({ statusList, listName, notionApiKey, databaseId }: { statusList: any, listName: string, notionApiKey: string, databaseId: string }) {
 
@@ -133,7 +134,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                 );
             });
             setContent(listStates.find((listState) => listState.status === status)?.list || []);
-            setLoading(false);
+            content && setLoading(false);
 
             return data;
 
@@ -200,97 +201,100 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
             </Head>
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
-                <SearchBar input={input} handleInputChange={handleInputChange} />
-                
-                {statusList && (
-                    <div className="flex justify-between items-center w-[95%] sm:w-[70%] gap-2 overflow-auto select-none">
-                        <button
-                            className="my-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                            onClick={() => {
-                                handleShuffle();
-                            }}
-                        >
-                            <div className="flex flex-row justify-center items-center gap-1">
-                                <h1>Shuffle</h1>
-                                <img src="/shuffle-white.png" alt="" className="h-[17px]" />
-                            </div>
-                        </button>
-                        <div>
-                            <select
-                                className="my-1 py-2.5 px-5 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                                onChange={(e) => {
-                                    setStatus(e.target.value);
-                                    setContent(listStates.find((listState) => listState.status === e.target.value)?.list || []);
-                                    setDisplayCount(20);
-                                }}
-                                value={status}
-                            >
-                                {statusList.map((list: any) => (
-                                    <option key={list} value={list}>
-                                        {list}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                )}
+                <div className='w-fit'>
 
-                <div className=" min-h-screen">
-                    {loading ? (
-                        <ListSkeleton />
-                    ) : (
-                        <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4'>
-                            {listName === 'books' && content ? (
-                                <>
-                                    {content
-                                        .slice(0, displayCount)
-                                        .map((listItem: any) => (
-                                            <BooksListCard
-                                                key={listItem.id}
-                                                id={listItem.id}
-                                                title={listItem.properties.Title.title[0].text.content}
-                                                cover={listItem.properties["Cover Image"].url}
-                                                published_date={listItem.properties['Published Date'].date.start || ''}
-                                                link={`https://books.google.com/books?id=${listItem.id}`}
-                                                handleStatusChange={handleInputChange}
-                                                statusList={statusList}
-                                                status={listItem.properties.Status.status.name}
-                                                rating={listItem.properties['My Rating'].number}
-                                                description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
-                                                pageCount={listItem.properties['Page Count'].number}
-                                                author={listItem.properties.Authors.multi_select.map((author: any) => author.name).join(', ')}
-                                                notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
-                                            />
-                                        ))
-                                    }
-                                </>
-                            ) : content && (
-                                <>
-                                    {content
-                                        .slice(0, displayCount)
-                                        .map((listItem: any) => (
-                                            <MoviesListCard
-                                                key={listItem.id}
-                                                id={listItem.id}
-                                                title={listItem.properties.Name.title[0].text.content}
-                                                poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
-                                                release_date={listItem.properties['Release Date'].date.start || ''}
-                                                link={`https://www.themoviedb.org/movie/${listItem.id}`}
-                                                handleStatusChange={handleInputChange}
-                                                statusList={statusList}
-                                                status={listItem.properties.Status.status.name}
-                                                trailer={listItem.properties.Trailer.url}
-                                                overview={listItem.properties['Overview']?.rich_text[0]?.text?.content}
-                                                rating={listItem.properties['My Rating'].number}
-                                                watch_link={listItem.properties['Watch Link'].url}
-                                                notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
-                                            />
-                                        ))
-                                    }
-                                </>
-                            )}
+                    <SearchBar input={input} handleInputChange={handleInputChange} />
+                    <WidthKeeper />
+                    {statusList && (
+                        <div className="flex justify-between items-center sm:mx-auto mx-4 mb-2 gap-2 overflow-auto select-none">
+                            <button
+                                className="my-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                onClick={() => {
+                                    handleShuffle();
+                                }}
+                            >
+                                <div className="flex flex-row justify-center items-center gap-1">
+                                    <h1>Shuffle</h1>
+                                    <img src="/shuffle-white.png" alt="" className="h-[17px]" />
+                                </div>
+                            </button>
+                            <div>
+                                <select
+                                    className="my-1 py-2.5 px-5 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                    onChange={(e) => {
+                                        setStatus(e.target.value);
+                                        setContent(listStates.find((listState) => listState.status === e.target.value)?.list || []);
+                                        setDisplayCount(20);
+                                    }}
+                                    value={status}
+                                >
+                                    {statusList.map((list: any) => (
+                                        <option key={list} value={list}>
+                                            {list}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                     )}
+
+                    <div className="min-h-screen">
+                        {loading ? (
+                            <ListSkeleton />
+                        ) : (
+                            <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4'>
+                                {listName === 'books' && content ? (
+                                    <>
+                                        {content
+                                            .slice(0, displayCount)
+                                            .map((listItem: any) => (
+                                                <BooksListCard
+                                                    key={listItem.id}
+                                                    id={listItem.id}
+                                                    title={listItem.properties.Title.title[0].text.content}
+                                                    cover={listItem.properties["Cover Image"].url}
+                                                    published_date={listItem.properties['Published Date'].date.start || ''}
+                                                    link={`https://books.google.com/books?id=${listItem.id}`}
+                                                    handleStatusChange={handleInputChange}
+                                                    statusList={statusList}
+                                                    status={listItem.properties.Status.status.name}
+                                                    rating={listItem.properties['My Rating'].number}
+                                                    description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
+                                                    pageCount={listItem.properties['Page Count'].number}
+                                                    author={listItem.properties.Authors.multi_select.map((author: any) => author.name).join(', ')}
+                                                    notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
+                                                />
+                                            ))
+                                        }
+                                    </>
+                                ) : content && (
+                                    <>
+                                        {content
+                                            .slice(0, displayCount)
+                                            .map((listItem: any) => (
+                                                <MoviesListCard
+                                                    key={listItem.id}
+                                                    id={listItem.id}
+                                                    title={listItem.properties.Name.title[0].text.content}
+                                                    poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
+                                                    release_date={listItem.properties['Release Date'].date.start || ''}
+                                                    link={`https://www.themoviedb.org/movie/${listItem.id}`}
+                                                    handleStatusChange={handleInputChange}
+                                                    statusList={statusList}
+                                                    status={listItem.properties.Status.status.name}
+                                                    trailer={listItem.properties.Trailer.url}
+                                                    overview={listItem.properties['Overview']?.rich_text[0]?.text?.content}
+                                                    rating={listItem.properties['My Rating'].number}
+                                                    watch_link={listItem.properties['Watch Link'].url}
+                                                    notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
+                                                />
+                                            ))
+                                        }
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {content && displayCount < content.length && (

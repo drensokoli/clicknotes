@@ -98,53 +98,55 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
             </Head>
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
-                <SearchBar input={input} handleInputChange={handleInputChange} />
-                <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
-                    {tvShows
-                        .map((item) => (
-                            <TvShow
-                                {...item}
-                                key={item.id}
-                                first_air_date={item.first_air_date}
-                                backdrop_path={item.backdrop_path}
-                                onApiResponse={(error: string) => setApiResponse(error)}
-                                setPageLink={setPageLink}
-                                encryptionKey={encryptionKey}
-                                tmdbApiKey={tmdbApiKey}
-                                notionApiKey={notionApiKey}
-                                tvShowsDatabaseId={tvShowsDatabaseId}
-                            />
-                        ))
-                    }
-                    {tvShows.length === 0 && (
-                        <>
-                            {popularTvShows
-                                .slice(0, displayCount)
-                                .map((item) => (
-                                    <TvShow
-                                        {...item}
-                                        key={item.id}
-                                        first_air_date={item.first_air_date}
-                                        backdrop_path={item.backdrop_path}
-                                        onApiResponse={(error: string) => setApiResponse(error)}
-                                        setPageLink={setPageLink}
-                                        encryptionKey={encryptionKey}
-                                        tmdbApiKey={tmdbApiKey}
-                                        notionApiKey={notionApiKey}
-                                        tvShowsDatabaseId={tvShowsDatabaseId}
-                                    />
-                                ))
-                            }
-                        </>
+                <div className='w-fit'>
+                    <SearchBar input={input} handleInputChange={handleInputChange} />
+                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
+                        {tvShows
+                            .map((item) => (
+                                <TvShow
+                                    {...item}
+                                    key={item.id}
+                                    first_air_date={item.first_air_date}
+                                    backdrop_path={item.backdrop_path}
+                                    onApiResponse={(error: string) => setApiResponse(error)}
+                                    setPageLink={setPageLink}
+                                    encryptionKey={encryptionKey}
+                                    tmdbApiKey={tmdbApiKey}
+                                    notionApiKey={notionApiKey}
+                                    tvShowsDatabaseId={tvShowsDatabaseId}
+                                />
+                            ))
+                        }
+                        {tvShows.length === 0 && (
+                            <>
+                                {popularTvShows
+                                    .slice(0, displayCount)
+                                    .map((item) => (
+                                        <TvShow
+                                            {...item}
+                                            key={item.id}
+                                            first_air_date={item.first_air_date}
+                                            backdrop_path={item.backdrop_path}
+                                            onApiResponse={(error: string) => setApiResponse(error)}
+                                            setPageLink={setPageLink}
+                                            encryptionKey={encryptionKey}
+                                            tmdbApiKey={tmdbApiKey}
+                                            notionApiKey={notionApiKey}
+                                            tvShowsDatabaseId={tvShowsDatabaseId}
+                                        />
+                                    ))
+                                }
+                            </>
+                        )}
+                    </div>
+                    {displayCount < popularTvShows.length && tvShows.length === 0 && (
+                        <LoadMore
+                            displayCount={displayCount}
+                            setDisplayCount={setDisplayCount}
+                            media={popularTvShows}
+                        />
                     )}
                 </div>
-                {displayCount < popularTvShows.length && tvShows.length === 0 && (
-                    <LoadMore
-                        displayCount={displayCount}
-                        setDisplayCount={setDisplayCount}
-                        media={popularTvShows}
-                    />
-                )}
             </div>
         </>
     );

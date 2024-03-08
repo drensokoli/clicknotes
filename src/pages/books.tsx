@@ -130,64 +130,66 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             </Head>
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
-                <SearchBar input={input} handleInputChange={handleInputChange} />
-                <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
-                    {books.map((book: BookInterface) => (
-                        <Book
-                            key={book.id}
-                            id={book.id}
-                            title={book.volumeInfo.title}
-                            previewLink={book.volumeInfo.previewLink}
-                            cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                            description={book.volumeInfo.description}
-                            publishedDate={book.volumeInfo.publishedDate}
-                            averageRating={book.volumeInfo.averageRating}
-                            authors={book.volumeInfo.authors}
-                            infoLink={book.volumeInfo.infoLink}
-                            pageCount={book.volumeInfo.pageCount}
-                            thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-                            language={book.volumeInfo.language}
-                            price={book.saleInfo.listPrice?.amount}
-                            publisher={book.volumeInfo.publisher}
-                            availability={book.saleInfo.saleability}
-                            onApiResponse={(error: string) => setApiResponse(error)}
-                            setPageLink={setPageLink}
-                            encryptionKey={encryptionKey}
-                            notionApiKey={notionApiKey}
-                            booksDatabaseId={booksDatabaseId}
-                        />
-                    ))}
-                    {books.length === 0 && (
-                        <>
-                            {
-                                bestsellers.map((book: BookInterface) => (
-                                    <Book
-                                        key={book.id}
-                                        id={book.id}
-                                        title={book.volumeInfo.title}
-                                        previewLink={book.volumeInfo.previewLink}
-                                        cover_image={book.volumeInfo.imageLinks?.thumbnail}
-                                        description={book.volumeInfo.description}
-                                        publishedDate={book.volumeInfo.publishedDate}
-                                        averageRating={book.volumeInfo.averageRating}
-                                        authors={book.volumeInfo.authors}
-                                        infoLink={book.volumeInfo.infoLink}
-                                        pageCount={book.volumeInfo.pageCount}
-                                        thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-                                        language={book.volumeInfo.language}
-                                        price={book.saleInfo.listPrice?.amount}
-                                        publisher={book.volumeInfo.publisher}
-                                        availability={book.saleInfo.saleability}
-                                        onApiResponse={(error: string) => setApiResponse(error)}
-                                        setPageLink={setPageLink}
-                                        encryptionKey={encryptionKey}
-                                        notionApiKey={notionApiKey}
-                                        booksDatabaseId={booksDatabaseId}
-                                    />
-                                ))
-                            }
-                        </>
-                    )}
+                <div className='w-fit'>
+                    <SearchBar input={input} handleInputChange={handleInputChange} />
+                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
+                        {books.map((book: BookInterface) => (
+                            <Book
+                                key={book.id}
+                                id={book.id}
+                                title={book.volumeInfo.title}
+                                previewLink={book.volumeInfo.previewLink}
+                                cover_image={book.volumeInfo.imageLinks?.thumbnail}
+                                description={book.volumeInfo.description}
+                                publishedDate={book.volumeInfo.publishedDate}
+                                averageRating={book.volumeInfo.averageRating}
+                                authors={book.volumeInfo.authors}
+                                infoLink={book.volumeInfo.infoLink}
+                                pageCount={book.volumeInfo.pageCount}
+                                thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+                                language={book.volumeInfo.language}
+                                price={book.saleInfo.listPrice?.amount}
+                                publisher={book.volumeInfo.publisher}
+                                availability={book.saleInfo.saleability}
+                                onApiResponse={(error: string) => setApiResponse(error)}
+                                setPageLink={setPageLink}
+                                encryptionKey={encryptionKey}
+                                notionApiKey={notionApiKey}
+                                booksDatabaseId={booksDatabaseId}
+                            />
+                        ))}
+                        {books.length === 0 && (
+                            <>
+                                {
+                                    bestsellers.map((book: BookInterface) => (
+                                        <Book
+                                            key={book.id}
+                                            id={book.id}
+                                            title={book.volumeInfo.title}
+                                            previewLink={book.volumeInfo.previewLink}
+                                            cover_image={book.volumeInfo.imageLinks?.thumbnail}
+                                            description={book.volumeInfo.description}
+                                            publishedDate={book.volumeInfo.publishedDate}
+                                            averageRating={book.volumeInfo.averageRating}
+                                            authors={book.volumeInfo.authors}
+                                            infoLink={book.volumeInfo.infoLink}
+                                            pageCount={book.volumeInfo.pageCount}
+                                            thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+                                            language={book.volumeInfo.language}
+                                            price={book.saleInfo.listPrice?.amount}
+                                            publisher={book.volumeInfo.publisher}
+                                            availability={book.saleInfo.saleability}
+                                            onApiResponse={(error: string) => setApiResponse(error)}
+                                            setPageLink={setPageLink}
+                                            encryptionKey={encryptionKey}
+                                            notionApiKey={notionApiKey}
+                                            booksDatabaseId={booksDatabaseId}
+                                        />
+                                    ))
+                                }
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
         </>
