@@ -108,7 +108,7 @@ export default function Connect() {
             <div className="flex justify-center items-center flex-grow">
                 <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] shadow-xl  border-gray-100 border-2">
                     <div className="flex justify-center mt-4">
-                        <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 " width={50} height={50} />
+                        <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 select-none" width={50} height={50} />
                     </div>
                     <h1 className="font-bold text-center text-3xl text-gray-700 mt-2">{session?.user?.name}</h1>
                     <div className="w-full flex flex-col">

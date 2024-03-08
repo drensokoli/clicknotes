@@ -28,7 +28,7 @@ export default function Input(
     return (
         <>
             {field ? (
-                <div className='pb-4'>
+                <div className='pb-4 bg-white'>
                     <label className="block mb-2 text-sm text-gray-400">{label}</label>
                     <div className='flex flex-row justify-between items-center'>
                         <Link
@@ -42,16 +42,16 @@ export default function Input(
                     </div>
                 </div>
             ) : (
-                <form className='pb-4' onSubmit={handleSubmit}>
+                <form className='pb-4 bg-white' onSubmit={handleSubmit}>
                     <label className="block mb-2 text-sm text-gray-400">{label}</label>
                     <div className='flex flex-row bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 w-full '>
                         <input
                             type="text"
                             onChange={(e) => setInput(e.target.value)}
-                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-md truncate"
+                            className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-md truncate rounded-r-none mr-[1px]"
                             placeholder={placeHolder}
                         />
-                        <button className='bg-gray-100 py-2 px-2 rounded-md'>
+                        <button className='bg-gray-100 py-2 px-2 rounded-md rounded-l-none hover:bg-gray-200 focus:bg-gray-300'>
                             <h1 className="text-blue-600 text-xs font-semibold hover:underline">
                                 Update
                             </h1>

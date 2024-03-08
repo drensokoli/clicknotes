@@ -1,4 +1,4 @@
-export default function MyListsSkeleton() {
+export default function ListsSkeleton() {
   return (
     <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4'>
       {Array(15).fill(0).map((_, index) => (
