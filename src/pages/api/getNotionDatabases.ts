@@ -55,7 +55,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const list = await fetchAllPages(databaseId, filter);
 
         const databaseInfo = await notion.databases.retrieve({ database_id: databaseId }) as any;
-        const databaseName = databaseInfo.icon.emoji + databaseInfo.title[0].plain_text;
+        const emoji = databaseInfo.icon.emoji ? databaseInfo.icon.emoji : '';
+        const title = databaseInfo.title[0].plain_text;
+        const databaseName = emoji + title;
 
         res.status(200).json({ list, databaseName });
     } catch (error) {

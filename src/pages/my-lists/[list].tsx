@@ -142,6 +142,19 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
         }
     }
 
+    const getRandomNotionDatabasePage = async () => {
+        console.log("notionapikey:", notionApiKey, "databaseId:", databaseId)
+        console.log("status:", listStates.find((listState) => listState.status === status)?.status);
+        const response = await fetch('/api/getRandomNotionDatabasePage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ notionApiKey, databaseId, statusFilter: listStates.find((listState) => listState.status === status)?.status, type: listName }),
+        });
+
+        const data = await response.json();
+        console.log("Single page data:", data);
+    }
+
     useEffect(() => {
         if (userEmail) {
             listStates.forEach((listState) => {
@@ -188,7 +201,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <SearchBar input={input} handleInputChange={handleInputChange} />
-
+                
                 {statusList && (
                     <div className="flex justify-between items-center w-[95%] sm:w-[70%] gap-2 overflow-auto select-none">
                         <button

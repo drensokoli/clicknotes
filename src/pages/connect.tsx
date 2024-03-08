@@ -8,6 +8,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Toast from '@/components/Helpers/Toast';
 import Input from '@/components/Helpers/Input';
+import { Transition } from '@headlessui/react'
 
 export default function Connect() {
     const { data: session } = useSession();
@@ -91,6 +92,15 @@ export default function Connect() {
         }
     }, [session]);
 
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        if (show) return;
+        setTimeout(() => {
+            setShow(true);
+        }, 10);
+    }, []);
+
     return (
         <>
             <Head>
@@ -106,7 +116,17 @@ export default function Connect() {
             </Head>
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={undefined} />
             <div className="flex justify-center items-center flex-grow">
-                <div className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] shadow-xl  border-gray-100 border-2">
+
+                <Transition
+                    className="bg-white relative mx-auto rounded-md md:w-[50%] w-[90%] shadow-xl  border-gray-100 border-2"
+                    show={show}
+                    enter="transition-all ease-in-out duration-500 delay-[200ms]"
+                    enterFrom="opacity-0 translate-y-6"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition-all ease-in-out duration-300"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
                     <div className="flex justify-center mt-4">
                         <Image src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 select-none" width={50} height={50} />
                     </div>
@@ -148,7 +168,7 @@ export default function Connect() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </Transition>
             </div>
 
         </>
