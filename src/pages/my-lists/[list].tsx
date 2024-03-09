@@ -163,11 +163,6 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
 
     useEffect(() => {
         setContent(listStates.find((listState) => listState.status === status)?.list || []);
-        if (content && content.length > 0) {
-            setTimeout(() => {
-                setLoading(false);
-            }, 100);
-        }
     }, [listToWatch, listWatching, listWatched, currentShuffleItem]);
 
     const [show, setShow] = useState(false);
@@ -178,6 +173,14 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
             setShow(true);
         }, 10);
     }, []);
+
+    useEffect(() => {
+        if (content && content.length > 0) {
+            setTimeout(() => {
+                setLoading(false);
+            }, 400);
+        }
+    }, [content]);
 
     return (
         <>
@@ -256,10 +259,12 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                         </Transition>
                     )}
 
+                    {loading && (
+                        <ListSkeleton />
+                    )}
+
                     <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
-                        {loading ? (
-                            <ListSkeleton />
-                        ) : listName === 'books' && content ? (
+                        {listName === 'books' && content ? (
                             <>
                                 {content
                                     .slice(0, displayCount)
@@ -308,7 +313,6 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                                 }
                             </>
                         )}
-
                     </div>
                 </div>
             </div>
