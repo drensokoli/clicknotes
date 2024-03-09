@@ -18,6 +18,7 @@ export default function ListsSkeleton() {
       {Array(10).fill(0).map((_, index) => (
         <Transition
           className="sm:w-[200px] px-4 sm:px-0 py-2 sm:py-0"
+          key={index}
           show={show}
           enter="transition-all ease-in-out duration-500 delay-[200ms]"
           enterFrom="opacity-0 translate-y-6"
