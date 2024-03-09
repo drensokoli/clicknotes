@@ -142,8 +142,6 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
     }
 
     const getRandomNotionDatabasePage = async () => {
-        console.log("notionapikey:", notionApiKey, "databaseId:", databaseId)
-        console.log("status:", listStates.find((listState) => listState.status === status)?.status);
         const response = await fetch('/api/getRandomNotionDatabasePage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -151,7 +149,6 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
         });
 
         const data = await response.json();
-        console.log("Single page data:", data);
     }
 
     useEffect(() => {
@@ -211,8 +208,8 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                 <meta name="twitter:url" content={`https://clicknotes.site/my-lists/${listName}`} />
                 <link rel="icon" href="/favicon.ico" />
                 <link rel="canonical" href={`https://clicknotes.site/my-lists/${listName}`} />
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-                    crossOrigin="anonymous"></script>
+                {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script> */}
             </Head>
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">

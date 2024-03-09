@@ -93,8 +93,8 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                 <meta name="twitter:url" content="https://clicknotes.site/movies" />
                 <link rel="icon" href="/favicon.ico" />
                 <link rel="canonical" href="https://clicknotes.site/movies" />
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-                    crossOrigin="anonymous"></script>
+                {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script> */}
             </Head>
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">

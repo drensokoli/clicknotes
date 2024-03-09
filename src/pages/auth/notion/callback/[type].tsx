@@ -33,7 +33,6 @@ export default function NotionCallback({ response, type }: { response: any, type
             });
 
             const result = await res.json();
-            console.log("result", result);
 
             if (templateId === null) {
                 setShowInput(true);
@@ -195,7 +194,6 @@ export async function getServerSideProps(context: any) {
     });
 
     const response = await res.json();
-    console.log("response", response);
 
     if (response.error) {
         return {

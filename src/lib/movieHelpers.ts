@@ -6,7 +6,6 @@ export async function getCast({ id, tmdbApiKey }: { id: number, tmdbApiKey: stri
     );
 
     const credits = await response.json();
-    console.log("Credits: ", credits.cast.slice(0, 11).map((cast: { name: any; }) => ({ "name": cast.name })));
     return credits.cast.slice(0, 11).map((cast: { name: any; }) => ({ "name": cast.name }));
 };
 
@@ -58,7 +57,7 @@ export async function searchMovieByTitle({ title, tmdbApiKey }: { title: string,
 
         const movies = response.data.results;
 
-        const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore", "beautiful sisters: strip!"]
+        const adultContent = ["sex", "porn", "nude", "sadomasochistic", "pussy", "vagina", "erotic", "lust", "softcore", "hardcore"]
 
         return movies
         // .filter((item: { vote_average: number; }) => item.vote_average > 6)

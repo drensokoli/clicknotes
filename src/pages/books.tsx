@@ -125,8 +125,8 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
                 <meta name="twitter:domain" content="www.clicknotes.site" />
                 <meta name="twitter:url" content="https://clicknotes.site/books" />
                 <link rel="icon" href="/favicon.ico" />
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-                    crossOrigin="anonymous"></script>
+                {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script> */}
             </Head>
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">

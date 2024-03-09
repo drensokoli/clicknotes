@@ -111,8 +111,8 @@ export default function Connect() {
                 <meta name="author" content="Dren Sokoli" />
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta>
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-                    crossOrigin="anonymous"></script>
+                {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script> */}
             </Head>
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={undefined} />
             <div className='min-h-screen'>

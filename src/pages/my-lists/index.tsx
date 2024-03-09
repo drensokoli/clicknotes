@@ -95,8 +95,8 @@ export default function MyLists() {
                 <meta name="twitter:url" content="https://clicknotes.site/my-lists" />
                 <link rel="icon" href="/favicon.ico" />
                 <link rel="canonical" href="https://clicknotes.site/my-lists" />
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-                    crossOrigin="anonymous"></script>
+                {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script> */}
             </Head>
 
             <div className="min-h-screen flex-grow">

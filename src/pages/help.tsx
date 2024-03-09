@@ -25,8 +25,8 @@ export default function Help() {
                 <meta name="author" content="Dren Sokoli" />
                 <meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta>
                 <link rel="icon" href="/favicon.ico" />
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-                    crossOrigin="anonymous"></script>
+                {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
+                    crossOrigin="anonymous"></script> */}
             </Head>
             <div className="flex flex-col justify-center items-center w-full">
                 <div className="lg:w-[60%] w-[80%]">
