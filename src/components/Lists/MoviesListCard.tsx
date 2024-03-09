@@ -34,7 +34,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
 
     return (
         <Transition
-            className="sm:w-[200px] px-4 sm:px-0 py-2 sm:py-0"
+            className="sm:w-[200px] px-4 sm:px-0 py-2 sm:py-0 h-auto"
             show={show}
             enter="transition-all ease-in-out duration-500 delay-[200ms]"
             enterFrom="opacity-0 translate-y-6"
@@ -53,7 +53,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                             width={200}
                             height={300}
                             alt={title}
-                            className="rounded-sm max-h-[240px] min-h-[240px] sm:max-h-[300px] sm:min-h-[300px] h-auto select-none object-cover"
+                            className="rounded-sm min-h-[240px] sm:max-h-[300px] sm:min-h-[300px] h-auto select-none object-cover"
                             loading="lazy"
                         />
                     </div>
