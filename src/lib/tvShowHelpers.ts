@@ -86,6 +86,7 @@ export async function fetchCrew({ id, tmdbApiKey }: { id: number, tmdbApiKey: st
             crew.job.includes('Director') ||
             crew.known_for_department.includes('Directing') ||
             crew.known_for_department.includes('Writing'))
+        .slice(0, 15)
         .map((crew: { name: any; }) => ({ "name": crew.name }))
         .filter((name: string, index: number, self: string[]) => self.indexOf(name) === index);
     return crew;
