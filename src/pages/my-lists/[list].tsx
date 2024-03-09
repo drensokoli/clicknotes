@@ -12,6 +12,7 @@ import MovieModal from "@/components/Lists/MovieModal";
 import BookModal from "@/components/Lists/BookModal";
 import Head from "next/head";
 import WidthKeeper from "@/components/Lists/WidthKeeper";
+import { set } from "lodash";
 
 export default function List({ statusList, listName, notionApiKey, databaseId }: { statusList: any, listName: string, notionApiKey: string, databaseId: string }) {
 
@@ -178,7 +179,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
         if (content && content.length > 0) {
             setTimeout(() => {
                 setLoading(false);
-            }, 400);
+            }, 200);
         }
     }, [content]);
 
@@ -217,6 +218,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
                     <SearchBar input={input} handleInputChange={handleInputChange} />
+                    
                     {statusList && (
                         <Transition
                             className="flex justify-between items-center sm:mx-auto mx-4 mb-2 gap-2 overflow-auto select-none"
@@ -243,10 +245,10 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                                 <select
                                     className="my-1 py-2.5 px-5 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                     onChange={(e) => {
-                                        setStatus(e.target.value);
+                                                                                setStatus(e.target.value);
                                         setContent(listStates.find((listState) => listState.status === e.target.value)?.list || []);
                                         setDisplayCount(20);
-                                    }}
+                                                                            }}
                                     value={status}
                                 >
                                     {statusList.map((list: any) => (
@@ -258,7 +260,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                             </div>
                         </Transition>
                     )}
-
+                    <WidthKeeper />
                     {loading && (
                         <ListSkeleton />
                     )}
