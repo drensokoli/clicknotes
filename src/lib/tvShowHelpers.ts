@@ -132,7 +132,7 @@ export async function fetchOmdbData(omdbApiKeys: string[], title: string, year: 
     const runtime = omdbData.Runtime;
     const awards = omdbData.Awards;
     const imdbRating = parseInt(omdbData.imdbRating);
-    const rottenTomatoesRating = parseInt(omdbData.Ratings.find((rating: { Source: string; }) => rating.Source === 'Rotten Tomatoes')?.Value.replace('%', '')) ?? null;
+    const rottenTomatoesRating = parseInt(omdbData.Ratings?.find((rating: { Source: string; }) => rating.Source === 'Rotten Tomatoes')?.Value.replace('%', '')) ?? null;
     const imdbVotes = omdbData.imdbVotes;
     const boxOffice = omdbData.BoxOffice;
     const seasons = omdbData.totalSeasons;
