@@ -4,8 +4,14 @@ import { Client } from '@notionhq/client';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, tvShowData } = req.body;
 
-    const watchLinkName = tvShowData.name.replace(/ /g, '%20').toLowerCase();
-    const watchLink = `https://movie-web.app/media/tmdb-tv-${tvShowData.id}-${watchLinkName}`
+    const watchLinkName = tvShowData.name.replace(/ /g, '-').toLowerCase();
+    const imdbId = tvShowData.imdb_link.split('/')[4].replace('tt', '');
+    const watchLink = `https://www.strem.io/s/movie/${watchLinkName}-${imdbId}`;
+
+    let isAdult = false;
+    if (tvShowData.rated === "R" || tvShowData.rated === "NC-17" || tvShowData.rated === "X" || tvShowData.adult === true) {
+        isAdult = true;
+    }
 
     const checkProperties = [
         { name: 'Name', type: 'title', structure: [{ text: { content: tvShowData.name } }], data: tvShowData.name },
@@ -13,6 +19,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { name: 'Genres', type: 'multi_select', structure: tvShowData.genres, data: tvShowData.genres },
         { name: 'Cast', type: 'multi_select', structure: tvShowData.cast, data: tvShowData.cast },
         { name: 'TMDB Rating', type: 'number', structure: tvShowData.vote_average, data: tvShowData.vote_average },
+        { name: 'IMDB Rating', type: 'number', structure: tvShowData.imdbRating, data: tvShowData.imdbRating },
+        { name: 'Rotten Tomatoes Rating', type: 'number', structure: tvShowData.rottenTomatoesRating, data: tvShowData.rottenTomatoesRating },
         { name: 'TMDB Link', type: 'url', structure: tvShowData.tmdb_link, data: tvShowData.tmdb_link },
         { name: 'iMDB Link', type: 'url', structure: tvShowData.imdb_link, data: tvShowData.imdb_link },
         { name: 'Crew', type: 'multi_select', structure: tvShowData.crew, data: tvShowData.crew },
@@ -21,7 +29,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { name: 'Watch Link', type: 'url', structure: watchLink },
         { name: 'Overview', type: 'rich_text', structure: [{ text: { content: tvShowData.overview } }], data: tvShowData.overview },
         { name: 'Trailer', type: 'url', structure: tvShowData.trailer, data: tvShowData.trailer },
-        { name: 'Watch Link', type: 'url', structure: watchLink, data: watchLink}
+        { name: 'Watch Link', type: 'url', structure: watchLink, data: watchLink },
+        { name: 'Adult', type: 'checkbox', structure: isAdult, data: isAdult},
+        { name: 'Runtime', type: 'rich_text', structure: [{ text: { content: tvShowData.runtime } }], data: tvShowData.runtime },
+        { name: 'Rated', type: 'select', structure: { name: tvShowData.rated}, data: tvShowData.rated },
+        { name: 'Awards', type: 'rich_text', structure: [{ text: { content: tvShowData.awards } }], data: tvShowData.awards },
     ];
 
     try {

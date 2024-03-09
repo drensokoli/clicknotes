@@ -108,3 +108,42 @@ export async function fetchTrailer({ id, tmdbApiKey }: { id: number, tmdbApiKey:
     return '';
 
 };
+
+export async function fetchOmdbData(omdbApiKeys: string[], title: string, year: string) {
+    let response: any;
+    let omdbData: any;
+
+    for (const omdbApiKey of omdbApiKeys) {
+        response = await fetch(
+            `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${title}&type=movie&y=${year}`
+        );
+
+        omdbData = await response.json();
+        if (omdbData.Response === "True") {
+            break;
+        }
+        console.log(omdbData);
+    }
+
+    const imdbId = omdbData.imdbID;
+    const imdbLink = `https://www.imdb.com/title/${imdbId}`;
+    const rated = omdbData.Rated;
+    const runtime = omdbData.Runtime;
+    const awards = omdbData.Awards;
+    const imdbRating = parseInt(omdbData.imdbRating);
+    const rottenTomatoesRating = parseInt(omdbData.Ratings.find((rating: { Source: string; }) => rating.Source === 'Rotten Tomatoes')?.Value.replace('%', '')) ?? null;
+    const imdbVotes = omdbData.imdbVotes;
+    const boxOffice = omdbData.BoxOffice;
+    const seasons = omdbData.totalSeasons;
+
+    return {
+        imdbLink,
+        rated,
+        runtime,
+        awards,
+        imdbRating,
+        rottenTomatoesRating,
+        boxOffice,
+        seasons
+    };
+}

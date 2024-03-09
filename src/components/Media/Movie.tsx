@@ -1,9 +1,9 @@
 import React from 'react';
 import { decryptData } from '@/lib/encryption';
-import { genresMapping, getCast, getCrew, getImdb, getTrailer } from '@/lib/movieHelpers';
+import { fetchOmdbData, genresMapping, getCast, getCrew, getImdb, getTrailer } from '@/lib/movieHelpers';
 import Card from '../Helpers/Card';
 
-export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, genre_ids, notionApiKey, moviesDatabaseId }: {
+export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, genre_ids, notionApiKey, moviesDatabaseId, omdbApiKeys }: {
     id: number;
     title: string;
     overview: string;
@@ -20,6 +20,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
     genre_ids: number[];
     notionApiKey: string;
     moviesDatabaseId: any;
+    omdbApiKeys: string[];
 }) {
 
     const handleAddToNotion = async () => {
@@ -33,7 +34,15 @@ export default function Movie({ id, title, overview, release_date, vote_average,
         const imdb_link = await getImdb({ id, tmdbApiKey });
         const crew = await getCrew({ id, tmdbApiKey });
         const trailer = await getTrailer({ id, tmdbApiKey });
-
+        const {
+            rated,
+            runtime,
+            awards,
+            imdbRating,
+            rottenTomatoesRating,
+            boxOffice
+        } = await fetchOmdbData(omdbApiKeys, title, release_date.split('-')[0]);
+        
         const movieData = {
             id: id,
             title: title,
@@ -42,8 +51,13 @@ export default function Movie({ id, title, overview, release_date, vote_average,
             cast: cast,
             release_date: release_date || defaultDate,
             vote_average: rounded_vote_average,
+            imdbRating: imdbRating,
+            rottenTomatoesRating: rottenTomatoesRating,
             adult: adult,
             runtime: runtime,
+            rated: rated,
+            awards: awards,
+            boxOffice: boxOffice,
             tmdb_link: tmdb_link,
             imdb_link: imdb_link,
             crew: crew,

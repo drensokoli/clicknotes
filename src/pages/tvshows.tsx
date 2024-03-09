@@ -9,14 +9,18 @@ import { TvShow as TvShowInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
 
-export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
+export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKey3, encryptionKey, popularTvShows }: {
     tmdbApiKey: string;
+    omdbApiKey1: string;
+    omdbApiKey2: string;
+    omdbApiKey3: string;
     encryptionKey: string;
     popularTvShows: TvShowInterface[];
 }) {
 
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
+    const omdbApiKeys = [omdbApiKey1, omdbApiKey2, omdbApiKey3];
 
     const [input, setInput] = useState('');
     const [tvShows, setTvShows] = useState<TvShowInterface[]>([]);
@@ -114,6 +118,7 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                                     tmdbApiKey={tmdbApiKey}
                                     notionApiKey={notionApiKey}
                                     tvShowsDatabaseId={tvShowsDatabaseId}
+                                    omdbApiKeys={omdbApiKeys}
                                 />
                             ))
                         }
@@ -133,6 +138,7 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
                                             tmdbApiKey={tmdbApiKey}
                                             notionApiKey={notionApiKey}
                                             tvShowsDatabaseId={tvShowsDatabaseId}
+                                            omdbApiKeys={omdbApiKeys}
                                         />
                                     ))
                                 }
@@ -155,6 +161,9 @@ export default function TvShows({ tmdbApiKey, encryptionKey, popularTvShows }: {
 export const getStaticProps = async () => {
     const encryptionKey = process.env.ENCRYPTION_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
+    const omdbApiKey1 = process.env.OMDB_API_KEY_1;
+    const omdbApiKey2 = process.env.OMDB_API_KEY_2;
+    const omdbApiKey3 = process.env.OMDB_API_KEY_3;
     const totalPages = 20; // Total number of pages to fetch
 
     let popularTvShowsResults = [];
@@ -167,6 +176,9 @@ export const getStaticProps = async () => {
     return {
         props: {
             tmdbApiKey,
+            omdbApiKey1,
+            omdbApiKey2,
+            omdbApiKey3,
             encryptionKey,
             popularTvShows: popularTvShowsResults
         },

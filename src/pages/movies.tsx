@@ -9,14 +9,19 @@ import { Movie as MovieInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
 
-export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
+export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKey3, encryptionKey, popularMovies }: {
     tmdbApiKey: string;
+    omdbApiKey1: string;
+    omdbApiKey2: string;
+    omdbApiKey3: string;
     encryptionKey: string;
     popularMovies: MovieInterface[];
 }) {
 
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
+    const omdbApiKeys = [omdbApiKey1, omdbApiKey2, omdbApiKey3];
+
     const [input, setInput] = useState('');
     const [movies, setMovies] = useState<MovieInterface[]>([]);
 
@@ -115,6 +120,7 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                                     encryptionKey={encryptionKey}
                                     notionApiKey={notionApiKey}
                                     moviesDatabaseId={moviesDatabaseId}
+                                    omdbApiKeys={omdbApiKeys}
                                 />
                             ))
                         }
@@ -135,6 +141,7 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
                                             encryptionKey={encryptionKey}
                                             notionApiKey={notionApiKey}
                                             moviesDatabaseId={moviesDatabaseId}
+                                            omdbApiKeys={omdbApiKeys}
                                         />
                                     ))}
                             </>
@@ -156,6 +163,9 @@ export default function Movies({ tmdbApiKey, encryptionKey, popularMovies }: {
 export const getStaticProps = async () => {
     const encryptionKey = process.env.ENCRYPTION_KEY;
     const tmdbApiKey = process.env.TMDB_API_KEY;
+    const omdbApiKey1 = process.env.OMDB_API_KEY_1;
+    const omdbApiKey2 = process.env.OMDB_API_KEY_2;
+    const omdbApiKey3 = process.env.OMDB_API_KEY_3;
     const totalPages = 20; // Total number of pages to fetch
 
     let popularMoviesResults = [];
@@ -168,6 +178,9 @@ export const getStaticProps = async () => {
     return {
         props: {
             tmdbApiKey,
+            omdbApiKey1,
+            omdbApiKey2,
+            omdbApiKey3,
             encryptionKey,
             popularMovies: popularMoviesResults
         },

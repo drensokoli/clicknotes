@@ -164,3 +164,38 @@ export const genresMapping = {
         }
     ]
 };
+
+export async function fetchOmdbData(omdbApiKeys: string[], title: string, year: string) {
+    let response: any;
+    let data: any;
+
+    for (const omdbApiKey of omdbApiKeys) {
+        response = await fetch(
+            `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${title}&type=movie&y=${year}`
+        );
+
+        data = await response.json();
+        if (data.Response === "True") {
+            break;
+        }
+    }
+
+    const imdbId = data.imdbID;
+    const imdbLink = `https://www.imdb.com/title/${imdbId}`;
+    const rated = data.Rated;
+    const runtime = data.Runtime;
+    const awards = data.Awards;
+    const imdbRating = parseInt(data.imdbRating);
+    const rottenTomatoesRating = parseInt(data.Ratings?.find((rating: { Source: string; }) => rating.Source === 'Rotten Tomatoes')?.Value.replace('%', '')) ?? null;
+    const imdbVotes = data.imdbVotes;
+    const boxOffice = data.BoxOffice;
+
+    return {
+        rated,
+        runtime,
+        awards,
+        imdbRating,
+        rottenTomatoesRating,
+        boxOffice
+    };
+}

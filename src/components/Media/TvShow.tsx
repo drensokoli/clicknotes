@@ -3,10 +3,10 @@ import { useSession, signIn } from 'next-auth/react';
 import Image from 'next/dist/client/image';
 import { decryptData } from '@/lib/encryption';
 import Link from 'next/link';
-import { fetchCast, fetchCrew, fetchGenres, fetchTrailer } from '@/lib/tvShowHelpers';
+import { fetchCast, fetchCrew, fetchGenres, fetchOmdbData, fetchTrailer } from '@/lib/tvShowHelpers';
 import Card from '../Helpers/Card';
 
-export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, notionApiKey, tvShowsDatabaseId }: {
+export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, notionApiKey, tvShowsDatabaseId, omdbApiKeys }: {
   id: number;
   name: string;
   overview: string;
@@ -20,6 +20,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
   tmdbApiKey: string;
   notionApiKey: string;
   tvShowsDatabaseId: any;
+  omdbApiKeys: string[];
 }) {
 
   const handleAddToNotion = async () => {
@@ -32,6 +33,17 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
     const cast = await fetchCast({ id, tmdbApiKey });
     const crew = await fetchCrew({ id, tmdbApiKey });
     const trailer = await fetchTrailer({ id, tmdbApiKey });
+    const year = first_air_date.split('-')[0];
+    const {
+      imdbLink,
+      rated,
+      runtime,
+      awards,
+      imdbRating,
+      rottenTomatoesRating,
+      boxOffice,
+      seasons
+  } = await fetchOmdbData(omdbApiKeys, name, year);
 
     const tvShowData = {
       id: id,
@@ -44,8 +56,16 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       crew: crew,
       vote_average: rounded_vote_average,
       tmdb_link: tmdb_link,
+      imdb_link: imdbLink,
       poster_path: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null,
       backdrop_path: `https://image.tmdb.org/t/p/w500${backdrop_path}`,
+      rated: rated,
+      runtime: runtime,
+      awards: awards,
+      imdbRating: imdbRating,
+      rottenTomatoesRating: rottenTomatoesRating,
+      boxOffice: boxOffice,
+      seasons: seasons
     };
 
     const notionResponse = await fetch('/api/addTvShowToNotion', {

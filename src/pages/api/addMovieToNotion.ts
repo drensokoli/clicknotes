@@ -1,28 +1,39 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
-import { update } from 'lodash';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, movieData } = req.body;
 
-    const watchLinkName = movieData.title.replace(/ /g, '%20').toLowerCase();
-    const watchLink = `https://movie-web.app/media/tmdb-movie-${movieData.id}-${watchLinkName}`
+    const watchLinkName = movieData.title.replace(/ /g, '-').toLowerCase();
+    const imdbId = movieData.imdb_link.split('/')[4].replace('tt', '');
+    const watchLink = `https://www.strem.io/s/movie/${watchLinkName}-${imdbId}`;
+
+    let isAdult = false;
+    if (movieData.rated === "R" || movieData.rated === "NC-17" || movieData.rated === "X" || movieData.adult === true) {
+        isAdult = true;
+    }
 
     const checkProperties = [
-        { name: 'Name', type: 'title', structure: [{ text: { content: movieData.title } }], data: movieData.title},
-        { name: 'Release Date', type: 'date', structure: { start: movieData.release_date }, data: movieData.release_date},
-        { name: 'Genres', type: 'multi_select', structure: movieData.genres, data: movieData.genres},
-        { name: 'Cast', type: 'multi_select', structure: movieData.cast, data: movieData.cast},
-        { name: 'TMDB Rating', type: 'number', structure: movieData.vote_average, data: movieData.vote_average},
-        { name: 'TMDB Link', type: 'url', structure: movieData.tmdb_link, data: movieData.tmdb_link},
-        { name: 'iMDB Link', type: 'url', structure: movieData.imdb_link, data: movieData.imdb_link},
-        { name: 'Crew', type: 'multi_select', structure: movieData.crew, data: movieData.crew},
-        { name: 'Type', type: 'select', structure: { name: 'Movie' }, data: movieData.title},
-        { name: 'Poster', type: 'url', structure: movieData.poster_path, data: movieData.poster_path},
-        { name: 'Watch Link', type: 'url', structure: watchLink },
-        { name: 'Overview', type: 'rich_text', structure: [{ text: { content: movieData.overview } }], data: movieData.overview},
-        { name: 'Trailer', type: 'url', structure: movieData.trailer, data: movieData.trailer},
-        { name: 'Watch Link', type: 'url', structure: watchLink, data: watchLink}
+        { name: 'Name', type: 'title', structure: [{ text: { content: movieData.title } }], data: movieData.title },
+        { name: 'Release Date', type: 'date', structure: { start: movieData.release_date }, data: movieData.release_date },
+        { name: 'Genres', type: 'multi_select', structure: movieData.genres, data: movieData.genres },
+        { name: 'Cast', type: 'multi_select', structure: movieData.cast, data: movieData.cast },
+        { name: 'TMDB Rating', type: 'number', structure: movieData.vote_average, data: movieData.vote_average },
+        { name: 'IMDB Rating', type: 'number', structure: movieData.imdbRating, data: movieData.imdbRating },
+        { name: 'Rotten Tomatoes Rating', type: 'number', structure: movieData.rottenTomatoesRating, data: movieData.rottenTomatoesRating },
+        { name: 'TMDB Link', type: 'url', structure: movieData.tmdb_link, data: movieData.tmdb_link },
+        { name: 'iMDB Link', type: 'url', structure: movieData.imdb_link, data: movieData.imdb_link },
+        { name: 'Crew', type: 'multi_select', structure: movieData.crew, data: movieData.crew },
+        { name: 'Type', type: 'select', structure: { name: 'Movie' }, data: movieData.title },
+        { name: 'Poster', type: 'url', structure: movieData.poster_path, data: movieData.poster_path },
+        { name: 'Overview', type: 'rich_text', structure: [{ text: { content: movieData.overview } }], data: movieData.overview },
+        { name: 'Trailer', type: 'url', structure: movieData.trailer, data: movieData.trailer },
+        { name: 'Watch Link', type: 'url', structure: watchLink, data: watchLink },
+        { name: 'Adult', type: 'checkbox', structure: isAdult, data: isAdult},
+        { name: 'Runtime', type: 'rich_text', structure: [{ text: { content: movieData.runtime } }], data: movieData.runtime },
+        { name: 'Rated', type: 'select', structure: { name: movieData.rated}, data: movieData.rated },
+        // { name: 'Awards', type: 'rich_text', structure: [{ text: { content: movieData.awards } }], data: movieData.awards },
+        // { name: 'Box Office', type: 'number', structure: movieData.boxOffice, data: movieData.boxOffice },
     ];
 
     try {
@@ -143,14 +154,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         embed: {
                             url: movieData.trailer,
                         },
-                    },
-                    // {
-                    //     object: 'block',
-                    //     type: 'bookmark',
-                    //     bookmark: {
-                    //         url: movieData.tpb_link,
-                    //     },
-                    // }
+                    }
                 ],
             });
 
