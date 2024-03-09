@@ -218,7 +218,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
                     <SearchBar input={input} handleInputChange={handleInputChange} />
-                    
+
                     {statusList && (
                         <Transition
                             className="flex justify-between items-center sm:mx-auto mx-4 mb-2 gap-2 overflow-auto select-none"
@@ -245,10 +245,10 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                                 <select
                                     className="my-1 py-2.5 px-5 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                     onChange={(e) => {
-                                                                                setStatus(e.target.value);
+                                        setStatus(e.target.value);
                                         setContent(listStates.find((listState) => listState.status === e.target.value)?.list || []);
                                         setDisplayCount(20);
-                                                                            }}
+                                    }}
                                     value={status}
                                 >
                                     {statusList.map((list: any) => (
@@ -265,7 +265,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                         <ListSkeleton />
                     )}
 
-                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
+                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4'>
                         {listName === 'books' && content ? (
                             <>
                                 {content
@@ -320,9 +320,11 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
             </div>
 
             {content && displayCount < content.length && (
-                <LoadMore displayCount={displayCount} setDisplayCount={setDisplayCount} media={content}
-                    secondaryFunction={() => getNotionDatabasePages(listStates.find((listState) => listState.status === status)?.status, listStates.find((listState) => listState.status === status)?.setList, listStates.find((listState) => listState.status === status)?.cursor, listStates.find((listState) => listState.status === status)?.setCursor)}
-                />
+                <div className="mt-4">
+                    <LoadMore displayCount={displayCount} setDisplayCount={setDisplayCount} media={content}
+                        secondaryFunction={() => getNotionDatabasePages(listStates.find((listState) => listState.status === status)?.status, listStates.find((listState) => listState.status === status)?.setList, listStates.find((listState) => listState.status === status)?.cursor, listStates.find((listState) => listState.status === status)?.setCursor)}
+                    />
+                </div>
             )}
 
             <Transition.Root show={open} as={Fragment}>
