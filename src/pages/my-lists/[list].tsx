@@ -1,7 +1,6 @@
 import SearchBar from "@/components/Helpers/SearchBar";
-import { decryptData } from "@/lib/encryption";
 import { getSession, useSession } from "next-auth/react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, use, useEffect, useRef, useState } from "react";
 import { Client } from '@notionhq/client';
 import MoviesListCard from "@/components/Lists/MoviesListCard";
 import LoadMore from "@/components/Helpers/LoadMore";
@@ -133,8 +132,6 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                     index === self.findIndex((t) => t.id === item.id)
                 );
             });
-            setContent(listStates.find((listState) => listState.status === status)?.list || []);
-            content && setLoading(false);
 
             return data;
 
@@ -166,7 +163,21 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
 
     useEffect(() => {
         setContent(listStates.find((listState) => listState.status === status)?.list || []);
+        if (content && content.length > 0) {
+            setTimeout(() => {
+                setLoading(false);
+            }, 100);
+        }
     }, [listToWatch, listWatching, listWatched, currentShuffleItem]);
+
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        if (show) return;
+        setTimeout(() => {
+            setShow(true);
+        }, 10);
+    }, []);
 
     return (
         <>
@@ -202,11 +213,18 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
-
                     <SearchBar input={input} handleInputChange={handleInputChange} />
-                    <WidthKeeper />
                     {statusList && (
-                        <div className="flex justify-between items-center sm:mx-auto mx-4 mb-2 gap-2 overflow-auto select-none">
+                        <Transition
+                            className="flex justify-between items-center sm:mx-auto mx-4 mb-2 gap-2 overflow-auto select-none"
+                            show={show}
+                            enter="transition-all ease-in-out duration-500 delay-[200ms]"
+                            enterFrom="opacity-0 translate-y-6"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition-all ease-in-out duration-300"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
                             <button
                                 className="my-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                                 onClick={() => {
@@ -235,145 +253,142 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
                                     ))}
                                 </select>
                             </div>
-                        </div>
+                        </Transition>
                     )}
 
-                    <div className="min-h-screen">
+                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
                         {loading ? (
                             <ListSkeleton />
-                        ) : (
-                            <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4'>
-                                {listName === 'books' && content ? (
-                                    <>
-                                        {content
-                                            .slice(0, displayCount)
-                                            .map((listItem: any) => (
-                                                <BooksListCard
-                                                    key={listItem.id}
-                                                    id={listItem.id}
-                                                    title={listItem.properties.Title.title[0].text.content}
-                                                    cover={listItem.properties["Cover Image"].url}
-                                                    published_date={listItem.properties['Published Date'].date.start || ''}
-                                                    link={`https://books.google.com/books?id=${listItem.id}`}
-                                                    handleStatusChange={handleInputChange}
-                                                    statusList={statusList}
-                                                    status={listItem.properties.Status.status.name}
-                                                    rating={listItem.properties['My Rating'].number}
-                                                    description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
-                                                    pageCount={listItem.properties['Page Count'].number}
-                                                    author={listItem.properties.Authors.multi_select.map((author: any) => author.name).join(', ')}
-                                                    notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
-                                                />
-                                            ))
-                                        }
-                                    </>
-                                ) : content && (
-                                    <>
-                                        {content
-                                            .slice(0, displayCount)
-                                            .map((listItem: any) => (
-                                                <MoviesListCard
-                                                    key={listItem.id}
-                                                    id={listItem.id}
-                                                    title={listItem.properties.Name.title[0].text.content}
-                                                    poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
-                                                    release_date={listItem.properties['Release Date'].date.start || ''}
-                                                    link={`https://www.themoviedb.org/movie/${listItem.id}`}
-                                                    handleStatusChange={handleInputChange}
-                                                    statusList={statusList}
-                                                    status={listItem.properties.Status.status.name}
-                                                    trailer={listItem.properties.Trailer.url}
-                                                    overview={listItem.properties['Overview']?.rich_text[0]?.text?.content}
-                                                    rating={listItem.properties['My Rating'].number}
-                                                    watch_link={listItem.properties['Watch Link'].url}
-                                                    notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
-                                                />
-                                            ))
-                                        }
-                                    </>
-                                )}
-                            </div>
+                        ) : listName === 'books' && content ? (
+                            <>
+                                {content
+                                    .slice(0, displayCount)
+                                    .map((listItem: any) => (
+                                        <BooksListCard
+                                            key={listItem.id}
+                                            id={listItem.id}
+                                            title={listItem.properties.Title.title[0].text.content}
+                                            cover={listItem.properties["Cover Image"].url}
+                                            published_date={listItem.properties['Published Date'].date.start || ''}
+                                            link={`https://books.google.com/books?id=${listItem.id}`}
+                                            handleStatusChange={handleInputChange}
+                                            statusList={statusList}
+                                            status={listItem.properties.Status.status.name}
+                                            rating={listItem.properties['My Rating'].number}
+                                            description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
+                                            pageCount={listItem.properties['Page Count'].number}
+                                            author={listItem.properties.Authors.multi_select.map((author: any) => author.name).join(', ')}
+                                            notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
+                                        />
+                                    ))
+                                }
+                            </>
+                        ) : content && (
+                            <>
+                                {content
+                                    .slice(0, displayCount)
+                                    .map((listItem: any) => (
+                                        <MoviesListCard
+                                            key={listItem.id}
+                                            id={listItem.id}
+                                            title={listItem.properties.Name.title[0].text.content}
+                                            poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
+                                            release_date={listItem.properties['Release Date'].date.start || ''}
+                                            link={`https://www.themoviedb.org/movie/${listItem.id}`}
+                                            handleStatusChange={handleInputChange}
+                                            statusList={statusList}
+                                            status={listItem.properties.Status.status.name}
+                                            trailer={listItem.properties.Trailer.url}
+                                            overview={listItem.properties['Overview']?.rich_text[0]?.text?.content}
+                                            rating={listItem.properties['My Rating'].number}
+                                            watch_link={listItem.properties['Watch Link'].url}
+                                            notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, '')}`}
+                                        />
+                                    ))
+                                }
+                            </>
                         )}
+
                     </div>
                 </div>
-
-                {content && displayCount < content.length && (
-                    <LoadMore displayCount={displayCount} setDisplayCount={setDisplayCount} media={content}
-                        secondaryFunction={() => getNotionDatabasePages(listStates.find((listState) => listState.status === status)?.status, listStates.find((listState) => listState.status === status)?.setList, listStates.find((listState) => listState.status === status)?.cursor, listStates.find((listState) => listState.status === status)?.setCursor)}
-                    />
-                )}
-
-                <Transition.Root show={open} as={Fragment}>
-                    <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                        </Transition.Child>
-
-                        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                >
-                                    <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                                        <button
-                                            onClick={() => setOpen(false)}
-                                            ref={cancelButtonRef}
-                                            type="button"
-                                            className="absolute top-2 right-2 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm p-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                                        >
-                                            <span className="sr-only">Close menu</span>
-                                            <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                        <div className="flex flex-row justify-center items-center p-10">
-                                            {listName === 'books' && content && content[currentShuffleItem] ? (
-                                                <BookModal
-                                                    id={content[currentShuffleItem].id}
-                                                    title={content[currentShuffleItem].properties.Title.title[0].text.content}
-                                                    rating={content[currentShuffleItem].properties['My Rating'].number}
-                                                    coverImage={content[currentShuffleItem].properties["Cover Image"].url}
-                                                    published_date={content[currentShuffleItem].properties['Published Date'].date.start.split('-')[0]}
-                                                    description={content[currentShuffleItem].properties["Description"]?.rich_text[0]?.text?.content}
-                                                    author={content[currentShuffleItem].properties.Authors.multi_select.map((author: any) => author.name).join(', ')}
-                                                    pageCount={content[currentShuffleItem].properties['Page Count'].number}
-                                                    notion_link={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, '')}`}
-                                                />
-                                            ) : content && content[currentShuffleItem] && (
-                                                <MovieModal
-                                                    id={content[currentShuffleItem].id}
-                                                    name={content[currentShuffleItem].properties.Name.title[0].text.content}
-                                                    rating={content[currentShuffleItem].properties['My Rating'].number}
-                                                    poster={content[currentShuffleItem].properties.Poster.url || content[currentShuffleItem].cover.external.url}
-                                                    overview={content[currentShuffleItem].properties['Overview']?.rich_text[0]?.text?.content}
-                                                    trailer={content[currentShuffleItem].properties.Trailer.url}
-                                                    watchLink={content[currentShuffleItem].properties['Watch Link'].url}
-                                                    notionLink={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, '')}`}
-                                                    releaseDate={content[currentShuffleItem].properties['Release Date'].date.start.split('-')[0]}
-                                                />
-                                            )}
-                                        </div>
-                                    </Dialog.Panel>
-                                </Transition.Child>
-                            </div>
-                        </div>
-                    </Dialog>
-                </Transition.Root>
             </div>
+
+            {content && displayCount < content.length && (
+                <LoadMore displayCount={displayCount} setDisplayCount={setDisplayCount} media={content}
+                    secondaryFunction={() => getNotionDatabasePages(listStates.find((listState) => listState.status === status)?.status, listStates.find((listState) => listState.status === status)?.setList, listStates.find((listState) => listState.status === status)?.cursor, listStates.find((listState) => listState.status === status)?.setCursor)}
+                />
+            )}
+
+            <Transition.Root show={open} as={Fragment}>
+                <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                                    <button
+                                        onClick={() => setOpen(false)}
+                                        ref={cancelButtonRef}
+                                        type="button"
+                                        className="absolute top-2 right-2 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm p-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                                    >
+                                        <span className="sr-only">Close menu</span>
+                                        <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                    <div className="flex flex-row justify-center items-center p-10">
+                                        {listName === 'books' && content && content[currentShuffleItem] ? (
+                                            <BookModal
+                                                id={content[currentShuffleItem].id}
+                                                title={content[currentShuffleItem].properties.Title.title[0].text.content}
+                                                rating={content[currentShuffleItem].properties['My Rating'].number}
+                                                coverImage={content[currentShuffleItem].properties["Cover Image"].url}
+                                                published_date={content[currentShuffleItem].properties['Published Date'].date.start.split('-')[0]}
+                                                description={content[currentShuffleItem].properties["Description"]?.rich_text[0]?.text?.content}
+                                                author={content[currentShuffleItem].properties.Authors.multi_select.map((author: any) => author.name).join(', ')}
+                                                pageCount={content[currentShuffleItem].properties['Page Count'].number}
+                                                notion_link={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, '')}`}
+                                            />
+                                        ) : content && content[currentShuffleItem] && (
+                                            <MovieModal
+                                                id={content[currentShuffleItem].id}
+                                                name={content[currentShuffleItem].properties.Name.title[0].text.content}
+                                                rating={content[currentShuffleItem].properties['My Rating'].number}
+                                                poster={content[currentShuffleItem].properties.Poster.url || content[currentShuffleItem].cover.external.url}
+                                                overview={content[currentShuffleItem].properties['Overview']?.rich_text[0]?.text?.content}
+                                                trailer={content[currentShuffleItem].properties.Trailer.url}
+                                                watchLink={content[currentShuffleItem].properties['Watch Link'].url}
+                                                notionLink={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, '')}`}
+                                                releaseDate={content[currentShuffleItem].properties['Release Date'].date.start.split('-')[0]}
+                                            />
+                                        )}
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition.Root>
         </>
     )
 }

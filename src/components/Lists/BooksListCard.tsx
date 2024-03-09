@@ -34,7 +34,7 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
 
     return (
         <Transition
-            className="w-[200px] px-4 sm:px-0 py-2 sm:py-0"
+            className="sm:w-[200px] px-4 sm:px-0 py-2 sm:py-0"
             show={show}
             enter="transition-all ease-in-out duration-500 delay-[200ms]"
             enterFrom="opacity-0 translate-y-6"
@@ -72,8 +72,8 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
                     </div>
                 )}
                 <select
-                    className={`movie-card-button backdrop-blur-sm select-none text-white border-2 bg-transparent focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 ${status === 'To watch' || status === 'To read' ? 'border-red-700 hover:bg-red-800 focus:ring-red-800 focus:bg-red-800 focus:border-red-700' :
-                        status === 'Watching' || status === 'Reading' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800 focus:border-blue-700' :
+                    className={`movie-card-button backdrop-blur-sm select-none text-white border-2 bg-transparent focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 ${status === 'To read' ? 'border-red-700 hover:bg-red-800 focus:ring-red-800 focus:bg-red-800 focus:border-red-700' :
+                        status === 'Reading' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800 focus:border-blue-700' :
                             'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800 focus:border-green-700'
                         }`}
                     value={status}
