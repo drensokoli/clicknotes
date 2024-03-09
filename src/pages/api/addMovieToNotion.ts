@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { name: 'Adult', type: 'checkbox', structure: isAdult, data: isAdult},
         { name: 'Runtime', type: 'rich_text', structure: [{ text: { content: movieData.runtime } }], data: movieData.runtime },
         { name: 'Rated', type: 'select', structure: { name: movieData.rated}, data: movieData.rated },
-        // { name: 'Awards', type: 'rich_text', structure: [{ text: { content: movieData.awards } }], data: movieData.awards },
+        { name: 'Awards', type: 'rich_text', structure: [{ text: { content: movieData.awards } }], data: movieData.awards },
         // { name: 'Box Office', type: 'number', structure: movieData.boxOffice, data: movieData.boxOffice },
     ];
 
