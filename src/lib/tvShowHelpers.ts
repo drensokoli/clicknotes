@@ -69,7 +69,7 @@ export async function fetchCast({ id, tmdbApiKey }: { id: number, tmdbApiKey: st
     for (let index = 0; index < 11; index++) {
         if (theCast[index]) {
             const element = theCast[index];
-            castArray.push({ "name": element });
+            castArray.push({ "name": element.replace(/,/g, "")});
         }
     }
     return castArray;
@@ -87,7 +87,7 @@ export async function fetchCrew({ id, tmdbApiKey }: { id: number, tmdbApiKey: st
             crew.known_for_department.includes('Directing') ||
             crew.known_for_department.includes('Writing'))
         .slice(0, 15)
-        .map((crew: { name: any; }) => ({ "name": crew.name }))
+        .map((crew: { name: any; }) => ({ "name": crew.name.replace(/,/g, "")}))
         .filter((name: string, index: number, self: string[]) => self.indexOf(name) === index);
     return crew;
 };
@@ -116,7 +116,7 @@ export async function fetchOmdbData(omdbApiKeys: string[], title: string, year: 
 
     for (const omdbApiKey of omdbApiKeys) {
         response = await fetch(
-            `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${title}&type=movie&y=${year}`
+            `https://www.omdbapi.com/?apikey=${omdbApiKey}&t=${title}&type=series&y=${year}`
         );
 
         omdbData = await response.json();

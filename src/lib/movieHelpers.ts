@@ -6,7 +6,7 @@ export async function getCast({ id, tmdbApiKey }: { id: number, tmdbApiKey: stri
     );
 
     const credits = await response.json();
-    return credits.cast.slice(0, 11).map((cast: { name: any; }) => ({ "name": cast.name }));
+    return credits.cast.slice(0, 11).map((cast: { name: any; }) => ({ "name": cast.name.replace(/,/g, "") }));
 };
 
 export async function getCrew({ id, tmdbApiKey }: { id: number, tmdbApiKey: string }) {
@@ -21,7 +21,7 @@ export async function getCrew({ id, tmdbApiKey }: { id: number, tmdbApiKey: stri
             crew.known_for_department.includes('Directing') ||
             crew.known_for_department.includes('Writing'))
         .slice(0, 15)
-        .map((crew: { name: any; }) => ({ "name": crew.name }))
+        .map((crew: { name: any; }) => ({ "name": crew.name.replace(/,/g, "") }))
         .filter((name: string, index: number, self: string[]) => self.indexOf(name) === index);
     return crew;
 }

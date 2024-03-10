@@ -18,6 +18,7 @@ export default function NotionCallback({ response, type }: { response: any, type
 
     const updateNotionConnection = async () => {
         try {
+            if (response.error) { return; }
             const templateId = response.duplicated_template_id ? response.duplicated_template_id.split('-').join('') : null;
             const res = await fetch('/api/updateUserConnection', {
                 method: 'POST',
