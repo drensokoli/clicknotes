@@ -22,7 +22,7 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
                         <img
                             src={poster}
                             alt={name}
-                            className="rounded-sm min-h-[240px] sm:max-h-[300px] sm:min-h-[300px] h-auto select-none object-cover shadow-2xl"
+                            className="rounded-sm min-h-[240px] max-h-[240px] sm:max-h-[300px] sm:min-h-[300px] select-none object-cover shadow-2xl"
                             loading="lazy"
                         />
                     </div>
@@ -30,7 +30,7 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
                     <img
                         src="/no-image.png"
                         alt={name}
-                        className="rounded-sm min-h-[240px] sm:max-h-[300px] sm:min-h-[300px] h-auto select-none object-cover"
+                        className="rounded-sm min-h-[240px] max-h-[240px] sm:max-h-[300px] sm:min-h-[300px] select-none object-cover"
                         loading="lazy"
                     />
                 )}
