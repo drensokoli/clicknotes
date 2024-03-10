@@ -27,7 +27,7 @@ export default function NotionBanner({
     return (
 
         <Transition
-            className="bg-white shadow-2xl border-2 border-gray-200 sm:w-[400px] w-full h-[100px] fixed sm:bottom-2 bottom-0 left-0 right-0 m-auto rounded-md z-50"
+            className="bg-white shadow-2xl border-2 border-gray-200 sm:w-[450px] w-[95%] h-[100px] fixed bottom-3 left-0 right-0 m-auto rounded-md z-50"
             show={show}
             enter="transition-all ease-in-out duration-500 delay-[200ms]"
             enterFrom="opacity-0 translate-y-6"
