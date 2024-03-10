@@ -110,9 +110,8 @@ export default function MyLists() {
                     <>
                         {!movies && !tvShows && !books ? (
                             <div className="flex flex-col gap-2 px-2">
-                                <h1 className="text-center text-lg">You have no lists.</h1>
-                                <h1 className="text-center text-lg">Follow the guide below to create your first ClickNotes list!</h1>
-                                <NotionBanner image={notionBanners[Math.floor(Math.random() * notionBanners.length)].image} />
+                                <h1 className="text-center text-gray-500 text-2xl my-10">You have no lists.</h1>
+                                <NotionBanner image={notionBanners[Math.floor(Math.random() * notionBanners.length)].image} link='/connect' session={true} />
                             </div>
                         ) : (
                             <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3 justify-center gap-4 sm:px-20 px-4">

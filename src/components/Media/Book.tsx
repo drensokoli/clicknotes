@@ -28,9 +28,14 @@ export default function Book({ id, title, description, publishedDate, averageRat
     booksDatabaseId: any;
 }) {
 
+    const booksAuthUrl = process.env.NEXT_PUBLIC_BOOKS_AUTHORIZATION_URL as string;
+
     const handleAddToNotion = async () => {
+        if (!notionApiKey || !booksDatabaseId) {
+            window.location.href = booksAuthUrl;
+        }
         onApiResponse('Adding book to Notion...');
-        
+
         const defaultDate = '0001-01-01'
 
         if (description) {

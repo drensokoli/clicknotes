@@ -59,7 +59,7 @@ export default function Card({ id, title, poster_path, release_date, link, handl
 
                 <button type="button"
                     className="movie-card-button select-none backdrop-blur-sm text-white border-2 border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                    onClick={() => { session ? handleAddToNotion() : window.open('/help', '_blank') }}
+                    onClick={() => { session ? handleAddToNotion() : signIn('google') }}
                 >
                     Add to Notion
                 </button>

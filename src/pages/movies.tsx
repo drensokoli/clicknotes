@@ -8,6 +8,7 @@ import Toast from '@/components/Helpers/Toast';
 import { Movie as MovieInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
+import NotionBanner from '@/components/Notion/NotionBanner';
 
 export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKey3, encryptionKey, popularMovies }: {
     tmdbApiKey: string;
@@ -20,6 +21,10 @@ export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKe
 
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
+
+    const moviesAuthUrl = process.env.NEXT_PUBLIC_MOVIES_AUTHORIZATION_URL as string;
+    const [showNotionBanner, setShowNotionBanner] = useState(false);
+
     const omdbApiKeys = [omdbApiKey1, omdbApiKey2, omdbApiKey3];
 
     const [input, setInput] = useState('');
@@ -57,8 +62,13 @@ export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKe
             });
 
             const connectionData = await response.json();
-            setNotionApiKey(connectionData.access_token);
-            setMoviesDatabaseId(connectionData.template_id);
+
+            if (!connectionData || !connectionData.access_token || !connectionData.template_id) {
+                setShowNotionBanner(true);
+            } else if (connectionData.access_token && connectionData.template_id) {
+                setNotionApiKey(connectionData.access_token);
+                setMoviesDatabaseId(connectionData.template_id);
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -105,6 +115,9 @@ export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKe
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
                     <SearchBar input={input} handleInputChange={handleInputChange} />
+                    {showNotionBanner && (
+                        <NotionBanner image='/connectmovies.png' link={moviesAuthUrl} session={session ? true : false} />
+                    )}
                     <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
                         {movies
                             .map((item) => (

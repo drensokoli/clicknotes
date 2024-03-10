@@ -22,8 +22,12 @@ export default function Movie({ id, title, overview, release_date, vote_average,
     moviesDatabaseId: any;
     omdbApiKeys: string[];
 }) {
+    const moviesAuthUrl = process.env.NEXT_PUBLIC_MOVIES_AUTHORIZATION_URL as string;
 
     const handleAddToNotion = async () => {
+        if (!notionApiKey || !moviesDatabaseId) {
+            window.location.href = moviesAuthUrl;
+        }
         onApiResponse('Adding movie to Notion...');
 
         const genres = [...genresMapping.genres.filter((genre: { id: number; }) => genre_ids.includes(genre.id)).map((genre: { name: any; }) => ({ name: genre.name }))];
@@ -42,7 +46,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
             rottenTomatoesRating,
             boxOffice
         } = await fetchOmdbData(omdbApiKeys, title, release_date.split('-')[0]);
-        
+
         const movieData = {
             id: id,
             title: title,

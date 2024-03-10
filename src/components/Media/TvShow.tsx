@@ -23,7 +23,12 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
   omdbApiKeys: string[];
 }) {
 
+  const moviesAuthUrl = process.env.NEXT_PUBLIC_MOVIES_AUTHORIZATION_URL as string;
+
   const handleAddToNotion = async () => {
+    if (!notionApiKey || !tvShowsDatabaseId) {
+      window.location.href = moviesAuthUrl;
+    }
     onApiResponse('Adding TV show to Notion...');
 
     const rounded_vote_average = Math.round(vote_average * 10) / 10;
@@ -43,7 +48,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       rottenTomatoesRating,
       boxOffice,
       seasons
-  } = await fetchOmdbData(omdbApiKeys, name, year);
+    } = await fetchOmdbData(omdbApiKeys, name, year);
 
     const tvShowData = {
       id: id,

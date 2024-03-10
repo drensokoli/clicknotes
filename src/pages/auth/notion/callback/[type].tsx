@@ -14,6 +14,7 @@ export default function NotionCallback({ response, type }: { response: any, type
     const [input, setInput] = useState('');
     const [databaseId, setDatabaseId] = useState('');
     const [showInput, setShowInput] = useState(false);
+    const [showLink, setShowLink] = useState(false);
     const [apiResponse, setApiResponse] = useState<string>('');
 
     const updateNotionConnection = async () => {
@@ -36,7 +37,13 @@ export default function NotionCallback({ response, type }: { response: any, type
             const result = await res.json();
 
             if (templateId === null) {
-                setShowInput(true);
+                setTimeout(() => {
+                    setShowInput(true);
+                }, 100);
+            } else {
+                setTimeout(() => {
+                    setShowLink(true);
+                }, 100);
             }
 
         } catch (error) {
@@ -44,7 +51,8 @@ export default function NotionCallback({ response, type }: { response: any, type
         }
     };
 
-    const updateDatabaseId = async () => {
+    const updateDatabaseId = async (e: any) => {
+        e.preventDefault();
         if (!input.startsWith('https://www.notion.so/') || input.length < 50 || input === '') {
             return 'Please enter a valid Notion link';
         }
@@ -67,6 +75,9 @@ export default function NotionCallback({ response, type }: { response: any, type
         const data = await updateDatabaseIdResponse.json();;
 
         setShowInput(false);
+        setTimeout(() => {
+            setShowLink(true);
+        }, 100);
         setApiResponse(data.message);
     }
 
@@ -110,49 +121,48 @@ export default function NotionCallback({ response, type }: { response: any, type
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
             >
-                <img src="/connected.png" alt="logo" className='w-[300px] h-auto sm:w-[400px]'/>
+                <img src="/connected.png" alt="logo" className='w-[300px] h-auto sm:w-[400px]' />
             </Transition>
-            {!showInput ? (
-                <Transition
-                    className="m-10"
-                    show={show}
-                    enter="transition-all ease-in-out duration-500 delay-[200ms]"
-                    enterFrom="opacity-0 translate-y-6"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition-all ease-in-out duration-300"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                >
-                    <Link href="/my-lists" className='inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline text-lg'>
-                        My Lists
-                        <svg className="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                        </svg>
-                    </Link>
-                </Transition>
-            ) : (
-                <Transition
-                    className="mx-auto max-w-md space-y-4 w-[90%] m-10"
-                    show={show}
-                    enter="transition-all ease-in-out duration-500 delay-[200ms]"
-                    enterFrom="opacity-0 translate-y-6"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition-all ease-in-out duration-300"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                >
-                    <Input
-                        label='Database ID'
-                        placeHolder='Enter your Notion database ID'
-                        field={databaseId}
-                        link={'https://www.notion.so/' + databaseId}
-                        setLink={setDatabaseId}
-                        setInput={setInput}
-                        handleSubmit={updateDatabaseId}
-                        connectionType={type}
-                    />
-                </Transition>
-            )}
+
+            <Transition
+                className="mx-auto max-w-md space-y-4 w-[90%] m-10"
+                show={showInput}
+                enter="transition-all ease-in-out duration-500 delay-[200ms]"
+                enterFrom="opacity-0 translate-y-6"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition-all ease-in-out duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+            >
+                <Input
+                    label='Database ID'
+                    placeHolder='Enter your Notion database ID'
+                    field={databaseId}
+                    link={'https://www.notion.so/' + databaseId}
+                    setLink={setDatabaseId}
+                    setInput={setInput}
+                    handleSubmit={(e: any) => updateDatabaseId(e)}
+                    connectionType={type}
+                />
+            </Transition>
+
+            <Transition
+                className="m-10"
+                show={showLink}
+                enter="transition-all ease-in-out duration-500 delay-[200ms]"
+                enterFrom="opacity-0 translate-y-6"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition-all ease-in-out duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+            >
+                <Link href="/my-lists" className='inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline text-lg'>
+                    My Lists
+                    <svg className="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                    </svg>
+                </Link>
+            </Transition>
         </div>
     );
 }
@@ -197,11 +207,20 @@ export async function getServerSideProps(context: any) {
     const response = await res.json();
 
     if (response.error) {
-        return {
-            redirect: {
-                destination: '/movies',
-                permanent: false,
-            },
+        if (type === 'books') {
+            return {
+                redirect: {
+                    destination: '/books',
+                    permanent: false,
+                },
+            }
+        } else {
+            return {
+                redirect: {
+                    destination: '/movies',
+                    permanent: false,
+                },
+            }
         }
     }
 

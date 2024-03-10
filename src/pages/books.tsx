@@ -6,6 +6,7 @@ import Toast from '@/components/Helpers/Toast';
 import { Book as BookInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
+import NotionBanner from '@/components/Notion/NotionBanner';
 
 export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey, bestsellers }: {
     encryptionKey: string;
@@ -15,6 +16,9 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
 }) {
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
+    const booksAuthUrl = process.env.NEXT_PUBLIC_BOOKS_AUTHORIZATION_URL as string;
+
+    const [showNotionBanner, setShowNotionBanner] = useState(false);
 
     const [input, setInput] = useState('');
     const [books, setBooks] = useState<BookInterface[]>([]);
@@ -85,8 +89,13 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             });
 
             const connectionData = await response.json();
-            setNotionApiKey(connectionData.access_token);
-            setBooksDatabaseId(connectionData.template_id);
+
+            if (!connectionData || !connectionData.access_token || !connectionData.template_id || connectionData.status !== 200) {
+                setShowNotionBanner(true);
+            } else if (connectionData.access_token && connectionData.template_id) {
+                setNotionApiKey(connectionData.access_token);
+                setBooksDatabaseId(connectionData.template_id);
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -132,6 +141,9 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
                     <SearchBar input={input} handleInputChange={handleInputChange} />
+                    {showNotionBanner && (
+                        <NotionBanner image='/connectbooks.png' link={booksAuthUrl} session={session ? true : false} />
+                    )}
                     <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
                         {books.map((book: BookInterface) => (
                             <Book

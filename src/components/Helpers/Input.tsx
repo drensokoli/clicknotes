@@ -51,7 +51,9 @@ export default function Input(
                             className="text-gray-900 text-sm block w-full p-2.5 border-none rounded-md truncate rounded-r-none mr-[1px]"
                             placeholder={placeHolder}
                         />
-                        <button className='bg-gray-100 py-2 px-2 rounded-md rounded-l-none hover:bg-gray-200 focus:bg-gray-300'>
+                        <button className='bg-gray-100 py-2 px-2 rounded-md rounded-l-none hover:bg-gray-200 focus:bg-gray-300'
+                            onClick={handleSubmit}
+                        >
                             <h1 className="text-blue-600 text-xs font-semibold hover:underline">
                                 Update
                             </h1>

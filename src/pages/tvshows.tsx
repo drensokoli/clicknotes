@@ -8,6 +8,7 @@ import { searchTvShowByTitle } from '@/lib/tvShowHelpers';
 import { TvShow as TvShowInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
+import NotionBanner from '@/components/Notion/NotionBanner';
 
 export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKey3, encryptionKey, popularTvShows }: {
     tmdbApiKey: string;
@@ -20,6 +21,10 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
 
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
+    const tvShowsAuthUrl = process.env.NEXT_PUBLIC_MOVIES_AUTHORIZATION_URL as string;
+
+    const [showNotionBanner, setShowNotionBanner] = useState(false);
+
     const omdbApiKeys = [omdbApiKey1, omdbApiKey2, omdbApiKey3];
 
     const [input, setInput] = useState('');
@@ -57,8 +62,13 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
             });
 
             const connectionData = await response.json();
-            setNotionApiKey(connectionData.access_token);
-            setTvShowDatabaseId(connectionData.template_id);
+
+            if (!connectionData || !connectionData.access_token || !connectionData.template_id) {
+                setShowNotionBanner(true);
+            } else if (connectionData.access_token && connectionData.template_id) {
+                setNotionApiKey(connectionData.access_token);
+                setTvShowDatabaseId(connectionData.template_id);
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -104,6 +114,9 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
                     <SearchBar input={input} handleInputChange={handleInputChange} />
+                    {showNotionBanner && (
+                        <NotionBanner image='/connecttvshows.png' link={tvShowsAuthUrl} session={session ? true : false} />
+                    )}
                     <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
                         {tvShows
                             .map((item) => (
