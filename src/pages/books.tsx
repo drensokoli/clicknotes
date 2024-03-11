@@ -8,10 +8,9 @@ import Head from 'next/head';
 import { useSession } from 'next-auth/react';
 import NotionBanner from '@/components/Notion/NotionBanner';
 
-export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey, bestsellers }: {
+export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }: {
     encryptionKey: string;
     googleBooksApiKey: string;
-    nyTimesApiKey: string;
     bestsellers: BookInterface[];
 }) {
     const { data: session } = useSession();
@@ -214,8 +213,28 @@ export const getStaticProps = async () => {
     const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY;
     const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
-    const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
-    const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const getBooks = async (url: string) => {
+        await delay(20000); // wait for 15 seconds
+        return axios.get(url);
+    };
+
+    const hardcoverFiction = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
+    const hardcoverNonfiction = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-nonfiction.json?api-key=${nyTimesApiKey}`);
+    const tradeFictionPaperback = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/trade-fiction-paperback.json?api-key=${nyTimesApiKey}`);
+    const massMarketPaperback = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/mass-market-paperback.json?api-key=${nyTimesApiKey}`);
+    const paperbackNonfiction = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/paperback-nonfiction.json?api-key=${nyTimesApiKey}`);
+
+    const responses = [
+        ...hardcoverFiction.data.results.books,
+        ...hardcoverNonfiction.data.results.books,
+        ...tradeFictionPaperback.data.results.books,
+        ...massMarketPaperback.data.results.books,
+        ...paperbackNonfiction.data.results.books
+    ];
+
+    const isbns = responses.map((book: any) => book.primary_isbn13);
     const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
     const bookDetailsResponses = await Promise.all(bookDetailsPromises);
     const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
@@ -224,7 +243,6 @@ export const getStaticProps = async () => {
         props: {
             encryptionKey,
             googleBooksApiKey,
-            nyTimesApiKey,
             bestsellers
         },
 
