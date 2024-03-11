@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import axios from 'axios';
 import TvShow from '../components/Media/TvShow';
 import SearchBar from '@/components/Helpers/SearchBar';
 import Toast from '@/components/Helpers/Toast';
 import { useSession } from 'next-auth/react';
-import { searchTvShowByTitle } from '@/lib/tvShowHelpers';
+import { searchContentByTitle } from '@/lib/moviesAndShowsHeleprs';
 import { TvShow as TvShowInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
 import NotionBanner from '@/components/Notion/NotionBanner';
+import WidthKeeper from '@/components/Lists/WidthKeeper';
 
-export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKey3, encryptionKey, popularTvShows }: {
+export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popularTvShows }: {
     tmdbApiKey: string;
-    omdbApiKey1: string;
-    omdbApiKey2: string;
-    omdbApiKey3: string;
+    omdbApiKeys: string[];
     encryptionKey: string;
     popularTvShows: TvShowInterface[];
 }) {
@@ -24,8 +23,6 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
     const tvShowsAuthUrl = process.env.NEXT_PUBLIC_MOVIES_AUTHORIZATION_URL as string;
 
     const [showNotionBanner, setShowNotionBanner] = useState(false);
-
-    const omdbApiKeys = [omdbApiKey1, omdbApiKey2, omdbApiKey3];
 
     const [input, setInput] = useState('');
     const [tvShows, setTvShows] = useState<TvShowInterface[]>([]);
@@ -38,14 +35,13 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
     const [displayCount, setDisplayCount] = useState(20);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInput(event.target.value);
-        searchTvShowByTitle({ title: event.target.value, tmdbApiKey: tmdbApiKey })
-            .then(movies => {
-                if (movies) {
-                    setTvShows(movies);
+        searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'tv' })
+            .then((tvShows) => {
+                if (tvShows) {
+                    setTvShows(tvShows);
                 }
             })
-            .catch(error => console.error(error));
+            .catch((error: any) => console.error(error));
     };
 
     async function fetchUserData() {
@@ -79,6 +75,11 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
             fetchUserData();
         }
     }, [session]);
+    useEffect(() => {
+        if (input === '') {
+            setTvShows([]);
+        }
+    }, [input]);
 
     return (
         <>
@@ -113,7 +114,8 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
-                    <SearchBar input={input} handleInputChange={handleInputChange} />
+                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} />
+                    <WidthKeeper />
                     {showNotionBanner && (
                         <NotionBanner image='/connecttvshows.png' link={tvShowsAuthUrl} session={session ? true : false} />
                     )}
@@ -132,6 +134,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
                                     notionApiKey={notionApiKey}
                                     tvShowsDatabaseId={tvShowsDatabaseId}
                                     omdbApiKeys={omdbApiKeys}
+                                    genre_ids={item.genre_ids}
                                 />
                             ))
                         }
@@ -152,6 +155,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiK
                                             notionApiKey={notionApiKey}
                                             tvShowsDatabaseId={tvShowsDatabaseId}
                                             omdbApiKeys={omdbApiKeys}
+                                            genre_ids={item.genre_ids}
                                         />
                                     ))
                                 }
@@ -177,6 +181,7 @@ export const getStaticProps = async () => {
     const omdbApiKey1 = process.env.OMDB_API_KEY_1;
     const omdbApiKey2 = process.env.OMDB_API_KEY_2;
     const omdbApiKey3 = process.env.OMDB_API_KEY_3;
+    const omdbApiKeys = [omdbApiKey1, omdbApiKey2, omdbApiKey3];
     const totalPages = 20; // Total number of pages to fetch
 
     let popularTvShowsResults = [];
@@ -189,9 +194,7 @@ export const getStaticProps = async () => {
     return {
         props: {
             tmdbApiKey,
-            omdbApiKey1,
-            omdbApiKey2,
-            omdbApiKey3,
+            omdbApiKeys,
             encryptionKey,
             popularTvShows: popularTvShowsResults
         },

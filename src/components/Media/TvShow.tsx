@@ -1,12 +1,8 @@
 import React from 'react';
-import { useSession, signIn } from 'next-auth/react';
-import Image from 'next/dist/client/image';
-import { decryptData } from '@/lib/encryption';
-import Link from 'next/link';
-import { fetchCast, fetchCrew, fetchGenres, fetchOmdbData, fetchTrailer } from '@/lib/tvShowHelpers';
 import Card from '../Helpers/Card';
+import { genresMapping, getCast, getCrew, getTrailer, getOmdbData } from '@/lib/moviesAndShowsHeleprs';
 
-export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, notionApiKey, tvShowsDatabaseId, omdbApiKeys }: {
+export default function TvShow({ id, name, overview, first_air_date, vote_average, poster_path, backdrop_path, genre_ids, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, notionApiKey, tvShowsDatabaseId, omdbApiKeys }: {
   id: number;
   name: string;
   overview: string;
@@ -14,6 +10,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
   vote_average: number;
   poster_path: string;
   backdrop_path: string;
+  genre_ids: number[];
   onApiResponse: (error: string) => void;
   setPageLink: (pageLink: string) => void;
   encryptionKey: string;
@@ -34,10 +31,10 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
     const rounded_vote_average = Math.round(vote_average * 10) / 10;
     const tmdb_link = `https://www.themoviedb.org/tv/${id}`;
     const defaultDate = "2000-01-01";
-    const genres = await fetchGenres({ id, tmdbApiKey });
-    const cast = await fetchCast({ id, tmdbApiKey });
-    const crew = await fetchCrew({ id, tmdbApiKey });
-    const trailer = await fetchTrailer({ id, tmdbApiKey });
+    const genres = [...genresMapping.genres.filter((genre: { id: number; }) => genre_ids.includes(genre.id)).map((genre: { name: any; }) => ({ name: genre.name }))];
+    const cast = await getCast({ id, tmdbApiKey, type: 'tv' });
+    const crew = await getCrew({ id, tmdbApiKey, type: 'tv' });
+    const trailer = await getTrailer({ id, tmdbApiKey, type: 'tv' });
     const year = first_air_date.split('-')[0];
     const {
       imdbLink,
@@ -48,7 +45,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
       rottenTomatoesRating,
       boxOffice,
       seasons
-    } = await fetchOmdbData(omdbApiKeys, name, year);
+    } = await getOmdbData(omdbApiKeys, name, year, 'series');
 
     const tvShowData = {
       id: id,

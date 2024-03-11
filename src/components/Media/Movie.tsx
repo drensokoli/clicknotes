@@ -1,7 +1,6 @@
 import React from 'react';
-import { decryptData } from '@/lib/encryption';
-import { fetchOmdbData, genresMapping, getCast, getCrew, getImdb, getTrailer } from '@/lib/movieHelpers';
 import Card from '../Helpers/Card';
+import { genresMapping, getCast, getCrew, getOmdbData, getTrailer } from '@/lib/moviesAndShowsHeleprs';
 
 export default function Movie({ id, title, overview, release_date, vote_average, adult, poster_path, backdrop_path, runtime, onApiResponse, setPageLink, encryptionKey, tmdbApiKey, genre_ids, notionApiKey, moviesDatabaseId, omdbApiKeys }: {
     id: number;
@@ -31,21 +30,22 @@ export default function Movie({ id, title, overview, release_date, vote_average,
         onApiResponse('Adding movie to Notion...');
 
         const genres = [...genresMapping.genres.filter((genre: { id: number; }) => genre_ids.includes(genre.id)).map((genre: { name: any; }) => ({ name: genre.name }))];
-        const cast = await getCast({ id, tmdbApiKey });
+
+        const cast = await getCast({ id, tmdbApiKey, type: 'movie'});
         const defaultDate = "2000-01-01";
         const rounded_vote_average = Math.round(vote_average * 10) / 10;
         const tmdb_link = `https://www.themoviedb.org/movie/${id}`;
-        const imdb_link = await getImdb({ id, tmdbApiKey });
-        const crew = await getCrew({ id, tmdbApiKey });
-        const trailer = await getTrailer({ id, tmdbApiKey });
+        const crew = await getCrew({ id, tmdbApiKey, type: 'movie'});
+        const trailer = await getTrailer({ id, tmdbApiKey, type: 'movie'});
         const {
+            imdbLink,
             rated,
             runtime,
             awards,
             imdbRating,
             rottenTomatoesRating,
             boxOffice
-        } = await fetchOmdbData(omdbApiKeys, title, release_date.split('-')[0]);
+        } = await getOmdbData(omdbApiKeys, title, release_date.split('-')[0], 'movie');
 
         const movieData = {
             id: id,
@@ -63,7 +63,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
             awards: awards,
             boxOffice: boxOffice,
             tmdb_link: tmdb_link,
-            imdb_link: imdb_link,
+            imdb_link: imdbLink,
             crew: crew,
             trailer: trailer,
             poster_path: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : null,

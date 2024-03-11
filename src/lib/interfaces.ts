@@ -12,6 +12,7 @@ export interface Movie {
 }
 
 export interface TvShow {
+    genre_ids: number[];
     first_air_date: string;
     id: number;
     title: string;

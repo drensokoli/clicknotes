@@ -3,18 +3,17 @@ import axios from 'axios';
 import SearchBar from '@/components/Helpers/SearchBar';
 import Movie from '@/components/Media/Movie';
 import { useSession } from 'next-auth/react';
-import { searchMovieByTitle } from '@/lib/movieHelpers';
+import { searchContentByTitle } from '@/lib/moviesAndShowsHeleprs';
 import Toast from '@/components/Helpers/Toast';
 import { Movie as MovieInterface } from '@/lib/interfaces';
 import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
 import NotionBanner from '@/components/Notion/NotionBanner';
+import WidthKeeper from '@/components/Lists/WidthKeeper';
 
-export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKey3, encryptionKey, popularMovies }: {
+export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popularMovies }: {
     tmdbApiKey: string;
-    omdbApiKey1: string;
-    omdbApiKey2: string;
-    omdbApiKey3: string;
+    omdbApiKeys: string[];
     encryptionKey: string;
     popularMovies: MovieInterface[];
 }) {
@@ -24,8 +23,6 @@ export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKe
 
     const moviesAuthUrl = process.env.NEXT_PUBLIC_MOVIES_AUTHORIZATION_URL as string;
     const [showNotionBanner, setShowNotionBanner] = useState(false);
-
-    const omdbApiKeys = [omdbApiKey1, omdbApiKey2, omdbApiKey3];
 
     const [input, setInput] = useState('');
     const [movies, setMovies] = useState<MovieInterface[]>([]);
@@ -37,9 +34,12 @@ export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKe
     const [pageLink, setPageLink] = useState('');
     const [displayCount, setDisplayCount] = useState(20);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInput(event.target.value);
-        searchMovieByTitle({ title: event.target.value, tmdbApiKey: tmdbApiKey })
+    const handleInputChange = () => {
+        if(input === '') {
+            setMovies([]);
+            return;
+        }
+        searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'movie' })
             .then(movies => {
                 if (movies) {
                     setMovies(movies);
@@ -80,6 +80,12 @@ export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKe
         }
     }, [session]);
 
+    useEffect(() => {
+        if(input === '') {
+            setMovies([]);
+        }
+    }, [input]);
+
     return (
         <>
             <Head>
@@ -114,7 +120,8 @@ export default function Movies({ tmdbApiKey, omdbApiKey1, omdbApiKey2, omdbApiKe
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
-                    <SearchBar input={input} handleInputChange={handleInputChange} />
+                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} />
+                    <WidthKeeper />
                     {showNotionBanner && (
                         <NotionBanner image='/connectmovies.png' link={moviesAuthUrl} session={session ? true : false} />
                     )}
@@ -179,6 +186,7 @@ export const getStaticProps = async () => {
     const omdbApiKey1 = process.env.OMDB_API_KEY_1;
     const omdbApiKey2 = process.env.OMDB_API_KEY_2;
     const omdbApiKey3 = process.env.OMDB_API_KEY_3;
+    const omdbApiKeys = [omdbApiKey1, omdbApiKey2, omdbApiKey3];
     const totalPages = 20; // Total number of pages to fetch
 
     let popularMoviesResults = [];
@@ -191,9 +199,7 @@ export const getStaticProps = async () => {
     return {
         props: {
             tmdbApiKey,
-            omdbApiKey1,
-            omdbApiKey2,
-            omdbApiKey3,
+            omdbApiKeys,
             encryptionKey,
             popularMovies: popularMoviesResults
         },
