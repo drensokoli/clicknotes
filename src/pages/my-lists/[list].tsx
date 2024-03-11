@@ -214,7 +214,7 @@ export default function List({ statusList, listName, notionApiKey, databaseId }:
 
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
-                    <SearchBar input={input} handleInputChange={handleInputChange} />
+                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} />
 
                     {statusList && (
                         <Transition
