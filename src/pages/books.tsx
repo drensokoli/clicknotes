@@ -90,7 +90,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, nyTimesApiKey,
 
             const connectionData = await response.json();
 
-            if (!connectionData || !connectionData.access_token || !connectionData.template_id || connectionData.status !== 200) {
+            if (!connectionData || !connectionData.access_token || !connectionData.template_id) {
                 setShowNotionBanner(true);
             } else if (connectionData.access_token && connectionData.template_id) {
                 setNotionApiKey(connectionData.access_token);
