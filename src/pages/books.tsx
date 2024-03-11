@@ -37,6 +37,14 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
                 }
             })
             .catch(error => console.error(error));
+        
+        searchBooksByAuthor(event.target.value)
+            .then(books => {
+                if (books) {
+                    setBooks(books);
+                }
+            })
+            .catch(error => console.error(error));
     };
 
     const searchBooksByTitle = async (title: string) => {
@@ -224,14 +232,14 @@ export const getStaticProps = async () => {
     const hardcoverNonfiction = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-nonfiction.json?api-key=${nyTimesApiKey}`);
     const tradeFictionPaperback = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/trade-fiction-paperback.json?api-key=${nyTimesApiKey}`);
     const massMarketPaperback = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/mass-market-paperback.json?api-key=${nyTimesApiKey}`);
-    const paperbackNonfiction = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/paperback-nonfiction.json?api-key=${nyTimesApiKey}`);
+    // const paperbackNonfiction = await getBooks(`https://api.nytimes.com/svc/books/v3/lists/current/paperback-nonfiction.json?api-key=${nyTimesApiKey}`);
 
     const responses = [
         ...hardcoverFiction.data.results.books,
         ...hardcoverNonfiction.data.results.books,
         ...tradeFictionPaperback.data.results.books,
         ...massMarketPaperback.data.results.books,
-        ...paperbackNonfiction.data.results.books
+        // ...paperbackNonfiction.data.results.books
     ];
 
     const isbns = responses.map((book: any) => book.primary_isbn13);
