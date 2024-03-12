@@ -43,7 +43,7 @@ export default function Navbar() {
                                 </div>
                                 <div className="flex flex-1 items-center justify-between">
                                     <div className="flex-shrink-0 hidden sm:block sm:items-center mx-[40px] select-none">
-                                        <Link href="/" aria-label='Home'>
+                                        <Link href="/movies" aria-label='Home'>
                                             <Image src="/logo.png" alt="logo" width={70} height={40}
                                                 className="h-auto"
                                             />

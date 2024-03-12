@@ -25,6 +25,8 @@ export default function BreadCrumb({
   statusList: string[];
 }) {
 
+  const url = process.env.NEXT_PUBLIC_BASE_URL;
+
   useEffect(() => {
     // Initialize the dropdown functionality
     initDropdowns();
@@ -36,7 +38,7 @@ export default function BreadCrumb({
         <li className="inline-flex items-center">
           <Link
             href="/my-lists"
-            className="inline-flex items-center text-sm text-gray-700 hover:bg-gray-100 rounded-lg py-2 px-2"
+            className="inline-flex items-center text-sm text-gray-700 hover:bg-gray-100 rounded-lg py-2 px-3"
           >
             <BsList />
             <h1 className="pl-1">
@@ -93,14 +95,14 @@ export default function BreadCrumb({
               >
                 {userConnections.map((connection: any) => (
                   <li key={connection} value={connection}>
-                    <Link
-                      href={`/my-lists/${connection
+                    <a
+                      href={`${url}/my-lists/${connection
                         .toLowerCase()
                         .replace(" ", "")}`}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       {connection}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
