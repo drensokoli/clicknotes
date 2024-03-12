@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { initDropdowns } from 'flowbite';
 import { BsList } from "react-icons/bs";
+import Link from "next/link";
 
 export default function BreadCrumb({
   userConnections,
@@ -33,7 +34,7 @@ export default function BreadCrumb({
     <nav className="w-full mb-2 sm:pl-0 pl-5" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
         <li className="inline-flex items-center">
-          <a
+          <Link
             href="/my-lists"
             className="inline-flex items-center text-sm text-gray-700 hover:bg-gray-100 rounded-lg py-2 px-2"
           >
@@ -41,7 +42,7 @@ export default function BreadCrumb({
             <h1 className="pl-1">
               My Lists
             </h1>
-          </a>
+          </Link>
         </li>
         <li aria-current="page">
           <div className="flex items-center">
@@ -92,14 +93,14 @@ export default function BreadCrumb({
               >
                 {userConnections.map((connection: any) => (
                   <li key={connection} value={connection}>
-                    <a
+                    <Link
                       href={`/my-lists/${connection
                         .toLowerCase()
                         .replace(" ", "")}`}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       {connection}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -172,12 +173,12 @@ export default function BreadCrumb({
                       }
                     }}
                   >
-                    <a
+                    <Link
                       href={`#${list}`}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       {list}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
