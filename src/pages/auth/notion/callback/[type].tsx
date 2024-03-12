@@ -151,16 +151,6 @@ export default function NotionCallback({ response, type }: { response: any, type
 					handleSubmit={updateDatabaseId}
 					connectionType={type}
 				/>
-				{/* <Input
-					label='Movies and TV Shows Database'
-					placeHolder='Enter the database ID'
-					field={moviesDatabaseId}
-					link={'https://www.notion.so/' + moviesDatabaseId}
-					setLink={setMoviesDatabaseId}
-					setInput={setInput}
-					handleSubmit={(e: any) => handleDatabaseIdSubmit(e, 'movies')}
-					connectionType='movies'
-				/> */}
 			</Transition>
 			<Transition
 				className="m-10"
