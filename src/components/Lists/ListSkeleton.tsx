@@ -16,7 +16,7 @@ export default function ListsSkeleton() {
   return (
     <>
       <Transition
-        className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 my-4'
+        className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 mt-4'
         show={show}
         enter="transition-all ease-in-out duration-500 delay-[200ms]"
         enterFrom="opacity-0 translate-y-6"

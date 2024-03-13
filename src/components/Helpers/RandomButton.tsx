@@ -14,7 +14,7 @@ export default function RandomButton({ handleShuffle }: { handleShuffle: any }) 
 
   return (
     <Transition
-      className="flex justify-center items-center sm:mx-auto mx-4 mb-2 gap-2 overflow-auto select-none"
+      className="flex justify-center items-center select-none mb-2"
       show={show}
       enter="transition-all ease-in-out duration-500 delay-[200ms]"
       enterFrom="opacity-0 translate-y-6"

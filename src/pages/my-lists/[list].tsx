@@ -53,6 +53,7 @@ export default function List({
   };
 
   const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(true);
   const [displayCount, setDisplayCount] = useState(20);
 
   const [message, setMessage] = useState("");
@@ -148,7 +149,7 @@ export default function List({
   ) => {
     try {
       if (cursor === null) return;
-      setLoading(true);
+      setFetching(true);
       const response = await fetch("/api/getNotionDatabasePages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -177,7 +178,6 @@ export default function List({
             index === self.findIndex((t) => t.id === item.id)
         );
       });
-
       return data;
     } catch (error) {
       console.error(error);
@@ -211,6 +211,7 @@ export default function List({
   useEffect(() => {
     if (content && content.length > 0) {
       setLoading(false);
+      setFetching(false);
     }
   }, [content]);
 
@@ -278,6 +279,7 @@ export default function List({
             setCursorToWatch={setCursorToWatch}
             setCursorWatching={setCursorWatching}
             setCursorWatched={setCursorWatched}
+            setFetching={setFetching}
           />
 
           <SearchBar
@@ -288,14 +290,16 @@ export default function List({
 
           <WidthKeeper />
 
-          {message && content?.length === 0 ? (
+          {loading ? (
+            <ListSkeleton />
+          ) : message && content?.length === 0 ? (
             <NoItems message={message} />
           ) : (
             <>
               {!message && (
                 <RandomButton handleShuffle={handleShuffle} />
               )}
-              <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4">
+              <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 mb-4">
                 {listName === "books" && content ? (
                   <>
                     {content.slice(0, displayCount).map((listItem: any) => (
@@ -349,26 +353,24 @@ export default function List({
               </div>
             </>
           )}
-          {loading && <ListSkeleton />}
+          {fetching && <ListSkeleton />}
         </div>
       </div>
 
       {content && displayCount < content.length && (
-        <div className="mt-4">
-          <LoadMore
-            displayCount={displayCount}
-            setDisplayCount={setDisplayCount}
-            media={content}
-            secondaryFunction={() =>
-              getNotionDatabasePages(
-                listStates.find((listState) => listState.status === status)?.status,
-                listStates.find((listState) => listState.status === status)?.setList,
-                listStates.find((listState) => listState.status === status)?.cursor,
-                listStates.find((listState) => listState.status === status)?.setCursor
-              )
-            }
-          />
-        </div>
+        <LoadMore
+          displayCount={displayCount}
+          setDisplayCount={setDisplayCount}
+          media={content}
+          secondaryFunction={() =>
+            getNotionDatabasePages(
+              listStates.find((listState) => listState.status === status)?.status,
+              listStates.find((listState) => listState.status === status)?.setList,
+              listStates.find((listState) => listState.status === status)?.cursor,
+              listStates.find((listState) => listState.status === status)?.setCursor
+            )
+          }
+        />
       )}
 
       <Transition.Root show={open} as={Fragment}>

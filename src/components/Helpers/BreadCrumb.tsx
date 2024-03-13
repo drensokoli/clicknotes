@@ -21,6 +21,7 @@ export default function BreadCrumb({
   setCursorWatching,
   setCursorWatched,
   setLoading,
+  setFetching,
 }: {
   userConnections: string[];
   listName: string;
@@ -38,7 +39,7 @@ export default function BreadCrumb({
   setCursorWatching: any;
   setCursorWatched: any;
   setLoading: any;
-  
+  setFetching: any;  
 }) {
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export default function BreadCrumb({
                     <button
                       onClick={() => {
                         setLoading(true);
+                        setFetching(true);
                         setListToWatch([]);
                         setListWatching([]);
                         setListWatched([]);
