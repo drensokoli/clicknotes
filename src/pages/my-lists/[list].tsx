@@ -353,7 +353,7 @@ export default function List({
         </div>
       </div>
 
-      {content && displayCount <= content.length && (
+      {content && displayCount < content.length && (
         <div className="mt-4">
           <LoadMore
             displayCount={displayCount}
