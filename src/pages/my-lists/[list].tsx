@@ -148,6 +148,7 @@ export default function List({
   ) => {
     try {
       if (cursor === null) return;
+      setLoading(true);
       const response = await fetch("/api/getNotionDatabasePages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -183,23 +184,6 @@ export default function List({
     }
   };
 
-  const getRandomNotionDatabasePage = async () => {
-    const response = await fetch("/api/getRandomNotionDatabasePage", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        notionApiKey,
-        databaseId,
-        statusFilter: listStates.find(
-          (listState) => listState.status === status
-        )?.status,
-        type: listName,
-      }),
-    });
-
-    const data = await response.json();
-  };
-
   useEffect(() => {
     if (userEmail) {
       listStates.map((listState) =>
@@ -211,20 +195,18 @@ export default function List({
         )
       );
     }
-  }, [session]);
+  }, [session, listName]);
 
   useEffect(() => {
     const listState = listStates.find(
       (listState) => listState.status === status
     );
 
-    setContent(listState?.list || []);
-
-    if (listState && listState.list && listState.list.length === 0) {
-      setLoading(false);
-      setMessage("No items found");
+    if (listToWatch || listWatching || listWatched) {
+      setContent(listState?.list || []);
     }
-  }, [listToWatch, listWatching, listWatched, currentShuffleItem]);
+
+  }, [listToWatch, listWatching, listWatched]);
 
   useEffect(() => {
     if (content && content.length > 0) {
@@ -241,80 +223,38 @@ export default function List({
     }, 10);
   }, []);
 
+  useEffect(() => {
+    console.log("content is: ", content);
+  }, [status, content]);
+
   return (
     <>
       <Head>
-        <title>
-          ClickNotes |{" "}
-          {titleMapping.find((title) => title.path === listName)?.title} List
-        </title>
-        <meta
-          name="description"
-          content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template."
-        />
+        <title>ClickNotes |{" "}{titleMapping.find((title) => title.path === listName)?.title} List</title>
+        <meta name="description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
         <meta name="robots" content="all"></meta>
-        <meta
-          property="og:title"
-          content={`ClickNotes | ${titleMapping.find((title) => title.path === listName)?.title
-            } List`}
-        />
-        <meta
-          property="og:description"
-          content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template."
-        />
-        <meta
-          property="og:image"
-          content="https://www.clicknotes.site/favicon.ico"
-        />
+        <meta property="og:title" content={`ClickNotes | ${titleMapping.find((title) => title.path === listName)?.title} List`} />
+        <meta property="og:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+        <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="author" content="Dren Sokoli" />
-        <meta
-          name="google-adsense-account"
-          content="ca-pub-3464540666338005"
-        ></meta>
-        <meta
-          property="og:title"
-          content="ClickNotes - Save your movies to Notion"
-        />
-        <meta
-          property="og:description"
-          content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template."
-        />
-        <meta
-          property="og:image"
-          content="https://www.clicknotes.site/og/my-lists.png"
-        />
-        <meta
-          property="og:url"
-          content={`https://clicknotes.site/my-lists/${listName}`}
-        />
+        <meta name="google-adsense-account" content="ca-pub-3464540666338005" ></meta>
+        <meta property="og:title" content="ClickNotes - Save your movies to Notion" />
+        <meta property="og:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+        <meta property="og:image" content="https://www.clicknotes.site/og/my-lists.png" />
+        <meta property="og:url" content={`https://clicknotes.site/my-lists/${listName}`} />
         <meta property="og:site_name" content="ClickNotes" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@SokoliDren" />
         <meta name="twitter:creator" content="@SokoliDren" />
-        <meta
-          name="twitter:title"
-          content="ClickNotes - Save your movies to Notion"
-        />
-        <meta
-          name="twitter:description"
-          content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template."
-        />
-        <meta
-          name="twitter:image"
-          content="https://www.clicknotes.site/og/my-lists.png"
-        />
+        <meta name="twitter:title" content="ClickNotes - Save your movies to Notion" />
+        <meta name="twitter:description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
+        <meta name="twitter:image" content="https://www.clicknotes.site/og/my-lists.png" />
         <meta name="twitter:domain" content="www.clicknotes.site" />
-        <meta
-          name="twitter:url"
-          content={`https://clicknotes.site/my-lists/${listName}`}
-        />
+        <meta name="twitter:url" content={`https://clicknotes.site/my-lists/${listName}`} />
         <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="canonical"
-          href={`https://clicknotes.site/my-lists/${listName}`}
-        />
+        <link rel="canonical" href={`https://clicknotes.site/my-lists/${listName}`} />
         {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script> */}
       </Head>
@@ -331,7 +271,15 @@ export default function List({
             setDisplayCount={setDisplayCount}
             setMessage={setMessage}
             statusList={statusList}
+            setLoading={setLoading}
+            setListToWatch={setListToWatch}
+            setListWatching={setListWatching}
+            setListWatched={setListWatched}
+            setCursorToWatch={setCursorToWatch}
+            setCursorWatching={setCursorWatching}
+            setCursorWatched={setCursorWatched}
           />
+
           <SearchBar
             input={input}
             handleInputChange={handleInputChange}
@@ -339,13 +287,11 @@ export default function List({
           />
 
           <WidthKeeper />
-          {loading ? (
-            <ListSkeleton />
-          ) : message ? (
-            <NoItems />
+
+          {message && content?.length === 0 ? (
+            <NoItems message={message} />
           ) : (
             <>
-
               {!message && (
                 <RandomButton handleShuffle={handleShuffle} />
               )}
@@ -366,18 +312,10 @@ export default function List({
                         statusList={statusList}
                         status={listItem.properties.Status.status.name}
                         rating={listItem.properties["My Rating"].number}
-                        description={
-                          listItem.properties["Description"]?.rich_text[0]?.text
-                            ?.content
-                        }
+                        description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
                         pageCount={listItem.properties["Page Count"].number}
-                        author={listItem.properties.Authors.multi_select
-                          .map((author: any) => author.name)
-                          .join(", ")}
-                        notion_link={`https://www.notion.so/${listItem.id.replace(
-                          /-/g,
-                          ""
-                        )}`}
+                        author={listItem.properties.Authors.multi_select.map((author: any) => author.name).join(", ")}
+                        notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
                       />
                     ))}
                   </>
@@ -399,8 +337,8 @@ export default function List({
                           overview={listItem.properties["Overview"]?.rich_text[0]?.text?.content}
                           rating={listItem.properties["My Rating"].number}
                           watch_link={listItem.properties["Watch Link"].url}
-                          notion_link={`https://www.notion.so/${listItem.id.replace(/-/g,"")}`}
-                          rated={listItem.properties.Rated?.select.name}
+                          notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
+                          rated={listItem.properties.Rated?.select?.name}
                           awards={listItem.properties.Awards?.rich_text[0]?.text?.content}
                           runtime={listItem.properties.Runtime?.rich_text[0]?.text?.content}
                         />
@@ -411,10 +349,11 @@ export default function List({
               </div>
             </>
           )}
+          {loading && <ListSkeleton />}
         </div>
       </div>
 
-      {content && displayCount < content.length && (
+      {content && displayCount <= content.length && (
         <div className="mt-4">
           <LoadMore
             displayCount={displayCount}
@@ -422,14 +361,10 @@ export default function List({
             media={content}
             secondaryFunction={() =>
               getNotionDatabasePages(
-                listStates.find((listState) => listState.status === status)
-                  ?.status,
-                listStates.find((listState) => listState.status === status)
-                  ?.setList,
-                listStates.find((listState) => listState.status === status)
-                  ?.cursor,
-                listStates.find((listState) => listState.status === status)
-                  ?.setCursor
+                listStates.find((listState) => listState.status === status)?.status,
+                listStates.find((listState) => listState.status === status)?.setList,
+                listStates.find((listState) => listState.status === status)?.cursor,
+                listStates.find((listState) => listState.status === status)?.setCursor
               )
             }
           />
@@ -474,20 +409,8 @@ export default function List({
                     className="absolute top-2 right-2 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm p-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                   >
                     <span className="sr-only">Close menu</span>
-                    <svg
-                      className="h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        stroke-linejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
+                    <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                   <div className="flex flex-row justify-center items-center p-10">
@@ -496,39 +419,14 @@ export default function List({
                       content[currentShuffleItem] ? (
                       <BookModal
                         id={content[currentShuffleItem].id}
-                        title={
-                          content[currentShuffleItem].properties.Title.title[0]
-                            .text.content
-                        }
-                        rating={
-                          content[currentShuffleItem].properties["My Rating"]
-                            .number
-                        }
-                        coverImage={
-                          content[currentShuffleItem].properties["Cover Image"]
-                            .url
-                        }
-                        published_date={
-                          content[currentShuffleItem].properties[
-                            "Published Date"
-                          ].date.start.split("-")[0]
-                        }
-                        description={
-                          content[currentShuffleItem].properties["Description"]
-                            ?.rich_text[0]?.text?.content
-                        }
-                        author={content[
-                          currentShuffleItem
-                        ].properties.Authors.multi_select
-                          .map((author: any) => author.name)
-                          .join(", ")}
-                        pageCount={
-                          content[currentShuffleItem].properties["Page Count"]
-                            .number
-                        }
-                        notion_link={`https://www.notion.so/${content[
-                          currentShuffleItem
-                        ].id.replace(/-/g, "")}`}
+                        title={content[currentShuffleItem].properties.Title.title[0].text.content}
+                        rating={content[currentShuffleItem].properties["My Rating"].number}
+                        coverImage={content[currentShuffleItem].properties["Cover Image"].url}
+                        published_date={content[currentShuffleItem].properties["Published Date"].date.start.split("-")[0]}
+                        description={content[currentShuffleItem].properties["Description"]?.rich_text[0]?.text?.content}
+                        author={content[currentShuffleItem].properties.Authors.multi_select.map((author: any) => author.name).join(", ")}
+                        pageCount={content[currentShuffleItem].properties["Page Count"].number}
+                        notion_link={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, "")}`}
                       />
                     ) : (
                       content &&
@@ -543,7 +441,7 @@ export default function List({
                           watchLink={content[currentShuffleItem].properties["Watch Link"].url}
                           notionLink={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, "")}`}
                           releaseDate={content[currentShuffleItem].properties["Release Date"].date.start.split("-")[0]}
-                          rated={content[currentShuffleItem].properties.Rated?.select.name}
+                          rated={content[currentShuffleItem].properties.Rated?.select?.name}
                           awards={content[currentShuffleItem].properties.Awards?.rich_text[0]?.text?.content}
                           runtime={content[currentShuffleItem].properties.Runtime?.rich_text[0]?.text?.content}
                         />

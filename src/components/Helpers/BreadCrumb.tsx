@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { initDropdowns } from 'flowbite';
 import { BsList } from "react-icons/bs";
 import Link from "next/link";
+import router from "next/router";
 
 export default function BreadCrumb({
   userConnections,
@@ -13,6 +14,13 @@ export default function BreadCrumb({
   setDisplayCount,
   setMessage,
   statusList,
+  setListToWatch,
+  setListWatching,
+  setListWatched,
+  setCursorToWatch,
+  setCursorWatching,
+  setCursorWatched,
+  setLoading,
 }: {
   userConnections: string[];
   listName: string;
@@ -23,12 +31,17 @@ export default function BreadCrumb({
   setDisplayCount: any;
   setMessage: any;
   statusList: string[];
+  setListToWatch: any;
+  setListWatching: any;
+  setListWatched: any;
+  setCursorToWatch: any;
+  setCursorWatching: any;
+  setCursorWatched: any;
+  setLoading: any;
+  
 }) {
 
-  const url = process.env.NEXT_PUBLIC_BASE_URL;
-
   useEffect(() => {
-    // Initialize the dropdown functionality
     initDropdowns();
   }, []);
 
@@ -54,41 +67,35 @@ export default function BreadCrumb({
               data-dropdown-toggle="dropdown-database"
               className="inline-flex items-center px-3 py-2 text-sm font-normal text-center text-gray-700 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-white dark:focus:ring-gray-700"
             >
-              {listName.charAt(0).toUpperCase() + listName.slice(1).replace("vs", "v s")}
-              <svg
-                className="w-3 h-2.5 ms-2.5 text-gray-500"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 4 4 4-4"
-                />
+              {listName.charAt(0).toUpperCase() + listName.slice(1).replace("vs", "V s")}
+              <svg className="w-3 h-2.5 ms-2.5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" >
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
               </svg>
             </button>
-            <div
-              id="dropdown-database"
-              className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-            >
-              <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownDefault"
-              >
+            <div id="dropdown-database" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault" >
                 {userConnections.map((connection: any) => (
                   <li key={connection} value={connection}>
-                    <a
-                      href={`${url}/my-lists/${connection
-                        .toLowerCase()
-                        .replace(" ", "")}`}
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    <button
+                      onClick={() => {
+                        setLoading(true);
+                        setListToWatch([]);
+                        setListWatching([]);
+                        setListWatched([]);
+                        setContent([]);
+                        setCursorToWatch(undefined);
+                        setCursorWatching(undefined);
+                        setCursorWatched(undefined);
+                        setStatus(statusList[0]);
+                        setMessage("");
+                        router.push(`/my-lists/${connection
+                          .toLowerCase()
+                          .replace(" ", "")}`);
+                      }}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white w-full text-left"
                     >
                       {connection}
-                    </a>
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -104,20 +111,8 @@ export default function BreadCrumb({
               className="inline-flex items-center px-3 py-2 text-sm font-normal text-center text-gray-700 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-white dark:focus:ring-gray-700"
             >
               {status}
-              <svg
-                className="w-3 h-2.5 ms-2.5 text-gray-500"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 4 4 4-4"
-                />
+              <svg className="w-3 h-2.5 ms-2.5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" >
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
               </svg>
             </button>
             <div

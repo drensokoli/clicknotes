@@ -16,7 +16,7 @@ export default function ListsSkeleton() {
   return (
     <>
       <Transition
-        className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen my-4'
+        className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 my-4'
         show={show}
         enter="transition-all ease-in-out duration-500 delay-[200ms]"
         enterFrom="opacity-0 translate-y-6"
@@ -25,7 +25,7 @@ export default function ListsSkeleton() {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        {Array(15).fill(0).map((_, index) => (
+        {Array(5).fill(0).map((_, index) => (
           <div
             className="sm:w-[200px] px-4 sm:px-0 py-2 sm:py-0"
             key={index}

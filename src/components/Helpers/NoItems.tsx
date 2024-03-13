@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { useState, useEffect } from "react";
 
-export default function NoItems() {
+export default function NoItems({message}: {message: string}) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function NoItems() {
       leaveTo="opacity-0"
       className="flex justify-center my-10"
     >
-      <h1 className="text-lg font-semibold text-gray-600">No items found</h1>
+      <h1 className="text-lg font-semibold text-gray-600">{message}</h1>
     </Transition>
   );
 }
