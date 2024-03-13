@@ -1,13 +1,12 @@
 import SearchBar from "@/components/Helpers/SearchBar";
 import { getSession, useSession } from "next-auth/react";
 import { Fragment, use, useEffect, useRef, useState } from "react";
-import { Client } from "@notionhq/client";
 import MoviesListCard from "@/components/Lists/MoviesListCard";
 import LoadMore from "@/components/Helpers/LoadMore";
 import BooksListCard from "@/components/Lists/BooksListCard";
 import ListSkeleton from "@/components/Lists/ListSkeleton";
 import { Dialog, Transition } from "@headlessui/react";
-import Link from "next/link";
+import { Client } from "@notionhq/client";
 import MovieModal from "@/components/Lists/MovieModal";
 import BookModal from "@/components/Lists/BookModal";
 import Head from "next/head";
@@ -390,28 +389,20 @@ export default function List({
                           key={listItem.id}
                           id={listItem.id}
                           title={listItem.properties.Name.title[0].text.content}
-                          poster_path={
-                            listItem.properties.Poster.url ||
-                            listItem.cover.external.url
-                          }
-                          release_date={
-                            listItem.properties["Release Date"].date.start || ""
-                          }
+                          poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
+                          release_date={listItem.properties["Release Date"].date.start || ""}
                           link={`https://www.themoviedb.org/movie/${listItem.id}`}
                           handleStatusChange={handleInputChange}
                           statusList={statusList}
                           status={listItem.properties.Status.status.name}
                           trailer={listItem.properties.Trailer.url}
-                          overview={
-                            listItem.properties["Overview"]?.rich_text[0]?.text
-                              ?.content
-                          }
+                          overview={listItem.properties["Overview"]?.rich_text[0]?.text?.content}
                           rating={listItem.properties["My Rating"].number}
                           watch_link={listItem.properties["Watch Link"].url}
-                          notion_link={`https://www.notion.so/${listItem.id.replace(
-                            /-/g,
-                            ""
-                          )}`}
+                          notion_link={`https://www.notion.so/${listItem.id.replace(/-/g,"")}`}
+                          rated={listItem.properties.Rated?.select.name}
+                          awards={listItem.properties.Awards?.rich_text[0]?.text?.content}
+                          runtime={listItem.properties.Runtime?.rich_text[0]?.text?.content}
                         />
                       ))}
                     </>
@@ -544,37 +535,17 @@ export default function List({
                       content[currentShuffleItem] && (
                         <MovieModal
                           id={content[currentShuffleItem].id}
-                          name={
-                            content[currentShuffleItem].properties.Name.title[0]
-                              .text.content
-                          }
-                          rating={
-                            content[currentShuffleItem].properties["My Rating"]
-                              .number
-                          }
-                          poster={
-                            content[currentShuffleItem].properties.Poster.url ||
-                            content[currentShuffleItem].cover.external.url
-                          }
-                          overview={
-                            content[currentShuffleItem].properties["Overview"]
-                              ?.rich_text[0]?.text?.content
-                          }
-                          trailer={
-                            content[currentShuffleItem].properties.Trailer.url
-                          }
-                          watchLink={
-                            content[currentShuffleItem].properties["Watch Link"]
-                              .url
-                          }
-                          notionLink={`https://www.notion.so/${content[
-                            currentShuffleItem
-                          ].id.replace(/-/g, "")}`}
-                          releaseDate={
-                            content[currentShuffleItem].properties[
-                              "Release Date"
-                            ].date.start.split("-")[0]
-                          }
+                          name={content[currentShuffleItem].properties.Name.title[0].text.content}
+                          rating={content[currentShuffleItem].properties["My Rating"].number}
+                          poster={content[currentShuffleItem].properties.Poster.url || content[currentShuffleItem].cover.external.url}
+                          overview={content[currentShuffleItem].properties["Overview"]?.rich_text[0]?.text?.content}
+                          trailer={content[currentShuffleItem].properties.Trailer.url}
+                          watchLink={content[currentShuffleItem].properties["Watch Link"].url}
+                          notionLink={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, "")}`}
+                          releaseDate={content[currentShuffleItem].properties["Release Date"].date.start.split("-")[0]}
+                          rated={content[currentShuffleItem].properties.Rated?.select.name}
+                          awards={content[currentShuffleItem].properties.Awards?.rich_text[0]?.text?.content}
+                          runtime={content[currentShuffleItem].properties.Runtime?.rich_text[0]?.text?.content}
                         />
                       )
                     )}

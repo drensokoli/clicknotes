@@ -46,31 +46,17 @@ export default function BreadCrumb({
             </h1>
           </Link>
         </li>
+        <h1 className="text-gray-400">/</h1>
         <li aria-current="page">
           <div className="flex items-center">
-            <svg
-              className="rtl:rotate-180 w-3 h-3 text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                stroke-linejoin="round"
-                strokeWidth="2"
-                d="m1 9 4-4-4-4"
-              />
-            </svg>
             <button
               id="dropdownDatabase"
               data-dropdown-toggle="dropdown-database"
-              className="inline-flex items-center px-3 py-2 text-sm font-normal text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-white dark:focus:ring-gray-700"
+              className="inline-flex items-center px-3 py-2 text-sm font-normal text-center text-gray-700 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-white dark:focus:ring-gray-700"
             >
               {listName.charAt(0).toUpperCase() + listName.slice(1).replace("vs", "v s")}
               <svg
-                className="w-2.5 h-2.5 ms-2.5"
+                className="w-3 h-2.5 ms-2.5 text-gray-500"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -109,31 +95,17 @@ export default function BreadCrumb({
             </div>
           </div>
         </li>
+        <h1 className="text-gray-400">/</h1>
         <li aria-current="page">
           <div className="flex items-center">
-            <svg
-              className="rtl:rotate-180 w-3 h-3 text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                stroke-linejoin="round"
-                strokeWidth="2"
-                d="m1 9 4-4-4-4"
-              />
-            </svg>
             <button
               id="dropdownStatus"
               data-dropdown-toggle="dropdown-status"
-              className="inline-flex items-center px-3 py-2 text-sm font-normal text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-white dark:focus:ring-gray-700"
+              className="inline-flex items-center px-3 py-2 text-sm font-normal text-center text-gray-700 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-white dark:focus:ring-gray-700"
             >
               {status}
               <svg
-                className="w-2.5 h-2.5 ms-2.5"
+                className="w-3 h-2.5 ms-2.5 text-gray-500"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

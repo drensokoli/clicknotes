@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function MovieModal({ id, name, rating, poster, overview, trailer, watchLink, notionLink, releaseDate }:
+export default function MovieModal({ id, name, rating, poster, overview, trailer, watchLink, notionLink, releaseDate, rated, awards, runtime, }:
     {
         id: string | number,
         name: string,
@@ -10,14 +10,19 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
         trailer: string,
         watchLink: string,
         notionLink: string,
-        releaseDate: string
+        releaseDate: string,
+        rated: any,
+        awards: string,
+        runtime: string
 
     }) {
     return (
         <div key={id} className="w-[400px] py-2 sm:py-0" >
             <div className='flex justify-center'>
                 {poster ? (
-                    <div
+                    <Link
+                        href={notionLink}
+                        target='_blank'
                         aria-label={name}>
                         <img
                             src={poster}
@@ -25,7 +30,7 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
                             className="rounded-sm min-h-[240px] max-h-[240px] sm:max-h-[300px] sm:min-h-[300px] select-none object-cover shadow-2xl"
                             loading="lazy"
                         />
-                    </div>
+                    </Link>
                 ) : (
                     <img
                         src="/no-image.png"
@@ -44,28 +49,46 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
                     <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
                 )}
             </h2>
-            <div className="px-10 sm:px-0 gap-2 flex flex-col">
-                <p className="text-sm text-gray-500 text-left mt-2">Overview:</p>
-                {overview ? (
-                    <p className="text-sm text-gray-900 text-left">{overview}</p>
-                ) : (
-                    <p className="text-sm text-gray-400 text-left">No overview for this movie</p>
+            <div className=" gap-2 flex flex-col">
+                {overview && (
+                    <>
+                        <p className="text-sm text-gray-500 text-left mt-2 w-full">Overview</p>
+                        <p className="text-sm text-gray-900 text-left w-full">{overview}</p>
+                    </>
                 )}
-                <p className="text-sm text-gray-500 text-left mt-2">Trailer:</p>
-                {trailer ? (
-                    <Link href={trailer} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{trailer}</Link>
-                ) : (
-                    <p className="text-sm text-gray-400 text-left">No trailer for this movie</p>
+
+                {rated && (
+                    <>
+                        <p className="text-sm text-gray-500 text-left mt-2 w-full">Rated</p>
+                        <p className="text-sm text-gray-900 text-left bg-red-500 w-fit px-2 py-1 rounded-lg text-white ">{rated}</p>
+
+                    </>
                 )}
-                <p className="text-sm text-gray-500 text-left mt-2">Watch:</p>
-                {watchLink ? (
-                    <Link href={watchLink} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{watchLink}</Link>
-                ) : (
-                    <p className="text-sm text-gray-400 text-left">No watch link for this movie</p>
+
+                {awards && awards !== 'N/A' && (
+                    <>
+                        <p className="text-sm text-gray-500 text-left mt-2 w-full">Awards</p>
+                        <p className="text-sm text-gray-900 text-left">{awards}</p>
+                    </>
                 )}
-                <p className="text-sm text-gray-500 text-left mt-2">Notion:</p>
-                <Link href={notionLink} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline truncate">{notionLink}</Link>
+
+                {runtime && (
+                    <>
+                        <p className="text-sm text-gray-500 text-left mt-2 w-full">Runtime</p>
+                        <p className="text-sm text-gray-900 text-left w-full">{runtime}</p>
+
+                    </>
+                )}
+
             </div>
+            <div className="flex flex-row justify-center items-center mt-2">
+                {watchLink && (
+                    <Link href={watchLink} target='_blank' className="w-full text-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Watch</Link>
+                )}
+            </div>
+            {trailer && (
+                <iframe width="1903" height="742" src={`https://www.youtube.com/embed/${trailer.split('v=')[1]}`} title="Kung Fu Panda 4 | Sand &amp; Spice Trailer" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen className="w-full sm:h-[300px] h-[200px] mt-2"></iframe>
+            )}
         </div>
     )
 }

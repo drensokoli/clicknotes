@@ -25,7 +25,7 @@ export default function ListsSkeleton() {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        {Array(10).fill(0).map((_, index) => (
+        {Array(15).fill(0).map((_, index) => (
           <div
             className="sm:w-[200px] px-4 sm:px-0 py-2 sm:py-0"
             key={index}
