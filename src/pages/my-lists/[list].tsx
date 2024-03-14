@@ -306,20 +306,20 @@ export default function List({
                       <BooksListCard
                         key={listItem.id}
                         id={listItem.id}
-                        title={listItem.properties.Title.title[0].text.content}
-                        cover={listItem.properties["Cover Image"].url}
-                        published_date={
-                          listItem.properties["Published Date"].date.start || ""
-                        }
+                        title={listItem.properties.Title?.title[0]?.text?.content}
+                        cover={listItem.properties["Cover Image"]?.url || listItem.cover?.external?.url}
                         link={`https://books.google.com/books?id=${listItem.id}`}
                         handleStatusChange={handleInputChange}
                         statusList={statusList}
-                        status={listItem.properties.Status.status.name}
-                        rating={listItem.properties["My Rating"].number}
+                        status={listItem.properties.Status?.status?.name}
+                        rating={listItem.properties["My Rating"]?.number}
                         description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
-                        pageCount={listItem.properties["Page Count"].number}
-                        author={listItem.properties.Authors.multi_select.map((author: any) => author.name).join(", ")}
+                        pageCount={listItem.properties["Page Count"]?.number}
+                        author={listItem.properties.Authors?.multi_select?.map((author: any) => author?.name).join(", ")}
                         notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
+                        googleBooksId={listItem.properties["ID"]?.rich_text[0]?.text?.content}
+                        publisher={listItem.properties.Publisher?.select?.name}
+                        publishedDate={listItem.properties["Published Date"]?.date?.start}
                       />
                     ))}
                   </>
@@ -330,9 +330,9 @@ export default function List({
                         <MoviesListCard
                           key={listItem.id}
                           id={listItem.id}
-                          title={listItem.properties.Name.title[0].text.content}
-                          poster_path={listItem.properties.Poster.url || listItem.cover.external.url}
-                          release_date={listItem.properties["Release Date"].date.start || ""}
+                          title={listItem.properties.Name?.title[0]?.text?.content}
+                          poster_path={listItem.properties.Poster?.url || listItem.cover?.external?.url}
+                          release_date={listItem.properties["Release Date"]?.date?.start || ""}
                           link={`https://www.themoviedb.org/movie/${listItem.id}`}
                           handleStatusChange={handleInputChange}
                           statusList={statusList}
@@ -345,6 +345,7 @@ export default function List({
                           rated={listItem.properties.Rated?.select?.name}
                           awards={listItem.properties.Awards?.rich_text[0]?.text?.content}
                           runtime={listItem.properties.Runtime?.rich_text[0]?.text?.content}
+                          imdbLink={listItem.properties["iMDB Link"]?.url}
                         />
                       ))}
                     </>
@@ -421,31 +422,34 @@ export default function List({
                       content[currentShuffleItem] ? (
                       <BookModal
                         id={content[currentShuffleItem].id}
-                        title={content[currentShuffleItem].properties.Title.title[0].text.content}
-                        rating={content[currentShuffleItem].properties["My Rating"].number}
-                        coverImage={content[currentShuffleItem].properties["Cover Image"].url}
-                        published_date={content[currentShuffleItem].properties["Published Date"].date.start.split("-")[0]}
+                        title={content[currentShuffleItem].properties.Title?.title[0]?.text.content}
+                        rating={content[currentShuffleItem].properties["My Rating"]?.number}
+                        coverImage={content[currentShuffleItem].properties["Cover Image"]?.url || content[currentShuffleItem].cover?.external?.url}
                         description={content[currentShuffleItem].properties["Description"]?.rich_text[0]?.text?.content}
-                        author={content[currentShuffleItem].properties.Authors.multi_select.map((author: any) => author.name).join(", ")}
-                        pageCount={content[currentShuffleItem].properties["Page Count"].number}
+                        author={content[currentShuffleItem].properties.Authors?.multi_select?.map((author: any) => author?.name).join(", ")}
+                        pageCount={content[currentShuffleItem].properties["Page Count"]?.number}
                         notion_link={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, "")}`}
+                        googleBooksId={content[currentShuffleItem].properties["ID"]?.rich_text[0]?.text?.content}
+                        publisher={content[currentShuffleItem].properties.Publisher?.select?.name}
+                        publishedDate={content[currentShuffleItem].properties["Published Date"]?.date?.start}
                       />
                     ) : (
                       content &&
                       content[currentShuffleItem] && (
                         <MovieModal
                           id={content[currentShuffleItem].id}
-                          name={content[currentShuffleItem].properties.Name.title[0].text.content}
-                          rating={content[currentShuffleItem].properties["My Rating"].number}
-                          poster={content[currentShuffleItem].properties.Poster.url || content[currentShuffleItem].cover.external.url}
+                          name={content[currentShuffleItem].properties.Name?.title[0]?.text?.content}
+                          rating={content[currentShuffleItem].properties["My Rating"]?.number}
+                          poster={content[currentShuffleItem].properties.Poster?.url || content[currentShuffleItem].cover?.external?.url}
                           overview={content[currentShuffleItem].properties["Overview"]?.rich_text[0]?.text?.content}
-                          trailer={content[currentShuffleItem].properties.Trailer.url}
-                          watchLink={content[currentShuffleItem].properties["Watch Link"].url}
+                          trailer={content[currentShuffleItem].properties.Trailer?.url}
+                          watchLink={content[currentShuffleItem].properties["Watch Link"]?.url}
                           notionLink={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, "")}`}
-                          releaseDate={content[currentShuffleItem].properties["Release Date"].date.start.split("-")[0]}
+                          releaseDate={content[currentShuffleItem].properties["Release Date"]?.date?.start.split("-")[0]}
                           rated={content[currentShuffleItem].properties.Rated?.select?.name}
                           awards={content[currentShuffleItem].properties.Awards?.rich_text[0]?.text?.content}
                           runtime={content[currentShuffleItem].properties.Runtime?.rich_text[0]?.text?.content}
+                          imdbLink={content[currentShuffleItem].properties["iMDB Link"]?.url}
                         />
                       )
                     )}

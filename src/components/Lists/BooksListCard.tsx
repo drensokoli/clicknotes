@@ -5,12 +5,11 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import BookModal from './BookModal';
 
-export default function BooksListCard({ id, title, cover, published_date, link, handleStatusChange, statusList, status, rating, pageCount, description, author, notion_link
+export default function BooksListCard({ id, title, cover, link, handleStatusChange, statusList, status, rating, pageCount, description, author, notion_link, googleBooksId, publisher, publishedDate
 }: {
     id: number | string;
     title: string;
     cover: string | null | undefined;
-    published_date: string;
     link: string;
     handleStatusChange: any;
     statusList: any;
@@ -20,6 +19,9 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
     pageCount?: number;
     author: string;
     notion_link: string;
+    googleBooksId: string;
+    publisher: string;
+    publishedDate: string;
 }) {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
@@ -87,7 +89,7 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
                 </select>
             </div>
             <h2 className="font-bold text-center text-gray-800 mt-1">
-                <span>{title} {published_date ? ` (${published_date.split('-')[0]})` : ''}</span>
+                <span>{title} {publishedDate ? ` (${publishedDate.split('-')[0]})` : ''}</span>
             </h2>
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
@@ -132,11 +134,13 @@ export default function BooksListCard({ id, title, cover, published_date, link, 
                                             title={title}
                                             rating={rating}
                                             coverImage={cover}
-                                            published_date={published_date.split('-')[0]}
                                             description={description}
                                             author={author}
                                             pageCount={pageCount}
                                             notion_link={notion_link}
+                                            googleBooksId={googleBooksId}
+                                            publisher={publisher}
+                                            publishedDate={publishedDate}
                                         />
                                     </div>
                                 </Dialog.Panel>
