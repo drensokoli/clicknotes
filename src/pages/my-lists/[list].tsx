@@ -104,16 +104,10 @@ export default function List({
   const handleShuffle = async () => {
     setOpen(true);
     let contentLength = content?.length;
-    const statusFilter = listStates.find(
-      (listState) => listState.status === status
-    )?.status;
-    const setList = listStates.find((listState) => listState.status === status)
-      ?.setList as any;
-    let cursor = listStates.find((listState) => listState.status === status)
-      ?.cursor as any;
-    const setCursor = listStates.find(
-      (listState) => listState.status === status
-    )?.setCursor;
+    const statusFilter = listStates.find((listState) => listState.status === status)?.status;
+    const setList = listStates.find((listState) => listState.status === status)?.setList as any;
+    let cursor = listStates.find((listState) => listState.status === status)?.cursor as any;
+    const setCursor = listStates.find((listState) => listState.status === status)?.setCursor;
 
     const intervalId = setInterval(() => {
       setCurrentShuffleItem(Math.floor(Math.random() * (contentLength || 0)));
@@ -224,9 +218,36 @@ export default function List({
     }, 10);
   }, []);
 
+  const [skeletonNumber, setSkeletonNumber] = useState(5);
+
   useEffect(() => {
-    console.log("content is: ", content);
-  }, [status, content]);
+    const handleResize = () => {
+      const windowWidth = window.innerWidth;
+
+      if (windowWidth <= 600) {
+        setSkeletonNumber(2);
+      } else if (windowWidth <= 900) {
+        if (content && content.length % 3 === 2) {
+          setSkeletonNumber(4);
+        } else if (content && content.length % 3 === 1) {
+          setSkeletonNumber(5);
+        } else {
+          setSkeletonNumber(3);
+        }
+      } else if (windowWidth <= 1200) {
+        setSkeletonNumber(4);
+      } else {
+        setSkeletonNumber(5);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call the function initially to set the state based on the initial window size
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [content]);
 
   return (
     <>
@@ -286,13 +307,12 @@ export default function List({
             input={input}
             handleInputChange={handleInputChange}
             setInput={setInput}
+            placeholder={`Search your ${listName.replace("tvs", "TV s")} list`}
           />
 
           <WidthKeeper />
 
-          {loading ? (
-            <ListSkeleton />
-          ) : message && content?.length === 0 ? (
+          {message && content?.length === 0 ? (
             <NoItems message={message} />
           ) : (
             <>
@@ -300,6 +320,9 @@ export default function List({
                 <RandomButton handleShuffle={handleShuffle} />
               )}
               <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 mb-4">
+                {loading && (
+                  <ListSkeleton number={skeletonNumber} />
+                )}
                 {listName === "books" && content ? (
                   <>
                     {content.slice(0, displayCount).map((listItem: any) => (
@@ -351,14 +374,15 @@ export default function List({
                     </>
                   )
                 )}
+                {fetching && <ListSkeleton number={skeletonNumber} />}
+
               </div>
             </>
           )}
-          {fetching && <ListSkeleton />}
         </div>
       </div>
 
-      {content && displayCount < content.length && (
+      {content && displayCount <= content.length && (
         <LoadMore
           displayCount={displayCount}
           setDisplayCount={setDisplayCount}
@@ -413,7 +437,7 @@ export default function List({
                   >
                     <span className="sr-only">Close menu</span>
                     <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                   <div className="flex flex-row justify-center items-center p-10">

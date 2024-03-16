@@ -51,6 +51,11 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
                     <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
                 )}
             </h2>
+            <div className="flex flex-row justify-center items-center mt-4">
+                {watchLink && (
+                    <Link href={watchLink} target='_blank' className="w-full text-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Watch</Link>
+                )}
+            </div>
             <div className=" gap-2 flex flex-col">
                 {overview && (
                     <>
@@ -82,11 +87,6 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
                     </>
                 )}
 
-            </div>
-            <div className="flex flex-row justify-center items-center mt-2">
-                {watchLink && (
-                    <Link href={watchLink} target='_blank' className="w-full text-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Watch</Link>
-                )}
             </div>
             {trailer && (
                 <iframe width="1903" height="742" src={`https://www.youtube.com/embed/${trailer.split('v=')[1]}`} title="Kung Fu Panda 4 | Sand &amp; Spice Trailer" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen className="w-full sm:h-[300px] h-[200px] mt-2"></iframe>

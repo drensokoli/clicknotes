@@ -34,7 +34,7 @@ export default function Book({ id, title, description, publishedDate, averageRat
         if (!notionApiKey || !booksDatabaseId) {
             window.location.href = booksAuthUrl;
         }
-        onApiResponse('Adding book to Notion...');
+        onApiResponse('Adding book to Notion');
 
         const defaultDate = '0001-01-01'
 

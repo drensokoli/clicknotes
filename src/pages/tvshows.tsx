@@ -111,10 +111,10 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                 {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script> */}
             </Head>
-            <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
+            <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/tvshows' />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
-                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} />
+                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} placeholder='Search for TV shows' />
                     <WidthKeeper />
                     {showNotionBanner && (
                         <NotionBanner image='/connecttvshows.png' link={tvShowsAuthUrl} session={session ? true : false} />

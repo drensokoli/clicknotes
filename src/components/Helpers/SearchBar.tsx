@@ -2,11 +2,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react'
 import Link from 'next/link';
 
-export default function SearchBar({ input, handleInputChange, setInput }:
+export default function SearchBar({ input, handleInputChange, setInput,placeholder }:
   {
     input: string;
     handleInputChange: any;
     setInput: any;
+    placeholder: string;
   }) {
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,8 +62,8 @@ export default function SearchBar({ input, handleInputChange, setInput }:
             </svg>
             <input
               type="text"
-              placeholder="Enter title"
-              value={input}
+              placeholder={placeholder}
+              defaultValue={input}
               // onChange={setInput(event?.target.value)}
               className="bg-white h-12 w-full px-12 rounded-lg focus:outline-none hover:cursor-pointer border-2 border-blue-500 select-none"
               ref={inputRef}
@@ -75,7 +76,7 @@ export default function SearchBar({ input, handleInputChange, setInput }:
                 }}
                className='absolute top-3.5 right-4 text-blue-600 dark:text-blue-500 cursor-pointer'>
                 <svg className="w-5 h-5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                  <path stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
               </button>
             )}

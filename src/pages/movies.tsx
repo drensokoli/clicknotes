@@ -117,10 +117,10 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                 {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script> */}
             </Head>
-            <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
+            <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/movies' />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
-                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} />
+                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} placeholder='Search for movies' />
                     <WidthKeeper />
                     {showNotionBanner && (
                         <NotionBanner image='/connectmovies.png' link={moviesAuthUrl} session={session ? true : false} />

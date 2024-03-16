@@ -39,7 +39,7 @@ export default function BreadCrumb({
   setCursorWatching: any;
   setCursorWatched: any;
   setLoading: any;
-  setFetching: any;  
+  setFetching: any;
 }) {
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function BreadCrumb({
             >
               {listName.charAt(0).toUpperCase() + listName.slice(1).replace("vs", "V s")}
               <svg className="w-3 h-2.5 ms-2.5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" >
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
               </svg>
             </button>
             <div id="dropdown-database" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
@@ -114,7 +114,7 @@ export default function BreadCrumb({
             >
               {status}
               <svg className="w-3 h-2.5 ms-2.5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" >
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
               </svg>
             </button>
             <div
@@ -125,16 +125,14 @@ export default function BreadCrumb({
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
                 aria-labelledby="dropdownStatus"
               >
-                {statusList.map((list: any) => (
+                {statusList.map((currentStatus: any) => (
                   <li
-                    key={list}
-                    value={list}
+                    key={currentStatus}
+                    value={currentStatus}
                     onClick={(e) => {
                       setMessage("");
-                      setStatus(list);
-                      const updatedContent = listStates.find(
-                        (listState) => listState.status === list
-                      )?.list;
+                      setStatus(currentStatus);
+                      const updatedContent = listStates.find((listState) => listState.status === currentStatus)?.list;
                       if (updatedContent && updatedContent.length > 0) {
                         setContent(updatedContent);
                         setDisplayCount(20);
@@ -145,10 +143,10 @@ export default function BreadCrumb({
                     }}
                   >
                     <Link
-                      href={`#${list}`}
+                      href={`#${currentStatus}`}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
-                      {list}
+                      {currentStatus}
                     </Link>
                   </li>
                 ))}

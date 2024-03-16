@@ -26,7 +26,7 @@ export default function TvShow({ id, name, overview, first_air_date, vote_averag
     if (!notionApiKey || !tvShowsDatabaseId) {
       window.location.href = moviesAuthUrl;
     }
-    onApiResponse('Adding TV show to Notion...');
+    onApiResponse('Adding TV show to Notion');
 
     const rounded_vote_average = Math.round(vote_average * 10) / 10;
     const tmdb_link = `https://www.themoviedb.org/tv/${id}`;

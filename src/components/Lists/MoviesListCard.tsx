@@ -77,7 +77,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                         status === 'Watching' ? 'border-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:bg-blue-800 focus:border-blue-700' :
                             'border-green-700 hover:bg-green-800 focus:ring-green-800 focus:bg-green-800 focus:border-green-700'
                         }`}
-                    value={status}
+                    defaultValue={status}
                 // onChange={(e) => handleStatusChange(e, id)}
                 >
                     {statusList.map((status: any) => (
@@ -126,7 +126,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                     >
                                         <span className="sr-only">Close menu</span>
                                         <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                            <path strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
                                     <div className="flex flex-row justify-center items-center p-10">

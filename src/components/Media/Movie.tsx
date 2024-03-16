@@ -27,7 +27,7 @@ export default function Movie({ id, title, overview, release_date, vote_average,
         if (!notionApiKey || !moviesDatabaseId) {
             window.location.href = moviesAuthUrl;
         }
-        onApiResponse('Adding movie to Notion...');
+        onApiResponse('Adding movie to Notion');
 
         const genres = [...genresMapping.genres.filter((genre: { id: number; }) => genre_ids.includes(genre.id)).map((genre: { name: any; }) => ({ name: genre.name }))];
 

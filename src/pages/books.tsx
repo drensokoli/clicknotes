@@ -59,7 +59,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 			if (author.length === 0) {
 				return [];
 			}
-			const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}&maxResults=20&key=${googleBooksApiKey}`);	
+			const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}&maxResults=20&key=${googleBooksApiKey}`);
 			return response ? response.data.items : [];
 		} catch (error) {
 			console.error(error);
@@ -68,7 +68,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 	};
 
 	useEffect(() => {
-		if (apiResponse !== 'Adding book to Notion...') {
+		if (apiResponse !== 'Adding book to Notion') {
 			const timer = setTimeout(() => {
 				setApiResponse(null);
 			}, 1000);
@@ -143,102 +143,102 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 				<link rel="icon" href="/favicon.ico" />
 				{/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
 	crossOrigin="anonymous"></script> */}
-		</Head>
-		<Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={pageLink} />
-		<div className="flex flex-col items-center min-h-screen bg-white space-y-4">
-			<div className='w-fit'>
-				<SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} />
-				<WidthKeeper />
-				{showNotionBanner && (
-					<NotionBanner image='/connectbooks.png' link={booksAuthUrl} session={session ? true : false} />
-				)}
-				<div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
-					{books.map((book: BookInterface) => (
-						<Book
-							key={book.id}
-							id={book.id}
-							title={book.volumeInfo.title}
-							previewLink={book.volumeInfo.previewLink}
-							cover_image={book.volumeInfo.imageLinks?.thumbnail}
-							description={book.volumeInfo.description}
-							publishedDate={book.volumeInfo.publishedDate}
-							averageRating={book.volumeInfo.averageRating}
-							authors={book.volumeInfo.authors}
-							infoLink={book.volumeInfo.infoLink}
-							pageCount={book.volumeInfo.pageCount}
-							thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-							language={book.volumeInfo.language}
-							price={book.saleInfo.listPrice?.amount}
-							publisher={book.volumeInfo.publisher}
-							availability={book.saleInfo.saleability}
-							onApiResponse={(error: string) => setApiResponse(error)}
-							setPageLink={setPageLink}
-							encryptionKey={encryptionKey}
-							notionApiKey={notionApiKey}
-							booksDatabaseId={booksDatabaseId}
-						/>
-					))}
-					{books.length === 0 && (
-						<>
-							{
-								bestsellers.map((book: BookInterface) => (
-									<Book
-										key={book.id}
-										id={book.id}
-										title={book.volumeInfo.title}
-										previewLink={book.volumeInfo.previewLink}
-										cover_image={book.volumeInfo.imageLinks?.thumbnail}
-										description={book.volumeInfo.description}
-										publishedDate={book.volumeInfo.publishedDate}
-										averageRating={book.volumeInfo.averageRating}
-										authors={book.volumeInfo.authors}
-										infoLink={book.volumeInfo.infoLink}
-										pageCount={book.volumeInfo.pageCount}
-										thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-										language={book.volumeInfo.language}
-										price={book.saleInfo.listPrice?.amount}
-										publisher={book.volumeInfo.publisher}
-										availability={book.saleInfo.saleability}
-										onApiResponse={(error: string) => setApiResponse(error)}
-										setPageLink={setPageLink}
-										encryptionKey={encryptionKey}
-										notionApiKey={notionApiKey}
-										booksDatabaseId={booksDatabaseId}
-									/>
-								))
-							}
-						</>
+			</Head>
+			<Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/books' />
+			<div className="flex flex-col items-center min-h-screen bg-white space-y-4">
+				<div className='w-fit'>
+					<SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} placeholder='Search for books' />
+					<WidthKeeper />
+					{showNotionBanner && (
+						<NotionBanner image='/connectbooks.png' link={booksAuthUrl} session={session ? true : false} />
 					)}
+					<div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
+						{books.map((book: BookInterface) => (
+							<Book
+								key={book.id}
+								id={book.id}
+								title={book.volumeInfo.title}
+								previewLink={book.volumeInfo.previewLink}
+								cover_image={book.volumeInfo.imageLinks?.thumbnail}
+								description={book.volumeInfo.description}
+								publishedDate={book.volumeInfo.publishedDate}
+								averageRating={book.volumeInfo.averageRating}
+								authors={book.volumeInfo.authors}
+								infoLink={book.volumeInfo.infoLink}
+								pageCount={book.volumeInfo.pageCount}
+								thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+								language={book.volumeInfo.language}
+								price={book.saleInfo.listPrice?.amount}
+								publisher={book.volumeInfo.publisher}
+								availability={book.saleInfo.saleability}
+								onApiResponse={(error: string) => setApiResponse(error)}
+								setPageLink={setPageLink}
+								encryptionKey={encryptionKey}
+								notionApiKey={notionApiKey}
+								booksDatabaseId={booksDatabaseId}
+							/>
+						))}
+						{books.length === 0 && (
+							<>
+								{
+									bestsellers.map((book: BookInterface) => (
+										<Book
+											key={book.id}
+											id={book.id}
+											title={book.volumeInfo.title}
+											previewLink={book.volumeInfo.previewLink}
+											cover_image={book.volumeInfo.imageLinks?.thumbnail}
+											description={book.volumeInfo.description}
+											publishedDate={book.volumeInfo.publishedDate}
+											averageRating={book.volumeInfo.averageRating}
+											authors={book.volumeInfo.authors}
+											infoLink={book.volumeInfo.infoLink}
+											pageCount={book.volumeInfo.pageCount}
+											thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+											language={book.volumeInfo.language}
+											price={book.saleInfo.listPrice?.amount}
+											publisher={book.volumeInfo.publisher}
+											availability={book.saleInfo.saleability}
+											onApiResponse={(error: string) => setApiResponse(error)}
+											setPageLink={setPageLink}
+											encryptionKey={encryptionKey}
+											notionApiKey={notionApiKey}
+											booksDatabaseId={booksDatabaseId}
+										/>
+									))
+								}
+							</>
+						)}
+					</div>
 				</div>
 			</div>
-		</div>
 		</>
-		);
+	);
 };
 
 
 export const getStaticProps = async () => {
 
-    const encryptionKey = process.env.ENCRYPTION_KEY;
-    const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY_2;
-    const nyTimesApiKey = process.env.NYTIMES_API_KEY;
+	const encryptionKey = process.env.ENCRYPTION_KEY;
+	const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY_2;
+	const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
-    const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
-    const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
-    const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
-    const bookDetailsResponses = await Promise.all(bookDetailsPromises);
-    const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
+	const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
+	const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
+	const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
+	const bookDetailsResponses = await Promise.all(bookDetailsPromises);
+	const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
 
-    return {
-        props: {
-            encryptionKey,
-            googleBooksApiKey,
-            nyTimesApiKey,
-            bestsellers
-        },
+	return {
+		props: {
+			encryptionKey,
+			googleBooksApiKey,
+			nyTimesApiKey,
+			bestsellers
+		},
 
-        revalidate: 60 * 60 * 24 // 24 hours
-    };
+		revalidate: 60 * 60 * 24 // 24 hours
+	};
 }
 
 // export const getStaticProps = async () => {
