@@ -45,7 +45,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
         }
         searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'movie' })
             .then(movies => {
-                if (movies.length > 0) {
+                if (movies && movies.length > 0) {
                     setMovies(movies);
                     setNoItemsFound(false);
                 } else {

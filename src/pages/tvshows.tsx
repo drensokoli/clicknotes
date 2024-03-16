@@ -39,7 +39,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'tv' })
             .then((tvShows) => {
-                if (tvShows.length > 0) {
+                if (tvShows && tvShows.length > 0) {
                     setTvShows(tvShows);
                     setNoItemsFound(false);
                 } else {
