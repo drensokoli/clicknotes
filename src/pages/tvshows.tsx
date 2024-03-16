@@ -34,11 +34,16 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
     const [pageLink, setPageLink] = useState('');
     const [displayCount, setDisplayCount] = useState(20);
 
+    const [noItemsFound, setNoItemsFound] = useState(false);
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'tv' })
             .then((tvShows) => {
-                if (tvShows) {
+                if (tvShows.length > 0) {
                     setTvShows(tvShows);
+                    setNoItemsFound(false);
+                } else {
+                    setNoItemsFound(true);
                 }
             })
             .catch((error: any) => console.error(error));
@@ -78,6 +83,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
     useEffect(() => {
         if (input === '') {
             setTvShows([]);
+            setNoItemsFound(false);
         }
     }, [input]);
 
@@ -138,7 +144,11 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                                 />
                             ))
                         }
-                        {tvShows.length === 0 && (
+                        {noItemsFound ? (
+                            <div className='text-center text-gray-500 text-xl col-span-full my-4'>
+                                No items found
+                            </div>
+                        ): tvShows.length === 0 && (
                             <>
                                 {popularTvShows
                                     .slice(0, displayCount)

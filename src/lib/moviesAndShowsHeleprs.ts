@@ -2,12 +2,12 @@ import axios from "axios";
 
 export async function searchContentByTitle({ title, tmdbApiKey, type }: { title: string, tmdbApiKey: string, type: string }) {
     try {
-        const response = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${tmdbApiKey}&query=${title}&language=en-US&page=1&include_adult=false`);
+        const pageOneResponse = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${tmdbApiKey}&query=${title}&language=en-US&page=1&include_adult=false`);
+        const pageTwoResponse = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${tmdbApiKey}&query=${title}&language=en-US&page=2&include_adult=false`);
 
-        const content = response.data.results;
+        const content = [...pageOneResponse.data.results, ...pageTwoResponse.data.results];
 
         return content;
-
 
     } catch (error) {
         console.error(error);

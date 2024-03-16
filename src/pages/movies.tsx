@@ -10,6 +10,7 @@ import Head from 'next/head';
 import LoadMore from '@/components/Helpers/LoadMore';
 import NotionBanner from '@/components/Notion/NotionBanner';
 import WidthKeeper from '@/components/Lists/WidthKeeper';
+import { set } from 'lodash';
 
 export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popularMovies }: {
     tmdbApiKey: string;
@@ -34,15 +35,21 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
     const [pageLink, setPageLink] = useState('');
     const [displayCount, setDisplayCount] = useState(20);
 
+    const [noItemsFound, setNoItemsFound] = useState(false);
+
     const handleInputChange = () => {
-        if(input === '') {
+        if (input === '') {
             setMovies([]);
+            setNoItemsFound(false);
             return;
         }
         searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'movie' })
             .then(movies => {
-                if (movies) {
+                if (movies.length > 0) {
                     setMovies(movies);
+                    setNoItemsFound(false);
+                } else {
+                    setNoItemsFound(true);
                 }
             })
             .catch(error => console.error(error));
@@ -81,8 +88,9 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
     }, [session]);
 
     useEffect(() => {
-        if(input === '') {
+        if (input === '') {
             setMovies([]);
+            setNoItemsFound(false);
         }
     }, [input]);
 
@@ -144,7 +152,11 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                                 />
                             ))
                         }
-                        {movies.length === 0 && (
+                        {noItemsFound ? (
+                            <div className='text-center text-gray-500 text-xl col-span-full my-4'>
+                                No items found
+                            </div>
+                        ): movies.length === 0 && (
                             <>
                                 {popularMovies
                                     .slice(0, displayCount)

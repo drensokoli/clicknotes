@@ -8,6 +8,7 @@ import Head from 'next/head';
 import { useSession } from 'next-auth/react';
 import NotionBanner from '@/components/Notion/NotionBanner';
 import WidthKeeper from '@/components/Lists/WidthKeeper';
+import { set } from 'lodash';
 
 export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }: {
 	encryptionKey: string;
@@ -29,6 +30,8 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 	const [apiResponse, setApiResponse] = useState<string | null>(null);
 	const [pageLink, setPageLink] = useState('');
 
+	const [noItemsFound, setNoItemsFound] = useState(false);
+
 	const handleInputChange = () => {
 		const resultsByTitle = searchBooksByTitle(input)
 		const resultsByAuthor = searchBooksByAuthor(input)
@@ -36,18 +39,31 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 		Promise.all([resultsByTitle, resultsByAuthor])
 			.then((results) => {
 				const [titleResults, authorResults] = results;
-				const books = [...titleResults, ...authorResults];
-				setBooks(books);
+				const books = [
+					...(Array.isArray(titleResults) ? titleResults : []),
+					...(Array.isArray(authorResults) ? authorResults : []),
+				  ];
+				if (books.length === 0) {
+					setNoItemsFound(true);
+				} else {
+					setNoItemsFound(false);
+					setBooks(books);
+				}
 			});
 	};
 
 	const searchBooksByTitle = async (title: string) => {
 		try {
 			if (title.length === 0) {
+				setNoItemsFound(false);
 				return [];
 			}
 			const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=20&key=${googleBooksApiKey}`);
-			return response ? response.data.items : [];
+			if (response && response.data?.items) {
+				return response.data.items;
+			} else {
+				return [];
+			}
 		} catch (error) {
 			console.error(error);
 			return []; // return an empty array in case of an error
@@ -57,10 +73,16 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 	const searchBooksByAuthor = async (author: string) => {
 		try {
 			if (author.length === 0) {
+				setNoItemsFound(false);
 				return [];
 			}
 			const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}&maxResults=20&key=${googleBooksApiKey}`);
-			return response ? response.data.items : [];
+			if (response && response.data?.items) {
+				console.log("Author Response:", response)
+				return response.data.items;
+			} else {
+				return [];
+			}
 		} catch (error) {
 			console.error(error);
 			return []; // return an empty array in case of an error
@@ -112,6 +134,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 	useEffect(() => {
 		if (input === '') {
 			setBooks([]);
+			setNoItemsFound(false);
 		}
 	}, [input]);
 	return (
@@ -178,7 +201,11 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 								booksDatabaseId={booksDatabaseId}
 							/>
 						))}
-						{books.length === 0 && (
+                        {noItemsFound ? (
+                            <div className='text-center text-gray-500 text-xl col-span-full my-4'>
+                                No items found
+                            </div>
+                        ): books.length === 0 && (
 							<>
 								{
 									bestsellers.map((book: BookInterface) => (
