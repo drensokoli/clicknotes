@@ -5,7 +5,7 @@ export default function LoadMore({ displayCount, setDisplayCount, media, seconda
     secondaryFunction?: () => void;
 }) {
     return (
-        <div className='w-full flex justify-center items-center'>
+        <div className='w-full flex justify-center items-center mt-4'>
             <button
                 type="button"
                 className=" text-blue-700 select-none hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-14 py-2.5 text-center mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"

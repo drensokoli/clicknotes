@@ -44,6 +44,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 					...(Array.isArray(authorResults) ? authorResults : []),
 				  ];
 				if (books.length === 0) {
+					setBooks([]);
 					setNoItemsFound(true);
 				} else {
 					setNoItemsFound(false);
@@ -175,7 +176,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 					{showNotionBanner && (
 						<NotionBanner image='/connectbooks.png' link={booksAuthUrl} session={session ? true : false} />
 					)}
-					<div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
+					<div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 flex-grow'>
 						{books.map((book: BookInterface) => (
 							<Book
 								key={book.id}

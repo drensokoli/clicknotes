@@ -49,6 +49,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                     setMovies(movies);
                     setNoItemsFound(false);
                 } else {
+                    setMovies([]);
                     setNoItemsFound(true);
                 }
             })
@@ -133,7 +134,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                     {showNotionBanner && (
                         <NotionBanner image='/connectmovies.png' link={moviesAuthUrl} session={session ? true : false} />
                     )}
-                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
+                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 flex-grow'>
                         {movies
                             .map((item) => (
                                 <Movie
@@ -152,11 +153,12 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                                 />
                             ))
                         }
+
                         {noItemsFound ? (
                             <div className='text-center text-gray-500 text-xl col-span-full my-4'>
                                 No items found
                             </div>
-                        ): movies.length === 0 && (
+                        ) : movies.length === 0 && (
                             <>
                                 {popularMovies
                                     .slice(0, displayCount)
@@ -180,7 +182,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                         )}
                     </div>
                 </div>
-                {displayCount < popularMovies.length && movies.length === 0 && (
+                {displayCount < popularMovies.length && movies.length === 0 && !noItemsFound && (
                     <LoadMore
                         displayCount={displayCount}
                         setDisplayCount={setDisplayCount}

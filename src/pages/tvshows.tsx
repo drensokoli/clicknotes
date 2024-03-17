@@ -43,6 +43,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                     setTvShows(tvShows);
                     setNoItemsFound(false);
                 } else {
+                    setTvShows([]);
                     setNoItemsFound(true);
                 }
             })
@@ -125,7 +126,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                     {showNotionBanner && (
                         <NotionBanner image='/connecttvshows.png' link={tvShowsAuthUrl} session={session ? true : false} />
                     )}
-                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 min-h-screen'>
+                    <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 flex-grow'>
                         {tvShows
                             .map((item) => (
                                 <TvShow
@@ -172,7 +173,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                             </>
                         )}
                     </div>
-                    {displayCount < popularTvShows.length && tvShows.length === 0 && (
+                    {displayCount < popularTvShows.length && tvShows.length === 0 && !noItemsFound && (
                         <LoadMore
                             displayCount={displayCount}
                             setDisplayCount={setDisplayCount}
