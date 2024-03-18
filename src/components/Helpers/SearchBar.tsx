@@ -1,15 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react'
-import Link from 'next/link';
 
-export default function SearchBar({ input, handleInputChange, setInput,placeholder }:
+export default function SearchBard({ input, handleInputChange, placeholder }:
   {
     input: string;
-    handleInputChange: any;
-    setInput: any;
-    placeholder: string;
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
   }) {
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -49,13 +46,7 @@ export default function SearchBar({ input, handleInputChange, setInput,placehold
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <form
-          onChange={(event) => setInput((event.target as HTMLInputElement).value)}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleInputChange();
-          }}
-        >
+        <form onSubmit={(event) => event.preventDefault()}>
           <div className="relative">
             <svg className="w-5 h-5 text-gray-400 absolute top-3.5 left-4" fill="currentColor" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path>
@@ -63,23 +54,11 @@ export default function SearchBar({ input, handleInputChange, setInput,placehold
             <input
               type="text"
               placeholder={placeholder}
-              defaultValue={input}
-              // onChange={setInput(event?.target.value)}
+              value={input}
+              onChange={handleInputChange}
               className="bg-white h-12 w-full px-12 rounded-lg focus:outline-none hover:cursor-pointer border-2 border-blue-500 select-none"
               ref={inputRef}
             />
-            {input.length > 0 && (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleInputChange();
-                }}
-               className='absolute top-3.5 right-4 text-blue-600 dark:text-blue-500 cursor-pointer'>
-                <svg className="w-5 h-5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                </svg>
-              </button>
-            )}
           </div>
         </form>
       </Transition>

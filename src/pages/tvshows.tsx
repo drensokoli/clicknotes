@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import TvShow from '../components/Media/TvShow';
 import SearchBar from '@/components/Helpers/SearchBar';
@@ -35,9 +35,22 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
     const [displayCount, setDisplayCount] = useState(20);
 
     const [noItemsFound, setNoItemsFound] = useState(false);
+    const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'tv' })
+        setInput(event.target.value);
+        if (event.target.value === '') {
+            setTvShows([]);
+            setNoItemsFound(false);
+            return;
+        }
+
+        // Clear the existing debounce timeout
+        clearTimeout(debounceTimeout.current!);
+
+        // Set a new debounce timeout
+        debounceTimeout.current = setTimeout(() => {
+            searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'tv' })
             .then((tvShows) => {
                 if (tvShows && tvShows.length > 0) {
                     setTvShows(tvShows);
@@ -48,6 +61,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                 }
             })
             .catch((error: any) => console.error(error));
+        }, 300);
     };
 
     async function fetchUserData() {
@@ -121,7 +135,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/tvshows' />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
-                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} placeholder='Search for TV shows' />
+                    <SearchBar input={input} handleInputChange={handleInputChange} placeholder='Search for TV shows' />
                     <WidthKeeper />
                     {showNotionBanner && (
                         <NotionBanner image='/connecttvshows.png' link={tvShowsAuthUrl} session={session ? true : false} />

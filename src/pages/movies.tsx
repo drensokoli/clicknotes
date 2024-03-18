@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import SearchBar from '@/components/Helpers/SearchBar';
 import Movie from '@/components/Media/Movie';
@@ -36,24 +36,33 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
     const [displayCount, setDisplayCount] = useState(20);
 
     const [noItemsFound, setNoItemsFound] = useState(false);
+    const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const handleInputChange = () => {
-        if (input === '') {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInput(event.target.value);
+        if (event.target.value === '') {
             setMovies([]);
             setNoItemsFound(false);
             return;
         }
-        searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'movie' })
-            .then(movies => {
-                if (movies && movies.length > 0) {
-                    setMovies(movies);
-                    setNoItemsFound(false);
-                } else {
-                    setMovies([]);
-                    setNoItemsFound(true);
-                }
-            })
-            .catch(error => console.error(error));
+
+        // Clear the existing debounce timeout
+        clearTimeout(debounceTimeout.current!);
+
+        // Set a new debounce timeout
+        debounceTimeout.current = setTimeout(() => {
+            searchContentByTitle({ title: event.target.value, tmdbApiKey: tmdbApiKey, type: 'movie' })
+                .then(movies => {
+                    if (movies && movies.length > 0) {
+                        setMovies(movies);
+                        setNoItemsFound(false);
+                    } else {
+                        setMovies([]);
+                        setNoItemsFound(true);
+                    }
+                })
+                .catch(error => console.error(error));
+        }, 300); // Adjust the delay (in milliseconds) to suit your needs
     };
 
     async function fetchUserData() {
@@ -129,7 +138,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/movies' />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
-                    <SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} placeholder='Search for movies' />
+                    <SearchBar input={input} handleInputChange={handleInputChange} placeholder='Search for movies' />
                     <WidthKeeper />
                     {showNotionBanner && (
                         <NotionBanner image='/connectmovies.png' link={moviesAuthUrl} session={session ? true : false} />

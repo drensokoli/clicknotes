@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Book from '../components/Media/Book';
 import SearchBar from '@/components/Helpers/SearchBar';
@@ -31,27 +31,42 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 	const [pageLink, setPageLink] = useState('');
 
 	const [noItemsFound, setNoItemsFound] = useState(false);
+    const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	const handleInputChange = () => {
-		const resultsByTitle = searchBooksByTitle(input)
-		const resultsByAuthor = searchBooksByAuthor(input)
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInput(event.target.value);
+        if (event.target.value === '') {
+            setBooks([]);
+            setNoItemsFound(false);
+            return;
+        }
 
-		Promise.all([resultsByTitle, resultsByAuthor])
-			.then((results) => {
-				const [titleResults, authorResults] = results;
-				const books = [
-					...(Array.isArray(titleResults) ? titleResults : []),
-					...(Array.isArray(authorResults) ? authorResults : []),
-				  ];
-				if (books.length === 0) {
-					setBooks([]);
-					setNoItemsFound(true);
-				} else {
-					setNoItemsFound(false);
-					setBooks(books);
-				}
-			});
-	};
+        // Clear the existing debounce timeout
+        clearTimeout(debounceTimeout.current!);
+
+        // Set a new debounce timeout
+        debounceTimeout.current = setTimeout(() => {
+            const resultsByTitle = searchBooksByTitle(event.target.value);
+            const resultsByAuthor = searchBooksByAuthor(event.target.value);
+
+            Promise.all([resultsByTitle, resultsByAuthor])
+                .then((results) => {
+                    const [titleResults, authorResults] = results;
+                    const books = [
+                        ...(Array.isArray(titleResults) ? titleResults : []),
+                        ...(Array.isArray(authorResults) ? authorResults : []),
+                    ];
+                    if (books.length === 0) {
+                        setBooks([]);
+                        setNoItemsFound(true);
+                    } else {
+                        setNoItemsFound(false);
+                        setBooks(books);
+                    }
+                });
+        }, 300); // Adjust the delay (in milliseconds) to suit your needs
+    };
+
 
 	const searchBooksByTitle = async (title: string) => {
 		try {
@@ -171,7 +186,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 			<Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/books' />
 			<div className="flex flex-col items-center min-h-screen bg-white space-y-4">
 				<div className='w-fit'>
-					<SearchBar input={input} handleInputChange={handleInputChange} setInput={setInput} placeholder='Search for books' />
+					<SearchBar input={input} handleInputChange={handleInputChange} placeholder='Search for books' />
 					<WidthKeeper />
 					{showNotionBanner && (
 						<NotionBanner image='/connectbooks.png' link={booksAuthUrl} session={session ? true : false} />
