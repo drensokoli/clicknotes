@@ -6,8 +6,11 @@ import { decryptData } from '@/lib/encryption';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const { listName, cursor, statusFilter, notionApiKey, databaseId } = req.body;
-
-    const notion = new Client({ auth: notionApiKey });
+	const encryptionKey = process.env.ENCRYPTION_KEY as string;
+    const decryptedApiKey = decryptData(notionApiKey, encryptionKey);
+    
+    const notion = new Client({ auth: decryptedApiKey });
+    
     let filter = {} as any;
 
     switch (listName) {

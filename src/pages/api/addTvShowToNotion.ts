@@ -1,8 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
+import { decryptData } from '@/lib/encryption';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, tvShowData } = req.body;
+
+    const encryptionKey = process.env.ENCRYPTION_KEY as string;
+    const decryptedApiKey = decryptData(notionApiKey, encryptionKey);
 
     const watchLinkName = tvShowData.name.replace(/ /g, '-').toLowerCase();
     const imdbId = tvShowData.imdb_link.split('/')[4].replace('tt', '');
@@ -30,14 +34,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { name: 'Overview', type: 'rich_text', structure: [{ text: { content: tvShowData.overview } }], data: tvShowData.overview },
         { name: 'Trailer', type: 'url', structure: tvShowData.trailer, data: tvShowData.trailer },
         { name: 'Watch Link', type: 'url', structure: watchLink, data: watchLink },
-        { name: 'Adult', type: 'checkbox', structure: isAdult, data: isAdult},
+        { name: 'Adult', type: 'checkbox', structure: isAdult, data: isAdult },
         { name: 'Runtime', type: 'rich_text', structure: [{ text: { content: tvShowData.runtime } }], data: tvShowData.runtime },
-        { name: 'Rated', type: 'select', structure: { name: tvShowData.rated}, data: tvShowData.rated },
+        { name: 'Rated', type: 'select', structure: { name: tvShowData.rated }, data: tvShowData.rated },
         { name: 'Awards', type: 'rich_text', structure: [{ text: { content: tvShowData.awards } }], data: tvShowData.awards },
     ];
 
     try {
-        const notion = new Client({ auth: notionApiKey });
+        const notion = new Client({ auth: decryptedApiKey });
 
         const existingPages = await notion.databases.query({
             database_id: db_id,

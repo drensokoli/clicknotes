@@ -8,8 +8,9 @@ import Link from 'next/link';
 import Toast from '@/components/Helpers/Toast';
 import Input from '@/components/Helpers/Input';
 import { Transition } from '@headlessui/react'
+import { decryptData } from '@/lib/encryption';
 
-export default function Connect() {
+export default function Connect({ encryptionKey }: { encryptionKey: string }) {
 	const { data: session } = useSession();
 	const userEmail = session?.user?.email;
 
@@ -40,8 +41,8 @@ export default function Connect() {
 		}
 
 		const extractedId = extractValueFromUrl(input);
-        setInput(extractedId);
-        
+		setInput(extractedId);
+
 		const response = await fetch('/api/updateUserConnection', {
 			method: 'POST',
 			headers: {
@@ -58,7 +59,7 @@ export default function Connect() {
 		const result = await response.json();
 
 		fetchUserData();
-;
+		;
 		setApiResponse(result.message);
 	}
 
@@ -78,8 +79,11 @@ export default function Connect() {
 
 				const connectionData = await response.json();
 
-				connection.setApiKey(connectionData.access_token);
-				connection.setDataBaseId(connectionData.template_id);
+				const apiKey = decryptData(connectionData.access_token, encryptionKey);
+				const databaseId = connectionData.template_id;
+
+				connection.setApiKey(apiKey);
+				connection.setDataBaseId(databaseId);
 			});
 
 		} catch (error) {
@@ -91,7 +95,7 @@ export default function Connect() {
 		if (userEmail) {
 			fetchUserData();
 		}
-	}, []);
+	}, [session]);
 
 	const [show, setShow] = useState(false);
 
@@ -179,6 +183,7 @@ export default function Connect() {
 
 export const getServerSideProps = async (context: any) => {
 	const session = await getSession(context);
+	const encryptionKey = process.env.ENCRYPTION_KEY;
 
 	if (!session) {
 		return {
@@ -188,7 +193,9 @@ export const getServerSideProps = async (context: any) => {
 		};
 	} else {
 		return {
-			props: {},
+			props: {
+				encryptionKey
+			},
 		};
 	}
 };

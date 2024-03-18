@@ -1,8 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
+import { decryptData } from '@/lib/encryption';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, bookData } = req.body;
+
+    const encryptionKey = process.env.ENCRYPTION_KEY as string;
+    const decryptedApiKey = decryptData(notionApiKey, encryptionKey);
 
     const checkProperties = [
         { name: 'Title', type: 'title', structure: [{ text: { content: bookData.title } }], data: bookData.title },
@@ -10,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { name: 'Google Books Link', type: 'url', structure: bookData.previewLink, data: bookData.previewLink },
         { name: 'Published Date', type: 'date', structure: { start: bookData.publishedDate }, data: bookData.publishedDate },
         { name: 'Average Rating', type: 'number', structure: bookData.averageRating, data: bookData.averageRating },
-        { name: 'Authors', type: 'multi_select', structure: bookData.authors, data: bookData.authors},
+        { name: 'Authors', type: 'multi_select', structure: bookData.authors, data: bookData.authors },
         { name: 'Language', type: 'select', structure: { name: bookData.language }, data: bookData.language },
         { name: 'Publisher', type: 'select', structure: { name: bookData.publisher }, data: bookData.publisher },
         { name: 'Page Count', type: 'number', structure: bookData.pageCount, data: bookData.pageCount },
@@ -19,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ];
 
     try {
-        const notion = new Client({ auth: notionApiKey });
+        const notion = new Client({ auth: decryptedApiKey });
 
         const existingPages = await notion.databases.query({
             database_id: db_id,

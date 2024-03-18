@@ -42,14 +42,14 @@ export default function Navbar() {
                                     </Disclosure.Button>
                                 </div>
                                 <div className="flex  flex-1 justify-around items-center">
-                                    <div className="flex-shrink-0 hidden sm:block sm:items-center select-none ml-2">
+                                    <div className="flex-shrink-0 hidden sm:block sm:items-center select-none ml-6">
                                         <Link href="/movies" aria-label='Home'>
                                             <Image src="/logo.png" alt="logo" width={70} height={40}
                                                 className="h-auto"
                                             />
                                         </Link>
                                     </div>
-                                    <div className="hidden sm:block">
+                                    <div className="hidden sm:block lg:mr-64 lg:ml-60">
                                         <div className="flex gap-10">
                                             {navigation.map((item) => (
                                                 <Link

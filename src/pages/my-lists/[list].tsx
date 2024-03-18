@@ -17,6 +17,7 @@ import { stat } from "fs";
 import { useRouter } from "next/router";
 import BreadCrumb from "@/components/Helpers/BreadCrumb";
 import RandomButton from "@/components/Helpers/RandomButton";
+import { decryptData } from "@/lib/encryption";
 
 export default function List({
   statusList,
@@ -306,7 +307,6 @@ export default function List({
           <SearchBar
             input={input}
             handleInputChange={handleInputChange}
-            setInput={setInput}
             placeholder={`Search your ${listName.replace("tvs", "TV s")} list`}
           />
 
@@ -491,7 +491,8 @@ export default function List({
 export async function getServerSideProps(context: any) {
   const session = await getSession(context);
   const userEmail = session?.user?.email;
-
+  const encryptionKey = process.env.ENCRYPTION_KEY as string;
+  
   if (!session) {
     return {
       redirect: {
@@ -569,6 +570,8 @@ export async function getServerSideProps(context: any) {
 
   const { notionApiKey, databaseId } = await fetchUserData();
 
+  const decryptedApiKey = decryptData(notionApiKey, encryptionKey);
+  
   if (!notionApiKey) {
     return {
       redirect: {
@@ -581,7 +584,7 @@ export async function getServerSideProps(context: any) {
   let statusList = [] as any;
 
   if (databaseId) {
-    const notion = new Client({ auth: notionApiKey });
+    const notion = new Client({ auth: decryptedApiKey });
     const databaseInfo = (await notion.databases.retrieve({
       database_id: databaseId,
     })) as any;

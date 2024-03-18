@@ -1,8 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
+import { decryptData } from '@/lib/encryption';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, db_id, movieData } = req.body;
+
+    const encryptionKey = process.env.ENCRYPTION_KEY as string;
+    const decryptedApiKey = decryptData(notionApiKey, encryptionKey);
 
     const watchLinkName = movieData.title.replace(/ /g, '-').toLowerCase();
     const imdbId = movieData.imdb_link.split('/')[4].replace('tt', '');
@@ -29,15 +33,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { name: 'Overview', type: 'rich_text', structure: [{ text: { content: movieData.overview } }], data: movieData.overview },
         { name: 'Trailer', type: 'url', structure: movieData.trailer, data: movieData.trailer },
         { name: 'Watch Link', type: 'url', structure: watchLink, data: watchLink },
-        { name: 'Adult', type: 'checkbox', structure: isAdult, data: isAdult},
+        { name: 'Adult', type: 'checkbox', structure: isAdult, data: isAdult },
         { name: 'Runtime', type: 'rich_text', structure: [{ text: { content: movieData.runtime } }], data: movieData.runtime },
-        { name: 'Rated', type: 'select', structure: { name: movieData.rated}, data: movieData.rated },
+        { name: 'Rated', type: 'select', structure: { name: movieData.rated }, data: movieData.rated },
         { name: 'Awards', type: 'rich_text', structure: [{ text: { content: movieData.awards } }], data: movieData.awards },
         // { name: 'Box Office', type: 'number', structure: movieData.boxOffice, data: movieData.boxOffice },
     ];
 
     try {
-        const notion = new Client({ auth: notionApiKey });
+        const notion = new Client({ auth: decryptedApiKey });
 
         const existingPages = await notion.databases.query({
             database_id: db_id,

@@ -1,9 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Client } from '@notionhq/client';
+import { decryptData } from '@/lib/encryption';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { notionApiKey, databaseId, statusFilter, type } = req.body;
-    const notion = new Client({ auth: notionApiKey });
+    
+    const encryptionKey = process.env.ENCRYPTION_KEY as string;
+    const decryptedApiKey = decryptData(notionApiKey, encryptionKey);
+    
+    const notion = new Client({ auth: decryptedApiKey });
     let filter = {} as any;
     switch (type) {
         case 'movies':

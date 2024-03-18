@@ -6,6 +6,7 @@ import { decryptData } from '@/lib/encryption';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const { userEmail, listType } = req.body;
+        const encryptionKey = process.env.ENCRYPTION_KEY as string;
 
         const dbName = process.env.MONGODB_DB_NAME;
         const dbCollection = 'connections';
@@ -38,9 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const notionApiKey = connection.access_token;
+        const decryptedApiKey = decryptData(notionApiKey, encryptionKey);
         const databaseId = connection.template_id;
 
-        const notion = new Client({ auth: notionApiKey });
+        const notion = new Client({ auth: decryptedApiKey });
 
         const fetchAllPages = async (databaseId: string, filter: any) => {
             const response = await notion.databases.query({

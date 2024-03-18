@@ -6,8 +6,9 @@ import Input from '@/components/Helpers/Input';
 import { template } from 'lodash';
 import { extractValueFromUrl } from '@/lib/profileHelpers';
 import Toast from '@/components/Helpers/Toast';
+import { encryptData } from '@/lib/encryption';
 
-export default function NotionCallback({ response, type }: { response: any, type: any }) {
+export default function NotionCallback({ response, type, encryptionKey }: { response: any, type: any, encryptionKey: any }) {
 	const { data: session } = useSession();
 	const userEmail = session?.user?.email;
 
@@ -21,6 +22,13 @@ export default function NotionCallback({ response, type }: { response: any, type
 		try {
 			if (response.error) { return; }
 			const templateId = response.duplicated_template_id ? response.duplicated_template_id.split('-').join('') : null;
+			const encryptedAccessToken = encryptData(response.access_token, encryptionKey);
+			
+			const encryptedData = {
+				...response,
+				access_token: encryptedAccessToken
+			}
+
 			const res = await fetch('/api/updateUserConnection', {
 				method: 'POST',
 				headers: {
@@ -28,7 +36,7 @@ export default function NotionCallback({ response, type }: { response: any, type
 				},
 				body: JSON.stringify({
 					userEmail,
-					data: response,
+					data: encryptedData,
 					templateId: templateId,
 					type: type,
 				}),
@@ -175,6 +183,7 @@ export default function NotionCallback({ response, type }: { response: any, type
 
 export async function getServerSideProps(context: any) {
 
+	const encryptionKey = process.env.ENCRYPTION_KEY;
 	const type = context.params.type;
 	let clientId;
 	let clientSecret;
@@ -233,7 +242,8 @@ export async function getServerSideProps(context: any) {
 	return {
 		props: {
 			response,
-			type
+			type,
+			encryptionKey
 		}
 	};
 }
