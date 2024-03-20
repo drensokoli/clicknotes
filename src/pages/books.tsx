@@ -31,52 +31,40 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 	const [pageLink, setPageLink] = useState('');
 
 	const [noItemsFound, setNoItemsFound] = useState(false);
-    const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInput(event.target.value);
-        if (event.target.value === '') {
-            setBooks([]);
-            setNoItemsFound(false);
-            return;
-        }
+	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setInput(event.target.value);
+		if (event.target.value === '') {
+			setBooks([]);
+			setNoItemsFound(false);
+			return;
+		}
 
-        clearTimeout(debounceTimeout.current!);
+		clearTimeout(debounceTimeout.current!);
 
-        debounceTimeout.current = setTimeout(() => {
-			const resultsByTitle = searchBooksByTitle(input);
-            const resultsByAuthor = searchBooksByAuthor(input);
-
-            Promise.all([resultsByTitle, resultsByAuthor])
-                .then((results: any) => {
-                    const [titleResults, authorResults] = results;
-                    const books = [
-                        ...(Array.isArray(titleResults) ? titleResults : []),
-                        ...(Array.isArray(authorResults) ? authorResults : []),
-                    ];
-                    if (books.length > 0) {
-                        setBooks(books);
-                        setNoItemsFound(false);
-                    } else {
-                        setBooks([]);
-                        setNoItemsFound(true);
-                    }
-                })
-				.catch((error) => {
-					console.error(error);
-				});
-        }, 300);
-    };
+		debounceTimeout.current = setTimeout(() => {
+			searchBooksByTitle(event.target.value)
+				.then((books) => {
+					if (books && books.length > 0) {
+						setBooks(books);
+						setNoItemsFound(false);
+					} else {
+						setBooks([]);
+						setNoItemsFound(true);
+					}
+				})
+				.catch((error) => console.error(error));
+		}, 300);
+	};
 
 
 	const searchBooksByTitle = async (title: string) => {
 		try {
-			const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=20&key=${googleBooksApiKey}`);
-			if (response && response.data?.items) {
-				return response.data.items;
-			} else {
-				return [];
-			}
+			const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=40&key=${googleBooksApiKey}`);
+
+			return response.data.items;
+
 		} catch (error) {
 			console.error(error);
 		}
@@ -213,7 +201,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 								booksDatabaseId={booksDatabaseId}
 							/>
 						))}
-                        {books.length === 0 && (
+						{books.length === 0 && (
 							<>
 								{
 									bestsellers.map((book: BookInterface) => (
