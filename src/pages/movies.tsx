@@ -46,10 +46,8 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
             return;
         }
 
-        // Clear the existing debounce timeout
         clearTimeout(debounceTimeout.current!);
-
-        // Set a new debounce timeout
+        
         debounceTimeout.current = setTimeout(() => {
             searchContentByTitle({ title: event.target.value, tmdbApiKey: tmdbApiKey, type: 'movie' })
                 .then(movies => {
@@ -62,7 +60,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                     }
                 })
                 .catch(error => console.error(error));
-        }, 300); // Adjust the delay (in milliseconds) to suit your needs
+        }, 300); 
     };
 
     async function fetchUserData() {
@@ -135,7 +133,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                 {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script> */}
             </Head>
-            
+
             <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/movies' />
             <div className="flex flex-col items-center min-h-screen bg-white space-y-4">
                 <div className='w-fit'>
@@ -164,11 +162,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                             ))
                         }
 
-                        {noItemsFound ? (
-                            <div className='text-center text-gray-500 text-xl col-span-full my-4'>
-                                No items found
-                            </div>
-                        ) : movies.length === 0 && (
+                        {movies.length === 0 && (
                             <>
                                 {popularMovies
                                     .slice(0, displayCount)

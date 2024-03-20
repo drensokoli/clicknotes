@@ -159,11 +159,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                                 />
                             ))
                         }
-                        {noItemsFound ? (
-                            <div className='text-center text-gray-500 text-xl col-span-full my-4'>
-                                No items found
-                            </div>
-                        ): tvShows.length === 0 && (
+                        {tvShows.length === 0 && (
                             <>
                                 {popularTvShows
                                     .slice(0, displayCount)

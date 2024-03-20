@@ -41,39 +41,36 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
             return;
         }
 
-        // Clear the existing debounce timeout
         clearTimeout(debounceTimeout.current!);
 
-        // Set a new debounce timeout
         debounceTimeout.current = setTimeout(() => {
-            const resultsByTitle = searchBooksByTitle(event.target.value);
-            const resultsByAuthor = searchBooksByAuthor(event.target.value);
+			const resultsByTitle = searchBooksByTitle(input);
+            const resultsByAuthor = searchBooksByAuthor(input);
 
             Promise.all([resultsByTitle, resultsByAuthor])
-                .then((results) => {
+                .then((results: any) => {
                     const [titleResults, authorResults] = results;
                     const books = [
                         ...(Array.isArray(titleResults) ? titleResults : []),
                         ...(Array.isArray(authorResults) ? authorResults : []),
                     ];
-                    if (books.length === 0) {
+                    if (books.length > 0) {
+                        setBooks(books);
+                        setNoItemsFound(false);
+                    } else {
                         setBooks([]);
                         setNoItemsFound(true);
-                    } else {
-                        setNoItemsFound(false);
-                        setBooks(books);
                     }
-                });
-        }, 300); // Adjust the delay (in milliseconds) to suit your needs
+                })
+				.catch((error) => {
+					console.error(error);
+				});
+        }, 300);
     };
 
 
 	const searchBooksByTitle = async (title: string) => {
 		try {
-			if (title.length === 0) {
-				setNoItemsFound(false);
-				return [];
-			}
 			const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=20&key=${googleBooksApiKey}`);
 			if (response && response.data?.items) {
 				return response.data.items;
@@ -82,7 +79,6 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 			}
 		} catch (error) {
 			console.error(error);
-			return []; // return an empty array in case of an error
 		}
 	};
 
@@ -217,11 +213,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 								booksDatabaseId={booksDatabaseId}
 							/>
 						))}
-                        {noItemsFound ? (
-                            <div className='text-center text-gray-500 text-xl col-span-full my-4'>
-                                No items found
-                            </div>
-                        ): books.length === 0 && (
+                        {books.length === 0 && (
 							<>
 								{
 									bestsellers.map((book: BookInterface) => (

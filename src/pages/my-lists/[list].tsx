@@ -382,11 +382,11 @@ export default function List({
         </div>
       </div>
 
-      {content && displayCount <= content.length && (
+      {((content && displayCount <= content.length) || listStates.find((listState) => listState.status === status)?.cursor !== null) && !fetching && (
         <LoadMore
           displayCount={displayCount}
           setDisplayCount={setDisplayCount}
-          media={content}
+          media={content || []}
           secondaryFunction={() =>
             getNotionDatabasePages(
               listStates.find((listState) => listState.status === status)?.status,
