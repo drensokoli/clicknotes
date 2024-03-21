@@ -78,14 +78,13 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 			}
 			const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}&maxResults=20&key=${googleBooksApiKey}`);
 			if (response && response.data?.items) {
-				console.log("Author Response:", response)
 				return response.data.items;
 			} else {
 				return [];
 			}
 		} catch (error) {
 			console.error(error);
-			return []; // return an empty array in case of an error
+			return [];
 		}
 	};
 
@@ -250,7 +249,14 @@ export const getStaticProps = async () => {
 	const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
 	const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
 	const bookDetailsResponses = await Promise.all(bookDetailsPromises);
-	const bestsellers = bookDetailsResponses.map((response: any) => response.data.items[0]);
+	const bestsellers = bookDetailsResponses.flatMap((response: any) => {
+		const items = response.data?.items;
+		if (Array.isArray(items) && items.length > 0) {
+			return items;
+		} else {
+			return [];
+		}
+	});
 
 	return {
 		props: {
