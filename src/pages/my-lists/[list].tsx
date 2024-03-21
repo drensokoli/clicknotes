@@ -47,12 +47,6 @@ export default function List({
   const cancelButtonRef = useRef(null);
 
   const [input, setInput] = useState("");
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-    // const data = getMovies(notionApiKey, databaseId);
-  };
-
   const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState(true);
   const [displayCount, setDisplayCount] = useState(20);
@@ -67,6 +61,62 @@ export default function List({
   const [cursorWatched, setCursorWatched] = useState<string | undefined>();
 
   const [content, setContent] = useState<any[]>();
+  const [searchResults, setSearchResults] = useState<any[]>();
+  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleStatusChange = async (id: string, status: string) => {
+
+    throw new Error("Not implemented");
+
+    return;
+  };
+
+  const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+    if (event.target.value.length === 0) {
+      setSearchResults([]);
+    }
+
+    if (event.target.value === '') {
+      setSearchResults([]);
+      return;
+    }
+
+    clearTimeout(debounceTimeout.current!);
+
+    debounceTimeout.current = setTimeout(() => {
+      searchNotionDatabase(event.target.value)
+        .then((results) => {
+          if (results && results.length > 0) {
+            setSearchResults(results);
+          } else {
+            setSearchResults([]);
+          }
+        })
+        .catch((error) => console.error(error));
+    }, 300);
+  };
+
+  const searchNotionDatabase = async (query: string) => {
+    try {
+      const response = await fetch("/api/searchNotionDatabase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query,
+          notionApiKey,
+          listName
+        }),
+      });
+
+      const data = await response.json();
+
+      return data;
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const statusPath = router.asPath.split("#")[1]?.replace(/%20/g, " ");
@@ -250,6 +300,12 @@ export default function List({
     };
   }, [content]);
 
+  useEffect(() => {
+    if (input === '') {
+      setSearchResults([]);
+    }
+  }, [input]);
+
   return (
     <>
       <Head>
@@ -316,64 +372,125 @@ export default function List({
             <NoItems message={message} />
           ) : (
             <>
-              {!message && (
+              {!message && searchResults && searchResults.length === 0 && (
                 <RandomButton handleShuffle={handleShuffle} />
               )}
               <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 mb-4">
+
                 {loading && (
                   <ListSkeleton number={skeletonNumber} />
                 )}
-                {listName === "books" && content ? (
+
+                {listName === "books" && content && (
                   <>
-                    {content.slice(0, displayCount).map((listItem: any) => (
-                      <BooksListCard
-                        key={listItem.id}
-                        id={listItem.id}
-                        title={listItem.properties.Title?.title[0]?.text?.content}
-                        cover={listItem.properties["Cover Image"]?.url || listItem.cover?.external?.url}
-                        link={`https://books.google.com/books?id=${listItem.id}`}
-                        handleStatusChange={handleInputChange}
-                        statusList={statusList}
-                        status={listItem.properties.Status?.status?.name}
-                        rating={listItem.properties["My Rating"]?.number}
-                        description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
-                        pageCount={listItem.properties["Page Count"]?.number}
-                        author={listItem.properties.Authors?.multi_select?.map((author: any) => author?.name).join(", ")}
-                        notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
-                        googleBooksId={listItem.properties["ID"]?.rich_text[0]?.text?.content}
-                        publisher={listItem.properties.Publisher?.select?.name}
-                        publishedDate={listItem.properties["Published Date"]?.date?.start}
-                      />
-                    ))}
+                    {searchResults && searchResults.length > 0 ? (
+                      <>
+                        {searchResults.map((result) => (
+                          <BooksListCard
+                            key={result.id}
+                            id={result.id}
+                            title={result.title}
+                            cover={result.cover}
+                            link={result.link}
+                            handleStatusChange={handleStatusChange}
+                            status={result.status}
+                            rating={result.rating}
+                            description={result.description}
+                            pageCount={result.pageCount}
+                            author={result.author}
+                            notion_link={result.notion_link}
+                            googleBooksId={result.googleBooksId}
+                            publisher={result.publisher}
+                            publishedDate={result.publishedDate}
+                            statusList={statusList}
+                          />
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {content.slice(0, displayCount).map((listItem) => (
+                          <BooksListCard
+                            key={listItem.id}
+                            id={listItem.id}
+                            title={listItem.properties.Title?.title[0]?.text?.content}
+                            cover={listItem.properties["Cover Image"]?.url || listItem.cover?.external?.url}
+                            link={`https://books.google.com/books?id=${listItem.id}`}
+                            handleStatusChange={handleStatusChange}
+                            statusList={statusList}
+                            status={listItem.properties.Status?.status?.name}
+                            rating={listItem.properties["My Rating"]?.number}
+                            description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
+                            pageCount={listItem.properties["Page Count"]?.number}
+                            author={listItem.properties.Authors?.multi_select?.map((author: any) => author?.name).join(", ")}
+                            notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
+                            googleBooksId={listItem.properties["ID"]?.rich_text[0]?.text?.content}
+                            publisher={listItem.properties.Publisher?.select?.name}
+                            publishedDate={listItem.properties["Published Date"]?.date?.start}
+                          />
+                        ))}
+                      </>
+                    )}
                   </>
-                ) : (
-                  content && (
-                    <>
-                      {content.slice(0, displayCount).map((listItem: any) => (
-                        <MoviesListCard
-                          key={listItem.id}
-                          id={listItem.id}
-                          title={listItem.properties.Name?.title[0]?.text?.content}
-                          poster_path={listItem.properties.Poster?.url || listItem.cover?.external?.url}
-                          release_date={listItem.properties["Release Date"]?.date?.start || ""}
-                          link={`https://www.themoviedb.org/movie/${listItem.id}`}
-                          handleStatusChange={handleInputChange}
-                          statusList={statusList}
-                          status={listItem.properties.Status.status.name}
-                          trailer={listItem.properties.Trailer.url}
-                          overview={listItem.properties["Overview"]?.rich_text[0]?.text?.content}
-                          rating={listItem.properties["My Rating"].number}
-                          watch_link={listItem.properties["Watch Link"].url}
-                          notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
-                          rated={listItem.properties.Rated?.select?.name}
-                          awards={listItem.properties.Awards?.rich_text[0]?.text?.content}
-                          runtime={listItem.properties.Runtime?.rich_text[0]?.text?.content}
-                          imdbLink={listItem.properties["iMDB Link"]?.url}
-                        />
-                      ))}
-                    </>
-                  )
                 )}
+
+                {listName !== "books" && content && (
+                  <>
+                    {searchResults && searchResults.length > 0 ? (
+                      <>
+                        {searchResults
+                          .filter((result) => result.type === (listName === "movies" ? "Movie" : "TvShow"))
+                          .map((result) => (
+                            <MoviesListCard
+                              key={result.id}
+                              id={result.id}
+                              title={result.title}
+                              poster_path={result.poster}
+                              release_date={result.releaseDate}
+                              link={result.notionLink}
+                              handleStatusChange={handleStatusChange}
+                              statusList={statusList}
+                              status={result.status}
+                              trailer={result.trailer}
+                              overview={result.overview}
+                              rating={result.myRating}
+                              watch_link={result.watchLink}
+                              notion_link={result.notionLink}
+                              rated={result.rated}
+                              awards={result.awards}
+                              runtime={result.runtime}
+                              imdbLink={result.imdbLink}
+                            />
+                          ))}
+                      </>
+                    ) : (
+                      <>
+                        {content.slice(0, displayCount).map((listItem) => (
+                          <MoviesListCard
+                            key={listItem.id}
+                            id={listItem.id}
+                            title={listItem.properties.Name?.title[0]?.text?.content}
+                            poster_path={listItem.properties.Poster?.url || listItem.cover?.external?.url}
+                            release_date={listItem.properties["Release Date"]?.date?.start || ""}
+                            link={`https://www.themoviedb.org/movie/${listItem.id}`}
+                            handleStatusChange={handleStatusChange}
+                            statusList={statusList}
+                            status={listItem.properties.Status.status.name}
+                            trailer={listItem.properties.Trailer.url}
+                            overview={listItem.properties["Overview"]?.rich_text[0]?.text?.content}
+                            rating={listItem.properties["My Rating"].number}
+                            watch_link={listItem.properties["Watch Link"].url}
+                            notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
+                            rated={listItem.properties.Rated?.select?.name}
+                            awards={listItem.properties.Awards?.rich_text[0]?.text?.content}
+                            runtime={listItem.properties.Runtime?.rich_text[0]?.text?.content}
+                            imdbLink={listItem.properties["iMDB Link"]?.url}
+                          />
+                        ))}
+                      </>
+                    )}
+                  </>
+                )}
+
                 {fetching && <ListSkeleton number={skeletonNumber} />}
 
               </div>
@@ -382,7 +499,7 @@ export default function List({
         </div>
       </div>
 
-      {((content && displayCount <= content.length) || listStates.find((listState) => listState.status === status)?.cursor !== null) && !fetching && (
+      {((content && displayCount <= content.length) || listStates.find((listState) => listState.status === status)?.cursor !== null) && !fetching && searchResults && searchResults.length === 0 && (
         <LoadMore
           displayCount={displayCount}
           setDisplayCount={setDisplayCount}
@@ -492,7 +609,7 @@ export async function getServerSideProps(context: any) {
   const session = await getSession(context);
   const userEmail = session?.user?.email;
   const encryptionKey = process.env.ENCRYPTION_KEY as string;
-  
+
   if (!session) {
     return {
       redirect: {
@@ -571,7 +688,7 @@ export async function getServerSideProps(context: any) {
   const { notionApiKey, databaseId } = await fetchUserData();
 
   const decryptedApiKey = decryptData(notionApiKey, encryptionKey);
-  
+
   if (!notionApiKey) {
     return {
       redirect: {

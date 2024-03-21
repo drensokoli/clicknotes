@@ -139,7 +139,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                             trailer={trailer}
                                             watchLink={watch_link}
                                             notionLink={notion_link}
-                                            releaseDate={release_date.split('-')[0]}
+                                            releaseDate={release_date?.split('-')[0]}
                                             awards={awards}
                                             runtime={runtime}
                                             rated={rated}
