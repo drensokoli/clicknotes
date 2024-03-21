@@ -91,7 +91,7 @@ export default function List({
           }
         })
         .catch((error) => console.error(error));
-    }, 100);
+    }, 300);
   };
 
   const searchNotionDatabase = async (query: string) => {
