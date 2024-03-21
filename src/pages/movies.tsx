@@ -42,6 +42,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
         setInput(event.target.value);
         if (event.target.value === '') {
             setMovies([]);
+            setInput('');
             setNoItemsFound(false);
             return;
         }

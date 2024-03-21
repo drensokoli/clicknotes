@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import NotionBanner from '@/components/Notion/NotionBanner';
 import WidthKeeper from '@/components/Lists/WidthKeeper';
 import { set } from 'lodash';
+import NoItems from '@/components/Helpers/NoItems';
 
 export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }: {
 	encryptionKey: string;
@@ -37,6 +38,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 		setInput(event.target.value);
 		if (event.target.value === '') {
 			setBooks([]);
+			setInput('');
 			setNoItemsFound(false);
 			return;
 		}
@@ -49,9 +51,12 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 					if (books && books.length > 0) {
 						setBooks(books);
 						setNoItemsFound(false);
-					} else {
+					} else if (books && books.length === 0 && event.target.value.length > 0) {
 						setBooks([]);
 						setNoItemsFound(true);
+					} else {
+						setBooks([]);
+						setNoItemsFound(false);
 					}
 				})
 				.catch((error) => console.error(error));
@@ -134,6 +139,9 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 		if (input === '') {
 			setBooks([]);
 			setNoItemsFound(false);
+		} else if (input.length === 0) {
+			setBooks([]);
+			setNoItemsFound(false);
 		}
 	}, [input]);
 	return (
@@ -175,62 +183,66 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 						<NotionBanner image='/connectbooks.png' link={booksAuthUrl} session={session ? true : false} />
 					)}
 					<div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 flex-grow'>
-						{books.map((book: BookInterface) => (
-							<Book
-								key={book.id}
-								id={book.id}
-								title={book.volumeInfo.title}
-								previewLink={book.volumeInfo.previewLink}
-								cover_image={book.volumeInfo.imageLinks?.thumbnail}
-								description={book.volumeInfo.description}
-								publishedDate={book.volumeInfo.publishedDate}
-								averageRating={book.volumeInfo.averageRating}
-								authors={book.volumeInfo.authors}
-								infoLink={book.volumeInfo.infoLink}
-								pageCount={book.volumeInfo.pageCount}
-								thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-								language={book.volumeInfo.language}
-								price={book.saleInfo.listPrice?.amount}
-								publisher={book.volumeInfo.publisher}
-								availability={book.saleInfo.saleability}
-								onApiResponse={(error: string) => setApiResponse(error)}
-								setPageLink={setPageLink}
-								encryptionKey={encryptionKey}
-								notionApiKey={notionApiKey}
-								booksDatabaseId={booksDatabaseId}
-							/>
-						))}
-						{books.length === 0 && (
+						{books && books.length > 0 && input.length > 0 ? (
 							<>
-								{
-									bestsellers.map((book: BookInterface) => (
-										<Book
-											key={book.id}
-											id={book.id}
-											title={book.volumeInfo.title}
-											previewLink={book.volumeInfo.previewLink}
-											cover_image={book.volumeInfo.imageLinks?.thumbnail}
-											description={book.volumeInfo.description}
-											publishedDate={book.volumeInfo.publishedDate}
-											averageRating={book.volumeInfo.averageRating}
-											authors={book.volumeInfo.authors}
-											infoLink={book.volumeInfo.infoLink}
-											pageCount={book.volumeInfo.pageCount}
-											thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-											language={book.volumeInfo.language}
-											price={book.saleInfo.listPrice?.amount}
-											publisher={book.volumeInfo.publisher}
-											availability={book.saleInfo.saleability}
-											onApiResponse={(error: string) => setApiResponse(error)}
-											setPageLink={setPageLink}
-											encryptionKey={encryptionKey}
-											notionApiKey={notionApiKey}
-											booksDatabaseId={booksDatabaseId}
-										/>
-									))
-								}
+								{books.map((book: BookInterface) => (
+									<Book
+										key={book.id}
+										id={book.id}
+										title={book.volumeInfo.title}
+										previewLink={book.volumeInfo.previewLink}
+										cover_image={book.volumeInfo.imageLinks?.thumbnail}
+										description={book.volumeInfo.description}
+										publishedDate={book.volumeInfo.publishedDate}
+										averageRating={book.volumeInfo.averageRating}
+										authors={book.volumeInfo.authors}
+										infoLink={book.volumeInfo.infoLink}
+										pageCount={book.volumeInfo.pageCount}
+										thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+										language={book.volumeInfo.language}
+										price={book.saleInfo.listPrice?.amount}
+										publisher={book.volumeInfo.publisher}
+										availability={book.saleInfo.saleability}
+										onApiResponse={(error: string) => setApiResponse(error)}
+										setPageLink={setPageLink}
+										encryptionKey={encryptionKey}
+										notionApiKey={notionApiKey}
+										booksDatabaseId={booksDatabaseId}
+									/>
+								))}
+							</>
+						) : noItemsFound ? (
+							<NoItems message={'No books found'}  />
+						):(
+							<>
+							{bestsellers.map((book: BookInterface) => (
+								<Book
+									key={book.id}
+									id={book.id}
+									title={book.volumeInfo.title}
+									previewLink={book.volumeInfo.previewLink}
+									cover_image={book.volumeInfo.imageLinks?.thumbnail}
+									description={book.volumeInfo.description}
+									publishedDate={book.volumeInfo.publishedDate}
+									averageRating={book.volumeInfo.averageRating}
+									authors={book.volumeInfo.authors}
+									infoLink={book.volumeInfo.infoLink}
+									pageCount={book.volumeInfo.pageCount}
+									thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+									language={book.volumeInfo.language}
+									price={book.saleInfo.listPrice?.amount}
+									publisher={book.volumeInfo.publisher}
+									availability={book.saleInfo.saleability}
+									onApiResponse={(error: string) => setApiResponse(error)}
+									setPageLink={setPageLink}
+									encryptionKey={encryptionKey}
+									notionApiKey={notionApiKey}
+									booksDatabaseId={booksDatabaseId}
+								/>
+							))}
 							</>
 						)}
+					
 					</div>
 				</div>
 			</div>
