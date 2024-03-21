@@ -73,12 +73,9 @@ export default function List({
 
   const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
-    if (event.target.value.length === 0) {
+    if (event.target.value.length === 0 || event.target.value === "") {
       setSearchResults([]);
-    }
-
-    if (event.target.value === '') {
-      setSearchResults([]);
+      setInput("");
       return;
     }
 
@@ -94,7 +91,7 @@ export default function List({
           }
         })
         .catch((error) => console.error(error));
-    }, 300);
+    }, 100);
   };
 
   const searchNotionDatabase = async (query: string) => {
@@ -304,6 +301,10 @@ export default function List({
     if (input === '') {
       setSearchResults([]);
     }
+    console.log("--------------------");
+    console.log("input: ", input);
+    console.log("searchResults: ", searchResults);
+    console.log("--------------------");
   }, [input]);
 
   return (
@@ -372,7 +373,7 @@ export default function List({
             <NoItems message={message} />
           ) : (
             <>
-              {!message && searchResults && searchResults.length === 0 && (
+              {!message && input.length === 0 && (
                 <RandomButton handleShuffle={handleShuffle} />
               )}
               <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 mb-4">
@@ -435,7 +436,7 @@ export default function List({
 
                 {listName !== "books" && content && (
                   <>
-                    {searchResults && searchResults.length > 0 ? (
+                    {searchResults && searchResults.length > 0 && input.length > 0 ? (
                       <>
                         {searchResults
                           .filter((result) => result.type === (listName === "movies" ? "Movie" : "TvShow"))
