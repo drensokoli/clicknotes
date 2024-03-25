@@ -1,12 +1,13 @@
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Fragment, useRef, useState } from 'react'
+import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/dist/client/image';
-import { BsPersonFillGear, BsQuestionCircleFill, BsBoxArrowInRight, BsList } from 'react-icons/bs';
+import { BsPersonFillGear, BsQuestionCircleFill, BsBoxArrowInRight, BsList, BsFillShareFill } from 'react-icons/bs';
+import ShareModal from '../Helpers/ShareModal';
 
 export default function Navbar() {
     const { data: session, status } = useSession();
@@ -20,6 +21,9 @@ export default function Navbar() {
     function classNames(...classes: string[]) {
         return classes.filter(Boolean).join(' ')
     };
+
+    const [open, setOpen] = useState(false);
+    const cancelButtonRef = useRef(null);
 
     return (
         <>
@@ -65,7 +69,7 @@ export default function Navbar() {
                                     </div>
                                     <div className="absolute inset-y-0 right-0 flex items-center sm:static ">
 
-                                        <Menu as="div" className="relative">    
+                                        <Menu as="div" className="relative">
                                             <div>
                                                 {status === 'loading' ? (
                                                     <div role="status"
@@ -133,6 +137,20 @@ export default function Navbar() {
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                         {({ active }) => (
+                                                            <button
+                                                                className={classNames(active ? 'w-full bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                onClick={() => setOpen(true)}
+                                                                aria-label='Share'
+                                                            >
+                                                                <div className='flex flex-row justify-start items-center gap-1'>
+                                                                    <BsFillShareFill />
+                                                                    <h1>Share</h1>
+                                                                </div>
+                                                            </button>
+                                                        )}
+                                                    </Menu.Item>
+                                                    <Menu.Item>
+                                                        {({ active }) => (
 
                                                             <button
                                                                 onClick={() => signOut()}
@@ -174,6 +192,45 @@ export default function Navbar() {
                 )}
             </Disclosure>
             <div className='h-24'></div>
+
+            {/* SHARE MODAL */}
+            <Transition.Root show={open} as={Fragment}>
+                <Dialog
+                    as="div"
+                    className="relative z-10"
+                    initialFocus={cancelButtonRef}
+                    onClose={setOpen}
+                >
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+                    <div className="fixed inset-0 z-10 w-screen">
+                        <div className="flex min-h-full items-center justify-center text-center">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full mx-4 sm:w-[500px]">
+                                    <ShareModal setOpen={setOpen} />
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition.Root>
         </>
     )
 }
