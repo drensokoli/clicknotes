@@ -10,6 +10,7 @@ import NotionBanner from '@/components/Notion/NotionBanner';
 import WidthKeeper from '@/components/Lists/WidthKeeper';
 import { set } from 'lodash';
 import NoItems from '@/components/Helpers/NoItems';
+import LoadMore from '@/components/Helpers/LoadMore';
 
 export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }: {
 	encryptionKey: string;
@@ -24,6 +25,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 
 	const [input, setInput] = useState('');
 	const [books, setBooks] = useState<BookInterface[]>([]);
+	const [displayCount, setDisplayCount] = useState(20);
 
 	const [notionApiKey, setNotionApiKey] = useState<string>('');
 	const [booksDatabaseId, setBooksDatabaseId] = useState<string>('');
@@ -212,63 +214,83 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 								))}
 							</>
 						) : noItemsFound ? (
-							<NoItems message={'No books found'}  />
-						):(
+							<NoItems message={'No books found'} />
+						) : (
 							<>
-							{bestsellers.map((book: BookInterface) => (
-								<Book
-									key={book.id}
-									id={book.id}
-									title={book.volumeInfo.title}
-									previewLink={book.volumeInfo.previewLink}
-									cover_image={book.volumeInfo.imageLinks?.thumbnail}
-									description={book.volumeInfo.description}
-									publishedDate={book.volumeInfo.publishedDate}
-									averageRating={book.volumeInfo.averageRating}
-									authors={book.volumeInfo.authors}
-									infoLink={book.volumeInfo.infoLink}
-									pageCount={book.volumeInfo.pageCount}
-									thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-									language={book.volumeInfo.language}
-									price={book.saleInfo.listPrice?.amount}
-									publisher={book.volumeInfo.publisher}
-									availability={book.saleInfo.saleability}
-									onApiResponse={(error: string) => setApiResponse(error)}
-									setPageLink={setPageLink}
-									encryptionKey={encryptionKey}
-									notionApiKey={notionApiKey}
-									booksDatabaseId={booksDatabaseId}
-								/>
-							))}
+								{bestsellers
+									.slice(0, displayCount)
+									.map((book: BookInterface) => (
+										<Book
+											key={book.id}
+											id={book.id}
+											title={book.volumeInfo.title}
+											previewLink={book.volumeInfo.previewLink}
+											cover_image={book.volumeInfo.imageLinks?.thumbnail}
+											description={book.volumeInfo.description}
+											publishedDate={book.volumeInfo.publishedDate}
+											averageRating={book.volumeInfo.averageRating}
+											authors={book.volumeInfo.authors}
+											infoLink={book.volumeInfo.infoLink}
+											pageCount={book.volumeInfo.pageCount}
+											thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+											language={book.volumeInfo.language}
+											price={book.saleInfo.listPrice?.amount}
+											publisher={book.volumeInfo.publisher}
+											availability={book.saleInfo.saleability}
+											onApiResponse={(error: string) => setApiResponse(error)}
+											setPageLink={setPageLink}
+											encryptionKey={encryptionKey}
+											notionApiKey={notionApiKey}
+											booksDatabaseId={booksDatabaseId}
+										/>
+									))}
 							</>
 						)}
-					
+
 					</div>
 				</div>
+				{displayCount < bestsellers.length && books.length === 0 && !noItemsFound && (
+					<LoadMore
+						displayCount={displayCount}
+						setDisplayCount={setDisplayCount}
+						media={bestsellers}
+					/>
+				)}
 			</div>
 		</>
 	);
 };
 
-
 export const getStaticProps = async () => {
-
 	const encryptionKey = process.env.ENCRYPTION_KEY;
 	const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY_2;
 	const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
-	const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
-	const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
-	const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
-	const bookDetailsResponses = await Promise.all(bookDetailsPromises);
-	const bestsellers = bookDetailsResponses.flatMap((response: any) => {
-		const items = response.data?.items;
-		if (Array.isArray(items) && items.length > 0) {
-			return items;
-		} else {
-			return [];
+	let bestsellers;
+	const bestsellersData = await fetch(`${process.env.BASE_URL}/api/redisHandler`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
 		}
 	});
+	const data = await bestsellersData.json();
+
+	if (data) {
+		bestsellers = data ? (typeof data === 'string' ? JSON.parse(data) : data) : [];
+	} else {
+		const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
+		const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
+		const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
+		const bookDetailsResponses = await Promise.all(bookDetailsPromises);
+		bestsellers = bookDetailsResponses.flatMap((response: any) => {
+			const items = response.data?.items;
+			if (Array.isArray(items) && items.length > 0) {
+				return items;
+			} else {
+				return [];
+			}
+		});
+	}
 
 	return {
 		props: {
@@ -277,30 +299,6 @@ export const getStaticProps = async () => {
 			nyTimesApiKey,
 			bestsellers
 		},
-
-		revalidate: 60 * 60 * 24 // 24 hours
+		revalidate: 60 * 60 * 24
 	};
-}
-
-// export const getStaticProps = async () => {
-
-// 	const encryptionKey = process.env.ENCRYPTION_KEY;
-// 	const googleBooksApiKey1 = process.env.GOOGLE_BOOKS_API_KEY_1;
-// 	const googleBooksApiKey2 = process.env.GOOGLE_BOOKS_API_KEY_2;
-// 	const googleBooksApiKeys = [googleBooksApiKey1, googleBooksApiKey2];
-// 	const nyTimesApiKey = process.env.NYTIMES_API_KEY;
-
-// 	const redisResponse = await axios.get(`${process.env.BASE_URL}/api/redisHandler`);
-// 	const bestsellers = redisResponse.data;
-
-// 	return {
-// 		props: {
-// 			encryptionKey,
-// 			googleBooksApiKeys,
-// 			nyTimesApiKey,
-// 			bestsellers
-// 		},
-
-// 		revalidate: 60 * 60 * 24 * 7 // 1 week
-// 	};
-// }
+};

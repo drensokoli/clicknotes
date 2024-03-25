@@ -1,19 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from 'redis';
 
-const redisHost = process.env.REDIS_HOST;
-const redisPort = process.env.REDIS_PORT as any;
-const redisPassword = process.env.REDIS_PASSWORD;
+export default async (req: NextApiRequest, res: NextApiResponse) => {
 
-const client = createClient({
+  const redisHost = process.env.REDIS_HOST;
+  const redisPort = process.env.REDIS_PORT as any;
+  const redisPassword = process.env.REDIS_PASSWORD;
+
+  const client = createClient({
     password: redisPassword,
     socket: {
-        host: redisHost,
-        port: redisPort
+      host: redisHost,
+      port: redisPort
     }
-});
+  });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+  client.connect().catch(console.error);
+
   if (req.method === 'GET') {
     const data = await client.get('bestsellers');
     res.status(200).json(data);
