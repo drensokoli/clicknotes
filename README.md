@@ -76,6 +76,7 @@ If you would like to contribute to the ClickNotes project, please follow the sta
 Fork the repository.
 Create a new branch for your feature or bugfix.
 Make your changes and commit them to your branch.
+<a href="https://www.buymeacoffee.com/drenso"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=drenso&button_colour=FF5F5F&font_colour=ffffff&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00" /></a>
 Submit a pull request to the main repository.
 Please ensure that your code follows the existing style and structure of the project.
 
