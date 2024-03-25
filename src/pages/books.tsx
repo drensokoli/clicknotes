@@ -266,31 +266,34 @@ export const getStaticProps = async () => {
 	const googleBooksApiKey = process.env.GOOGLE_BOOKS_API_KEY_2;
 	const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
-	let bestsellers;
 	const bestsellersData = await fetch(`${process.env.BASE_URL}/api/redisHandler`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
 		}
 	});
-	const data = await bestsellersData.json();
 
-	if (data) {
-		bestsellers = data ? (typeof data === 'string' ? JSON.parse(data) : data) : [];
-	} else {
-		const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
-		const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
-		const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
-		const bookDetailsResponses = await Promise.all(bookDetailsPromises);
-		bestsellers = bookDetailsResponses.flatMap((response: any) => {
-			const items = response.data?.items;
-			if (Array.isArray(items) && items.length > 0) {
-				return items;
-			} else {
-				return [];
-			}
-		});
-	}
+	// if (bestsellersData.ok) {
+	const data = await bestsellersData.json();
+	console.log("Data from Redis:", data);
+	const bestsellers = data ? (typeof data === 'string' ? JSON.parse(data) : data) : [];
+	console.log("Bestsellers:", bestsellers);
+	// } else {
+	// 	// Handle the case where the response is not a valid JSON
+	// 	console.error('Error fetching bestsellers data:', bestsellersData.status);
+	// 	const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
+	// 	const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
+	// 	const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
+	// 	const bookDetailsResponses = await Promise.all(bookDetailsPromises);
+	// 	bestsellers = bookDetailsResponses.flatMap((response: any) => {
+	// 		const items = response.data?.items;
+	// 		if (Array.isArray(items) && items.length > 0) {
+	// 			return items;
+	// 		} else {
+	// 			return [];
+	// 		}
+	// 	});
+	// }
 
 	return {
 		props: {
