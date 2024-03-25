@@ -138,7 +138,7 @@ export default function Navbar() {
                                                     <Menu.Item>
                                                         {({ active }) => (
                                                             <button
-                                                                className={classNames(active ? 'w-full bg-gray-100 hover:bg-gray-200' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200 w-full' : '', 'w-full block px-4 py-2 text-sm text-gray-700')}
                                                                 onClick={() => setOpen(true)}
                                                                 aria-label='Share'
                                                             >
@@ -154,7 +154,7 @@ export default function Navbar() {
 
                                                             <button
                                                                 onClick={() => signOut()}
-                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200 w-full' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                className={classNames(active ? 'bg-gray-100 hover:bg-gray-200 w-full' : '', 'w-full block px-4 py-2 text-sm text-gray-700')}
                                                                 aria-label='Notion'
                                                             >
                                                                 <div className='flex flex-row justify-start items-center gap-1'>
