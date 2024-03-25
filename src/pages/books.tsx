@@ -176,7 +176,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 				{/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
 	crossOrigin="anonymous"></script> */}
 			</Head>
-			<Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/books' />
+						<Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink='/my-lists/books' />
 			<div className="flex flex-col items-center min-h-screen bg-white space-y-4">
 				<div className='w-fit'>
 					<SearchBar input={input} handleInputChange={handleInputChange} placeholder='Search for books' />
@@ -267,19 +267,31 @@ export const getStaticProps = async () => {
 	const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
 	let bestsellers;
-
-	const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
-	const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
-	const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
-	const bookDetailsResponses = await Promise.all(bookDetailsPromises);
-	bestsellers = bookDetailsResponses.flatMap((response: any) => {
-		const items = response.data?.items;
-		if (Array.isArray(items) && items.length > 0) {
-			return items;
-		} else {
-			return [];
+	const bestsellersData = await fetch(`${process.env.BASE_URL}/api/redisHandler`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
 		}
 	});
+
+	const data = await bestsellersData.json();
+	console.log("Data", data);
+	if (bestsellersData.status === 200) {
+		bestsellers = data ? (typeof data === 'string' ? JSON.parse(data) : data) : [];
+	} else {
+		const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${nyTimesApiKey}`);
+		const isbns = response.data.results.books.map((book: any) => book.primary_isbn13);
+		const bookDetailsPromises = isbns.map((isbn: string) => axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${googleBooksApiKey}`));
+		const bookDetailsResponses = await Promise.all(bookDetailsPromises);
+		bestsellers = bookDetailsResponses.flatMap((response: any) => {
+			const items = response.data?.items;
+			if (Array.isArray(items) && items.length > 0) {
+				return items;
+			} else {
+				return [];
+			}
+		});
+	}
 
 	return {
 		props: {
