@@ -34,7 +34,6 @@ export default function Connect({ encryptionKey }: { encryptionKey: string }) {
 	const handleDatabaseIdSubmit = async (e: any, connectionType: string) => {
 		e.preventDefault();
 
-		console.log('input', input);
 		if (!input.startsWith('https://www.notion.so/') || input === '') {
 			setApiResponse('Please enter a valid Notion link');
 			return 'Please enter a valid Notion link';

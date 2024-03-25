@@ -17,17 +17,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		"trade-fiction-paperback",
 		"paperback-nonfiction",
 		"advice-how-to-and-miscellaneous",
-		"childrens-middle-grade-hardcover",
+		// "childrens-middle-grade-hardcover",
 		"picture-books",
 		"series-books",
 		"young-adult-hardcover",
-		"audio-fiction",
-		"audio-nonfiction",
+		// "audio-fiction",
+		// "audio-nonfiction",
 		"business-books",
 		"graphic-books-and-manga",
 		"mass-market-monthly",
-		"middle-grade-paperback-monthly",
-		"young-adult-paperback-monthly"
+		// "middle-grade-paperback-monthly",
+		// "young-adult-paperback-monthly"
 	];
 
 	let isbns: any[] = [];
@@ -50,13 +50,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				currentIndex++;
 
 				const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${key}`);
-								if (response.status === 429) {
+				if (response.status === 429) {
+					console.log('API limit reached, switching to next key');
 					currentKeyIndex = (currentKeyIndex + 1) % googleBooksApiKeys.length;
 					const nextKey = googleBooksApiKeys[currentKeyIndex];
 					await fetchWithKey(nextKey);
 					break;
 				} else {
 					if (response.data.items && response.data.items.length > 0) {
+						console.log(`Found item for ISBN: ${isbn}`);
 						responses.push(response.data.items[0]);
 					} else {
 						console.error(`No items found for ISBN: ${isbn}`);
@@ -67,10 +69,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		};
 
 		await fetchWithKey(googleBooksApiKeys[0]);
+		console.log('Finished fetching book details');
+		console.log("Responses: ", responses);
 		return responses;
 	};
 
 	const bestsellers = await bookDetailsPromises();
+	console.log("Bestsellers: ", bestsellers);
 
 	const redisReq = await axios.post(`${process.env.BASE_URL}/api/redisHandler`, { bestsellers });
+	console.log("Redis response: ", redisReq.data);
 }

@@ -105,12 +105,6 @@ export default function NotionCallback({ response, type, encryptionKey }: { resp
 		}, 100);
 	}, []);
 
-	useEffect(() => {
-
-		if (input)
-			console.log('input', input);
-	}, [input]);
-
 	return (
 		<div className="flex flex-col items-center h-screen">
 			<Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={undefined} />

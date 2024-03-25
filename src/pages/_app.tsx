@@ -52,11 +52,6 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
   return (
     <div className='flex flex-col min-h-screen'>
       <Navbar />
-
-      {/* {banner && (
-        <NotionBanner image={banner.image} />
-      )} */}
-
       <Component {...pageProps} />
       <Analytics />
       <Footer />
@@ -65,7 +60,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
         href="https://affiliate.notion.so/8ieljsf8weuq"
         target='_blank'
         aria-label='Notion affiliate link'
-        className='fixed bottom-5 right-5 z-10 shadow-xl'
+        className='fixed bottom-5 left-5 z-10 shadow-xl'
       >
         <Image
           src={isSmallDevice ? "/affiliate-white-sm.png" : "/affiliate-white.png"}

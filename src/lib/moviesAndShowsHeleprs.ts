@@ -69,7 +69,6 @@ export async function getOmdbData(omdbApiKeys: string[], title: string, year: st
         if (omdbData.Response === "True") {
             break;
         }
-        console.log(omdbData);
     }
 
     const imdbId = omdbData.imdbID;

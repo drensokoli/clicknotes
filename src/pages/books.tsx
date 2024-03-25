@@ -275,7 +275,6 @@ export const getStaticProps = async () => {
 	});
 
 	const data = await bestsellersData.json();
-	console.log("Data", data);
 	if (bestsellersData.status === 200) {
 		bestsellers = data ? (typeof data === 'string' ? JSON.parse(data) : data) : [];
 	} else {

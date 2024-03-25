@@ -301,10 +301,6 @@ export default function List({
     if (input === '') {
       setSearchResults([]);
     }
-    console.log("--------------------");
-    console.log("input: ", input);
-    console.log("searchResults: ", searchResults);
-    console.log("--------------------");
   }, [input]);
 
   return (

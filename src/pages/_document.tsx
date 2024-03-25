@@ -1,6 +1,7 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 import { Analytics } from '@vercel/analytics/react';
 import MicrosoftClarity from '@/metrics/MicrosoftClarity';
+import Script from 'next/script';
 
 export default function Document({ }: any) {
   return (
@@ -23,6 +24,7 @@ export default function Document({ }: any) {
       <meta name="twitter:image" content="https://www.clicknotes.site/og/movies.png" />
       <meta name="twitter:domain" content="www.clicknotes.site" />
       <meta name="twitter:url" content="https://clicknotes.site/" />
+      <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="drenso" data-description="Support me on Buy me a coffee!" data-message="" data-color="#5F7FFF" data-position="Left" data-x_margin="18" data-y_margin="18" defer></script>
       <Head />
       <body>
         <Main />
