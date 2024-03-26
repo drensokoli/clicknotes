@@ -61,7 +61,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						console.log(`Found item for ISBN: ${isbn}`);
 						responses.push(response.data.items[0]);
 					} else {
-						console.error(`No items found for ISBN: ${isbn}`);
+						console.log(`No items found for ISBN: ${isbn}`);
+						continue;
 					}
 					await new Promise(resolve => setTimeout(resolve, 1000));
 				}
