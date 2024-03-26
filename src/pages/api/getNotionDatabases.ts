@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { clientPromise } from './mongodb';
+import clientPromise from './mongodb';
 import { Client } from '@notionhq/client';
 import { decryptData } from '@/lib/encryption';
 

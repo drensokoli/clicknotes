@@ -58,7 +58,6 @@ export default function Connect({ encryptionKey }: { encryptionKey: string }) {
 		const result = await response.json();
 
 		fetchUserData();
-		;
 		setApiResponse(result.message);
 	}
 

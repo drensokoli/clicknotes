@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react';
@@ -12,6 +12,8 @@ import ShareModal from '../Helpers/ShareModal';
 export default function Navbar() {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const { pathname, query } = router;
+
     const navigation = [
         { name: 'Movies', href: '/movies' },
         { name: 'TV Shows', href: '/tvshows', current: false },
@@ -24,6 +26,18 @@ export default function Navbar() {
 
     const [open, setOpen] = useState(false);
     const cancelButtonRef = useRef(null);
+
+    let shareUrl: any;
+
+    if (pathname.includes('movies')) {
+        shareUrl = 'https://www.clicknotes.site/movies';
+    } else if (pathname.includes('tvshows')) {
+        shareUrl = 'https://www.clicknotes.site/tvshows';
+    } else if (pathname.includes('books')) {
+        shareUrl = 'https://www.clicknotes.site/books';
+    } else {
+        shareUrl = 'https://www.clicknotes.site';
+    }
 
     return (
         <>
@@ -224,7 +238,7 @@ export default function Navbar() {
                                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                             >
                                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full mx-4 sm:w-[500px]">
-                                    <ShareModal setOpen={setOpen} />
+                                    <ShareModal setOpen={setOpen} shareUrl={shareUrl} />
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>

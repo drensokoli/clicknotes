@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { clientPromise } from './mongodb';
+import clientPromise from './mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

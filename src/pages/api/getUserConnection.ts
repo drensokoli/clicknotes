@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { clientPromise } from './mongodb';
+import clientPromise from './mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -15,12 +15,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const client = await clientPromise;
     const collection = client.db(dbName)?.collection(dbCollection);
     const connection = await collection?.findOne({ email: userEmail, connection_type: connectionType });
-    
+
     if (connection) {
       res.status(200).json(connection);
     } else {
       res.status(404).json({ message: 'Connection not found' });
     }
+
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
