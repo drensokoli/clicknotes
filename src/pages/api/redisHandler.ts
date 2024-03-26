@@ -1,17 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from 'redis';
+import { createClient } from "@redis/client";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const redisHost = process.env.REDIS_HOST;
-  const redisPort = process.env.REDIS_PORT as any;
   const redisPassword = process.env.REDIS_PASSWORD;
 
   const client = createClient({
     password: redisPassword,
+    username: "default",
     socket: {
       host: redisHost,
-      port: redisPort
+      port: 13669
     }
   });
 
