@@ -1,6 +1,3 @@
-export const config = {
-	runtime: 'edge'
-};
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -10,8 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const googleBooksApiKeys = [googleBooksApiKey1, googleBooksApiKey2];
 	const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
-	const response = await fetch(`https://api.nytimes.com/svc/books/v3/lists/full-overview.json?api-key=${nyTimesApiKey}`);
-	const data = await response.json(); // Parse the response as JSON
+	const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/full-overview.json?api-key=${nyTimesApiKey}`);
 
 	const listNames = [
 		"combined-print-and-e-book-fiction",
@@ -21,27 +17,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		"trade-fiction-paperback",
 		"paperback-nonfiction",
 		"advice-how-to-and-miscellaneous",
-		// "childrens-middle-grade-hardcover",
+		"childrens-middle-grade-hardcover",
 		"picture-books",
 		"series-books",
 		"young-adult-hardcover",
-		// "audio-fiction",
-		// "audio-nonfiction",
+		"audio-fiction",
+		"audio-nonfiction",
 		"business-books",
 		"graphic-books-and-manga",
 		"mass-market-monthly",
-		// "middle-grade-paperback-monthly",
-		// "young-adult-paperback-monthly"
+		"middle-grade-paperback-monthly",
+		"young-adult-paperback-monthly"
 	];
 
 	let isbns: any[] = [];
-	const maxResults = 160;
 
 	listNames.forEach(listName => {
-		const list = data.results.lists.find((list: any) => list.list_name_encoded === listName);
-		if (list && isbns.length < maxResults) {
-			const booksList = list.books.slice(0, maxResults - isbns.length);
-			isbns.push(...booksList.map((book: any) => book.primary_isbn13));
+		const list = response.data.results.lists.find((list: any) => list.list_name_encoded === listName);
+		if (list) {
+			isbns = [...isbns, ...list.books.map((book: any) => book.primary_isbn13)];
 		}
 	});
 
@@ -57,8 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				const isbn = isbns[currentIndex];
 				currentIndex++;
 
-				const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${key}`);
-				const responseJson = await response.json();
+				const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${key}`);
 				if (response.status === 429) {
 					console.log('API limit reached, switching to next key');
 					currentKeyIndex = (currentKeyIndex + 1) % googleBooksApiKeys.length;
@@ -66,9 +59,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					await fetchWithKey(nextKey);
 					break;
 				} else {
-					if (responseJson.items && responseJson.items.length > 0) {
+					if (response.data.items && response.data.items.length > 0) {
 						console.log(`Found item for ISBN: ${isbn}`);
-						responses.push(responseJson.items[0]);
+						responses.push(response.data.items[0]);
 					} else {
 						console.log(`No items found for ISBN: ${isbn}`);
 						continue;
@@ -83,22 +76,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return responses;
 	};
 
-	const bestsellers = await bookDetailsPromises();
+	const allBestsellers = await bookDetailsPromises();
+	const lengthToSlice = Math.floor(allBestsellers.length / 20) * 20;
+	const bestsellers = allBestsellers.slice(0, lengthToSlice);
 
-	const redisResponse = await fetch(`${process.env.BASE_URL}/api/redisHandler`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ bestsellers })
-	});
-	const redisData = await redisResponse.json();
-	console.log("Redis response: ", redisData);
+	const redisReq = await axios.post(`${process.env.BASE_URL}/api/redisHandler`, { bestsellers });
+	console.log("Redis response: ", redisReq.data);
 
-	// At the end of your function
-	return new Response(JSON.stringify({ message: 'Success' }), {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+	res.status(redisReq.status).json({ redisResponse: redisReq.data});
 }
