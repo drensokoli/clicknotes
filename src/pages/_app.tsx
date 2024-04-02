@@ -53,7 +53,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
   return (
     <>
 
-      {/* <Head>
+      <Head>
         <title>ClickNotes</title>
         <meta name="description" content="Save popular and trending movies, TV shows and books to your Notion list or search for your favourites. All your content in one place, displayed in a beautiful Notion template." />
         <meta name="robots" content="all"></meta>
@@ -66,7 +66,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
         <meta property="og:title" content="ClickNotes - Save your favorite content to Notion" />
         <meta property="og:description" content="Save popular and trending movies, TV shows and books to your Notion list or search for your favourites. All your content in one place, displayed in a beautiful Notion template." />
         <meta property="og:image" content="https://www.clicknotes.site/og/movies.png" />
-        <meta property="og:url" content="https://clicknotes.site" />
+        <meta property="og:url" content="https://www.clicknotes.site" />
         <meta property="og:site_name" content="ClickNotes" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -76,10 +76,10 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
         <meta name="twitter:description" content="Save popular and trending movies, TV shows and books to your Notion list or search for your favourites. All your content in one place, displayed in a beautiful Notion template." />
         <meta name="twitter:image" content="https://www.clicknotes.site/og/movies.png" />
         <meta name="twitter:domain" content="www.clicknotes.site" />
-        <meta name="twitter:url" content="https://clicknotes.site" />
+        <meta name="twitter:url" content="https://www.clicknotes.site" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="canonical" href="https://clicknotes.site" />
-      </Head> */}
+        <link rel="canonical" href="https://www.clicknotes.site" />
+      </Head>
       <div className='flex flex-col min-h-screen'>
         <Navbar />
         <Component {...pageProps} />

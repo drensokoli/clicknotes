@@ -61,7 +61,7 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
                     {/* WHATSAPP */}
                     <button type="button"
                         className="w-12 h-12 inline-flex items-center justify-center rounded-full border-none outline-none hover:shadow-xl"
-                        onClick={() => window.open(`https://wa.me/?link=${shareUrl}`, '_blank')}
+                        onClick={() => window.open(`https://wa.me/?text=${shareUrl}`, '_blank')}
                         style={{ fill: '#2CB742' }}>
                         <svg height="800px" width="800px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 58 58">

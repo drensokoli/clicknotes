@@ -161,7 +161,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 				<meta property="og:title" content="ClickNotes - Save your books to Notion" />
 				<meta property="og:description" content="Save popular and trending books to your Notion list or search for your favorites. All your books in one place, displayed in a beautiful Notion template." />
 				<meta property="og:image" content="https://www.clicknotes.site/og/books.png" />
-				<meta property="og:url" content="https://clicknotes.site/books" />
+				<meta property="og:url" content="https://www.clicknotes.site/books" />
 				<meta property="og:site_name" content="ClickNotes" />
 				<meta property="og:type" content="website" />
 				<meta name="twitter:card" content="summary_large_image" />
@@ -171,8 +171,9 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 				<meta name="twitter:description" content="Save popular and trending books to your Notion list or search for your favorites. All your books in one place, displayed in a beautiful Notion template." />
 				<meta name="twitter:image" content="https://www.clicknotes.site/og/books.png" />
 				<meta name="twitter:domain" content="www.clicknotes.site" />
-				<meta name="twitter:url" content="https://clicknotes.site/books" />
+				<meta name="twitter:url" content="https://www.clicknotes.site/books" />
 				<link rel="icon" href="/favicon.ico" />
+                <link rel="canonical" href="https://www.clicknotes.site/books" />
 				{/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
 	crossOrigin="anonymous"></script> */}
 			</Head>

@@ -117,7 +117,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                 <meta property="og:title" content="ClickNotes - Save your TV shows to Notion" />
                 <meta property="og:description" content="Save popular and trending TV shows to your Notion list or search for your favorites. All your TV shows in one place, displayed in a beautiful Notion template." />
                 <meta property="og:image" content="https://www.clicknotes.site/og/tvshows.png" />
-                <meta property="og:url" content="https://clicknotes.site/tvshows" />
+                <meta property="og:url" content="https://www.clicknotes.site/tvshows" />
                 <meta property="og:site_name" content="ClickNotes" />
                 <meta property="og:type" content="website" />
                 <meta name="twitter:card" content="summary_large_image" />
@@ -127,8 +127,9 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
                 <meta name="twitter:description" content="Save popular and trending TV shows to your Notion list or search for your favorites. All your TV shows in one place, displayed in a beautiful Notion template." />
                 <meta name="twitter:image" content="https://www.clicknotes.site/og/tvshows.png" />
                 <meta name="twitter:domain" content="www.clicknotes.site" />
-                <meta name="twitter:url" content="https://clicknotes.site/tvshows" />
+                <meta name="twitter:url" content="https://www.clicknotes.site/tvshows" />
                 <link rel="icon" href="/favicon.ico" />
+                <link rel="canonical" href="https://www.clicknotes.site/tvshows" />
                 {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script> */}
             </Head>
