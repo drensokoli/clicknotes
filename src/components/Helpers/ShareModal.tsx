@@ -1,6 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareUrl: string }) {
+
+    const [isCopied, setIsCopied] = useState("Copy");
+    function copyTextToClipboard(textToCopy: string, label: string) {
+        navigator.clipboard.writeText(textToCopy);
+        setIsCopied("Copied!");
+        setTimeout(() => {
+            setIsCopied("Copy");
+        }, 2000);
+    }
 
     return (
         <div className="w-full bg-white shadow-lg rounded-md p-6 relative">
@@ -33,14 +42,14 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
 
                     {/* TWITTER */}
                     <button type="button"
-                        onClick={() => window.open('https://twitter.com/intent/post?text=I%27m%20using%20ClickNotes%20to%20save%20my%20favorite%20movies%2C%20books%20and%20time.%0A&url=https%3A%2F%2Fwww.clicknotes.site', '_blank')}
+                        onClick={() => window.open(`https://twitter.com/intent/post?text=I%27m%20using%20ClickNotes%20to%20save%20my%20favorite%20movies%2C%20books%20and%20time.%0A&url=${shareUrl}`, '_blank')}
                         className="w-12 h-12 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#03a9f4] hover:shadow-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512"><path d="M256 0c141.385 0 256 114.615 256 256S397.385 512 256 512 0 397.385 0 256 114.615 0 256 0z" /><path fill="#fff" fill-rule="nonzero" d="M318.64 157.549h33.401l-72.973 83.407 85.85 113.495h-67.222l-52.647-68.836-60.242 68.836h-33.423l78.052-89.212-82.354-107.69h68.924l47.59 62.917 55.044-62.917zm-11.724 176.908h18.51L205.95 176.493h-19.86l120.826 157.964z" /></svg>
                     </button>
 
                     {/* LINKEDIN */}
                     <button type="button"
-                        onClick={() => window.open('https://www.linkedin.com/sharing/share-offsite/?url=https://www.clicknotes.site', '_blank')}
+                        onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`, '_blank')}
                         className="w-12 h-12 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#0077b5] hover:shadow-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20px" fill="#fff" viewBox="0 0 24 24">
                             <path
@@ -49,17 +58,41 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
                         </svg>
                     </button>
 
-
+                    {/* WHATSAPP */}
                     <button type="button"
-                        className="w-12 h-12 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#ea0065] hover:shadow-xl">
-                        whatsapp
+                        className="w-12 h-12 inline-flex items-center justify-center rounded-full border-none outline-none hover:shadow-xl"
+                        onClick={() => window.open(`https://wa.me/?link=${shareUrl}`, '_blank')}
+                        style={{ fill: '#2CB742' }}>
+                        <svg height="800px" width="800px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 58 58">
+                            <path d="M0,58l4.988-14.963C2.457,38.78,1,33.812,1,28.5C1,12.76,13.76,0,29.5,0S58,12.76,58,28.5S45.24,57,29.5,57c-4.789,0-9.299-1.187-13.26-3.273L0,58z" />
+                            <path style={{ fill: '#FFFFFF' }} d="M47.683,37.985c-1.316-2.487-6.169-5.331-6.169-5.331c-1.098-0.626-2.423-0.696-3.049,0.42c0,0-1.577,1.891-1.978,2.163c-1.832,1.241-3.529,1.193-5.242-0.52l-3.981-3.981l-3.981-3.981c-1.713-1.713-1.761-3.41-0.52-5.242c0.272-0.401,2.163-1.978,2.163-1.978c1.116-0.627,1.046-1.951,0.42-3.049c0,0-2.844-4.853-5.331-6.169c-1.058-0.56-2.357-0.364-3.203,0.482l-1.758,1.758c-5.577,5.577-2.831,11.873,2.746,17.45l5.097,5.097l5.097,5.097c5.577,5.577,11.873,8.323,17.45,2.746l1.758-1.758C48.048,40.341,48.243,39.042,47.683,37.985z" />
+                        </svg>
+                    </button>
+
+                    {/* REDDIT */}
+                    <button type="button"
+                        onClick={() => window.open(`https://reddit.com/submit?url=${shareUrl}&title=I'm using ClickNotes to save my favorite movies, books and time.`, '_blank')}
+                        className="w-12 h-12 inline-flex items-center justify-center rounded-full border-none outline-none hover:shadow-xl"
+                        style={{ stroke: 'none', strokeWidth: 1, strokeDasharray: 'none', strokeLinecap: 'butt', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: 'rgb(255,255,255)', fillRule: 'nonzero', opacity: 1 } as React.CSSProperties}>
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="256" height="256" viewBox="0 0 256 256">
+                            <defs>
+                            </defs>
+                            <g style={{ stroke: 'none', strokeWidth: 0, strokeDasharray: 'none', strokeLinecap: 'butt', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: 'none', fillRule: 'nonzero', opacity: 1 }} transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+                                <circle cx="45" cy="45" r="45" style={{ stroke: 'none', strokeWidth: 1, strokeDasharray: 'none', strokeLinecap: 'butt', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: 'rgb(255,69,0)', fillRule: 'nonzero', opacity: 1 }} transform="  matrix(1 0 0 1 0 0) " />
+                                <path d="M 75.011 45 c -0.134 -3.624 -3.177 -6.454 -6.812 -6.331 c -1.611 0.056 -3.143 0.716 -4.306 1.823 c -5.123 -3.49 -11.141 -5.403 -17.327 -5.537 l 2.919 -14.038 l 9.631 2.025 c 0.268 2.472 2.483 4.262 4.955 3.993 c 2.472 -0.268 4.262 -2.483 3.993 -4.955 s -2.483 -4.262 -4.955 -3.993 c -1.421 0.145 -2.696 0.973 -3.4 2.204 L 48.68 17.987 c -0.749 -0.168 -1.499 0.302 -1.667 1.063 c 0 0.011 0 0.011 0 0.022 l -3.322 15.615 c -6.264 0.101 -12.36 2.025 -17.55 5.537 c -2.64 -2.483 -6.801 -2.36 -9.284 0.291 c -2.483 2.64 -2.36 6.801 0.291 9.284 c 0.515 0.481 1.107 0.895 1.767 1.186 c -0.045 0.66 -0.045 1.32 0 1.98 c 0 10.078 11.745 18.277 26.23 18.277 c 14.485 0 26.23 -8.188 26.23 -18.277 c 0.045 -0.66 0.045 -1.32 0 -1.98 C 73.635 49.855 75.056 47.528 75.011 45 z M 30.011 49.508 c 0 -2.483 2.025 -4.508 4.508 -4.508 c 2.483 0 4.508 2.025 4.508 4.508 s -2.025 4.508 -4.508 4.508 C 32.025 53.993 30.011 51.991 30.011 49.508 z M 56.152 62.058 v -0.179 c -3.199 2.405 -7.114 3.635 -11.119 3.468 c -4.005 0.168 -7.919 -1.063 -11.119 -3.468 c -0.425 -0.515 -0.347 -1.286 0.168 -1.711 c 0.447 -0.369 1.085 -0.369 1.544 0 c 2.707 1.98 6.007 2.987 9.362 2.83 c 3.356 0.179 6.667 -0.783 9.407 -2.74 c 0.492 -0.481 1.297 -0.47 1.779 0.022 C 56.655 60.772 56.644 61.577 56.152 62.058 z M 55.537 54.34 c -0.078 0 -0.145 0 -0.224 0 l 0.034 -0.168 c -2.483 0 -4.508 -2.025 -4.508 -4.508 s 2.025 -4.508 4.508 -4.508 s 4.508 2.025 4.508 4.508 C 59.955 52.148 58.02 54.239 55.537 54.34 z" style={{ stroke: 'none', strokeWidth: 1, strokeDasharray: 'none', strokeLinecap: 'butt', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: 'rgb(255,255,255)', fillRule: 'nonzero', opacity: 1 }} transform=" matrix(1 0 0 1 0 0) " strokeLinecap="round" />
+                            </g>
+                        </svg>
                     </button>
                 </div>
             </div>
             <div>
                 <div className="w-full rounded overflow-hidden border flex items-center mt-6">
-                    <p className="text-sm text-gray-400 flex-1 ml-4">https://www.clicknotes.site</p>
-                    <button className="bg-blue-500 hover:bg-blue-600 px-4 py-3 text-sm text-white">Copy</button>
+                    <p className="text-sm text-gray-400 flex-1 ml-4">{shareUrl}</p>
+                    <button 
+                    className="bg-blue-500 hover:bg-blue-600 w-[70px] py-3 text-sm text-white"
+                    onClick={() => copyTextToClipboard(shareUrl, 'Share URL')}
+                    >{isCopied}</button>
                 </div>
             </div>
         </div>

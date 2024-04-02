@@ -53,7 +53,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
   return (
     <>
 
-      <Head>
+      {/* <Head>
         <title>ClickNotes</title>
         <meta name="description" content="Save popular and trending movies, TV shows and books to your Notion list or search for your favourites. All your content in one place, displayed in a beautiful Notion template." />
         <meta name="robots" content="all"></meta>
@@ -79,9 +79,7 @@ function WrappedApp({ Component, pageProps, router }: WrappedAppProps) {
         <meta name="twitter:url" content="https://clicknotes.site" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href="https://clicknotes.site" />
-        {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
-                    crossOrigin="anonymous"></script> */}
-      </Head>
+      </Head> */}
       <div className='flex flex-col min-h-screen'>
         <Navbar />
         <Component {...pageProps} />

@@ -7,7 +7,7 @@ export default function Document({ }: any) {
   return (
     <Html lang="en">
       <Head>
-        <meta name="description" content="Save popular and trending movies, TV shows and books to your Notion list or search for your favourites. All your content in one place, displayed in a beautiful Notion template." />
+        {/* <meta name="description" content="Save popular and trending movies, TV shows and books to your Notion list or search for your favourites. All your content in one place, displayed in a beautiful Notion template." />
         <meta name="robots" content="all"></meta>
         <meta property="og:title" content="ClickNotes" />
         <meta property="og:description" content="Save popular and trending movies, TV shows and books to your Notion list or search for your favourites. All your content in one place, displayed in a beautiful Notion template." />
@@ -29,7 +29,7 @@ export default function Document({ }: any) {
         <meta name="twitter:domain" content="www.clicknotes.site" />
         <meta name="twitter:url" content="https://clicknotes.site" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="canonical" href="https://clicknotes.site" />
+        <link rel="canonical" href="https://clicknotes.site" /> */}
         <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="drenso" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18" defer></script>
       </Head>
       <body>
