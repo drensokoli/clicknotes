@@ -64,11 +64,40 @@ export default function List({
   const [searchResults, setSearchResults] = useState<any[]>();
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleStatusChange = async (id: string, status: string) => {
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    const setCurrentList = listStates.find((listState) => listState.status === status)?.setList as any;
+    const setNewList = listStates.find((listState) => listState.status === newStatus)?.setList as any;
 
-    throw new Error("Not implemented");
+    const updatedItem = content?.find((item) => item.id === id);
+    updatedItem.properties.Status.status.name = newStatus;
 
-    return;
+    setCurrentList((prevList: any[]) => prevList.filter((item) => item.id !== id));
+    setNewList((prevList: any[]) => [updatedItem, ...prevList]);
+
+    const response = await fetch("/api/changePageStatus", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userEmail,
+        connectionType: listName,
+        pageId: id,
+        status: newStatus,
+      }),
+    });
+
+    const data = await response.json();
+
+    console.log("data", data);
+    // if (response.status === 200) {
+    //   const updatedContent = content?.map((item) => {
+    //     if (item.id === id) {
+    //       item.properties.Status.status.name = newStatus;
+    //     }
+    //     return item;
+    //   });
+
+    //   setContent(updatedContent);
+    // }
   };
 
   const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -306,7 +335,7 @@ export default function List({
   return (
     <>
       <Head>
-        <title>ClickNotes |{" "}{titleMapping.find((title) => title.path === listName)?.title} List</title>
+        <title>ClickNotes | My Lists | {" "}{titleMapping.find((title) => title.path === listName)?.title}</title>
         <meta name="description" content="View your lists and collections from ClickNotes. Save popular and trending movies, tv shows and books to your Notion list or search for your favourites. All your media in one place, displayed in a beautiful Notion template." />
         <meta name="robots" content="all"></meta>
         <meta property="og:title" content={`ClickNotes | ${titleMapping.find((title) => title.path === listName)?.title} List`} />
