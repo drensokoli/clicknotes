@@ -72,8 +72,8 @@ export default function List({
   const updateProperties = async () => {
 
     let rating;
-    if (listName === "books") rating = (rangeValue / 20).toFixed(1)
-    else rating = (rangeValue / 10).toFixed(1);
+    if (listName === "books") rating = (rangeValue / 20);
+    else rating = (rangeValue / 10);
 
     const response = await fetch("/api/updateNotionPageProperties", {
       method: "POST",
