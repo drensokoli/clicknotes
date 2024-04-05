@@ -73,9 +73,9 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                 )}
 
                 <select
-                    className={`movie-card-button select-none text-white border-2 bg-transparent focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 mr-2 mb-2 backdrop-blur-sm bg-opacity-80  ${status === 'To watch' ? 'border-red-700 bg-red-800 hover:bg-red-800 focus:ring-red-800 focus:border-red-600 focus:bg-red-800' :
-                        status === 'Watching' ? 'border-blue-700 bg-blue-900 hover:bg-blue-800 focus:ring-blue-800 focus:border-blue-600 focus:bg-blue-800' :
-                            'border-green-700 bg-green-800 hover:bg-green-800 focus:ring-green-800 focus:border-green-600 focus:bg-green-800'
+                    className={`movie-card-button select-none text-white border-2 focus:ring-4 font-medium rounded-lg text-xs sm:text-sm px-3 sm:px-5 py-2.5 mr-2 mb-2 backdrop-blur-sm bg-opacity-80  ${status === 'To watch' ? 'border-red-700 bg-red-700 hover:bg-red-800 focus:ring-red-800 focus:border-red-600 focus:bg-red-800' :
+                        status === 'Watching' ? 'border-blue-700 bg-blue-700 hover:bg-blue-800 focus:ring-blue-800 focus:border-blue-600 focus:bg-blue-800' :
+                            'border-green-700 bg-green-700 hover:bg-green-800 focus:ring-green-800 focus:border-green-600 focus:bg-green-800'
                         }`}
                     defaultValue={status}
                     onChange={(e) => handleStatusChange(id, e.target.value)}

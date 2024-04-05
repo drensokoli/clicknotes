@@ -11,13 +11,12 @@ import MovieModal from "@/components/Lists/MovieModal";
 import BookModal from "@/components/Lists/BookModal";
 import Head from "next/head";
 import WidthKeeper from "@/components/Lists/WidthKeeper";
-import { set } from "lodash";
 import NoItems from "@/components/Helpers/NoItems";
-import { stat } from "fs";
 import { useRouter } from "next/router";
 import BreadCrumb from "@/components/Helpers/BreadCrumb";
 import RandomButton from "@/components/Helpers/RandomButton";
 import { decryptData } from "@/lib/encryption";
+import { set } from "lodash";
 
 export default function List({
   statusList,
@@ -44,12 +43,18 @@ export default function List({
   ];
 
   const [open, setOpen] = useState(false);
+  const [openReview, setOpenReview] = useState(false);
   const cancelButtonRef = useRef(null);
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState(true);
   const [displayCount, setDisplayCount] = useState(20);
+
+  const [rangeValue, setRangeValue] = useState(0);
+  const [review, setReview] = useState("");
+  const [reviewedPageId, setReviewedPageId] = useState("");
+  const [reviewedPageTitle, setReviewedPageTitle] = useState("");
 
   const [message, setMessage] = useState("");
   const [listToWatch, setListToWatch] = useState<any[]>();
@@ -64,12 +69,47 @@ export default function List({
   const [searchResults, setSearchResults] = useState<any[]>();
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const updateProperties = async () => {
+
+    let rating;
+    if (listName === "books") rating = (rangeValue / 20).toFixed(1)
+    else rating = (rangeValue / 10).toFixed(1);
+
+    const response = await fetch("/api/updateNotionPageProperties", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userEmail,
+        connectionType: listName,
+        pageId: reviewedPageId,
+        rating,
+        review: review,
+      }),
+    });
+
+    const data = await response.json();
+    setOpenReview(false);
+    setTimeout(() => {
+      setReview("");
+      setRangeValue(0);
+    }, 500);
+    if (response.status !== 200) {
+      console.error(data.error.message);
+    }
+  };
+
   const handleStatusChange = async (id: string, newStatus: string) => {
+
+    if (newStatus === "Watched" || newStatus === "Finished") {
+      setOpenReview(true);
+      setReviewedPageId(id);
+      if (listName === "books") setReviewedPageTitle(content?.find((item) => item.id === id).properties.Title?.title[0]?.text?.content);
+      else setReviewedPageTitle(content?.find((item) => item.id === id).properties.Name?.title[0]?.text?.content);
+    }
+
     const setCurrentList = listStates.find((listState) => listState.status === status)?.setList as any;
     const setNewList = listStates.find((listState) => listState.status === newStatus)?.setList as any;
-
     const updatedItem = content?.find((item) => item.id === id);
-    updatedItem.properties.Status.status.name = newStatus;
 
     setCurrentList((prevList: any[]) => prevList.filter((item) => item.id !== id));
     setNewList((prevList: any[]) => [updatedItem, ...prevList]);
@@ -87,17 +127,11 @@ export default function List({
 
     const data = await response.json();
 
-    console.log("data", data);
-    // if (response.status === 200) {
-    //   const updatedContent = content?.map((item) => {
-    //     if (item.id === id) {
-    //       item.properties.Status.status.name = newStatus;
-    //     }
-    //     return item;
-    //   });
-
-    //   setContent(updatedContent);
-    // }
+    if (response.status === 200) {
+      updatedItem.properties.Status.status.name = newStatus;
+    } else {
+      console.error(data.error.message);
+    }
   };
 
   const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -540,6 +574,80 @@ export default function List({
           }
         />
       )}
+
+      <Transition.Root show={openReview} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          initialFocus={cancelButtonRef}
+          onClose={setOpenReview}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 w-full sm:max-w-lg">
+                  <button
+                    onClick={() => setOpenReview(false)}
+                    ref={cancelButtonRef}
+                    type="button"
+                    className="absolute top-2 right-2 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm p-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                  >
+                    <span className="sr-only">Close menu</span>
+                    <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <div className="flex flex-col justify-center items-center p-4 w-full mt-2">
+                    {reviewedPageTitle && <h1 className="text-lg font-semibold text-gray-900 dark:text-white">{reviewedPageTitle}</h1>}
+                    <div className="w-full">
+                      <label htmlFor="default-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rating</label>
+                      <input id="default-range" type="range" value={rangeValue} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                        onChange={(e) => setRangeValue(parseInt(e.target.value))}
+                      />
+                      <div className="flex justify-center items-center py-2">
+                        <h1 className="bg-blue-100 text-blue-800 font-semibold p-2 rounded dark:bg-blue-200 dark:text-blue-800">{
+                          listName === "books" ? (rangeValue / 20).toFixed(1) : (rangeValue / 10).toFixed(1)
+                        }</h1>
+                      </div>
+                    </div>
+                    <div className="w-full">
+                      <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Write a review</label>
+                      <textarea id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."
+                        onChange={(e) => setReview(e.target.value)}
+                      ></textarea>
+                    </div>
+                    <button type="button" className="my-4 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                      onClick={() => updateProperties()}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog

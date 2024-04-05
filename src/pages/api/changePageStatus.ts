@@ -24,16 +24,61 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const notion = new Client({ auth: decryptedApiKey });
 
-    const response = await notion.pages.update({
-        page_id: pageId,
-        properties: {
+    let properties;
+
+    if (status === 'Watched') {
+        properties = {
             Status: {
                 status: {
                     name: status,
                 },
             },
-        },
+            "Watched Date": {
+                date: {
+                    start: new Date().toISOString(),
+                },
+            }
+        };
+    } else if (status === 'Finished') {
+        properties = {
+            Status: {
+                status: {
+                    name: status,
+                },
+            },
+            "Completed": {
+                date: {
+                    start: new Date().toISOString(),
+                },
+            }
+        };
+    } else if (status === 'Reading') {
+        properties = {
+            Status: {
+                status: {
+                    name: status,
+                },
+            },
+            "Started": {
+                date: {
+                    start: new Date().toISOString(),
+                },
+            }
+        };
+    } else {
+        properties = {
+            Status: {
+                status: {
+                    name: status,
+                },
+            }
+        };
+    }
+
+    await notion.pages.update({
+        page_id: pageId,
+        properties: properties,
     });
 
-    res.status(200).json({ success: true }); // Send a JSON response
+    res.status(200).json({ success: true });
 }
