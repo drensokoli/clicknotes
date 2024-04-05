@@ -1,12 +1,13 @@
 import Link from "next/link";
 
-export default function MovieModal({ id, name, rating, poster, overview, trailer, watchLink, notionLink, releaseDate, rated, awards, runtime, imdbLink }:
+export default function MovieModal({ id, name, rating, poster, overview, review, trailer, watchLink, notionLink, releaseDate, rated, awards, runtime, imdbLink }:
     {
         id: string | number,
         name: string,
         rating: number | null | undefined,
         poster: string | null | undefined,
         overview: string,
+        review: string,
         trailer: string,
         watchLink: string,
         notionLink: string,
@@ -87,16 +88,24 @@ export default function MovieModal({ id, name, rating, poster, overview, trailer
                     </>
                 )}
 
+                {review && (
+                    <>
+                        <p className="text-sm text-gray-500 text-left mt-2 w-full">Your review</p>
+                        <p className="text-sm text-gray-900 text-left w-full">{review}</p>
+
+                    </>
+                )}
+
             </div>
             {trailer && (
                 <iframe width="1903" height="742" src={`https://www.youtube.com/embed/${trailer.split('v=')[1]}`} title="Kung Fu Panda 4 | Sand &amp; Spice Trailer" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen className="w-full sm:h-[300px] h-[200px] mt-2"></iframe>
             )}
-            <hr className="my-2 border-1 border-gray-400"/>
-                <div className="flex justify-center items-center">
-                    <Link href={notionLink} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">
+            <hr className="my-2 border-1 border-gray-400" />
+            <div className="flex justify-center items-center">
+                <Link href={notionLink} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">
                     <img src="/notion-wordmark.png" alt="Notion" className="w-auto h-6" />
-                    </Link>
-                </div>
+                </Link>
+            </div>
         </div>
     )
 }

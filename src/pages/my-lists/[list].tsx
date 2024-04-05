@@ -456,6 +456,7 @@ export default function List({
                             status={result.status}
                             rating={result.rating}
                             description={result.description}
+                            review={result.review}
                             pageCount={result.pageCount}
                             author={result.author}
                             notion_link={result.notion_link}
@@ -480,6 +481,7 @@ export default function List({
                             status={listItem.properties.Status?.status?.name}
                             rating={listItem.properties["My Rating"]?.number}
                             description={listItem.properties["Description"]?.rich_text[0]?.text?.content}
+                            review={listItem.properties.Review?.rich_text[0]?.text?.content}
                             pageCount={listItem.properties["Page Count"]?.number}
                             author={listItem.properties.Authors?.multi_select?.map((author: any) => author?.name).join(", ")}
                             notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
@@ -512,6 +514,7 @@ export default function List({
                               status={result.status}
                               trailer={result.trailer}
                               overview={result.overview}
+                              review={result.review}
                               rating={result.myRating}
                               watch_link={result.watchLink}
                               notion_link={result.notionLink}
@@ -537,6 +540,7 @@ export default function List({
                             status={listItem.properties.Status.status.name}
                             trailer={listItem.properties.Trailer.url}
                             overview={listItem.properties["Overview"]?.rich_text[0]?.text?.content}
+                            review={listItem.properties.Review?.rich_text[0]?.text?.content}
                             rating={listItem.properties["My Rating"].number}
                             watch_link={listItem.properties["Watch Link"].url}
                             notion_link={`https://www.notion.so/${listItem.id.replace(/-/g, "")}`}
@@ -701,6 +705,7 @@ export default function List({
                         rating={content[currentShuffleItem].properties["My Rating"]?.number}
                         coverImage={content[currentShuffleItem].properties["Cover Image"]?.url || content[currentShuffleItem].cover?.external?.url}
                         description={content[currentShuffleItem].properties["Description"]?.rich_text[0]?.text?.content}
+                        review={content[currentShuffleItem].properties.Review?.rich_text[0]?.text?.content}
                         author={content[currentShuffleItem].properties.Authors?.multi_select?.map((author: any) => author?.name).join(", ")}
                         pageCount={content[currentShuffleItem].properties["Page Count"]?.number}
                         notion_link={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, "")}`}
@@ -717,6 +722,7 @@ export default function List({
                           rating={content[currentShuffleItem].properties["My Rating"]?.number}
                           poster={content[currentShuffleItem].properties.Poster?.url || content[currentShuffleItem].cover?.external?.url}
                           overview={content[currentShuffleItem].properties["Overview"]?.rich_text[0]?.text?.content}
+                          review={content[currentShuffleItem].properties.Review?.rich_text[0]?.text?.content}
                           trailer={content[currentShuffleItem].properties.Trailer?.url}
                           watchLink={content[currentShuffleItem].properties["Watch Link"]?.url}
                           notionLink={`https://www.notion.so/${content[currentShuffleItem].id.replace(/-/g, "")}`}

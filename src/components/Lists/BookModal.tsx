@@ -1,12 +1,13 @@
 import Link from "next/link";
 
-export default function BookModal({ id, title, rating, coverImage, description, author, pageCount, notion_link, googleBooksId, publisher, publishedDate }:
+export default function BookModal({ id, title, rating, coverImage, description, review, author, pageCount, notion_link, googleBooksId, publisher, publishedDate }:
     {
         id: string | number,
         title: string,
         rating: number | null | undefined,
         coverImage: string | null | undefined,
         description: any,
+        review: any,
         author: string,
         pageCount: any,
         notion_link: string,
@@ -76,6 +77,12 @@ export default function BookModal({ id, title, rating, coverImage, description, 
                     <>
                         <p className="text-sm text-gray-500 text-left mt-2">Page count</p>
                         <p className="text-sm text-gray-900 text-left">{pageCount}</p>
+                    </>
+                )}
+                {review && (
+                    <>
+                        <p className="text-sm text-gray-500 text-left mt-2">Your review</p>
+                        <p className="text-sm text-gray-900 text-left">{review}</p>
                     </>
                 )}
 

@@ -5,7 +5,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import MovieModal from './MovieModal';
 
-export default function MoviesListCard({ id, title, poster_path, release_date, link, handleStatusChange, statusList, status, trailer, overview, rating, watch_link, notion_link, rated, awards, runtime, imdbLink }: {
+export default function MoviesListCard({ id, title, poster_path, release_date, link, handleStatusChange, statusList, status, trailer, overview, review, rating, watch_link, notion_link, rated, awards, runtime, imdbLink }: {
     id: number | string;
     title: string;
     poster_path: string | null | undefined;
@@ -16,6 +16,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
     status: string;
     trailer: string;
     overview: any;
+    review: any;
     rating: number;
     watch_link: string;
     notion_link: string;
@@ -145,6 +146,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                             runtime={runtime}
                                             rated={rated}
                                             imdbLink={imdbLink}
+                                            review={review}
                                         />
                                     </div>
                                 </Dialog.Panel>
