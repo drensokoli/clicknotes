@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
     <footer className="bg-white p-4 bottom-0 w-full flex flex-col items-center justify-center">
       <h1 className='text-gray-900 text-md'>Made with ❤️ by
         <span className="text-blue-600">
-          <Link href="https://www.linkedin.com/in/dren-sokoli-0003a81a1/" target="_blank" aria-label='Dren Sokoli LinkedIn Profile'> Dren Sokoli</Link>
+          <Link href="https://linktr.ee/drensokoli" target="_blank" aria-label='Dren Sokoli LinkedIn Profile'> Dren Sokoli</Link>
         </span>
       </h1>
       <p className="text-gray-900 mr-2  text-md ">

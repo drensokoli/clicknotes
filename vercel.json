@@ -3,6 +3,10 @@
         {
             "path": "/api/cron/getNYTimesBestsellers",
             "schedule": "0 0 * * 4"
+        },
+        {
+            "path": "/api/getNYTimesBestsellers",
+            "schedule": "0 0 * * 4"
         }
     ]
 }
