@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export default async function getNYTimesBestsellers() {
-	const googleBooksApiKey1 = process.env.GOOGLE_BOOKS_API_KEY_1;
-	const googleBooksApiKey2 = process.env.GOOGLE_BOOKS_API_KEY_2;
-	const googleBooksApiKeys = [googleBooksApiKey1, googleBooksApiKey2];
-	const nyTimesApiKey = process.env.NYTIMES_API_KEY;
+export default async function getNYTimesBestsellers(googleBooksApiKeys: (string | undefined)[], nyTimesApiKey: string | undefined) {
+	// const googleBooksApiKey1 = process.env.GOOGLE_BOOKS_API_KEY_1;
+	// const googleBooksApiKey2 = process.env.GOOGLE_BOOKS_API_KEY_2;
+	// const googleBooksApiKeys = [googleBooksApiKey1, googleBooksApiKey2];
+	// const nyTimesApiKey = process.env.NYTIMES_API_KEY;
 
 	const response = await axios.get(`https://api.nytimes.com/svc/books/v3/lists/full-overview.json?api-key=${nyTimesApiKey}`);
 

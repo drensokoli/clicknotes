@@ -173,7 +173,7 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 				<meta name="twitter:domain" content="www.clicknotes.site" />
 				<meta name="twitter:url" content="https://www.clicknotes.site/books" />
 				<link rel="icon" href="/favicon.ico" />
-                <link rel="canonical" href="https://www.clicknotes.site/books" />
+				<link rel="canonical" href="https://www.clicknotes.site/books" />
 				{/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
 	crossOrigin="anonymous"></script> */}
 			</Head>
