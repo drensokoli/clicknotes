@@ -178,6 +178,18 @@ export default function List({
     }
   };
 
+  const deletePage = async (id: string | number, notionApiKey: any) => {
+    setOpen(false);
+    setShow(false);
+    const res = await fetch(`/api/deletePage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id, notionApiKey }),
+    });
+  }
+
   useEffect(() => {
     const statusPath = router.asPath.split("#")[1]?.replace(/%20/g, " ");
     const urlStatus = statusPath || statusList[0];
@@ -418,6 +430,7 @@ export default function List({
             setCursorWatching={setCursorWatching}
             setCursorWatched={setCursorWatched}
             setFetching={setFetching}
+            setInput={setInput}
           />
 
           <SearchBar
@@ -464,6 +477,7 @@ export default function List({
                             publisher={result.publisher}
                             publishedDate={result.publishedDate}
                             statusList={statusList}
+                            notionApiKey={notionApiKey}
                           />
                         ))}
                       </>
@@ -474,7 +488,7 @@ export default function List({
                             key={listItem.id}
                             id={listItem.id}
                             title={listItem.properties.Title?.title[0]?.text?.content}
-                            cover={listItem.properties["Cover Image"]?.url || listItem.cover?.external?.url}
+                            cover={listItem.properties["Cover Image"]?.url ? listItem.properties["Cover Image"]?.url : ""}
                             link={`https://books.google.com/books?id=${listItem.id}`}
                             handleStatusChange={handleStatusChange}
                             statusList={statusList}
@@ -488,6 +502,7 @@ export default function List({
                             googleBooksId={listItem.properties["ID"]?.rich_text[0]?.text?.content}
                             publisher={listItem.properties.Publisher?.select?.name}
                             publishedDate={listItem.properties["Published Date"]?.date?.start}
+                            notionApiKey={notionApiKey}
                           />
                         ))}
                       </>
@@ -522,6 +537,7 @@ export default function List({
                               awards={result.awards}
                               runtime={result.runtime}
                               imdbLink={result.imdbLink}
+                              notionApiKey={notionApiKey}
                             />
                           ))}
                       </>
@@ -532,13 +548,13 @@ export default function List({
                             key={listItem.id}
                             id={listItem.id}
                             title={listItem.properties.Name?.title[0]?.text?.content}
-                            poster_path={listItem.properties.Poster?.url || listItem.cover?.external?.url}
+                            poster_path={listItem.properties.Poster?.url ? listItem.properties.Poster?.url : ""}
                             release_date={listItem.properties["Release Date"]?.date?.start || ""}
                             link={`https://www.themoviedb.org/movie/${listItem.id}`}
                             handleStatusChange={handleStatusChange}
                             statusList={statusList}
                             status={listItem.properties.Status.status.name}
-                            trailer={listItem.properties.Trailer.url}
+                            trailer={listItem.properties.Trailer?.url}
                             overview={listItem.properties["Overview"]?.rich_text[0]?.text?.content}
                             review={listItem.properties.Review?.rich_text[0]?.text?.content}
                             rating={listItem.properties["My Rating"].number}
@@ -548,6 +564,7 @@ export default function List({
                             awards={listItem.properties.Awards?.rich_text[0]?.text?.content}
                             runtime={listItem.properties.Runtime?.rich_text[0]?.text?.content}
                             imdbLink={listItem.properties["iMDB Link"]?.url}
+                            notionApiKey={notionApiKey}
                           />
                         ))}
                       </>
@@ -712,6 +729,7 @@ export default function List({
                         googleBooksId={content[currentShuffleItem].properties["ID"]?.rich_text[0]?.text?.content}
                         publisher={content[currentShuffleItem].properties.Publisher?.select?.name}
                         publishedDate={content[currentShuffleItem].properties["Published Date"]?.date?.start}
+                        deleteFunction={() => deletePage(content[currentShuffleItem].id, notionApiKey)}
                       />
                     ) : (
                       content &&
@@ -731,6 +749,7 @@ export default function List({
                           awards={content[currentShuffleItem].properties.Awards?.rich_text[0]?.text?.content}
                           runtime={content[currentShuffleItem].properties.Runtime?.rich_text[0]?.text?.content}
                           imdbLink={content[currentShuffleItem].properties["iMDB Link"]?.url}
+                          deleteFunction={() => deletePage(content[currentShuffleItem].id, notionApiKey)}
                         />
                       )
                     )}

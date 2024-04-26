@@ -41,6 +41,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
         setInput(event.target.value);
         if (event.target.value === '') {
             setTvShows([]);
+            setInput('');
             setNoItemsFound(false);
             return;
         }
@@ -50,7 +51,7 @@ export default function TvShows({ tmdbApiKey, omdbApiKeys, encryptionKey, popula
 
         // Set a new debounce timeout
         debounceTimeout.current = setTimeout(() => {
-            searchContentByTitle({ title: input, tmdbApiKey: tmdbApiKey, type: 'tv' })
+            searchContentByTitle({ title: event.target.value, tmdbApiKey: tmdbApiKey, type: 'tv' })
             .then((tvShows) => {
                 if (tvShows && tvShows.length > 0) {
                     setTvShows(tvShows);

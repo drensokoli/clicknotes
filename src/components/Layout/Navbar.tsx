@@ -99,6 +99,27 @@ export default function Navbar() {
                                                     <button type="button"
                                                         className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
                                                         onClick={() => signIn('google')}
+                                                        // onClick={() => {
+                                                        //     const authWindow = window.open(
+                                                        //         "/api/auth/signin/google",
+                                                        //         "GoogleAuthWindow",
+                                                        //         "width=800,height=600"
+                                                        //     );
+
+                                                        //     if (authWindow) {
+                                                        //         const handleRedirect = (event: any) => {
+                                                        //             if (event.data && event.data.url) {
+                                                        //                 authWindow.location.href = event.data.url;
+                                                        //             }
+                                                        //         };
+
+                                                        //         window.addEventListener("message", handleRedirect);
+
+                                                        //         return () => {
+                                                        //             window.removeEventListener("message", handleRedirect);
+                                                        //         };
+                                                        //     }
+                                                        // }}
                                                     >Sign in</button>
                                                 ) : (
                                                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 sm:mx-6 mx-2">

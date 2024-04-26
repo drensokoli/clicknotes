@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function MovieModal({ id, name, rating, poster, overview, review, trailer, watchLink, notionLink, releaseDate, rated, awards, runtime, imdbLink }:
+export default function MovieModal({ id, name, rating, poster, overview, review, trailer, watchLink, notionLink, releaseDate, rated, awards, runtime, imdbLink, deleteFunction }:
     {
         id: string | number,
         name: string,
@@ -14,9 +14,11 @@ export default function MovieModal({ id, name, rating, poster, overview, review,
         releaseDate: string,
         rated: any,
         awards: string,
-        runtime: string
-        imdbLink: any
+        runtime: string,
+        imdbLink: any,
+        deleteFunction: any
     }) {
+
     return (
         <div key={id} className="w-[400px]" >
             <div className='flex justify-center'>
@@ -100,6 +102,11 @@ export default function MovieModal({ id, name, rating, poster, overview, review,
             {trailer && (
                 <iframe width="1903" height="742" src={`https://www.youtube.com/embed/${trailer.split('v=')[1]}`} title="Kung Fu Panda 4 | Sand &amp; Spice Trailer" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen className="w-full sm:h-[300px] h-[200px] mt-2"></iframe>
             )}
+            <button type="button" className="w-full mt-2 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                onClick={() => {
+                    deleteFunction(id);
+                }}
+            >Delete</button>
             <hr className="my-2 border-1 border-gray-400" />
             <div className="flex justify-center items-center">
                 <Link href={notionLink} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">

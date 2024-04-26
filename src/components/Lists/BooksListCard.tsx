@@ -5,7 +5,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import BookModal from './BookModal';
 
-export default function BooksListCard({ id, title, cover, link, handleStatusChange, statusList, status, rating, pageCount, description, review, author, notion_link, googleBooksId, publisher, publishedDate
+export default function BooksListCard({ id, title, cover, link, handleStatusChange, statusList, status, rating, pageCount, description, review, author, notion_link, googleBooksId, publisher, publishedDate, notionApiKey
 }: {
     id: number | string;
     title: string;
@@ -23,10 +23,23 @@ export default function BooksListCard({ id, title, cover, link, handleStatusChan
     googleBooksId: string;
     publisher: string;
     publishedDate: string;
+    notionApiKey: any
 }) {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
     const cancelButtonRef = useRef(null);
+    
+    const deletePage = async (id: string | number) => {
+        setOpen(false);
+        setShow(false);
+        const res = await fetch(`/api/deletePage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, notionApiKey }),
+        });
+    }
 
     useEffect(() => {
         if (show) return;
@@ -143,6 +156,7 @@ export default function BooksListCard({ id, title, cover, link, handleStatusChan
                                             googleBooksId={googleBooksId}
                                             publisher={publisher}
                                             publishedDate={publishedDate}
+                                            deleteFunction={deletePage}
                                         />
                                     </div>
                                 </Dialog.Panel>

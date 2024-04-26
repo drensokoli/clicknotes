@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function BookModal({ id, title, rating, coverImage, description, review, author, pageCount, notion_link, googleBooksId, publisher, publishedDate }:
+export default function BookModal({ id, title, rating, coverImage, description, review, author, pageCount, notion_link, googleBooksId, publisher, publishedDate, deleteFunction }:
     {
         id: string | number,
         title: string,
@@ -14,6 +14,7 @@ export default function BookModal({ id, title, rating, coverImage, description, 
         googleBooksId: string,
         publisher: string,
         publishedDate: string
+        deleteFunction: any
     }) {
 
     // FORMAT THE PUBLISHED DATE TO THIS FORMAT 21 May 2021
@@ -49,7 +50,7 @@ export default function BookModal({ id, title, rating, coverImage, description, 
 
             <h2 className="font-bold text-center text-gray-800 mt-1 px-6"
             >
-                {title} { publishedDate ? `(${published_date_format})` : ''}
+                {title} {publishedDate ? `(${published_date_format})` : ''}
                 {rating && (
                     <p className="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800 mx-2">{rating}</p>
                 )}
@@ -85,7 +86,11 @@ export default function BookModal({ id, title, rating, coverImage, description, 
                         <p className="text-sm text-gray-900 text-left">{review}</p>
                     </>
                 )}
-
+                <button type="button" className="w-full mt-2 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                    onClick={() => {
+                        deleteFunction(id);
+                    }}
+                >Delete</button>
                 <hr className="my-2 border-1 border-gray-400" />
                 <div className="flex justify-center items-center">
                     <Link href={notion_link} target='_blank' className="text-sm text-blue-500 text-left hover:text-blue-700 hover:underline">

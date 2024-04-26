@@ -5,7 +5,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import MovieModal from './MovieModal';
 
-export default function MoviesListCard({ id, title, poster_path, release_date, link, handleStatusChange, statusList, status, trailer, overview, review, rating, watch_link, notion_link, rated, awards, runtime, imdbLink }: {
+export default function MoviesListCard({ id, title, poster_path, release_date, link, handleStatusChange, statusList, status, trailer, overview, review, rating, watch_link, notion_link, rated, awards, runtime, imdbLink, notionApiKey }: {
     id: number | string;
     title: string;
     poster_path: string | null | undefined;
@@ -23,7 +23,8 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
     rated: string,
     awards: string,
     runtime: any,
-    imdbLink: any
+    imdbLink: any,
+    notionApiKey: any
 }) {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false);
@@ -36,6 +37,18 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
             setShow(true);
         }, 10);
     }, []);
+
+    const deletePage = async (id: string | number) => {
+        setOpen(false);
+        setShow(false);
+        const res = await fetch(`/api/deletePage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, notionApiKey }),
+        });
+    }
 
     return (
         <Transition
@@ -64,6 +77,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                     </div>
                 ) : (
                     <Image
+                        onClick={() => setOpen(true)}
                         src="/no-image.png"
                         width={200}
                         height={300}
@@ -147,6 +161,7 @@ export default function MoviesListCard({ id, title, poster_path, release_date, l
                                             rated={rated}
                                             imdbLink={imdbLink}
                                             review={review}
+                                            deleteFunction={deletePage}
                                         />
                                     </div>
                                 </Dialog.Panel>
