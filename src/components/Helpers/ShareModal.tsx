@@ -32,7 +32,7 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
                     {/* FACEBOOK */}
                     <button type="button"
                         onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&t=ClickNotes`, '_blank')}
-                        className="sm:w-12 sm:h-12 w-9 h-9 inline-flex items-center justify-center rounded-full border-none outline-none bg-blue-600 hover:shadow-xl">
+                        className="sm:w-12 sm:h-12 w-8 h-8 inline-flex items-center justify-center rounded-full border-none outline-none bg-blue-600 hover:shadow-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20px" fill="#fff" viewBox="0 0 155.139 155.139">
                             <path
                                 d="M89.584 155.139V84.378h23.742l3.562-27.585H89.584V39.184c0-7.984 2.208-13.425 13.67-13.425l14.595-.006V1.08C115.325.752 106.661 0 96.577 0 75.52 0 61.104 12.853 61.104 36.452v20.341H37.29v27.585h23.814v70.761h28.48z"
@@ -43,14 +43,14 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
                     {/* TWITTER */}
                     <button type="button"
                         onClick={() => window.open(`https://twitter.com/intent/post?text=I%27m%20using%20ClickNotes%20to%20save%20my%20favorite%20movies%2C%20books%20and%20time.%0A&url=${shareUrl}`, '_blank')}
-                        className="sm:w-12 sm:h-12 w-9 h-9 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#03a9f4] hover:shadow-xl">
+                        className="sm:w-12 sm:h-12 w-8 h-8 inline-flex items-center justify-center rounded-full border-none outline-none hover:shadow-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512"><path d="M256 0c141.385 0 256 114.615 256 256S397.385 512 256 512 0 397.385 0 256 114.615 0 256 0z" /><path fill="#fff" fill-rule="nonzero" d="M318.64 157.549h33.401l-72.973 83.407 85.85 113.495h-67.222l-52.647-68.836-60.242 68.836h-33.423l78.052-89.212-82.354-107.69h68.924l47.59 62.917 55.044-62.917zm-11.724 176.908h18.51L205.95 176.493h-19.86l120.826 157.964z" /></svg>
                     </button>
 
                     {/* LINKEDIN */}
                     <button type="button"
                         onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`, '_blank')}
-                        className="sm:w-12 sm:h-12 w-9 h-9 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#0077b5] hover:shadow-xl">
+                        className="sm:w-12 sm:h-12 w-8 h-8 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#0077b5] hover:shadow-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20px" fill="#fff" viewBox="0 0 24 24">
                             <path
                                 d="M23.994 24v-.001H24v-8.802c0-4.306-.927-7.623-5.961-7.623-2.42 0-4.044 1.328-4.707 2.587h-.07V7.976H8.489v16.023h4.97v-7.934c0-2.089.396-4.109 2.983-4.109 2.549 0 2.587 2.384 2.587 4.243V24zM.396 7.977h4.976V24H.396zM2.882 0C1.291 0 0 1.291 0 2.882s1.291 2.909 2.882 2.909 2.882-1.318 2.882-2.909A2.884 2.884 0 0 0 2.882 0z"
@@ -60,7 +60,7 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
 
                     {/* WHATSAPP */}
                     <button type="button"
-                        className="sm:w-12 sm:h-12 w-9 h-9 m-0 p-0 inline-flex items-center justify-center rounded-full border-none outline-none hover:shadow-xl"
+                        className="sm:w-12 sm:h-12 w-8 h-8 inline-flex items-center justify-center rounded-full border-none outline-none hover:shadow-xl"
                         onClick={() => window.open(`https://wa.me/?text=${shareUrl}`, '_blank')}
                         style={{ fill: '#2CB742' }}>
                         <svg width="200px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +73,7 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
                     {/* REDDIT */}
                     <button type="button"
                         onClick={() => window.open(`https://reddit.com/submit?url=${shareUrl}&title=I'm using ClickNotes to save my favorite movies, books and time.`, '_blank')}
-                        className="sm:w-12 sm:h-12 w-9 h-9 inline-flex items-center justify-center rounded-full border-none outline-none hover:shadow-xl"
+                        className="sm:w-12 sm:h-12 w-8 h-8 inline-flex items-center justify-center rounded-full border-none outline-none hover:shadow-xl"
                         style={{ stroke: 'none', strokeWidth: 1, strokeDasharray: 'none', strokeLinecap: 'butt', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: 'rgb(255,255,255)', fillRule: 'nonzero', opacity: 1 } as React.CSSProperties}>
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="200" viewBox="0 0 256 256">
                             <defs>
