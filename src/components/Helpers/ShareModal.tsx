@@ -44,12 +44,16 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
                     <button type="button"
                         onClick={() => window.open(`https://twitter.com/intent/post?text=I%27m%20using%20ClickNotes%20to%20save%20my%20favorite%20movies%2C%20books%20and%20time.%0A&url=${shareUrl}`, '_blank')}
                         className="sm:w-12 sm:h-12 w-8 h-8 inline-flex items-center justify-center rounded-full outline-none hover:shadow-xl bg-black p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ffffff" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>                    </button>
+                        {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#ffffff" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+                        </svg> */}
+                        <img src="x-social-media-round-icon.jpg" alt="" />
+                    </button>
 
                     {/* LINKEDIN */}
                     <button type="button"
                         onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`, '_blank')}
-                        className="sm:w-12 sm:h-12 w-8 h-8 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#0077b5] hover:shadow-xl p-2">
+                        className="sm:w-12 sm:h-12 w-8 h-8 inline-flex items-center justify-center rounded-full border-none outline-none bg-[#0077b5] hover:shadow-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20px" fill="#fff" viewBox="0 0 24 24">
                             <path
                                 d="M23.994 24v-.001H24v-8.802c0-4.306-.927-7.623-5.961-7.623-2.42 0-4.044 1.328-4.707 2.587h-.07V7.976H8.489v16.023h4.97v-7.934c0-2.089.396-4.109 2.983-4.109 2.549 0 2.587 2.384 2.587 4.243V24zM.396 7.977h4.976V24H.396zM2.882 0C1.291 0 0 1.291 0 2.882s1.291 2.909 2.882 2.909 2.882-1.318 2.882-2.909A2.884 2.884 0 0 0 2.882 0z"
@@ -88,9 +92,9 @@ export default function ShareModal({ setOpen, shareUrl }: { setOpen: any, shareU
             <div>
                 <div className="w-full rounded overflow-hidden border flex items-center mt-6">
                     <p className="text-sm text-gray-400 flex-1 ml-4">{shareUrl}</p>
-                    <button 
-                    className="bg-blue-500 hover:bg-blue-600 w-[70px] py-3 text-sm text-white"
-                    onClick={() => copyTextToClipboard(shareUrl, 'Share URL')}
+                    <button
+                        className="bg-blue-500 hover:bg-blue-600 w-[70px] py-3 text-sm text-white"
+                        onClick={() => copyTextToClipboard(shareUrl, 'Share URL')}
                     >{isCopied}</button>
                 </div>
             </div>
