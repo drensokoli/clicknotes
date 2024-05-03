@@ -6,6 +6,8 @@ import MyListsCard from "@/components/Lists/MyListsCard";
 import NotionBanner from "@/components/Notion/NotionBanner";
 import MyListsSkeleton from "@/components/Lists/MyListsSkeleton";
 import Head from "next/head";
+import Toast from "@/components/Helpers/Toast";
+import { Transition } from "@headlessui/react";
 
 export default function MyLists() {
   const { data: session } = useSession();
@@ -18,6 +20,8 @@ export default function MyLists() {
   ];
 
   const [loading, setLoading] = useState(true);
+  
+	const [apiResponse, setApiResponse] = useState<string | null>(null);
 
   const [movies, setMovies] = useState<any[]>();
   const [tvShows, setTvShows] = useState<any[]>();
@@ -84,8 +88,16 @@ export default function MyLists() {
     }
   }, [session]);
 
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(true);
+    }, 10);
+  }, []);
+
   return (
-    <>
+    <div className="min-h-screen">
       <Head>
         <title>ClickNotes | My Lists</title>
         <meta
@@ -146,7 +158,29 @@ export default function MyLists() {
                     crossOrigin="anonymous"></script> */}
       </Head>
 
-      <div className="min-h-screen flex-grow">
+      <Toast apiResponse={apiResponse} setApiResponse={setApiResponse} pageLink={undefined} />
+      <div className=''>
+
+        <div className="flex justify-center items-center mb-4">
+          <Transition
+            className="bg-white mx-auto"
+            show={show}
+            enter="transition-all ease-in-out duration-500 delay-[200ms]"
+            enterFrom="opacity-0 translate-y-6"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition-all ease-in-out duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="flex justify-center">
+              <img src={session?.user?.image?.toString()!} alt="" className="rounded-full mx-auto w-32 h-32 shadow-2xl border-4 border-white transition duration-200 transform hover:scale-110 select-none" width={50} height={50} />
+            </div>
+            <h1 className="font-bold text-center text-3xl text-gray-700 mt-2">{session?.user?.name}</h1>
+          </Transition>
+        </div>
+      </div>
+
+      <div className="flex-grow">
         {loading ? (
           <MyListsSkeleton />
         ) : (
@@ -200,7 +234,7 @@ export default function MyLists() {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
