@@ -47,14 +47,16 @@ export default function Card({ id, title, poster_path, release_date, link, handl
                         />
                     </Link>
                 ) : (
-                    <Image
-                        src="/no-image.png"
-                        width={200}
-                        height={300}
-                        alt={title}
-                        className="rounded-sm h-auto select-none"
-                        loading="lazy"
-                    />
+                    <Link href={link} passHref target='_blank' aria-label={`${title} ${release_date}`}>
+                        <Image
+                            src="/no-image.png"
+                            width={200}
+                            height={300}
+                            alt={title}
+                            className="rounded-sm h-auto select-none"
+                            loading="lazy"
+                        />
+                    </Link>
                 )}
 
                 <button type="button"
