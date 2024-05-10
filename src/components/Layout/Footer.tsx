@@ -16,8 +16,8 @@ const Footer: React.FC = () => {
         </span>
       </p>
       <div className='flex flex-row gap-4 pt-2'>
-        <Link href="https://clicknotes.site/privacy-policy.html" target="_blank" aria-label='Privacy Policy' className='text-sm text-blue-600 hover:underline'>Privacy Policy</Link>
-        <Link href="https://clicknotes.site/terms-and-conditions.html" target="_blank" aria-label='Terms and Conditions' className='text-sm text-blue-600 hover:underline'>Terms of Use</Link>
+        <Link href="/privacy-policy.html" target="_blank" aria-label='Privacy Policy' className='text-sm text-blue-600 hover:underline'>Privacy Policy</Link>
+        <Link href="/terms-and-conditions.html" target="_blank" aria-label='Terms and Conditions' className='text-sm text-blue-600 hover:underline'>Terms of Use</Link>
       </div>
     </footer>
   );
