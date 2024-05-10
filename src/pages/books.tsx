@@ -152,18 +152,19 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 				<title>ClickNotes | Books</title>
 				<meta name="description" content="Save the New York Times best sellers to your Notion list or search for your favourite books. All your Books in one place, displayed in a beautiful Notion template." />
 				<meta name="robots" content="index, follow"></meta>
-				<meta property="og:title" content="ClickNotes | Books" />
-				<meta property="og:description" content="Save the New York Times best sellers to your Notion list or search for your books. All your Books in one place, displayed in a beautiful Notion template." />
-				<meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<meta name="author" content="Dren Sokoli" />
-				<meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta>
+
+				<link rel="icon" href="/favicon.ico" />
+				<link rel="canonical" href="https://www.clicknotes.site/books" />
+
 				<meta property="og:title" content="ClickNotes - Save your books to Notion" />
-				<meta property="og:description" content="Save popular and trending books to your Notion list or search for your favorites. All your books in one place, displayed in a beautiful Notion template." />
+				<meta property="og:description" content="Save the New York Times best sellers to your Notion list or search for your books. All your Books in one place, displayed in a beautiful Notion template." />
 				<meta property="og:image" content="https://www.clicknotes.site/og/books.png" />
 				<meta property="og:url" content="https://www.clicknotes.site/books" />
 				<meta property="og:site_name" content="ClickNotes" />
 				<meta property="og:type" content="website" />
+
 				<meta name="twitter:card" content="summary_large_image" />
 				<meta name="twitter:site" content="@SokoliDren" />
 				<meta name="twitter:creator" content="@SokoliDren" />
@@ -172,8 +173,8 @@ export default function Books({ encryptionKey, googleBooksApiKey, bestsellers }:
 				<meta name="twitter:image" content="https://www.clicknotes.site/og/books.png" />
 				<meta name="twitter:domain" content="www.clicknotes.site" />
 				<meta name="twitter:url" content="https://www.clicknotes.site/books" />
-				<link rel="icon" href="/favicon.ico" />
-				<link rel="canonical" href="https://www.clicknotes.site/books" />
+
+				{/* <meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta> */}
 				{/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
 	crossOrigin="anonymous"></script> */}
 			</Head>

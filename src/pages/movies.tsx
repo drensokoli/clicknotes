@@ -48,7 +48,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
         }
 
         clearTimeout(debounceTimeout.current!);
-        
+
         debounceTimeout.current = setTimeout(() => {
             searchContentByTitle({ title: event.target.value, tmdbApiKey: tmdbApiKey, type: 'movie' })
                 .then(movies => {
@@ -61,7 +61,7 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                     }
                 })
                 .catch(error => console.error(error));
-        }, 300); 
+        }, 300);
     };
 
     async function fetchUserData() {
@@ -109,18 +109,19 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                 <title>ClickNotes | Movies</title>
                 <meta name="description" content="Save popular and trending movies to your Notion list or search for your favourites. All your movies in one place, displayed in a beautiful Notion template." />
                 <meta name="robots" content="all"></meta>
-                <meta property="og:title" content="ClickNotes | Movies" />
-                <meta property="og:description" content="Save popular and trending movies to your Notion list or search for your favorites. All your movies in one place, displayed in a beautiful Notion template." />
-                <meta property="og:image" content="https://www.clicknotes.site/favicon.ico" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta name="author" content="Dren Sokoli" />
-                <meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta>
-                <meta property="og:title" content="ClickNotes - Save your movies to Notion" />
+
+                <link rel="icon" href="/favicon.ico" />
+                <link rel="canonical" href="https://www.clicknotes.site/movies" />
+
+                <meta property="og:title" content="ClickNotes - Save your moviesperik to Notion" />
                 <meta property="og:description" content="Save popular and trending movies to your Notion list or search for your favorites. All your movies in one place, displayed in a beautiful Notion template." />
                 <meta property="og:image" content="https://www.clicknotes.site/og/movies.png" />
                 <meta property="og:url" content="https://www.clicknotes.site/movies" />
                 <meta property="og:site_name" content="ClickNotes" />
                 <meta property="og:type" content="website" />
+
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:site" content="@SokoliDren" />
                 <meta name="twitter:creator" content="@SokoliDren" />
@@ -129,8 +130,8 @@ export default function Movies({ tmdbApiKey, omdbApiKeys, encryptionKey, popular
                 <meta name="twitter:image" content="https://www.clicknotes.site/og/movies.png" />
                 <meta name="twitter:domain" content="www.clicknotes.site" />
                 <meta name="twitter:url" content="https://www.clicknotes.site/movies" />
-                <link rel="icon" href="/favicon.ico" />
-                <link rel="canonical" href="https://www.clicknotes.site/movies" />
+
+                {/* <meta name="google-adsense-account" content="ca-pub-3464540666338005"></meta> */}
                 {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3464540666338005"
                     crossOrigin="anonymous"></script> */}
             </Head>
